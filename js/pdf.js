@@ -209,7 +209,9 @@ export function incrementPdfDownloadCountAndMaybeShowPrompt() {
   let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
   if (timesUserSaidNo === 0) {
     setTimeout(() => {
+      console.log("aqui 1");
       showInstallPrompt();
+      console.log("aqui 2");
     }, 5000);
     return;
   }
