@@ -54,8 +54,12 @@ export function monitorDisplayMode() {
 
 export function showInstallPrompt() {
   if (!deferredPrompt) return;
+  console.log("beforeinstallprompt event capturat");
   const ip = document.getElementById("install-prompt");
-  if (ip) ip.classList.remove("hidden");
+  if (ip) {
+    ip.classList.add("visible");
+    console.log("Prompt de instal·lació mostrat.");
+  }
 }
 
 export function onUserDismissInstall() {
@@ -72,5 +76,9 @@ export function onUserDismissInstall() {
 
 function hideInstallPrompt() {
   const ip = document.getElementById("install-prompt");
-  if (ip) ip.classList.add("hidden");
+  if (ip) {
+    ip.classList.remove("visible");
+    ip.classList.add("hidden");
+    console.log("Prompt de instal·lació ocultat.");
+  }
 }

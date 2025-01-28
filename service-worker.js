@@ -13,7 +13,6 @@ const urlsToCache = [
   "./js/db.js",
   "./js/diet.js",
   "./js/pdf.js",
-  "./js/pdfTemplate.js",
   "./js/formHandlers.js",
   "./js/clearService.js",
   "./js/modals.js",
