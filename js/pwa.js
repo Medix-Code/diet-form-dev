@@ -12,14 +12,11 @@ export function setupInstallPrompt() {
   const installButton = document.getElementById("install-button");
   if (installButton) {
     installButton.addEventListener("click", async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const choiceResult = await deferredPrompt.userChoice;
-        if (choiceResult.outcome === "accepted") {
-          localStorage.setItem("isAppInstalled", "true");
-          hideInstallPrompt();
-        }
-        deferredPrompt = null;
+      deferredPrompt.prompt();
+      const choiceResult = await deferredPrompt.userChoice;
+      if (choiceResult.outcome === "accepted") {
+        localStorage.setItem("isAppInstalled", "true");
+        hideInstallPrompt();
       }
     });
   }
@@ -52,6 +49,12 @@ export function monitorDisplayMode() {
   });
 }
 
+export function showInstallPrompt() {
+  if (!deferredPrompt) return;
+  const ip = document.getElementById("install-prompt");
+  if (ip) ip.classList.remove("hidden");
+}
+
 export function onUserDismissInstall() {
   let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
   timesUserSaidNo++;
@@ -67,10 +70,4 @@ export function onUserDismissInstall() {
 function hideInstallPrompt() {
   const ip = document.getElementById("install-prompt");
   if (ip) ip.classList.add("hidden");
-}
-
-export function showInstallPrompt() {
-  if (!deferredPrompt) return;
-  const ip = document.getElementById("install-prompt");
-  if (ip) ip.classList.remove("hidden");
 }
