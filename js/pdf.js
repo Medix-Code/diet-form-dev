@@ -4,7 +4,7 @@ import { gatherAllData } from "./formHandlers.js";
 import { showToast } from "./utils.js";
 import { handleSaveDietWithPossibleOverwrite } from "./diet.js";
 import { validateForPdf } from "./validation.js";
-import { install2, isAppInstalled, showInstallPrompt } from "./pwa.js";
+import { isAppInstalled, showInstallPrompt } from "./pwa.js";
 
 // Coordenadas generales y de servicios (posiciones en el PDF)
 export const generalFieldCoordinates = {
@@ -211,7 +211,6 @@ export function incrementPdfDownloadCountAndMaybeShowPrompt() {
   console.log("timesUserSaidNo:", timesUserSaidNo);
   if (timesUserSaidNo === 0) {
     setTimeout(() => {
-      install2();
       showInstallPrompt();
     }, 5000);
     return;
