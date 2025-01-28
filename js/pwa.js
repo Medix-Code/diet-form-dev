@@ -2,6 +2,16 @@
 
 let deferredPrompt = null;
 
+export function install2() {
+  const installPrompt = document.getElementById("install-prompt");
+  if (installPrompt) {
+    installPrompt.classList.remove("hidden");
+    console.log("Modal d'instal·lació de la PWA mostrat.");
+  } else {
+    console.warn("Element amb l'ID 'install-prompt' no trobat.");
+  }
+}
+
 export function setupInstallPrompt() {
   window.addEventListener("beforeinstallprompt", (evt) => {
     evt.preventDefault();

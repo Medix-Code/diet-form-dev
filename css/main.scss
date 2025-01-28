@@ -22,10 +22,6 @@ body.modal-open {
   overflow: hidden !important;
 }
 
-.hidden {
-  display: none !important;
-}
-
 main {
   flex: 1;
   padding-top: 120px;
@@ -837,9 +833,15 @@ button .fa {
   }
 }
 
+.hidden {
+  display: none;
+}
+
 /***********************************
   * BANNER PWA (INSTALACIÓN)
 ***********************************/
+/* css/styles.css */
+
 #install-prompt {
   position: fixed;
   bottom: 0;
@@ -857,53 +859,55 @@ button .fa {
   transition: transform 0.3s ease, opacity 0.3s ease;
   transform: translateY(100%);
   opacity: 0;
+}
 
-  &.visible {
-    transform: translateY(0);
-    opacity: 1;
-  }
+#install-prompt.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
 
-  p {
-    margin: 0 0 30px 0;
-    font-size: 16px;
-    font-weight: bold;
-  }
+#install-prompt p {
+  margin: 0 0 30px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
 
-  .install-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-  }
+#install-prompt .install-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
 
-  button {
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+#install-prompt button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-    &#install-button {
-      background-color: #007bff;
-      color: #fff;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-      &:hover {
-        background-color: #0056b3;
-        transform: scale(1.05);
-      }
-    }
+#install-prompt #install-button {
+  background-color: #007bff;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
 
-    &#dismiss-button {
-      background-color: #5c6064;
-      color: #fff;
-      &:hover {
-        background-color: #5a6268;
-        transform: scale(1.05);
-      }
-    }
-  }
+#install-prompt #install-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+#install-prompt #dismiss-button {
+  background-color: #5c6064;
+  color: #fff;
+}
+
+#install-prompt #dismiss-button:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
 }
 
 button .icon {
