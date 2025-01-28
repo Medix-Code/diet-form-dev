@@ -3,7 +3,6 @@
 import { gatherAllData } from "./formHandlers.js";
 import { showToast } from "./utils.js";
 import { handleSaveDietWithPossibleOverwrite } from "./diet.js";
-import { incrementPdfDownloadCountAndMaybeShowPrompt } from "./pwa.js";
 import { validateForPdf } from "./validation.js"; //
 
 // Coordenadas generales y de servicios (posiciones en el PDF)
@@ -199,4 +198,36 @@ export function buildPdfFileName(dateValue, dietType) {
   if (dietType === "lunch") return `dieta_comida_${formatted}.pdf`;
   if (dietType === "dinner") return `dieta_cena_${formatted}.pdf`;
   return `dieta_${formatted}.pdf`;
+}
+
+export function incrementPdfDownloadCountAndMaybeShowPrompt() {
+  const installed = isAppInstalled();
+  const neverShow = localStorage.getItem("neverShowInstallPrompt") === "true";
+  if (installed || neverShow) return;
+
+  let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
+  if (timesUserSaidNo === 0) {
+    setTimeout(() => {
+      showInstallPrompt();
+    }, 5000);
+    return;
+  }
+
+  if (timesUserSaidNo === 1) {
+    let pdfDownloadsSinceNo = +localStorage.getItem("pdfDownloadsSinceNo") || 0;
+    pdfDownloadsSinceNo++;
+    localStorage.setItem("pdfDownloadsSinceNo", String(pdfDownloadsSinceNo));
+
+    if (pdfDownloadsSinceNo >= 9) {
+      setTimeout(() => {
+        showInstallPrompt();
+      }, 5000);
+    }
+  }
+}
+
+function showInstallPrompt() {
+  if (!deferredPrompt) return;
+  const ip = document.getElementById("install-prompt");
+  if (ip) ip.classList.remove("hidden");
 }
