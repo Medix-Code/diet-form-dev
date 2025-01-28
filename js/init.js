@@ -19,7 +19,7 @@ import {
   monitorDisplayMode,
   isAppInstalled,
 } from "./pwa.js";
-import { setTodayDate, showToast } from "./utils.js";
+import { setTodayDate } from "./utils.js";
 
 let initialFormDataStr = "";
 

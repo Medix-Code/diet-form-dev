@@ -54,6 +54,12 @@ export function monitorDisplayMode() {
 
 export function showInstallPrompt() {
   if (!deferredPrompt) return;
+  const ip = document.getElementById("install-prompt");
+  if (ip) ip.classList.remove("hidden");
+}
+
+export function showInstallPrompt22() {
+  if (!deferredPrompt) return;
   console.log("beforeinstallprompt event capturat");
   const ip = document.getElementById("install-prompt");
   if (ip) {
@@ -61,7 +67,6 @@ export function showInstallPrompt() {
     console.log("Prompt de instal·lació mostrat.");
   }
 }
-
 export function onUserDismissInstall() {
   let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
   timesUserSaidNo++;
