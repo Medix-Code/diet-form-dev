@@ -62,7 +62,8 @@ export function onUserDismissInstall() {
   }
   hideInstallPrompt();
 }
-function showInstallPrompt() {
+
+export function showInstallPrompt() {
   if (!deferredPrompt) return;
   const ip = document.getElementById("install-prompt");
   if (ip) ip.classList.remove("hidden");
