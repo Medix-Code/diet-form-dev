@@ -1,0 +1,1001 @@
+@charset "UTF-8";
+/***********************************
+  * RESETEO Y ESTILOS GLOBALES
+***********************************/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+body.modal-open {
+  overflow: hidden !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+main {
+  flex: 1;
+  padding-top: 120px;
+}
+
+/***********************************
+  * TOP BAR (CABECERA FIJA)
+***********************************/
+.top-bar {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #343a40;
+  border-bottom: 0.5px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+.top-bar__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  line-height: 1.4;
+  text-align: left;
+  margin: 0;
+  font-size: clamp(20px, 3vw, 30px);
+  font-weight: bold;
+  color: #fff;
+}
+
+/***********************************
+  * BOTÓN AJUSTES Y PANEL
+***********************************/
+.button-group {
+  position: relative;
+  display: flex;
+  gap: 10px;
+}
+
+.ajustes-btn {
+  position: relative;
+  background-color: #1470c2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(14px, 2.5vw, 18px);
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.ajustes-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #ffffff;
+  border: 0px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  z-index: 1100;
+  min-width: 180px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+.ajustes-panel:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.ajustes-panel .big-btn {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 12px 20px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #f5f5f5;
+  border: 1px solid #ececec;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  color: #333;
+  box-sizing: border-box;
+  text-align: left;
+  border-radius: 0;
+}
+.ajustes-panel .big-btn:hover {
+  background-color: #e0e0e0;
+}
+.ajustes-panel .big-btn:active {
+  background-color: #d5d5d5;
+}
+.ajustes-panel .big-btn i {
+  font-size: 18px;
+  color: #555;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+.ajustes-panel .big-btn:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.ajustes-panel .big-btn:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.ajustes-panel i {
+  color: #007bff;
+  font-size: 18px;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+.ajustes-panel .generate-pdf i {
+  color: #28a745;
+}
+.ajustes-panel #manage-diets i {
+  color: #ffc107;
+}
+.ajustes-panel #save-diet i {
+  color: #17a2b8;
+}
+
+/***********************************
+  * PESTAÑAS (TABS)
+***********************************/
+.tabs-container {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #ddd;
+  z-index: 900;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button .fas,
+button .far,
+button .fa {
+  pointer-events: none;
+  font-size: inherit;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 10px;
+  cursor: pointer;
+  background: #e9ecef;
+  border: none;
+  display: flex;
+  font-size: 16px;
+  font-weight: normal;
+  color: #919191;
+  transition: all 0.3s ease;
+}
+.tab:hover {
+  background-color: #dee2e6;
+}
+.tab.active {
+  font-weight: bold;
+  background-color: #ffffff;
+  color: #495057;
+  box-shadow: inset 0 -3px 0 #0a96e7;
+}
+
+.tab-content-container {
+  margin-top: 120px;
+  padding: 20px;
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+
+/***********************************
+  * FORMULARIOS
+***********************************/
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-weight: normal;
+  margin-bottom: 10px;
+}
+.form-group input[type=text],
+.form-group input[type=date],
+.form-group input[type=datetime-local],
+.form-group input[type=time],
+.form-group select {
+  height: 40px;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  box-sizing: border-box;
+  font-size: 16px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #fff;
+  text-align: left;
+}
+.form-group select {
+  text-align: left;
+  line-height: 1.4;
+}
+
+.input-error {
+  border: 12px solid red;
+  background-color: #ffe6e6;
+}
+
+/***********************************
+  * SERVICIOS
+***********************************/
+.service-controls {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+#service-buttons-container {
+  display: flex;
+  gap: 20px;
+}
+
+.service-button {
+  width: clamp(40px, 5vw, 50px);
+  height: clamp(40px, 5vw, 50px);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: none;
+  color: #000;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+.service-button:hover {
+  opacity: 0.8;
+}
+
+.active-square {
+  transform: scale(1.05);
+  border: 1px solid rgb(114, 114, 114);
+}
+
+.clear-selected-btn {
+  margin-left: auto;
+  width: clamp(40px, 5vw, 50px);
+  height: clamp(40px, 5vw, 50px);
+  border-radius: 8px;
+  border: none;
+  font-size: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #6c757d;
+  transition: background-color 0.3s ease;
+}
+.clear-selected-btn:hover {
+  opacity: 0.85;
+}
+.clear-selected-btn.service-1 {
+  background-color: #8ddfd0;
+}
+.clear-selected-btn.service-2 {
+  background-color: #bad7f9;
+}
+.clear-selected-btn.service-3 {
+  background-color: #f0cdaa;
+}
+.clear-selected-btn.service-4 {
+  background-color: #e1b6f4;
+}
+
+.service {
+  padding: clamp(15px, 3vw, 30px) clamp(10px, 2vw, 20px);
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  border: 2px dashed transparent;
+}
+.service.service-1 {
+  background-color: #e9f7ef;
+}
+.service.service-2 {
+  background-color: #e8f4fd;
+}
+.service.service-3 {
+  background-color: #fdf0e6;
+}
+.service.service-4 {
+  background-color: #f9e6ff;
+}
+
+/***********************************
+  * SIGNATURE (CAMP DE FIRMA)
+***********************************/
+.signature-group .input-with-icon {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 40px;
+}
+.signature-group .input-with-icon:focus-within {
+  border-color: #343a40;
+  border-width: 2px;
+  border-style: solid;
+}
+.signature-group .input-with-icon input {
+  flex: 1;
+  height: 100%;
+  padding-right: 50px;
+  font-size: 16px;
+  border: none;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  box-sizing: border-box;
+  outline: none;
+}
+.signature-group .input-with-icon .signature-btn {
+  width: 50px;
+  height: 100%;
+  display: flex;
+  outline: none;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ced4da;
+  border: 0px solid #ced4da;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.signature-group .input-with-icon .signature-btn i {
+  color: #888;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+.signature-group .input-with-icon .signature-btn:hover {
+  background-color: #f1f1f1;
+}
+.signature-group .input-with-icon .signature-btn:hover i {
+  color: #444;
+}
+
+/***********************************
+  * MODALES (GENÉRICOS)
+***********************************/
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: auto;
+}
+
+.modal-content {
+  position: relative;
+  margin: 10% auto;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px 30px;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+.modal-content .modal-title {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content h2,
+.modal-content h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: bold;
+  color: #343a40;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+.modal-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #495057;
+  margin: 20px 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.close-modal-btn {
+  display: block;
+  background-color: #007bff;
+  color: #fff;
+  margin: 20px auto 0;
+  font-size: 16px;
+  padding: 12px 20px;
+  width: auto;
+  height: auto;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+.close-modal-btn:hover {
+  background-color: #0056b3;
+}
+
+/***********************************
+  * MODAL DE GESTIÓ DE DIETES
+***********************************/
+.diet-modal-content {
+  background-color: #f8f9fa;
+  border: 0px solid #ced4da;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+#diet-modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.no-diets-text {
+  margin: 0 0 20px 0;
+  text-align: center;
+  color: #555;
+  font-style: italic;
+}
+
+#diet-options {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  text-align: left;
+}
+
+.btn-modal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.937254902);
+  font-size: 22px;
+  gap: 20px;
+  border: none;
+  border-radius: 5px;
+  padding: 20px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+  text-decoration: none;
+}
+.btn-modal:hover {
+  background-color: #0056b3;
+}
+
+#diet-options li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: hsl(0, 0%, 95%);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+#diet-options li span {
+  font-size: 15px;
+  color: #333;
+}
+#diet-options li button.delete-diet {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #c9c9c9;
+  border-radius: 8px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 15px;
+}
+#diet-options li button.delete-diet:hover {
+  background-color: #f0f0f0;
+  color: #8a8a8a;
+}
+#diet-options li button.delete-diet:active {
+  background-color: #e0e0e0;
+  color: #4ee711;
+}
+#diet-options li button.delete-diet i {
+  color: #000000;
+  pointer-events: none;
+}
+
+/***********************************
+  * MODAL DE SIGNATURA
+***********************************/
+#signature-modal {
+  z-index: 9999;
+}
+
+.signature-modal-content {
+  max-width: 600px;
+  text-align: center;
+  position: relative;
+}
+
+.signature-modal-content p.signature-instruction {
+  text-align: left;
+}
+
+.signature-canvas-container {
+  margin: 20px auto;
+  width: 100%;
+  max-width: 500px;
+  height: 250px;
+  border: 2px dashed #aaa;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  position: relative;
+}
+.signature-canvas-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/***********************************
+  * MODAL DE CONFIRMACIÓ
+***********************************/
+.modal-buttons {
+  display: flex; /* Per alinear els botons en fila */
+  justify-content: center; /* Centra els botons horitzontalment */
+  align-items: center; /* Centra els botons verticalment */
+  gap: 20px; /* Distància entre botons */
+  margin: 10px auto; /* Marges superiors i inferiors uniformes */
+  padding: 10px; /* Padding global al contenidor */
+}
+
+.modal-button {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.modal-button.yes {
+  background-color: #28a745;
+}
+.modal-button.yes:hover {
+  background-color: #218838;
+}
+.modal-button.no {
+  background-color: #dc3545;
+}
+.modal-button.no:hover {
+  background-color: #c82333;
+}
+.modal-button.cancel {
+  background-color: #dc3545;
+}
+.modal-button.cancel:hover {
+  background-color: #c82333;
+}
+.modal-button.accept {
+  background-color: #28a745;
+}
+.modal-button.accept:hover {
+  background-color: #218838;
+}
+
+.disabled-button {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.disabled-button:hover {
+  background-color: #6c757d;
+}
+
+/***********************************
+  * TOASTS
+***********************************/
+#toast-container {
+  position: fixed;
+  display: none;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  width: 30vw; /* Amplada ajustada al 30% del viewport */
+  min-width: 200px; /* Amplada mínima */
+  max-width: 400px; /* Límit màxim */
+  background-color: #28a745;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-align: center;
+  animation: fadeInOut 3s forwards;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+}
+.toast.success {
+  background-color: #28a745;
+}
+.toast.error {
+  background-color: #dc3545;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+/***********************************
+  * FOOTER 
+***********************************/
+.footer {
+  background-color: #343a40; /* Color de fons del footer */
+  color: #f8f9fa; /* Color del text */
+  padding: 20px; /* Espai intern del footer */
+  border-top: 1px solid #495057; /* Línia separadora superior */
+  /* Contenidor del footer */
+  /* Estils per al paràgraf */
+  /* Contenidor per a les icones */
+  /* Estils per als enllaços amb icones */
+  /* Estils generals per als icones */
+  /* Efecte al passar el cursor sobre els icones */
+}
+.footer .footer__container {
+  max-width: 100%; /* Amplada màxima */
+  width: 100%; /* Amplada del contenidor */
+  margin: 0 auto; /* Centrat horitzontal */
+  text-align: center; /* Text centrat */
+  display: flex; /* Flexbox per a l'estructura */
+  flex-direction: column; /* Elements en columna */
+  align-items: center; /* Alineació central */
+  justify-content: center; /* Centrat vertical */
+  gap: 20px; /* Espai entre elements dins el contenidor */
+}
+.footer p {
+  margin: 0 0 2px 0;
+  font-size: 15px;
+  /* Enllaços dins del paràgraf */
+}
+.footer p a {
+  color: #f8f9fa;
+  text-decoration: none;
+  font-weight: bold;
+}
+.footer p a:hover {
+  color: #00bfff;
+  text-decoration: underline;
+}
+.footer .footer__icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+.footer .footer-icon-link {
+  color: #f8f9fa;
+  font-size: 18px;
+  transition: color 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+.footer .footer-icon-link:hover {
+  color: #00bfff;
+  transform: scale(1.1);
+}
+.footer .icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+  transition: transform 0.3s ease;
+  object-fit: contain;
+}
+.footer .icon:hover {
+  transform: scale(1.2);
+}
+
+/***********************************
+  * BANNER PWA (INSTALACIÓN)
+***********************************/
+#install-prompt {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  color: #343a40;
+  padding: 20px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 9999;
+  box-sizing: border-box;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateY(100%);
+  opacity: 0;
+}
+#install-prompt.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+#install-prompt p {
+  margin: 0 0 30px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+#install-prompt .install-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+#install-prompt button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#install-prompt button#install-button {
+  background-color: #007bff;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+#install-prompt button#install-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+#install-prompt button#dismiss-button {
+  background-color: #5c6064;
+  color: #fff;
+}
+#install-prompt button#dismiss-button:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
+}
+
+button .icon {
+  pointer-events: none;
+  width: 1.3em;
+  height: 1.3em;
+}
+
+/***********************************
+  * RESPONSIVE (MEDIA QUERIES)
+***********************************/
+@media (max-width: 768px) {
+  .top-bar {
+    height: 56px;
+    padding: 8px 16px;
+  }
+  .button-group {
+    flex-direction: row;
+    gap: 15px;
+    margin-left: auto;
+  }
+  .ajustes-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+  }
+  .ajustes-btn i {
+    font-size: 20px;
+  }
+  .ajustes-panel {
+    min-width: 150px;
+  }
+  .ajustes-panel .big-btn {
+    padding: 12px 15px;
+    font-size: 14px;
+    gap: 20px;
+  }
+  .tab {
+    min-height: 8px;
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+  .tabs-container {
+    top: 56px;
+  }
+  .tab-content-container {
+    margin-top: 110px;
+  }
+  input[type=text],
+  input[type=date],
+  input[type=datetime-local],
+  input[type=time],
+  select {
+    height: 36px;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 4px;
+  }
+  select {
+    text-align: center;
+    line-height: normal;
+  }
+  label {
+    margin-bottom: 8px;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .toast {
+    width: 80vw;
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+  .modal-content {
+    width: 85%;
+    padding: 15px 20px;
+  }
+  .modal-content h2,
+  .modal-content h3 {
+    font-size: 18px;
+  }
+  .modal-content p {
+    font-size: 16px;
+  }
+  #about-modal .modal-content {
+    max-width: 100%;
+    max-height: 90vh;
+    margin: 8% auto;
+    overflow: auto;
+  }
+  #about-title {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 0;
+    font-weight: bold;
+    color: #343a40;
+  }
+  h3#diet-modal-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  .btn-modal {
+    font-size: 16px;
+    border-radius: 8px;
+    gap: 15px;
+    padding: 16px 16px;
+  }
+  #diet-options li {
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+  }
+  #diet-options li span {
+    font-size: 15px;
+    margin-right: 5px;
+  }
+  #diet-options li button.delete-diet {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+    border: 1px solid #c9c9c9;
+    border-radius: 8px;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+  }
+  #diet-options li button.delete-diet i {
+    font-size: 14px;
+  }
+  .modal-buttons {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 30px;
+    margin-top: 20px;
+  }
+  .modal-button {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .signature-modal-content {
+    width: 90%;
+    margin: 40px auto;
+    max-width: 500px;
+  }
+  .signature-canvas-container {
+    height: 200px;
+  }
+  .modal-buttons {
+    flex-direction: row;
+    gap: 40px;
+  }
+}
