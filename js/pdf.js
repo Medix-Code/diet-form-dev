@@ -3,7 +3,8 @@
 import { gatherAllData } from "./formHandlers.js";
 import { showToast } from "./utils.js";
 import { handleSaveDietWithPossibleOverwrite } from "./diet.js";
-import { validateForPdf } from "./validation.js"; //
+import { validateForPdf } from "./validation.js";
+import { isAppInstalled, showInstallPrompt } from "./pwa.js";
 
 // Coordenadas generales y de servicios (posiciones en el PDF)
 export const generalFieldCoordinates = {
@@ -224,10 +225,4 @@ export function incrementPdfDownloadCountAndMaybeShowPrompt() {
       }, 5000);
     }
   }
-}
-
-function showInstallPrompt() {
-  if (!deferredPrompt) return;
-  const ip = document.getElementById("install-prompt");
-  if (ip) ip.classList.remove("hidden");
 }

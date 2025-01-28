@@ -6,6 +6,7 @@ export function setupInstallPrompt() {
   window.addEventListener("beforeinstallprompt", (evt) => {
     evt.preventDefault();
     deferredPrompt = evt;
+    console.log("beforeinstallprompt event capturat");
   });
 
   const installButton = document.getElementById("install-button");
@@ -66,4 +67,10 @@ export function onUserDismissInstall() {
 function hideInstallPrompt() {
   const ip = document.getElementById("install-prompt");
   if (ip) ip.classList.add("hidden");
+}
+
+export function showInstallPrompt() {
+  if (!deferredPrompt) return;
+  const ip = document.getElementById("install-prompt");
+  if (ip) ip.classList.remove("hidden");
 }
