@@ -211,7 +211,7 @@ export function incrementPdfDownloadCountAndMaybeShowPrompt() {
   console.log("timesUserSaidNo:", timesUserSaidNo);
   if (timesUserSaidNo === 0) {
     setTimeout(() => {
-      console.log("Mostrando prompt de instalación...");
+      console.log("aqui 1");
       showInstallPrompt();
     }, 5000);
     return;

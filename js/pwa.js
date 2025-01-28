@@ -6,7 +6,6 @@ export function setupInstallPrompt() {
   window.addEventListener("beforeinstallprompt", (evt) => {
     evt.preventDefault();
     deferredPrompt = evt;
-    console.log("beforeinstallprompt event capturat");
   });
 
   const installButton = document.getElementById("install-button");
@@ -52,21 +51,6 @@ export function monitorDisplayMode() {
   });
 }
 
-export function showInstallPrompt() {
-  if (!deferredPrompt) return;
-  const ip = document.getElementById("install-prompt");
-  if (ip) ip.classList.remove("hidden");
-}
-
-export function showInstallPrompt22() {
-  if (!deferredPrompt) return;
-  console.log("beforeinstallprompt event capturat");
-  const ip = document.getElementById("install-prompt");
-  if (ip) {
-    ip.classList.add("visible");
-    console.log("Prompt de instal·lació mostrat.");
-  }
-}
 export function onUserDismissInstall() {
   let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
   timesUserSaidNo++;
@@ -78,12 +62,13 @@ export function onUserDismissInstall() {
   }
   hideInstallPrompt();
 }
+function showInstallPrompt() {
+  if (!deferredPrompt) return;
+  const ip = document.getElementById("install-prompt");
+  if (ip) ip.classList.remove("hidden");
+}
 
 function hideInstallPrompt() {
   const ip = document.getElementById("install-prompt");
-  if (ip) {
-    ip.classList.remove("visible");
-    ip.classList.add("hidden");
-    console.log("Prompt de instal·lació ocultat.");
-  }
+  if (ip) ip.classList.add("hidden");
 }
