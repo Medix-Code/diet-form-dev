@@ -12,11 +12,14 @@ export function setupInstallPrompt() {
   const installButton = document.getElementById("install-button");
   if (installButton) {
     installButton.addEventListener("click", async () => {
-      deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      if (choiceResult.outcome === "accepted") {
-        localStorage.setItem("isAppInstalled", "true");
-        hideInstallPrompt();
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const choiceResult = await deferredPrompt.userChoice;
+        if (choiceResult.outcome === "accepted") {
+          localStorage.setItem("isAppInstalled", "true");
+          hideInstallPrompt();
+        }
+        deferredPrompt = null;
       }
     });
   }

@@ -204,14 +204,15 @@ export function buildPdfFileName(dateValue, dietType) {
 export function incrementPdfDownloadCountAndMaybeShowPrompt() {
   const installed = isAppInstalled();
   const neverShow = localStorage.getItem("neverShowInstallPrompt") === "true";
+  console.log("installed:", installed, "neverShow:", neverShow);
   if (installed || neverShow) return;
 
   let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
+  console.log("timesUserSaidNo:", timesUserSaidNo);
   if (timesUserSaidNo === 0) {
     setTimeout(() => {
-      console.log("aqui 1");
+      console.log("Mostrando prompt de instalación...");
       showInstallPrompt();
-      console.log("aqui 2");
     }, 5000);
     return;
   }
