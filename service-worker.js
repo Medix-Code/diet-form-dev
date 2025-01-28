@@ -34,13 +34,26 @@ self.addEventListener("install", (event) => {
   console.log("[ServiceWorker] Instalando...");
   event.waitUntil(
     caches
-      .open(CACHE_NAME) // Abre el cache definido
-      .then((cache) => {
+      .open(CACHE_NAME)
+      .then(async (cache) => {
         console.log("[ServiceWorker] Almacenando archivos en cache");
-        return cache.addAll(urlsToCache); // Guarda los archivos especificados
+        for (const url of urlsToCache) {
+          try {
+            const response = await fetch(url, { cache: "no-cache" });
+            if (!response.ok) {
+              throw new Error(
+                `Falló la solicitud para ${url}: ${response.statusText}`
+              );
+            }
+            await cache.put(url, response);
+            console.log(`[ServiceWorker] Cached: ${url}`);
+          } catch (error) {
+            console.error(`[ServiceWorker] Error cacheando ${url}:`, error);
+          }
+        }
       })
       .catch((error) => {
-        console.error("[ServiceWorker] Error durante la instalación:", error); // Maneja errores durante la instalación
+        console.error("[ServiceWorker] Error durante la instalación:", error);
       })
   );
 });
