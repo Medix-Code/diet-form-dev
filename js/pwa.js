@@ -73,9 +73,21 @@ export function onUserDismissInstall() {
 }
 
 export function showInstallPrompt() {
-  if (!deferredPrompt) return;
-  const ip = document.getElementById("install-prompt");
-  if (ip) ip.classList.remove("hidden");
+  console.log("Intentant mostrar el prompt d'instal·lació...");
+  console.log("deferredPrompt:", deferredPrompt);
+
+  if (!deferredPrompt) {
+    console.log("⚠️ deferredPrompt és NULL! No es pot mostrar el prompt.");
+    return;
+  }
+
+  const installPrompt = document.getElementById("install-prompt");
+  if (installPrompt) {
+    installPrompt.classList.add("visible");
+    console.log("✅ Banner d'instal·lació mostrat.");
+  } else {
+    console.warn("⚠️ L'element #install-prompt no s'ha trobat.");
+  }
 }
 
 function hideInstallPrompt() {
