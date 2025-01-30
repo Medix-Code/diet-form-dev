@@ -201,8 +201,6 @@ export function buildPdfFileName(dateValue, dietType) {
   return `dieta_${formatted}.pdf`;
 }
 
-import { isAppInstalled, showInstallPrompt } from "./pwa.js";
-
 export function incrementPdfDownloadCountAndMaybeShowPrompt() {
   console.log("incrementPdfDownloadCountAndMaybeShowPrompt() s'ha executat");
 
