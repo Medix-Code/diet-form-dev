@@ -5,6 +5,5 @@ import { setTodayDate } from "./utils.js";
    DOMContentLoaded
 -----------------------------------------------------*/
 document.addEventListener("DOMContentLoaded", () => {
-  setTodayDate();
   initializeApp();
 });

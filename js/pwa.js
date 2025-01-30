@@ -2,20 +2,14 @@
 
 let deferredPrompt = null;
 
-export function install2() {
-  const installPrompt = document.getElementById("install-prompt");
-  if (installPrompt) {
-    installPrompt.classList.remove("hidden");
-    console.log("Modal d'instal·lació de la PWA mostrat.");
-  } else {
-    console.warn("Element amb l'ID 'install-prompt' no trobat.");
-  }
-}
-
 export function setupInstallPrompt() {
   window.addEventListener("beforeinstallprompt", (evt) => {
     evt.preventDefault();
     deferredPrompt = evt;
+    console.log(
+      "Event beforeinstallprompt capturat. Es pot mostrar el banner d'instal·lació."
+    );
+    showInstallPrompt(); // ✅ Afegit per mostrar el prompt quan sigui possible
   });
 
   const installButton = document.getElementById("install-button");
@@ -25,8 +19,11 @@ export function setupInstallPrompt() {
         deferredPrompt.prompt();
         const choiceResult = await deferredPrompt.userChoice;
         if (choiceResult.outcome === "accepted") {
+          console.log("L'usuari ha acceptat la instal·lació.");
           localStorage.setItem("isAppInstalled", "true");
           hideInstallPrompt();
+        } else {
+          console.log("L'usuari ha rebutjat la instal·lació.");
         }
         deferredPrompt = null;
       }

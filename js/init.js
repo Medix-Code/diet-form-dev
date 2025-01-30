@@ -26,7 +26,8 @@ let initialFormDataStr = "";
  * Funció principal d'inicialització de l'aplicació
  */
 export async function initializeApp() {
-  await openDatabase(); // Obrim IndexedDB
+  await openDatabase();
+  setTodayDate();
   initServices();
   initSignature();
 
@@ -39,8 +40,8 @@ export async function initializeApp() {
   setupTimePickers();
   setupServiceNumberRestrictions();
 
-  addInputListeners(); // Per detectar canvis
-  addDoneBehavior(); // Tancar teclat en "Enter" si enterkeyhint="done"
+  addInputListeners();
+  addDoneBehavior();
 
   // Quan iniciem sense cap dieta carregada, definim "estat inicial"
   // que serà l'actual (buit), així si l'usuari no toca res, "no hi ha canvis".
