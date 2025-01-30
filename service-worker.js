@@ -24,7 +24,8 @@ const urlsToCache = [
   "./js/pwa.js",
   "./assets/images/icons-192.png",
   "./assets/images/icons-512.png",
-  "./assets/images/icons-vector.svg",
+  "./assets/images/icons-192-maskable.png",
+  "./assets/images/icons-512-maskable.png",
   "./template.pdf",
   "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
 ];

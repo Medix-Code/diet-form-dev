@@ -1,8 +1,5 @@
-// js/pwa.js
-
 let deferredPrompt = null;
 
-// Funció per configurar l'event beforeinstallprompt
 export function setupInstallPrompt() {
   console.log(
     "✅ setupInstallPrompt() carregat! Esperant beforeinstallprompt..."
@@ -13,39 +10,53 @@ export function setupInstallPrompt() {
     evt.preventDefault();
     deferredPrompt = evt;
 
-    // Guardem deferredPrompt a localStorage per a depuració
-    localStorage.setItem("deferredPromptExists", "true");
-
     // Mostrem el prompt només si l'event es captura correctament
     showInstallPrompt();
   });
-}
 
-// Funció per monitoritzar el mode de visualització
-export function monitorDisplayMode() {
-  const mq = window.matchMedia("(display-mode: standalone)");
-  mq.addEventListener("change", () => {
-    if (mq.matches) {
-      console.log("✅ L'app s'està executant en mode standalone.");
-      localStorage.setItem("isAppInstalled", "true");
-      hideInstallPrompt();
-    } else {
-      console.log("ℹ️ L'app ha sortit del mode standalone.");
-      localStorage.removeItem("isAppInstalled");
-    }
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("📌 DOM carregat, enllaçant botons...");
+    linkInstallButtons();
   });
 }
 
-// Funció per determinar si l'app està instal·lada
-export function isAppInstalled() {
-  return (
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.navigator.standalone === true ||
-    localStorage.getItem("isAppInstalled") === "true"
-  );
+function linkInstallButtons() {
+  const installButton = document.getElementById("install-button");
+  if (installButton) {
+    installButton.addEventListener("click", async () => {
+      if (deferredPrompt) {
+        console.log("📥 S'està mostrant el diàleg d'instal·lació...");
+        await deferredPrompt.prompt();
+
+        const choiceResult = await deferredPrompt.userChoice;
+        if (choiceResult.outcome === "accepted") {
+          console.log("✅ L'usuari ha acceptat la instal·lació.");
+          localStorage.setItem("isAppInstalled", "true");
+          hideInstallPrompt();
+        } else {
+          console.log("❌ L'usuari ha rebutjat la instal·lació.");
+        }
+        deferredPrompt = null;
+        localStorage.setItem("deferredPromptExists", "false");
+      } else {
+        console.log("⚠️ deferredPrompt no està definit.");
+      }
+    });
+  } else {
+    console.warn("⚠️ No s'ha trobat el botó d'instal·lació (#install-button).");
+  }
+
+  const dismissButton = document.getElementById("dismiss-button");
+  if (dismissButton) {
+    dismissButton.addEventListener("click", () => {
+      console.log("🚫 L'usuari ha descartat el banner d'instal·lació.");
+      onUserDismissInstall();
+    });
+  } else {
+    console.warn("⚠️ No s'ha trobat el botó de tancament (#dismiss-button).");
+  }
 }
 
-// Funció per mostrar el prompt d'instal·lació
 export function showInstallPrompt() {
   console.log("🔍 Intentant mostrar el prompt d'instal·lació...");
   console.log("deferredPrompt:", deferredPrompt);
@@ -69,7 +80,6 @@ export function showInstallPrompt() {
   }
 }
 
-// Funció per amagar el prompt d'instal·lació
 export function hideInstallPrompt() {
   const installPrompt = document.getElementById("install-prompt");
   if (installPrompt) {
@@ -78,7 +88,6 @@ export function hideInstallPrompt() {
   }
 }
 
-// Funció per gestionar la decisió de l'usuari en rebutjar l'instal·lació
 export function onUserDismissInstall() {
   let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
   timesUserSaidNo++;
@@ -95,42 +104,24 @@ export function onUserDismissInstall() {
   hideInstallPrompt();
 }
 
-// Funció per incrementar el comptador de descàrregues de PDF i potencialment mostrar el prompt
-export function incrementPdfDownloadCountAndMaybeShowPrompt() {
-  console.log("incrementPdfDownloadCountAndMaybeShowPrompt() s'ha executat");
-
-  const installed = isAppInstalled();
-  const neverShow = localStorage.getItem("neverShowInstallPrompt") === "true";
-
-  console.log("Estat de la instal·lació:", installed, "neverShow:", neverShow);
-  if (installed || neverShow) return;
-
-  let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
-  console.log(
-    "Vegades que l'usuari ha rebutjat la instal·lació:",
-    timesUserSaidNo
+export function isAppInstalled() {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true ||
+    localStorage.getItem("isAppInstalled") === "true"
   );
+}
 
-  if (timesUserSaidNo === 0) {
-    setTimeout(() => {
-      console.log("Mostrant prompt per primera vegada...");
-      showInstallPrompt();
-    }, 5000);
-    return;
-  }
-
-  if (timesUserSaidNo === 1) {
-    let pdfDownloadsSinceNo = +localStorage.getItem("pdfDownloadsSinceNo") || 0;
-    pdfDownloadsSinceNo++;
-    localStorage.setItem("pdfDownloadsSinceNo", String(pdfDownloadsSinceNo));
-
-    console.log("PDFs descarregats des de l'últim no:", pdfDownloadsSinceNo);
-
-    if (pdfDownloadsSinceNo >= 9) {
-      setTimeout(() => {
-        console.log("Mostrant prompt després de 9 descàrregues...");
-        showInstallPrompt();
-      }, 5000);
+export function monitorDisplayMode() {
+  const mq = window.matchMedia("(display-mode: standalone)");
+  mq.addEventListener("change", () => {
+    if (mq.matches) {
+      console.log("✅ L'app s'està executant en mode standalone.");
+      localStorage.setItem("isAppInstalled", "true");
+      hideInstallPrompt();
+    } else {
+      console.log("ℹ️ L'app ha sortit del mode standalone.");
+      localStorage.removeItem("isAppInstalled");
     }
-  }
+  });
 }

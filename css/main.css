@@ -788,6 +788,7 @@ button .fa {
 ***********************************/
 /* css/styles.css */
 #install-prompt {
+  display: none;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -807,6 +808,7 @@ button .fa {
 }
 
 #install-prompt.visible {
+  display: block; /* Mostra el prompt quan es necessari */
   transform: translateY(0);
   opacity: 1;
 }
