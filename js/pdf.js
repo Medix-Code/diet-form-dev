@@ -201,16 +201,26 @@ export function buildPdfFileName(dateValue, dietType) {
   return `dieta_${formatted}.pdf`;
 }
 
+import { isAppInstalled, showInstallPrompt } from "./pwa.js";
+
 export function incrementPdfDownloadCountAndMaybeShowPrompt() {
+  console.log("incrementPdfDownloadCountAndMaybeShowPrompt() s'ha executat");
+
   const installed = isAppInstalled();
   const neverShow = localStorage.getItem("neverShowInstallPrompt") === "true";
-  console.log("installed:", installed, "neverShow:", neverShow);
+
+  console.log("Estat de la instal·lació:", installed, "neverShow:", neverShow);
   if (installed || neverShow) return;
 
   let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
-  console.log("timesUserSaidNo:", timesUserSaidNo);
+  console.log(
+    "Vegades que l'usuari ha rebutjat la instal·lació:",
+    timesUserSaidNo
+  );
+
   if (timesUserSaidNo === 0) {
     setTimeout(() => {
+      console.log("Mostrant prompt per primera vegada...");
       showInstallPrompt();
     }, 5000);
     return;
@@ -221,8 +231,11 @@ export function incrementPdfDownloadCountAndMaybeShowPrompt() {
     pdfDownloadsSinceNo++;
     localStorage.setItem("pdfDownloadsSinceNo", String(pdfDownloadsSinceNo));
 
+    console.log("PDFs descarregats des de l'últim no:", pdfDownloadsSinceNo);
+
     if (pdfDownloadsSinceNo >= 9) {
       setTimeout(() => {
+        console.log("Mostrant prompt després de 9 descàrregues...");
         showInstallPrompt();
       }, 5000);
     }

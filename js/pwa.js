@@ -9,7 +9,9 @@ export function setupInstallPrompt() {
     console.log(
       "Event beforeinstallprompt capturat. Es pot mostrar el banner d'instal·lació."
     );
-    showInstallPrompt(); // ✅ Afegit per mostrar el prompt quan sigui possible
+
+    // Mostrem el missatge d'instal·lació
+    showInstallPrompt();
   });
 
   const installButton = document.getElementById("install-button");
