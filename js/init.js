@@ -20,6 +20,8 @@ import {
   isAppInstalled,
 } from "./pwa.js";
 
+import { setTodayDate } from "./utils.js";
+
 let initialFormDataStr = "";
 
 /**
