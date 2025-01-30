@@ -1,9 +1,10 @@
 // js/app.js
+import { setupInstallPrompt, monitorDisplayMode } from "./pwa.js";
 import { initializeApp } from "./init.js";
-import { setTodayDate } from "./utils.js";
-/* --------------------------------------------------
-   DOMContentLoaded
------------------------------------------------------*/
+
+setupInstallPrompt();
+monitorDisplayMode();
+
 document.addEventListener("DOMContentLoaded", () => {
   initializeApp();
 });

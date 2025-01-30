@@ -181,6 +181,7 @@ export async function generateAndDownloadPdf() {
     // Si tot OK, guardem la dieta
     await handleSaveDietWithPossibleOverwrite();
     incrementPdfDownloadCountAndMaybeShowPrompt();
+    console.log("Generant i descarregant el PDF...");
   } catch (err) {
     console.error("[app] Error generando el PDF:", err);
   }

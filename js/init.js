@@ -14,11 +14,7 @@ import {
   addDoneBehavior,
   getAllFormDataAsString,
 } from "./formHandlers.js";
-import {
-  setupInstallPrompt,
-  monitorDisplayMode,
-  isAppInstalled,
-} from "./pwa.js";
+import { isAppInstalled } from "./pwa.js";
 
 import { setTodayDate } from "./utils.js";
 
@@ -58,8 +54,6 @@ export async function initializeApp() {
   } else {
     localStorage.removeItem("isAppInstalled");
   }
-  setupInstallPrompt();
-  monitorDisplayMode();
 }
 
 /**
