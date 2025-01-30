@@ -11,7 +11,6 @@ export function setupInstallPrompt() {
     deferredPrompt = evt;
 
     // Mostrem el prompt només si l'event es captura correctament
-    showInstallPrompt();
   });
 
   document.addEventListener("DOMContentLoaded", () => {
