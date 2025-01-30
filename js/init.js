@@ -19,7 +19,6 @@ import {
   monitorDisplayMode,
   isAppInstalled,
 } from "./pwa.js";
-import { setTodayDate } from "./utils.js";
 
 let initialFormDataStr = "";
 
@@ -27,7 +26,6 @@ let initialFormDataStr = "";
  * Funció principal d'inicialització de l'aplicació
  */
 export async function initializeApp() {
-  setTodayDate();
   await openDatabase(); // Obrim IndexedDB
   initServices();
   initSignature();
