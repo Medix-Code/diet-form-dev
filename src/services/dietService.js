@@ -1,6 +1,6 @@
 /**
  * Lògica principal per a guardar/cargar/actualitzar Dietes.
- * Abans això era part de "diet.js"
+ * A
  */
 
 import {
@@ -56,7 +56,7 @@ export function buildDietObject(generalData, servicesData, customId) {
  */
 export async function onClickSaveDiet() {
   if (!validateMinFieldsForSave()) {
-    showToast("Falta rellenar los campos obligatorios", "error");
+    showToast("Falta rellenar los campos obligatorios.", "error");
     return;
   }
 
@@ -169,12 +169,12 @@ export async function loadDietById(dietId) {
 export async function deleteDietHandler(id, dietDate, dietType) {
   const { ddmmaa, franjaText } = getDietDisplayInfo(dietDate, dietType);
   const confirmTitle = "Eliminar dieta";
-  const confirmMessage = `Vols eliminar la dieta de la ${franjaText} del ${ddmmaa}?`;
+  const confirmMessage = `¿Quieres eliminar la dieta de la ${franjaText} del ${ddmmaa}?`;
 
   showConfirmModal(confirmMessage, confirmTitle).then((confirmed) => {
     if (confirmed) {
       deleteDietById(id).then(() => {
-        showToast("Dieta eliminada!", "success");
+        showToast("¡Dieta eliminada!", "success");
         displayDietOptions();
       });
     }

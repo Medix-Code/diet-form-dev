@@ -1,5 +1,5 @@
 /**
- * Lògica per generar i descarregar PDFs (abans era "pdf.js")
+ * Lògica per generar i descarregar PDFs
  */
 
 import { showToast } from "../ui/toast.js";
@@ -134,7 +134,7 @@ export async function fillPdf(data, servicesData) {
  */
 export async function generateAndDownloadPdf() {
   if (!validateForPdf()) {
-    showToast("Revisa els camps obligatoris per descarregar el PDF.", "error");
+    showToast("Falta rellenar los campos obligatorios.", "error");
     return;
   }
 
@@ -190,6 +190,7 @@ export function incrementPdfDownloadCountAndMaybeShowPrompt() {
     timesUserSaidNo
   );
 
+  // CAS 1: L'usuari encara no ha dit que NO cap vegada
   if (timesUserSaidNo === 0) {
     setTimeout(() => {
       console.log("Mostrant prompt per primera vegada...");
@@ -198,15 +199,16 @@ export function incrementPdfDownloadCountAndMaybeShowPrompt() {
     return;
   }
 
+  // CAS 2: L'usuari ha dit "No" 1 vegada
   if (timesUserSaidNo === 1) {
     let pdfDownloadsSinceNo = +localStorage.getItem("pdfDownloadsSinceNo") || 0;
     pdfDownloadsSinceNo++;
     localStorage.setItem("pdfDownloadsSinceNo", String(pdfDownloadsSinceNo));
 
     console.log("PDFs descarregats des de l'últim no:", pdfDownloadsSinceNo);
-    if (pdfDownloadsSinceNo >= 9) {
+    if (pdfDownloadsSinceNo >= 7) {
       setTimeout(() => {
-        console.log("Mostrant prompt després de 9 descàrregues...");
+        console.log("Mostrant prompt PWA (després de 7 descàrregues)...");
         showInstallPrompt();
       }, 5000);
     }

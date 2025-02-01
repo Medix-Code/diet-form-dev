@@ -89,8 +89,11 @@ export function onUserDismissInstall() {
   let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
   timesUserSaidNo++;
   localStorage.setItem("timesUserSaidNo", String(timesUserSaidNo));
+
+  // Reiniciem el comptador de descàrregues des del darrer No
   localStorage.setItem("pdfDownloadsSinceNo", "0");
 
+  // Si ja ens ha dit NO dues vegades, no el tornem a mostrar
   if (timesUserSaidNo >= 2) {
     localStorage.setItem("neverShowInstallPrompt", "true");
     console.log(
