@@ -1,8 +1,8 @@
-// js/pickers.js
+/**
+ * Configuració de date/time pickers natius
+ * Abans era "pickers.js"
+ */
 
-/* --------------------------------------------------
-   TIME/DATE PICKERS
------------------------------------------------------*/
 export function setupDatePickers() {
   const dateInps = document.querySelectorAll(
     'input[type="date"], input[type="datetime-local"]'

@@ -1,4 +1,6 @@
-// js/tabs.js
+/**
+ * Configuració de les pestanyes (dades / serveis)
+ */
 
 export function setupTabs() {
   const tabDades = document.getElementById("tab-dades");

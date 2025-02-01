@@ -1,8 +1,10 @@
-// js/modals.js
+/**
+ * Lògica de modals
+ */
 
-import { loadDietById, deleteDietHandler } from "./diet.js";
-import { getDietDisplayInfo, capitalizeFirstLetter } from "./utils.js";
-import { getAllDiets } from "./db.js";
+import { loadDietById, deleteDietHandler } from "../services/dietService.js";
+import { getDietDisplayInfo, capitalizeFirstLetter } from "../utils/utils.js";
+import { getAllDiets } from "../db/indexedDbDietRepository.js";
 
 export function setupModalGenerics() {
   const modals = document.querySelectorAll(".modal");
@@ -84,13 +86,13 @@ export async function displayDietOptions() {
       </span>
       <div>
         <button type="button" class="delete-diet">
-              <img src="assets/icons/trash.svg" alt="" class="icon" />
+          <img src="assets/icons/trash.svg" alt="" class="icon" />
         </button>
       </div>
     `;
 
     const confirmTitle = "Cargar dieta";
-    const confirmMessage = `¿Quieres cargar la dieta de la ${franjaText} del ${ddmmaa}?`;
+    const confirmMessage = `Vols carregar la dieta de la ${franjaText} del ${ddmmaa}?`;
 
     li.addEventListener("click", (evt) => {
       if (evt.target.closest(".delete-diet")) return;
@@ -107,16 +109,17 @@ export async function displayDietOptions() {
   });
 }
 
-/** Confirm modal => promise<bool> */
-export function showConfirmModal(message, title = "Confirmar acción") {
+/**
+ * Mostra un modal de confirmació i retorna una Promise<boolean>
+ */
+export function showConfirmModal(message, title = "Confirmar acció") {
   return new Promise((resolve) => {
     const modal = document.getElementById("confirm-modal");
     const msgEl = document.getElementById("confirm-message");
-    const titleEl = modal.querySelector(".modal-title"); // Afegim suport al títol
+    const titleEl = modal.querySelector(".modal-title");
     const yesBtn = document.getElementById("confirm-yes");
     const noBtn = document.getElementById("confirm-no");
 
-    // Configurar títol i missatge
     titleEl.textContent = title;
     msgEl.textContent = message;
 
@@ -124,7 +127,6 @@ export function showConfirmModal(message, title = "Confirmar acción") {
     document.body.classList.add("modal-open");
     yesBtn.focus();
 
-    // Tancar modal i netejar esdeveniments
     function closeModal() {
       modal.style.display = "none";
       document.body.classList.remove("modal-open");
@@ -151,7 +153,6 @@ export function showConfirmModal(message, title = "Confirmar acción") {
       }
     }
 
-    // Afegeix esdeveniments
     yesBtn.addEventListener("click", onYes);
     noBtn.addEventListener("click", onNo);
     window.addEventListener("click", outsideClick);

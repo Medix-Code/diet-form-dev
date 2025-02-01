@@ -1,100 +1,103 @@
-// Definimos el nombre del cache y los archivos a cachear
+// Definim el nom del caché i els fitxers a “cachejar”
 const CACHE_NAME = "dieta-cache-v1";
 const urlsToCache = [
   "./",
   "./index.html",
   "./css/main.css",
   "./manifest.json",
-  "./js/app.js",
-  "./js/init.js",
-  "./js/utils.js",
-  "./js/signature.js",
-  "./js/services.js",
-  "./js/db.js",
-  "./js/tabs.js",
-  "./js/diet.js",
-  "./js/pdf.js",
-  "./js/formHandlers.js",
-  "./js/clearService.js",
-  "./js/modals.js",
-  "./js/mainButtons.js",
-  "./js/pickers.js",
-  "./js/restrictions.js",
-  "./js/validation.js",
-  "./js/pwa.js",
+  // Service Worker en si
+  "./service-worker.js",
+
+  // ► TOTS els fitxers
+  "./src/app.js",
+  "./src/init.js",
+  "./src/models/diet.js",
+  "./src/db/indexedDbDietRepository.js",
+  "./src/services/dietService.js",
+  "./src/services/formService.js",
+  "./src/services/signatureService.js",
+  "./src/services/pdfService.js",
+  "./src/services/pwaService.js",
+  "./src/services/servicesPanelManager.js",
+  "./src/ui/clearService.js",
+  "./src/ui/mainButtons.js",
+  "./src/ui/modals.js",
+  "./src/ui/pickers.js",
+  "./src/ui/tabs.js",
+  "./src/ui/toast.js",
+  "./src/utils/restrictions.js",
+  "./src/utils/validation.js",
+  "./src/utils/utils.js",
+
+  // ► Arxius estàtics
   "./assets/images/icons-192.png",
   "./assets/images/icons-512.png",
   "./assets/images/icons-192-maskable.png",
   "./assets/images/icons-512-maskable.png",
   "./template.pdf",
+
+  // ► Dependència externa (CDN)
   "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
 ];
 
-// Evento que se ejecuta al instalar el Service Worker
+// Event 'install': fem "pre-cache" dels fitxers
 self.addEventListener("install", (event) => {
-  console.log("[ServiceWorker] Instalando...");
+  console.log("[ServiceWorker] Instal·lant...");
   event.waitUntil(
     caches
       .open(CACHE_NAME)
       .then(async (cache) => {
-        console.log("[ServiceWorker] Almacenando archivos en cache");
+        console.log("[ServiceWorker] Emmagatzemant fitxers al cache");
         for (const url of urlsToCache) {
           try {
             const response = await fetch(url, { cache: "no-cache" });
             if (!response.ok) {
               throw new Error(
-                `Falló la solicitud para ${url}: ${response.statusText}`
+                `Error en la sol·licitud per ${url}: ${response.statusText}`
               );
             }
             await cache.put(url, response);
-            console.log(`[ServiceWorker] Cached: ${url}`);
+            console.log(`[ServiceWorker] Fitxer en cache: ${url}`);
           } catch (error) {
-            console.error(`[ServiceWorker] Error cacheando ${url}:`, error);
+            console.error(`[ServiceWorker] Error cachejant ${url}:`, error);
           }
         }
       })
       .catch((error) => {
-        console.error("[ServiceWorker] Error durante la instalación:", error);
+        console.error("[ServiceWorker] Error durant la instal·lació:", error);
       })
   );
 });
 
-// Evento que intercepta las peticiones de red
+// Event 'fetch': interceptem peticions de xarxa i mirem si està en cache
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Devuelve el archivo desde el cache si existe
-        console.log(
-          "[ServiceWorker] Sirviendo desde cache:",
-          event.request.url
-        );
+        console.log("[ServiceWorker] Servint des de cache:", event.request.url);
         return cachedResponse;
       }
-      // Si no está en cache, lo obtiene de la red
       return fetch(event.request)
         .then((networkResponse) => {
           return networkResponse;
         })
         .catch((error) => {
-          // Manejo de errores durante la solicitud
-          console.error("[ServiceWorker] Error durante el fetch:", error);
+          console.error("[ServiceWorker] Error durant el fetch:", error);
           throw error;
         });
     })
   );
 });
 
-// Evento que se ejecuta al activar el Service Worker
+// Event 'activate': esborrem caches antics que no concordin amb la versió actual
 self.addEventListener("activate", (event) => {
-  console.log("[ServiceWorker] Activando...");
+  console.log("[ServiceWorker] Activant...");
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            // Elimina caches antiguos que no coincidan con el nombre actual
-            console.log("[ServiceWorker] Eliminando cache antigua:", cacheName);
+            console.log("[ServiceWorker] Eliminant cache antic:", cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -103,7 +106,7 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Captura y registra errores globales en el Service Worker
+// Captura i registra errors globals al Service Worker
 self.addEventListener("error", (event) => {
-  console.error("[ServiceWorker] Error capturado:", event.message);
+  console.error("[ServiceWorker] Error capturat:", event.message);
 });

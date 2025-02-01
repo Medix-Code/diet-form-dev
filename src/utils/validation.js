@@ -1,9 +1,8 @@
-// js/validation.js
+/**
+ * Funcions de validació (abans era "validation.js")
+ */
 
-/* --------------------------------------------------
-   VALIDACIÓ (MÍNIMA per guardar)
-   Necessitem: data, franja, NºServei S1 >=9 dígits
------------------------------------------------------*/
+import { validateServiceNumber } from "../services/servicesPanelManager.js";
 
 export function validateMinFieldsForSave() {
   let valid = true;
@@ -11,7 +10,6 @@ export function validateMinFieldsForSave() {
   const dietTypeSelect = document.getElementById("diet-type");
   const service1Number = document.getElementById("service-number-1");
 
-  // netegem errors previs
   [dateInput, dietTypeSelect, service1Number].forEach((el) =>
     el.classList.remove("input-error")
   );
@@ -29,14 +27,13 @@ export function validateMinFieldsForSave() {
     markError(service1Number);
   } else if (s1val.length < 9) {
     markError(service1Number);
+  } else if (!validateServiceNumber(s1val)) {
+    markError(service1Number);
   }
 
   return valid;
 }
 
 export function validateForPdf() {
-  // Pots fer una validació extra si vols
-  // Per exemple: vehicle, persona1 o persona2, etc.
-  // O deixar-ho igual que la minFields si no ho vols tan estricte
   return validateMinFieldsForSave();
 }

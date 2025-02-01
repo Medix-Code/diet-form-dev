@@ -1,15 +1,18 @@
-// js/clearService.js
+/**
+ * Botó per netejar el servei seleccionat
+ * Abans era "clearService.js"
+ */
 
 import {
   updateClearButtonColor,
   getCurrentServiceIndex,
   clearServiceFields,
-} from "./services.js";
-import { removeErrorClasses, checkIfFormChanged } from "./formHandlers.js";
+} from "../services/servicesPanelManager.js";
+import {
+  removeErrorClasses,
+  checkIfFormChanged,
+} from "../services/formService.js";
 
-/**
- * Configura el botó per netejar el servei seleccionat.
- */
 export function setupClearSelectedService() {
   const clearBtn = document.getElementById("clear-selected-service");
   const allServices = document.querySelectorAll(".service");

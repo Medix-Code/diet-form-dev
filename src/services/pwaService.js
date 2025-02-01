@@ -1,5 +1,13 @@
+/**
+ * Lògica de PWA (Prompt d'instal·lació, etc.)
+ * Abans era "pwa.js"
+ */
+
 let deferredPrompt = null;
 
+/**
+ * Configura escoltes per "beforeinstallprompt"
+ */
 export function setupInstallPrompt() {
   console.log(
     "✅ setupInstallPrompt() carregat! Esperant beforeinstallprompt..."
@@ -9,12 +17,10 @@ export function setupInstallPrompt() {
     console.log("📢 Event beforeinstallprompt capturat correctament!");
     evt.preventDefault();
     deferredPrompt = evt;
-
-    // Mostrem el prompt només si l'event es captura correctament
   });
 
   document.addEventListener("DOMContentLoaded", () => {
-    console.log("📌 DOM carregat, enllaçant botons...");
+    console.log("📌 DOM carregat, enllaçant botons instal·lació...");
     linkInstallButtons();
   });
 }
@@ -58,18 +64,10 @@ function linkInstallButtons() {
 
 export function showInstallPrompt() {
   console.log("🔍 Intentant mostrar el prompt d'instal·lació...");
-  console.log("deferredPrompt:", deferredPrompt);
-
   if (!deferredPrompt) {
     console.warn("⚠️ deferredPrompt és NULL! No es pot mostrar el prompt.");
-    console.log("ℹ️ Comprovant si `beforeinstallprompt` s'ha llançat abans...");
-    console.log(
-      "localStorage[deferredPromptExists]:",
-      localStorage.getItem("deferredPromptExists")
-    );
     return;
   }
-
   const installPrompt = document.getElementById("install-prompt");
   if (installPrompt) {
     installPrompt.classList.add("visible");

@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#343a40" />
     <meta name="author" content="Medix" />
-    <meta name="copyright" content="© 2025 Medix" />
-    <meta name="generator" content="" />
-    <title>Registro de dietas</title>
-
-    <link rel="stylesheet" href="css/main.css" />
-    <noscript><link rel="stylesheet" href="css/main.css" /></noscript>
-
-    <link rel="manifest" href="manifest.json" />
-    <link rel="icon" href="assets/images/icons-192.png" type="image/png" />
     <meta
       name="description"
       content="Aplicació per gestionar dietes amb formularis accessibles i funcionalitat PWA."
     />
+    <title>Registro de dietas</title>
+
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="css/main.css" />
+    <noscript><link rel="stylesheet" href="css/main.css" /></noscript>
+
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="assets/images/icons-192.png" type="image/png" />
   </head>
   <body>
     <!-- Missatge personalitzat d'instal·lació (ocult d'entrada) -->
@@ -40,7 +40,7 @@
         <button
           type="button"
           class="ajustes-btn"
-          id="ajustes"
+          id="settings"
           aria-label="Ajustes"
         >
           <img src="assets/icons/bars.svg" alt="Menu" class="icon bars" />
@@ -49,7 +49,7 @@
         <!-- Panell d'Ajustes -->
         <div
           class="ajustes-panel hidden"
-          id="ajustes-panel"
+          id="settings-panel"
           role="menu"
           aria-labelledby="ajustes"
         >
@@ -604,7 +604,7 @@
       async
     ></script>
 
-    <!-- Registre Service Worker (PWA) -->
+    <!-- Registre del service worker -->
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
@@ -614,7 +614,7 @@
       }
     </script>
 
-    <!-- Codi principal -->
-    <script type="module" src="js/app.js"></script>
+    <!-- Import del codi principal, ara al directori 'src/' -->
+    <script type="module" src="./src/app.js"></script>
   </body>
 </html>

@@ -1,8 +1,8 @@
-// js/restrictions.js
+/**
+ * Restriccions per N. Servei
+ * Abans era part de "restrictions.js"
+ */
 
-/* --------------------------------------------------
-   RESTRICCIÓ Nº SERVEI
------------------------------------------------------*/
 export function setupServiceNumberRestrictions() {
   const snInputs = document.querySelectorAll(".service-number");
   snInputs.forEach((i) => {
