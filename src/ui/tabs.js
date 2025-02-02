@@ -2,7 +2,14 @@
  * Configuració de les pestanyes (dades / serveis)
  */
 
+/**
+ * Configuració de les pestanyes (dades / serveis)
+ */
+
 let currentTab = "dades";
+export function getCurrentTab() {
+  return currentTab;
+}
 
 export function setupTabs() {
   const tabDades = document.getElementById("tab-dades");

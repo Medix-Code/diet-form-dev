@@ -2,7 +2,7 @@
  * Lògica per generar i descarregar PDFs
  */
 
-import { currentTab } from "../ui/tabs.js";
+import { getCurrentTab } from "../ui/tabs.js";
 import { showToast } from "../ui/toast.js";
 import { handleSaveDietWithPossibleOverwrite } from "./dietService.js";
 import { gatherAllData } from "./formService.js";
