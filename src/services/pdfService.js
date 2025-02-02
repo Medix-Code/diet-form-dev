@@ -6,7 +6,11 @@ import { getCurrentTab } from "../ui/tabs.js";
 import { showToast } from "../ui/toast.js";
 import { handleSaveDietWithPossibleOverwrite } from "./dietService.js";
 import { gatherAllData } from "./formService.js";
-import { validateDadesTab, validateServeisTab } from "../utils/validation.js";
+import {
+  validateDadesTab,
+  validateServeisTab,
+  validateForPdf,
+} from "../utils/validation.js";
 import { isAppInstalled, showInstallPrompt } from "./pwaService.js";
 
 /**
@@ -153,6 +157,7 @@ export async function generateAndDownloadPdf() {
     if (!serveisOK) {
       // Posem blink a tab-serveis
       document.getElementById("tab-serveis").classList.add("blink-error");
+      console.log("Añadir blink a los servicios");
       showToast("Completa los campos en la pestaña 'Servicios'.", "error");
       return;
     }
