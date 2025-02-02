@@ -43,7 +43,7 @@
   "prefer_related_applications": false,
 
   "id": "/",
-  "scope": "./",
+  "scope": "/",
   "display_override": ["window-controls-overlay", "standalone", "browser"],
   "handle_links": "preferred",
   "shortcuts": [
