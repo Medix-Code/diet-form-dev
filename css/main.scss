@@ -916,6 +916,15 @@ button .icon {
   height: 1.3em;
 }
 
+.big-btn:active {
+  background-color: #f0e68c; /* per exemple, un groc clar */
+}
+#diet-options li:active {
+  background-color: #f5d3d3;
+}
+.delete-diet:active {
+  background-color: #f5d3d3;
+}
 /***********************************
   * RESPONSIVE (MEDIA QUERIES)
 ***********************************/

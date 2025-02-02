@@ -170,17 +170,17 @@ export async function deleteDietHandler(id, dietDate, dietType) {
   const { ddmmaa, franjaText } = getDietDisplayInfo(dietDate, dietType);
   const confirmTitle = "Eliminar dieta";
   const confirmMessage = `¿Quieres eliminar la dieta de la ${franjaText} del ${ddmmaa}?`;
-  const allDiets = await getAllDiets();
+
   showConfirmModal(confirmMessage, confirmTitle).then((confirmed) => {
     if (confirmed) {
-      deleteDietById(id).then(() => {
+      deleteDietById(id).then(async () => {
         showToast("¡Dieta eliminada!", "success");
         displayDietOptions();
-        // Comprovar si queden dietes
 
-        if (!allDiets.length) {
-          // No queden dietes => tanquem modal "Mis dietas"
-          closeDietModal();
+        // Després d’haver esborrat la dieta, recarreguem la llista de BD:
+        const dietsAfter = await getAllDiets();
+        if (!dietsAfter.length) {
+          closeDietModal(); // Tanca el modal si ja no queden dietes
         }
       });
     }
