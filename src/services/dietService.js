@@ -1,6 +1,6 @@
 /**
  * Lògica principal per a guardar/cargar/actualitzar Dietes.
- * A
+ *
  */
 
 import {
@@ -71,7 +71,7 @@ export async function onClickSaveDiet() {
       disableSaveButton();
       break;
     case "unchanged":
-      showToast("No hi ha canvis que guardar.", "success");
+      showToast("No hay cambios que guardar.", "success");
       break;
     default:
       // L'usuari pot haver cancel·lat
@@ -105,7 +105,7 @@ export async function handleSaveDietWithPossibleOverwrite() {
     } else {
       // Preguntem si vol sobrescriure
       const overwrite = await showConfirmModal(
-        "Ja existeix una dieta amb aquest número de servei. Vols sobrescriure-la?"
+        "Ya existe una dieta con este número de servicio. ¿Quieres sobrescribirla?"
       );
       if (overwrite) {
         await updateDiet(dietToSave);
@@ -159,7 +159,7 @@ export async function loadDietById(dietId) {
   setInitialFormDataStr(getAllFormDataAsString());
   disableSaveButton();
 
-  showToast("Dieta carregada!", "success");
+  showToast("Dieta cargada!", "success");
   closeDietModal();
 }
 

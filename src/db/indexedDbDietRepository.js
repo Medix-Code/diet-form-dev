@@ -30,7 +30,7 @@ export function openDatabase() {
     };
 
     request.onerror = (event) => {
-      reject("Error al obrir la base de dades: " + event.target.errorCode);
+      reject("Error al abrir la base de datos: " + event.target.errorCode);
     };
   });
 }
@@ -48,7 +48,7 @@ export async function addDiet(diet) {
       resolve(evt.target.result);
     };
     req.onerror = () => {
-      reject("Error al afegir la dieta.");
+      reject("Error al agregar la dieta.");
     };
   });
 }
@@ -84,7 +84,7 @@ export async function getAllDiets() {
       resolve(evt.target.result);
     };
     req.onerror = () => {
-      reject("Error al recuperar les dietes.");
+      reject("Error al recuperar las dietas.");
     };
   });
 }
@@ -138,7 +138,7 @@ export async function clearAllDiets() {
       resolve();
     };
     req.onerror = () => {
-      reject("Error al borrar les dietes.");
+      reject("Error al borrar las dietas.");
     };
   });
 }

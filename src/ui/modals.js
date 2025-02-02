@@ -92,7 +92,7 @@ export async function displayDietOptions() {
     `;
 
     const confirmTitle = "Cargar dieta";
-    const confirmMessage = `Vols carregar la dieta de la ${franjaText} del ${ddmmaa}?`;
+    const confirmMessage = `¿Quieres cargar la dieta de la ${franjaText} del ${ddmmaa}?`;
 
     li.addEventListener("click", (evt) => {
       if (evt.target.closest(".delete-diet")) return;

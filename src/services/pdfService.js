@@ -156,9 +156,9 @@ export async function generateAndDownloadPdf() {
     await handleSaveDietWithPossibleOverwrite();
 
     incrementPdfDownloadCountAndMaybeShowPrompt();
-    console.log("Generant i descarregant el PDF...");
+    console.log("Generando y descargando el PDF...");
   } catch (err) {
-    console.error("[app] Error generant el PDF:", err);
+    console.error("[app] Error generando el PDF:", err);
   }
 }
 
@@ -186,14 +186,14 @@ export function incrementPdfDownloadCountAndMaybeShowPrompt() {
 
   let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
   console.log(
-    "Vegades que l'usuari ha rebutjat la instal·lació:",
+    "Veces que el usuario ha rechazado la instalación:",
     timesUserSaidNo
   );
 
   // CAS 1: L'usuari encara no ha dit que NO cap vegada
   if (timesUserSaidNo === 0) {
     setTimeout(() => {
-      console.log("Mostrant prompt per primera vegada...");
+      console.log("Mostrando prompt por primera vez...");
       showInstallPrompt();
     }, 5000);
     return;
@@ -205,10 +205,10 @@ export function incrementPdfDownloadCountAndMaybeShowPrompt() {
     pdfDownloadsSinceNo++;
     localStorage.setItem("pdfDownloadsSinceNo", String(pdfDownloadsSinceNo));
 
-    console.log("PDFs descarregats des de l'últim no:", pdfDownloadsSinceNo);
+    console.log("PDFs descargados desde el último no:", pdfDownloadsSinceNo);
     if (pdfDownloadsSinceNo >= 7) {
       setTimeout(() => {
-        console.log("Mostrant prompt PWA (després de 7 descàrregues)...");
+        console.log("Mostrando prompt PWA (después de 7 descargas)...");
         showInstallPrompt();
       }, 5000);
     }

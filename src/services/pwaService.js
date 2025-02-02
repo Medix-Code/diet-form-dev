@@ -1,26 +1,26 @@
 /**
- * Lògica de PWA (Prompt d'instal·lació, etc.)
- * Abans era "pwa.js"
+ * Lógica de PWA (Prompt de instalación, etc.)
+ *
  */
 
 let deferredPrompt = null;
 
 /**
- * Configura escoltes per "beforeinstallprompt"
+ * Configura escuchas para "beforeinstallprompt"
  */
 export function setupInstallPrompt() {
   console.log(
-    "✅ setupInstallPrompt() carregat! Esperant beforeinstallprompt..."
+    "✅ setupInstallPrompt() cargado! Esperando beforeinstallprompt..."
   );
 
   window.addEventListener("beforeinstallprompt", (evt) => {
-    console.log("📢 Event beforeinstallprompt capturat correctament!");
+    console.log("📢 Evento beforeinstallprompt capturado correctamente!");
     evt.preventDefault();
     deferredPrompt = evt;
   });
 
   document.addEventListener("DOMContentLoaded", () => {
-    console.log("📌 DOM carregat, enllaçant botons instal·lació...");
+    console.log("📌 DOM cargado, enlazando botones de instalación...");
     linkInstallButtons();
   });
 }
@@ -30,50 +30,52 @@ function linkInstallButtons() {
   if (installButton) {
     installButton.addEventListener("click", async () => {
       if (deferredPrompt) {
-        console.log("📥 S'està mostrant el diàleg d'instal·lació...");
+        console.log("📥 Mostrando el diálogo de instalación...");
         await deferredPrompt.prompt();
 
         const choiceResult = await deferredPrompt.userChoice;
         if (choiceResult.outcome === "accepted") {
-          console.log("✅ L'usuari ha acceptat la instal·lació.");
+          console.log("✅ El usuario ha aceptado la instalación.");
           localStorage.setItem("isAppInstalled", "true");
           hideInstallPrompt();
         } else {
-          console.log("❌ L'usuari ha rebutjat la instal·lació.");
+          console.log("❌ El usuario ha rechazado la instalación.");
         }
         deferredPrompt = null;
         localStorage.setItem("deferredPromptExists", "false");
       } else {
-        console.log("⚠️ deferredPrompt no està definit.");
+        console.log("⚠️ deferredPrompt no está definido.");
       }
     });
   } else {
-    console.warn("⚠️ No s'ha trobat el botó d'instal·lació (#install-button).");
+    console.warn(
+      "⚠️ No se encontró el botón de instalación (#install-button)."
+    );
   }
 
   const dismissButton = document.getElementById("dismiss-button");
   if (dismissButton) {
     dismissButton.addEventListener("click", () => {
-      console.log("🚫 L'usuari ha descartat el banner d'instal·lació.");
+      console.log("🚫 El usuario ha descartado el banner de instalación.");
       onUserDismissInstall();
     });
   } else {
-    console.warn("⚠️ No s'ha trobat el botó de tancament (#dismiss-button).");
+    console.warn("⚠️ No se encontró el botón de cierre (#dismiss-button).");
   }
 }
 
 export function showInstallPrompt() {
-  console.log("🔍 Intentant mostrar el prompt d'instal·lació...");
+  console.log("🔍 Intentando mostrar el prompt de instalación...");
   if (!deferredPrompt) {
-    console.warn("⚠️ deferredPrompt és NULL! No es pot mostrar el prompt.");
+    console.warn("⚠️ deferredPrompt es NULL! No se puede mostrar el prompt.");
     return;
   }
   const installPrompt = document.getElementById("install-prompt");
   if (installPrompt) {
     installPrompt.classList.add("visible");
-    console.log("✅ Banner d'instal·lació mostrat.");
+    console.log("✅ Banner de instalación mostrado.");
   } else {
-    console.warn("⚠️ L'element #install-prompt no s'ha trobat.");
+    console.warn("⚠️ No se encontró el elemento #install-prompt.");
   }
 }
 
@@ -81,7 +83,7 @@ export function hideInstallPrompt() {
   const installPrompt = document.getElementById("install-prompt");
   if (installPrompt) {
     installPrompt.classList.remove("visible");
-    console.log("🚫 S'ha amagat el banner d'instal·lació.");
+    console.log("🚫 Se ha ocultado el banner de instalación.");
   }
 }
 
@@ -90,14 +92,14 @@ export function onUserDismissInstall() {
   timesUserSaidNo++;
   localStorage.setItem("timesUserSaidNo", String(timesUserSaidNo));
 
-  // Reiniciem el comptador de descàrregues des del darrer No
+  // Reiniciamos el contador de descargas desde el último No
   localStorage.setItem("pdfDownloadsSinceNo", "0");
 
-  // Si ja ens ha dit NO dues vegades, no el tornem a mostrar
+  // Si ya nos ha dicho NO dos veces, no lo volvemos a mostrar
   if (timesUserSaidNo >= 2) {
     localStorage.setItem("neverShowInstallPrompt", "true");
     console.log(
-      "🚫 L'usuari ha descartat la instal·lació massa vegades. No es tornarà a mostrar."
+      "🚫 El usuario ha descartado la instalación demasiadas veces. No se volverá a mostrar."
     );
   }
 
@@ -116,11 +118,11 @@ export function monitorDisplayMode() {
   const mq = window.matchMedia("(display-mode: standalone)");
   mq.addEventListener("change", () => {
     if (mq.matches) {
-      console.log("✅ L'app s'està executant en mode standalone.");
+      console.log("✅ La app se está ejecutando en modo standalone.");
       localStorage.setItem("isAppInstalled", "true");
       hideInstallPrompt();
     } else {
-      console.log("ℹ️ L'app ha sortit del mode standalone.");
+      console.log("ℹ️ La app ha salido del modo standalone.");
       localStorage.removeItem("isAppInstalled");
     }
   });
