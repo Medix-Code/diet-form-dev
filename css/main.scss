@@ -232,20 +232,10 @@ button .fa {
     display: block;
   }
 }
-/*Parpelleig Tabs*/
-.tab.blink-error {
-  animation: blinkErrorAnim 1s ease-in-out infinite alternate;
-}
-
-@keyframes blinkErrorAnim {
-  0% {
-    background-color: #dc3545; /* vermell */
-    color: #fff;
-  }
-  100% {
-    background-color: #e9ecef; /* color original de la pestanya */
-    color: #495057;
-  }
+/* Classe per indicar error: canvia el fons de la pestanya */
+.tab.error-tab {
+  background-color: #47c715 !important;
+  color: #47c715 !important;
 }
 
 /***********************************

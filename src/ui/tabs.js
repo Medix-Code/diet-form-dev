@@ -2,10 +2,6 @@
  * Configuració de les pestanyes (dades / serveis)
  */
 
-/**
- * Configuració de les pestanyes (dades / serveis)
- */
-
 let currentTab = "dades";
 export function getCurrentTab() {
   return currentTab;
@@ -30,8 +26,8 @@ function switchToTab(tabName) {
   const serveisContent = document.getElementById("serveis-tab-content");
 
   // (opcional) quan fem clic, eliminem el parpelleig
-  tabDades.classList.remove("blink-error");
-  tabServeis.classList.remove("blink-error");
+  tabDades.classList.remove("error-tab");
+  tabServeis.classList.remove("error-tab");
 
   if (tabName === "dades") {
     tabDades.classList.add("active");

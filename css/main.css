@@ -222,21 +222,12 @@ button .fa {
   display: block;
 }
 
-/*Parpelleig Tabs*/
-.tab.blink-error {
-  animation: blinkErrorAnim 1s ease-in-out infinite alternate;
+/* Classe per indicar error: canvia el fons de la pestanya */
+.tab.error-tab {
+  background-color: #dc3545 !important;
+  color: #fff !important;
 }
 
-@keyframes blinkErrorAnim {
-  0% {
-    background-color: #dc3545; /* vermell */
-    color: #fff;
-  }
-  100% {
-    background-color: #e9ecef; /* color original de la pestanya */
-    color: #495057;
-  }
-}
 /***********************************
   * FORMULARIOS
 ***********************************/
@@ -248,10 +239,10 @@ button .fa {
   font-weight: normal;
   margin-bottom: 10px;
 }
-.form-group input[type=text],
-.form-group input[type=date],
-.form-group input[type=datetime-local],
-.form-group input[type=time],
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="datetime-local"],
+.form-group input[type="time"],
 .form-group select {
   height: 40px;
   width: 100%;
@@ -928,10 +919,10 @@ button .icon {
   .tab-content-container {
     margin-top: 110px;
   }
-  input[type=text],
-  input[type=date],
-  input[type=datetime-local],
-  input[type=time],
+  input[type="text"],
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="time"],
   select {
     height: 36px;
     font-size: 14px;

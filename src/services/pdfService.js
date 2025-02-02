@@ -156,7 +156,7 @@ export async function generateAndDownloadPdf() {
     // Si la pestanya actual (dades) no té error però Serveis sí...
     if (!serveisOK) {
       // Posem blink a tab-serveis
-      document.getElementById("tab-serveis").classList.add("blink-error");
+      document.getElementById("tab-serveis").classList.add("error-tab");
       console.log("Añadir blink a los servicios");
       showToast("Completa los campos en la pestaña 'Servicios'.", "error");
       return;
@@ -168,7 +168,7 @@ export async function generateAndDownloadPdf() {
       return;
     }
     if (!dadesOK) {
-      document.getElementById("tab-dades").classList.add("blink-error");
+      document.getElementById("tab-dades").classList.add("error-tab");
       showToast("Completa los campos en la pestaña 'Datos'.", "error");
       return;
     }
