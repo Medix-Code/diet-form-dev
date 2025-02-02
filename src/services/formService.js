@@ -2,6 +2,11 @@
  * Lògica de formulari: recollir dades, comparar, gestionar estat inicial, etc.
  */
 
+import {
+  getSignatureConductor,
+  getSignatureAjudant,
+} from "./signatureService.js";
+
 // ESTAT LOCAL del mòdul
 let initialFormDataStr = "";
 
@@ -104,13 +109,13 @@ export function getAllFormDataAsString() {
  * Recull totes les dades del formulari en objectes
  */
 export function gatherAllData() {
-  const dateVal = document.getElementById("date")?.value.trim() || "";
-  const dietTypeVal = document.getElementById("diet-type")?.value.trim() || "";
-  const vehicleVal =
-    document.getElementById("vehicle-number")?.value.trim() || "";
-  const p1 = document.getElementById("person1")?.value.trim() || "";
-  const p2 = document.getElementById("person2")?.value.trim() || "";
+  const dateVal = document.getElementById("date").value.trim();
+  const dietTypeVal = document.getElementById("diet-type").value.trim();
+  const vehicleVal = document.getElementById("vehicle-number").value.trim();
+  const p1 = document.getElementById("person1").value.trim();
+  const p2 = document.getElementById("person2").value.trim();
 
+  // recollim dades de cada servei
   const servicesEls = document.querySelectorAll(".service");
   const servicesData = Array.from(servicesEls).map((s) => ({
     serviceNumber: s.querySelector(".service-number")?.value.trim() || "",
@@ -121,6 +126,7 @@ export function gatherAllData() {
     endTime: s.querySelector(".end-time")?.value.trim() || "",
   }));
 
+  // 🔴 ARA incloem les firmes reals de signatureService.js
   return {
     generalData: {
       date: dateVal,
@@ -128,8 +134,8 @@ export function gatherAllData() {
       vehicleNumber: vehicleVal,
       person1: p1,
       person2: p2,
-      signatureConductor: "", // Es posarà si cal
-      signatureAjudant: "",
+      signatureConductor: getSignatureConductor(),
+      signatureAjudant: getSignatureAjudant(),
     },
     servicesData,
   };
