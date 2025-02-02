@@ -711,6 +711,21 @@ button .fa {
     transform: translateY(20px);
   }
 }
+/*Parpelleig Tabs*/
+.blink-error {
+  animation: blinkErrorAnim 1s ease-in-out infinite alternate;
+}
+
+@keyframes blinkErrorAnim {
+  0% {
+    background-color: #dc3545; /* vermell */
+    color: #fff;
+  }
+  100% {
+    background-color: #e9ecef; /* color original pestanya, canvia-ho al teu gust */
+    color: #495057;
+  }
+}
 /***********************************
   * FOOTER 
 ***********************************/

@@ -2,10 +2,11 @@
  * Lògica per generar i descarregar PDFs
  */
 
+import { currentTab } from "../ui/tabs.js";
 import { showToast } from "../ui/toast.js";
 import { handleSaveDietWithPossibleOverwrite } from "./dietService.js";
 import { gatherAllData } from "./formService.js";
-import { validateForPdf } from "../utils/validation.js";
+import { validateDadesTab, validateServeisTab } from "../utils/validation.js";
 import { isAppInstalled, showInstallPrompt } from "./pwaService.js";
 
 /**
@@ -133,9 +134,39 @@ export async function fillPdf(data, servicesData) {
  * Funció principal per generar i descarregar el PDF
  */
 export async function generateAndDownloadPdf() {
+  const dadesOK = validateDadesTab();
+  const serveisOK = validateServeisTab();
+
   if (!validateForPdf()) {
     showToast("Falta rellenar los campos obligatorios.", "error");
     return;
+  }
+
+  // Són booleans: si hi ha error => false
+  if (currentTab === "dades") {
+    if (!dadesOK) {
+      // Ens quedem
+      showToast("Faltan campos obligatorios en 'Datos'.", "error");
+      return;
+    }
+    // Si la pestanya actual (dades) no té error però Serveis sí...
+    if (!serveisOK) {
+      // Posem blink a tab-serveis
+      document.getElementById("tab-serveis").classList.add("blink-error");
+      showToast("Completa los campos en la pestaña 'Servicios'.", "error");
+      return;
+    }
+  } else {
+    // currentTab === "serveis"
+    if (!serveisOK) {
+      showToast("Faltan campos obligatorios en 'Servicios'.", "error");
+      return;
+    }
+    if (!dadesOK) {
+      document.getElementById("tab-dades").classList.add("blink-error");
+      showToast("Completa los campos en la pestaña 'Datos'.", "error");
+      return;
+    }
   }
 
   try {
