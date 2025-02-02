@@ -14,9 +14,8 @@ import * as formService from "./services/formService.js";
 import { isAppInstalled } from "./services/pwaService.js";
 
 export async function initializeApp() {
-  await openDatabase();
   setTodayDate();
-
+  await openDatabase();
   initServices();
   initSignature();
   setupTabs();
