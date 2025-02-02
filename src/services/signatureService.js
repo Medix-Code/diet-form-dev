@@ -162,8 +162,18 @@ function getXY(e) {
   return { x: clientX - rect.left, y: clientY - rect.top };
 }
 
-export function openSignatureModal(target) {
+function openSignatureModal(target) {
   currentSignatureTarget = target;
+
+  const modalTitleEl = document.getElementById("signature-title");
+  if (modalTitleEl) {
+    if (target === "person1") {
+      modalTitleEl.textContent = "Firma del conductor";
+    } else {
+      modalTitleEl.textContent = "Firma del ayudante";
+    }
+  }
+
   signatureModal.style.display = "block";
   document.body.classList.add("modal-open");
 
@@ -172,7 +182,8 @@ export function openSignatureModal(target) {
 
   let oldSig = "";
   if (target === "person1") oldSig = signatureConductor;
-  if (target === "person2") oldSig = signatureAjudant;
+  else if (target === "person2") oldSig = signatureAjudant;
+
   if (oldSig) {
     drawSignatureFromDataUrl(oldSig);
   }
