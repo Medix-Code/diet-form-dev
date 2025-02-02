@@ -141,7 +141,7 @@ export async function generateAndDownloadPdf() {
     showToast("Falta rellenar los campos obligatorios.", "error");
     return;
   }
-
+  const currentTab = getCurrentTab();
   // Són booleans: si hi ha error => false
   if (currentTab === "dades") {
     if (!dadesOK) {
