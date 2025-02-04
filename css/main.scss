@@ -235,6 +235,7 @@ button .fa {
 
 .tab.error-tab {
   animation: blinkErrorAnim 1s ease-in-out infinite alternate;
+  font-weight: bold;
 }
 
 @keyframes blinkErrorAnim {
@@ -242,7 +243,7 @@ button .fa {
     color: #dc3545;
   }
   100% {
-    background-color: #e9ecef; /* color original de la pestanya */
+    background-color: #e9ecef;
     color: #495057;
   }
 }

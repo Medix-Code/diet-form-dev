@@ -137,6 +137,9 @@ export async function fillPdf(data, servicesData) {
 /**
  * Funció principal per generar i descarregar el PDF
  */
+/**
+ * Funció principal per generar i descarregar el PDF
+ */
 export async function generateAndDownloadPdf() {
   // Esborrem qualsevol classe d'error prèvia de les pestanyes
   document.getElementById("tab-dades").classList.remove("error-tab");
@@ -146,30 +149,26 @@ export async function generateAndDownloadPdf() {
   const serveisOK = validateServeisTab();
   const currentTab = getCurrentTab();
 
-  // Si algun dels dos grups no és vàlid
+  // Si algun dels dos grups no és vàlid...
   if (!dadesOK || !serveisOK) {
-    // Si l'usuari està a "Dades"
+    // Si l'usuari està a la pestanya "Dades"
     if (currentTab === "dades") {
-      // I la pestanya inactiva ("Serveis") té errors, la marquem
-      if (!serveisOK) {
+      // Mostrem el toast només si "Dades" està completa però "Serveis" té errors
+      if (dadesOK && !serveisOK) {
         document.getElementById("tab-serveis").classList.add("error-tab");
         showToast("Completa los campos en la pestaña 'Servicios'.", "error");
-      } else {
-        // En cas que també hi hagi errors a la pestanya activa, els camps ja mostren error
-        showToast("Falta rellenar los campos obligatorios.", "error");
       }
     }
-    // Si l'usuari està a "Serveis"
+    // Si l'usuari està a la pestanya "Serveis"
     else if (currentTab === "serveis") {
-      // I la pestanya inactiva ("Dades") té errors, la marquem
-      if (!dadesOK) {
+      // Mostrem el toast només si "Serveis" està completa però "Dades" té errors
+      if (serveisOK && !dadesOK) {
         document.getElementById("tab-dades").classList.add("error-tab");
         showToast("Completa los campos en la pestaña 'Datos'.", "error");
-      } else {
-        // En cas que també hi hagi errors a la pestanya activa, els camps ja mostren error
-        showToast("Falta rellenar los campos obligatorios.", "error");
       }
     }
+    // En qualsevol altre cas (per exemple, si la pestanya activa també té errors),
+    // no es mostra cap toast, ja que els errors es veuen als camps.
     return;
   }
 
