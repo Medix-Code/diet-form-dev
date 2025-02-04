@@ -319,19 +319,12 @@ button .fa {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border: none;
   color: #000;
-  transition: box-shadow 0.2s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
 
   &:hover {
     opacity: 0.8;
   }
-}
-
-.service-button:focus,
-.service-button:active {
-  outline: none; /* Elimina l'outline per defecte */
-  box-shadow: 0 0 0 3px rgba(21, 156, 228, 0.4); /* Exemple de focus amb ombra arrodonida */
-  border-radius: 8px; /* Assegura't que el focus segueix el mateix border-radius */
 }
 
 .active-square {
