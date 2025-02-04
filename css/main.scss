@@ -1,21 +1,59 @@
-@use "variables" as *;
-
+// ===========================================================================
+// VARIABLES CSS PARA TEMAS (LIGHT y DARK)
+// ===========================================================================
+/* 
+  Definimos las variables CSS para el tema claro por defecto.
+  Estas variables se pueden utilizar en cualquier parte del código mediante la función var().
+*/
 :root {
-  color-scheme: light;
+  --primary-color: #343a40; // Color principal (por ejemplo, para la cabecera)
+  --secondary-color: #007bff; // Color secundario
+  --transition-speed: 0.3s; // Velocidad de transición
+  --bg-color: #f8f9fa; // Color de fondo (tema claro)
+  --text-color: #333; // Color del texto (tema claro)
+  --top-bar-height: 60px; // Altura de la cabecera
+  --tab-height: 60px; // Altura de las pestañas
+  --font-size-base: 16px; // Tamaño base de fuente
 }
 
-/***********************************
-  * RESETEO Y ESTILOS GLOBALES
-***********************************/
+/* 
+  Definimos el tema oscuro. Cuando se aplique la clase .theme-dark al elemento raíz (por ejemplo, al body),
+  se sobreescribirán las variables CSS usadas en los estilos.
+*/
+.theme-dark {
+  --primary-color: #222;
+  --secondary-color: #007bff; /* Se puede ajustar si se desea */
+  --bg-color: #222;
+  --text-color: #eee;
+  --top-bar-height: 60px;
+  --tab-height: 60px;
+  --font-size-base: 16px;
+}
+
+// ===========================================================================
+// IMPORTAMOS VARIABLES SCSS (para otros cálculos si se precisan)
+// ===========================================================================
+@use "variables" as *;
+
+// ===========================================================================
+// RESET Y ESTILOS GLOBALES
+// ===========================================================================
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* 
+  Usamos las variables CSS para definir el fondo y color de texto.
+  Así, cuando cambiemos de tema (añadiendo o quitando la clase .theme-dark al body),
+  se actualizarán automáticamente.
+*/
 body {
   font-family: Arial, sans-serif;
-  font-size: $font-size-base;
+  font-size: var(--font-size-base);
+  background-color: var(--bg-color);
+  color: var(--text-color);
   min-height: 100vh;
   overflow-x: hidden;
   display: flex;
@@ -31,24 +69,26 @@ main {
   padding-top: 120px;
 }
 
-/***********************************
-  * TOP BAR (CABECERA FIJA)
-***********************************/
+// ===========================================================================
+// CABEZA (TOP BAR)
+// ===========================================================================
 .top-bar {
   position: fixed;
-  display: none;
   top: 0;
   left: 0;
-  height: $top-bar-height;
+  height: var(--top-bar-height);
   width: 100%;
   padding: 10px 20px;
-  background-color: $primary-color;
+  background-color: var(
+    --primary-color
+  ); // Usamos la variable para el color principal
   border-bottom: 0.5px solid #ddd;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
 
+  // Elementos a la izquierda de la cabecera
   &__left {
     display: flex;
     align-items: center;
@@ -65,9 +105,9 @@ main {
   color: #fff;
 }
 
-/***********************************
-  * BOTÓN AJUSTES Y PANEL
-***********************************/
+// ===========================================================================
+// BOTONES DE AJUSTES Y PANEL DE AJUSTES
+// ===========================================================================
 .button-group {
   position: relative;
   display: flex;
@@ -88,15 +128,14 @@ main {
   font-size: clamp(14px, 2.5vw, 18px);
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
 
-.ajustes-btn .icon {
-  transition: transform 0.3s ease;
-}
-
-/* Quan el botó tingui la classe "open", gira l'icona 90 graus */
-.ajustes-btn.open .icon {
-  transform: rotate(90deg);
+  .icon {
+    transition: transform 0.3s ease;
+  }
+  // Rotación de la icono cuando el botón está abierto
+  &.open .icon {
+    transform: rotate(90deg);
+  }
 }
 
 .ajustes-panel {
@@ -124,6 +163,7 @@ main {
     transform: translateY(0);
   }
 
+  // Botón grande dentro del panel
   .big-btn {
     width: 100%;
     justify-content: flex-start;
@@ -182,12 +222,12 @@ main {
   }
 }
 
-/***********************************
-  * PESTAÑAS (TABS)
-***********************************/
+// ===========================================================================
+// PESTAÑAS (TABS)
+// ===========================================================================
 .tabs-container {
   position: fixed;
-  top: $top-bar-height;
+  top: var(--top-bar-height);
   left: 0;
   width: 100%;
   background-color: #ffffff;
@@ -218,7 +258,7 @@ button .fa {
   font-size: 16px;
   font-weight: normal;
   color: #919191;
-  transition: all $transition-speed ease;
+  transition: all var(--transition-speed) ease;
 
   &:hover {
     background-color: #dee2e6;
@@ -244,6 +284,7 @@ button .fa {
   }
 }
 
+// Pestaña con error (parpadeo)
 .tab.error-tab {
   animation: blinkErrorAnim 1s ease-in-out infinite alternate;
   font-weight: bold;
@@ -259,9 +300,9 @@ button .fa {
   }
 }
 
-/***********************************
-  * FORMULARIOS
-***********************************/
+// ===========================================================================
+// FORMULARIOS
+// ===========================================================================
 .form-group {
   margin-bottom: 20px;
 
@@ -299,9 +340,9 @@ button .fa {
   background-color: #ffe5e5 !important;
 }
 
-/***********************************
-  * SERVICIOS
-***********************************/
+// ===========================================================================
+// SERVICIOS
+// ===========================================================================
 .service-controls {
   display: flex;
   align-items: center;
@@ -352,10 +393,6 @@ button .fa {
   background-color: #6c757d;
   transition: background-color 0.3s ease;
 
-  &:hover {
-    opacity: 0.85;
-  }
-
   &.service-1 {
     background-color: #8ddfd0;
   }
@@ -392,9 +429,9 @@ button .fa {
   }
 }
 
-/***********************************
-  * SIGNATURE (CAMP DE FIRMA)
-***********************************/
+// ===========================================================================
+// SIGNATURE (CAMPO DE FIRMA)
+// ===========================================================================
 .signature-group {
   .input-with-icon {
     display: flex;
@@ -454,9 +491,9 @@ button .fa {
   }
 }
 
-/***********************************
-  * MODALES (GENÉRICOS)
-***********************************/
+// ===========================================================================
+// MODALES (GENÉRICOS)
+// ===========================================================================
 .modal {
   display: none;
   position: fixed;
@@ -527,16 +564,16 @@ button .fa {
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
-  transition: background-color $transition-speed ease;
+  transition: background-color var(--transition-speed) ease;
 
   &:hover {
     background-color: #0056b3;
   }
 }
 
-/***********************************
-  * MODAL DE GESTIÓ DE DIETES
-***********************************/
+// ===========================================================================
+// MODAL DE GESTIÓN DE DIETAS
+// ===========================================================================
 .diet-modal-content {
   background-color: #f8f9fa;
   border: 0px solid #ced4da;
@@ -555,7 +592,6 @@ button .fa {
 .no-diets-text {
   margin: 0 0 20px 0;
   text-align: center;
-
   color: #555;
   font-style: italic;
 }
@@ -564,29 +600,7 @@ button .fa {
   list-style: none;
   padding: 0;
   margin: 0 0 20px 0;
-
   text-align: left;
-}
-
-.btn-modal {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffffef;
-  font-size: 22px;
-  gap: 20px;
-
-  border: none;
-  border-radius: 5px;
-  padding: 20px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 10px;
-  text-decoration: none;
-
-  &:hover {
-    background-color: #0056b3;
-  }
 }
 
 #diet-options li {
@@ -632,9 +646,29 @@ button .fa {
   }
 }
 
-/***********************************
-  * MODAL DE SIGNATURA
-***********************************/
+.btn-modal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffffef;
+  font-size: 22px;
+  gap: 20px;
+  border: none;
+  border-radius: 5px;
+  padding: 20px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+// ===========================================================================
+// MODAL DE FIRMA
+// ===========================================================================
 #signature-modal {
   z-index: 9999;
 }
@@ -643,10 +677,10 @@ button .fa {
   max-width: 600px;
   text-align: center;
   position: relative;
-}
 
-.signature-modal-content p.signature-instruction {
-  text-align: left;
+  p.signature-instruction {
+    text-align: left;
+  }
 }
 
 .signature-canvas-container {
@@ -666,16 +700,16 @@ button .fa {
   }
 }
 
-/***********************************
-  * MODAL DE CONFIRMACIÓ
-***********************************/
+// ===========================================================================
+// MODAL DE CONFIRMACIÓN
+// ===========================================================================
 .modal-buttons {
-  display: flex; /* Per alinear els botons en fila */
-  justify-content: center; /* Centra els botons horitzontalment */
-  align-items: center; /* Centra els botons verticalment */
-  gap: 20px; /* Distància entre botons */
-  margin: 10px auto; /* Marges superiors i inferiors uniformes */
-  padding: 10px; /* Padding global al contenidor */
+  display: flex; // Alinea los botones en fila
+  justify-content: center; // Centra horizontalmente
+  align-items: center; // Centra verticalmente
+  gap: 20px; // Espacio entre botones
+  margin: 10px auto;
+  padding: 10px;
 }
 
 .modal-button {
@@ -695,13 +729,7 @@ button .fa {
     }
   }
 
-  &.no {
-    background-color: #dc3545;
-    &:hover {
-      background-color: #c82333;
-    }
-  }
-
+  &.no,
   &.cancel {
     background-color: #dc3545;
     &:hover {
@@ -727,12 +755,11 @@ button .fa {
   }
 }
 
-/***********************************
-  * TOASTS
-***********************************/
+// ===========================================================================
+// TOASTS
+// ===========================================================================
 #toast-container {
   position: fixed;
-  display: none;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
@@ -745,9 +772,9 @@ button .fa {
 }
 
 .toast {
-  width: 30vw; /* Amplada ajustada al 30% del viewport */
-  min-width: 200px; /* Amplada mínima */
-  max-width: 400px; /* Límit màxim */
+  width: 30vw; // Ancho al 30% del viewport
+  min-width: 200px; // Ancho mínimo
+  max-width: 400px; // Límite máximo
   background-color: #28a745;
   color: #fff;
   padding: 12px 24px;
@@ -784,38 +811,35 @@ button .fa {
   }
 }
 
-/***********************************
-  * FOOTER 
-***********************************/
+// ===========================================================================
+// FOOTER
+// ===========================================================================
 .footer {
-  background-color: $primary-color; /* Color de fons del footer */
-  color: #f8f9fa; /* Color del text */
-  padding: 20px; /* Espai intern del footer */
-  border-top: 1px solid #495057; /* Línia separadora superior */
+  background-color: var(--primary-color); // Se utiliza la variable del tema
+  color: #f8f9fa;
+  padding: 20px;
+  border-top: 1px solid #495057;
 
-  /* Contenidor del footer */
   .footer__container {
-    max-width: 100%; /* Amplada màxima */
-    width: 100%; /* Amplada del contenidor */
-    margin: 0 auto; /* Centrat horitzontal */
-    text-align: center; /* Text centrat */
-    display: flex; /* Flexbox per a l'estructura */
-    flex-direction: column; /* Elements en columna */
-    align-items: center; /* Alineació central */
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: space-between;
-    gap: 20px; /* Espai entre elements dins el contenidor */
+    gap: 20px;
   }
 
-  /* Contenidor per a les icones */
   .footer__icons {
-    width: 100%; /* Ocupa tot l'ample disponible */
-    position: relative; /* Per poder posicionar elements de forma absoluta */
+    width: 100%;
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centra la icona */
+    justify-content: center;
   }
 
-  /* Estils per a la versió: posicionada absolutament a la dreta */
   .app-version {
     font-size: 0.8em;
     opacity: 0.8;
@@ -824,7 +848,6 @@ button .fa {
     right: 0;
   }
 
-  /* Estils per als paràgrafs dins el footer */
   p {
     margin: 0 0 2px 0;
     font-size: 15px;
@@ -840,7 +863,6 @@ button .fa {
     }
   }
 
-  /* Estils per als enllaços amb icones */
   .footer-icon-link {
     color: #f8f9fa;
     font-size: 18px;
@@ -852,7 +874,6 @@ button .fa {
     }
   }
 
-  /* Estils generals per als icones */
   .icon {
     width: 24px;
     height: 24px;
@@ -871,11 +892,9 @@ button .fa {
   display: none;
 }
 
-/***********************************
-  * BANNER PWA (INSTALACIÓN)
-***********************************/
-/* css/styles.css */
-
+// ===========================================================================
+// BANNER PWA (INSTALACIÓN)
+// ===========================================================================
 #install-prompt {
   position: fixed;
   bottom: 0;
@@ -951,17 +970,91 @@ button .icon {
 }
 
 .big-btn:active {
-  background-color: #f0e68c; /* per exemple, un groc clar */
+  background-color: #f0e68c; // Ejemplo: amarillo claro
 }
+
 #diet-options li:active {
   background-color: #f5d3d3;
 }
+
 .delete-diet:active {
   background-color: #f5d3d3;
 }
-/***********************************
-  * RESPONSIVE (MEDIA QUERIES)
-***********************************/
+
+// ===========================================================================
+// MEDIA QUERIES RESPONSIVES
+// ===========================================================================
+
+/* =======================================================
+   Media Query para TABLETS (entre 768px y 1024px)
+   ======================================================= */
+@media (max-width: 1024px) and (min-width: 769px) {
+  // Reducción ligera de la altura del top-bar y botones
+  .top-bar {
+    height: calc(var(--top-bar-height) - 4px);
+    padding: 8px 18px;
+  }
+
+  .ajustes-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .tabs-container {
+    top: calc(var(--top-bar-height) - 4px);
+  }
+
+  .tab {
+    padding: 14px 12px;
+    font-size: 15px;
+  }
+
+  main {
+    padding-top: 110px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="time"],
+  select {
+    height: 38px;
+    font-size: 15px;
+    padding: 10px 14px;
+  }
+
+  .toast {
+    width: 40vw;
+    font-size: 15px;
+    padding: 11px 22px;
+  }
+
+  .modal-content {
+    padding: 18px 25px;
+  }
+
+  .btn-modal {
+    font-size: 17px;
+    padding: 18px 18px;
+    gap: 18px;
+  }
+
+  .signature-modal-content {
+    max-width: 550px;
+  }
+
+  .signature-canvas-container {
+    height: 230px;
+  }
+}
+
+/* =======================================================
+   Media Query para MÓVILES (hasta 768px)
+   ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
     height: 56px;
@@ -973,6 +1066,7 @@ button .icon {
     gap: 15px;
     margin-left: auto;
   }
+
   .ajustes-btn {
     width: 38px;
     height: 38px;
@@ -981,11 +1075,10 @@ button .icon {
       font-size: 20px;
     }
   }
+
   .ajustes-btn .icon {
     transition: transform 0.3s ease;
   }
-
-  /* Quan el botó tingui la classe "open", gira l'icona 90 graus */
   .ajustes-btn.open .icon {
     transform: rotate(90deg);
   }
@@ -1004,9 +1097,11 @@ button .icon {
     padding: 14px 16px;
     font-size: 16px;
   }
+
   .tabs-container {
     top: 56px;
   }
+
   .tab-content-container {
     margin-top: 110px;
   }
@@ -1030,9 +1125,11 @@ button .icon {
   label {
     margin-bottom: 8px;
   }
+
   .form-group {
     margin-bottom: 16px;
   }
+
   .toast {
     width: 80vw;
     font-size: 14px;
@@ -1064,13 +1161,14 @@ button .icon {
     font-size: 1.2rem;
     margin: 0;
     font-weight: bold;
-    color: $primary-color;
+    color: var(--primary-color);
   }
 
   h3#diet-modal-title {
     font-size: 18px;
     margin-bottom: 20px;
   }
+
   .btn-modal {
     font-size: 16px;
     border-radius: 8px;
@@ -1104,18 +1202,9 @@ button .icon {
   }
 
   .modal-buttons {
-    display: flex;
-    justify-content: center;
     flex-direction: row;
-    gap: 30px;
+    gap: 40px;
     margin-top: 20px;
-  }
-
-  .modal-button {
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
   }
 
   .signature-modal-content {
@@ -1126,10 +1215,5 @@ button .icon {
 
   .signature-canvas-container {
     height: 200px;
-  }
-
-  .modal-buttons {
-    flex-direction: row;
-    gap: 40px;
   }
 }
