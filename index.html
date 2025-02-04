@@ -546,6 +546,7 @@
     <footer class="footer">
       <div class="footer__container">
         <p>© 2025 Medix</p>
+        <p class="app-version">Versió: <span id="app-version"></span></p>
         <div class="footer__icons">
           <a
             href="#about-modal"
@@ -605,6 +606,15 @@
         </div>
       </div>
     </div>
+
+    <script>
+      fetch("version.json")
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("app-version").textContent = data.version;
+        })
+        .catch((err) => console.error("Error carregant la versió", err));
+    </script>
 
     <!-- PDF-lib (CDN) -->
     <script
