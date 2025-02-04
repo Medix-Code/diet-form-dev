@@ -3,6 +3,7 @@ const CACHE_NAME = "dieta-cache-v1";
 const urlsToCache = [
   "./",
   "./index.html",
+  "./404.html",
   "./css/main.css",
   "./manifest.json",
   "./service-worker.js",
@@ -24,6 +25,7 @@ const urlsToCache = [
   "./src/ui/pickers.js",
   "./src/ui/tabs.js",
   "./src/ui/toast.js",
+  "./src/ui/theme.js",
   "./src/utils/restrictions.js",
   "./src/utils/validation.js",
   "./src/utils/utils.js",

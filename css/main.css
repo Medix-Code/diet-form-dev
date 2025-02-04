@@ -14,7 +14,7 @@
   --white: #ffffff;
   --black: #000000;
   --light-grey: #f5f5f5;
-  --grey-border: #ddd;
+  --grey-border: #ddddddea;
   --input-border: #ced4da;
   /* Variables de tamaño y transición */
   --top-bar-height: 60px;
@@ -28,15 +28,11 @@
   se sobreescribirán las variables CSS usadas en los estilos.
 */
 .theme-dark {
-  --primary-color: #c92222;
+  --primary-color: #222;
   --secondary-color: #007bff; /* Se puede ajustar si se desea */
   /* Colores del tema oscuro */
   --bg-color: #222;
   --text-color: #eee;
-  /* Podemos mantener o ajustar las mismas medidas */
-  --top-bar-height: 60px;
-  --tab-height: 60px;
-  --font-size-base: 16px;
 }
 
 /* 
@@ -53,6 +49,8 @@ body {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
 }
 
 body.modal-open {
@@ -61,7 +59,7 @@ body.modal-open {
 
 main {
   flex: 1;
-  padding-top: 120px;
+  padding-top: 100px;
 }
 
 .top-bar {
@@ -70,25 +68,18 @@ main {
   left: 0;
   height: var(--top-bar-height);
   width: 100%;
-  padding: 10px 20px;
   background-color: var(--primary-color);
-  border-bottom: 0.5px solid var(--grey-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
 }
-.top-bar__left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
 .title {
   line-height: 1.4;
   text-align: left;
-  margin: 0;
-  font-size: clamp(20px, 3vw, 30px);
+  margin: 20px;
+  font-size: clamp(20px, 2vw, 26px);
   font-weight: bold;
   color: var(--white);
 }
@@ -108,9 +99,9 @@ main {
   width: 48px;
   height: 48px;
   display: flex;
+  margin: 20px;
   align-items: center;
   justify-content: center;
-  font-size: clamp(14px, 2.5vw, 18px);
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
@@ -123,8 +114,8 @@ main {
 
 .ajustes-panel {
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: 80%;
+  right: 20%;
   background-color: var(--white);
   border: 0px solid var(--input-border);
   border-radius: 8px;
@@ -200,7 +191,7 @@ main {
 
 .tabs-container {
   position: fixed;
-  top: var(--top-bar-height);
+  top: var(--tab-height);
   left: 0;
   width: 100%;
   background-color: var(--white);
@@ -885,14 +876,17 @@ button .icon {
 @media (max-width: 1024px) and (min-width: 769px) {
   .top-bar {
     height: calc(var(--top-bar-height) - 4px);
-    padding: 8px 18px;
+    padding: 0px 0px;
+  }
+  .title {
+    font-size: clamp(18px, 2vw, 22px);
   }
   .ajustes-btn {
     width: 42px;
     height: 42px;
   }
   .tabs-container {
-    top: calc(var(--top-bar-height) - 4px);
+    top: calc(var(--tab-height) - 4px);
   }
   .tab {
     padding: 14px 12px;
@@ -938,8 +932,11 @@ button .icon {
    ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
-    height: 56px;
-    padding: 8px 16px;
+    height: calc(var(--top-bar-height) - 10px);
+    padding: 0px 0px;
+  }
+  .title {
+    font-size: clamp(16px, 3vw, 20px);
   }
   .button-group {
     flex-direction: row;
@@ -947,8 +944,8 @@ button .icon {
     margin-left: auto;
   }
   .ajustes-btn {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 8px;
   }
   .ajustes-btn i {
@@ -974,7 +971,7 @@ button .icon {
     font-size: 16px;
   }
   .tabs-container {
-    top: 56px;
+    top: calc(var(--tab-height) - 10px);
   }
   .tab-content-container {
     margin-top: 110px;
