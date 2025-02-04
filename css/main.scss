@@ -232,10 +232,19 @@ button .fa {
     display: block;
   }
 }
-/* Classe per indicar error: canvia el fons de la pestanya */
+
 .tab.error-tab {
-  background-color: #47c715 !important;
-  color: #47c715 !important;
+  animation: blinkErrorAnim 1s ease-in-out infinite alternate;
+}
+
+@keyframes blinkErrorAnim {
+  0% {
+    color: #dc3545;
+  }
+  100% {
+    background-color: #e9ecef; /* color original de la pestanya */
+    color: #495057;
+  }
 }
 
 /***********************************

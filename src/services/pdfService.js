@@ -138,40 +138,39 @@ export async function fillPdf(data, servicesData) {
  * Funció principal per generar i descarregar el PDF
  */
 export async function generateAndDownloadPdf() {
+  // Esborrem qualsevol classe d'error prèvia de les pestanyes
+  document.getElementById("tab-dades").classList.remove("error-tab");
+  document.getElementById("tab-serveis").classList.remove("error-tab");
+
   const dadesOK = validateDadesTab();
   const serveisOK = validateServeisTab();
-
-  if (!validateForPdf()) {
-    showToast("Falta rellenar los campos obligatorios.", "error");
-    return;
-  }
   const currentTab = getCurrentTab();
-  // Són booleans: si hi ha error => false
-  if (currentTab === "dades") {
-    if (!dadesOK) {
-      // Ens quedem
-      showToast("Faltan campos obligatorios en 'Datos'.", "error");
-      return;
+
+  // Si algun dels dos grups no és vàlid
+  if (!dadesOK || !serveisOK) {
+    // Si l'usuari està a "Dades"
+    if (currentTab === "dades") {
+      // I la pestanya inactiva ("Serveis") té errors, la marquem
+      if (!serveisOK) {
+        document.getElementById("tab-serveis").classList.add("error-tab");
+        showToast("Completa los campos en la pestaña 'Servicios'.", "error");
+      } else {
+        // En cas que també hi hagi errors a la pestanya activa, els camps ja mostren error
+        showToast("Falta rellenar los campos obligatorios.", "error");
+      }
     }
-    // Si la pestanya actual (dades) no té error però Serveis sí...
-    if (!serveisOK) {
-      // Posem blink a tab-serveis
-      document.getElementById("tab-serveis").classList.add("error-tab");
-      console.log("Añadir blink a los servicios");
-      showToast("Completa los campos en la pestaña 'Servicios'.", "error");
-      return;
+    // Si l'usuari està a "Serveis"
+    else if (currentTab === "serveis") {
+      // I la pestanya inactiva ("Dades") té errors, la marquem
+      if (!dadesOK) {
+        document.getElementById("tab-dades").classList.add("error-tab");
+        showToast("Completa los campos en la pestaña 'Datos'.", "error");
+      } else {
+        // En cas que també hi hagi errors a la pestanya activa, els camps ja mostren error
+        showToast("Falta rellenar los campos obligatorios.", "error");
+      }
     }
-  } else {
-    // currentTab === "serveis"
-    if (!serveisOK) {
-      showToast("Faltan campos obligatorios en 'Servicios'.", "error");
-      return;
-    }
-    if (!dadesOK) {
-      document.getElementById("tab-dades").classList.add("error-tab");
-      showToast("Completa los campos en la pestaña 'Datos'.", "error");
-      return;
-    }
+    return;
   }
 
   try {
@@ -188,7 +187,7 @@ export async function generateAndDownloadPdf() {
 
     setTimeout(() => URL.revokeObjectURL(url), 100);
 
-    // Després de generar PDF, guardem la dieta
+    // Després de generar el PDF, guardem la dieta
     await handleSaveDietWithPossibleOverwrite();
 
     incrementPdfDownloadCountAndMaybeShowPrompt();
