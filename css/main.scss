@@ -666,7 +666,7 @@ button .fa {
 }
 
 .signature-modal-content {
-  max-width: 600px;
+  max-width: 40%;
   text-align: center;
   position: relative;
 
@@ -678,7 +678,6 @@ button .fa {
 .signature-canvas-container {
   margin: 20px auto;
   width: 100%;
-  max-width: 500px;
   height: 250px;
   border: 2px dashed #aaa;
   border-radius: 8px;
@@ -701,7 +700,7 @@ button .fa {
   align-items: center; // Centra verticalmente
   gap: 20px; // Espacio entre botones
   margin: 10px auto;
-  padding: 10px;
+  padding: 0px;
 }
 
 .modal-button {
