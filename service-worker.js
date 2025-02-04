@@ -5,10 +5,9 @@ const urlsToCache = [
   "./index.html",
   "./css/main.css",
   "./manifest.json",
-  // Service Worker en si
   "./service-worker.js",
 
-  // ► TOTS els fitxers
+  // ► Fitxers
   "./src/app.js",
   "./src/init.js",
   "./src/models/diet.js",
@@ -47,7 +46,7 @@ self.addEventListener("install", (event) => {
     caches
       .open(CACHE_NAME)
       .then(async (cache) => {
-        console.log("[ServiceWorker] Emmagatzemant fitxers al cache");
+        console.log("[ServiceWorker] Guardar ficheros al cache");
         for (const url of urlsToCache) {
           try {
             const response = await fetch(url, { cache: "no-cache" });
@@ -57,14 +56,14 @@ self.addEventListener("install", (event) => {
               );
             }
             await cache.put(url, response);
-            console.log(`[ServiceWorker] Fitxer en cache: ${url}`);
+            console.log(`[ServiceWorker] Ficheros en cache: ${url}`);
           } catch (error) {
             console.error(`[ServiceWorker] Error cachejant ${url}:`, error);
           }
         }
       })
       .catch((error) => {
-        console.error("[ServiceWorker] Error durant la instal·lació:", error);
+        console.error("[ServiceWorker] Error durante la instalación:", error);
       })
   );
 });

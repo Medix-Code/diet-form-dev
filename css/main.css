@@ -82,7 +82,12 @@ main {
   font-size: clamp(14px, 2.5vw, 18px);
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: transform 0.1s ease;
+}
+
+/* Quan el botó tingui la classe "open", gira l'icona 90 graus */
+.ajustes-btn.open .icon {
+  transform: scale(0.9);
 }
 
 .ajustes-panel {

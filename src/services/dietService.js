@@ -35,7 +35,7 @@ import {
 
 /**
  * Construeix l'objecte "Dieta" que després guardarem a IndexedDB.
- * (Abans era buildDietObject)
+ *
  */
 export function buildDietObject(generalData, servicesData, customId) {
   return {

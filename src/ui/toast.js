@@ -25,7 +25,7 @@ function displayToast(message, type) {
   toastVisible = true;
   const container = document.getElementById("toast-container");
   if (!container) {
-    console.error("[UI] #toast-container no trobat!");
+    console.error("[UI] #toast-container no encontrado!");
     return;
   }
 
