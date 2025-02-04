@@ -99,7 +99,7 @@ main {
   width: 48px;
   height: 48px;
   display: flex;
-  margin: 20px;
+  margin: 18px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -921,7 +921,10 @@ button .icon {
     gap: 18px;
   }
   .signature-modal-content {
-    max-width: 550px;
+    overflow-x: hidden;
+    width: 60%;
+    max-height: 90vh;
+    max-width: 90%;
   }
   .signature-canvas-container {
     height: 230px;
@@ -1060,6 +1063,7 @@ button .icon {
     margin-top: 20px;
   }
   .signature-modal-content {
+    overflow-x: hidden;
     width: 80%;
     max-height: 90vh;
     max-width: 90%;
