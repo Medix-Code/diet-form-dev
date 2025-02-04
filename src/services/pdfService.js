@@ -6,11 +6,7 @@ import { getCurrentTab } from "../ui/tabs.js";
 import { showToast } from "../ui/toast.js";
 import { handleSaveDietWithPossibleOverwrite } from "./dietService.js";
 import { gatherAllData } from "./formService.js";
-import {
-  validateDadesTab,
-  validateServeisTab,
-  validateForPdf,
-} from "../utils/validation.js";
+import { validateDadesTab, validateServeisTab } from "../utils/validation.js";
 import { isAppInstalled, showInstallPrompt } from "./pwaService.js";
 
 /**
@@ -137,9 +133,6 @@ export async function fillPdf(data, servicesData) {
 /**
  * Funció principal per generar i descarregar el PDF
  */
-/**
- * Funció principal per generar i descarregar el PDF
- */
 export async function generateAndDownloadPdf() {
   // Esborrem qualsevol classe d'error prèvia de les pestanyes
   document.getElementById("tab-dades").classList.remove("error-tab");
@@ -156,7 +149,7 @@ export async function generateAndDownloadPdf() {
       // Mostrem el toast només si "Dades" està completa però "Serveis" té errors
       if (dadesOK && !serveisOK) {
         document.getElementById("tab-serveis").classList.add("error-tab");
-        showToast("Completa los campos en la pestaña 'Servicios'.", "error");
+        showToast("Completa los campos en la pestaña Servicios.", "error");
       }
     }
     // Si l'usuari està a la pestanya "Serveis"
@@ -164,11 +157,10 @@ export async function generateAndDownloadPdf() {
       // Mostrem el toast només si "Serveis" està completa però "Dades" té errors
       if (serveisOK && !dadesOK) {
         document.getElementById("tab-dades").classList.add("error-tab");
-        showToast("Completa los campos en la pestaña 'Datos'.", "error");
+        showToast("Completa los campos en la pestaña Datos.", "error");
       }
     }
-    // En qualsevol altre cas (per exemple, si la pestanya activa també té errors),
-    // no es mostra cap toast, ja que els errors es veuen als camps.
+
     return;
   }
 

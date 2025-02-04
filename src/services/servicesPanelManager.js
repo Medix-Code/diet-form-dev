@@ -131,31 +131,3 @@ export function validateServiceNumber(value) {
   const regex = /^\d{9}$/;
   return regex.test(value);
 }
-
-/**
- * Valida que els temps d'origen/destí/final siguin coherents
- */
-export function validateServiceTimesForAll() {
-  const allServices = document.querySelectorAll(".service");
-  for (let service of allServices) {
-    const originTime = service.querySelector(".origin-time").value;
-    const destinationTime = service.querySelector(".destination-time").value;
-    const endTime = service.querySelector(".end-time").value;
-
-    if (originTime && destinationTime && endTime) {
-      const originMinutes = timeToMinutes(originTime);
-      const destinationMinutes = timeToMinutes(destinationTime);
-      const endMinutes = timeToMinutes(endTime);
-
-      if (originMinutes > destinationMinutes) return false;
-      if (destinationMinutes > endMinutes) return false;
-      if (originMinutes > endMinutes) return false;
-    }
-  }
-  return true;
-}
-
-function timeToMinutes(hhmm) {
-  const [hh, mm] = hhmm.split(":").map(Number);
-  return hh * 60 + mm;
-}

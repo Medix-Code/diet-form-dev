@@ -24,7 +24,8 @@ import {
   getInitialFormDataStr,
 } from "./formService.js";
 import { removeErrorClasses } from "./formService.js";
-import { validateMinFieldsForSave } from "../utils/validation.js";
+import { validateDadesTab, validateServeisTab } from "../utils/validation.js";
+import { getCurrentTab } from "../ui/tabs.js";
 import { getDietDisplayInfo } from "../utils/utils.js";
 import {
   setSignatureConductor,
@@ -55,12 +56,37 @@ export function buildDietObject(generalData, servicesData, customId) {
  * Quan l'usuari clica el botó "Guardar Dieta"
  */
 export async function onClickSaveDiet() {
-  if (!validateMinFieldsForSave()) {
-    showToast("Falta rellenar los campos obligatorios.", "error");
+  // Esborrem qualsevol classe d'error prèvia de les pestanyes
+  document.getElementById("tab-dades").classList.remove("error-tab");
+  document.getElementById("tab-serveis").classList.remove("error-tab");
+
+  // Validem cada pestanya de manera independent
+  const dadesOK = validateDadesTab();
+  const serveisOK = validateServeisTab();
+  const currentTab = getCurrentTab();
+
+  // Si alguna pestanya no és vàlida...
+  if (!dadesOK || !serveisOK) {
+    if (currentTab === "dades") {
+      // Si els camps de "Dades" estan complets però "Serveis" té errors:
+      if (dadesOK && !serveisOK) {
+        document.getElementById("tab-serveis").classList.add("error-tab");
+        showToast("Completa los campos en la pestaña Servicios.", "error");
+        return;
+      }
+    } else if (currentTab === "serveis") {
+      // Si els camps de "Serveis" estan complets però "Dades" té errors:
+      if (serveisOK && !dadesOK) {
+        document.getElementById("tab-dades").classList.add("error-tab");
+        showToast("Completa los campos en la pestaña Datos.", "error");
+        return;
+      }
+    }
     return;
   }
 
-  // Guardem la dieta
+  // Si hem arribat aquí, vol dir que ambdues pestanyes són vàlides.
+  // Continuem amb la lògica per guardar la dieta.
   const result = await handleSaveDietWithPossibleOverwrite();
   switch (result) {
     case "overwritten":
