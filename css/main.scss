@@ -805,7 +805,7 @@ button .fa {
     display: flex; /* Flexbox per a l'estructura */
     flex-direction: column; /* Elements en columna */
     align-items: center; /* Alineació central */
-    justify-content: center; /* Centrat vertical */
+    justify-content: space-between;
     gap: 20px; /* Espai entre elements dins el contenidor */
   }
 
@@ -824,6 +824,11 @@ button .fa {
         text-decoration: underline;
       }
     }
+  }
+  .app-version {
+    font-size: 0.9em;
+    opacity: 0.8;
+    margin: 0;
   }
 
   /* Contenidor per a les icones */
