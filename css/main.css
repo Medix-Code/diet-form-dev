@@ -749,11 +749,11 @@ button .fa {
   padding: 20px; /* Espai intern del footer */
   border-top: 1px solid #495057; /* Línia separadora superior */
   /* Contenidor del footer */
-  /* Estils per al paràgraf */
   /* Contenidor per a les icones */
+  /* Estils per a la versió: posicionada absolutament a la dreta */
+  /* Estils per als paràgrafs dins el footer */
   /* Estils per als enllaços amb icones */
   /* Estils generals per als icones */
-  /* Efecte al passar el cursor sobre els icones */
 }
 .footer .footer__container {
   max-width: 100%; /* Amplada màxima */
@@ -766,10 +766,23 @@ button .fa {
   justify-content: space-between;
   gap: 20px; /* Espai entre elements dins el contenidor */
 }
+.footer .footer__icons {
+  width: 100%; /* Ocupa tot l'ample disponible */
+  position: relative; /* Per poder posicionar elements de forma absoluta */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra la icona */
+}
+.footer .app-version {
+  font-size: 0.8em;
+  opacity: 0.8;
+  margin: 0;
+  position: absolute;
+  right: 0;
+}
 .footer p {
   margin: 0 0 2px 0;
   font-size: 15px;
-  /* Enllaços dins del paràgraf */
 }
 .footer p a {
   color: #f8f9fa;
@@ -779,17 +792,6 @@ button .fa {
 .footer p a:hover {
   color: #00bfff;
   text-decoration: underline;
-}
-.footer .app-version {
-  font-size: 0.9em;
-  opacity: 0.8;
-  margin: 0;
-}
-.footer .footer__icons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
 }
 .footer .footer-icon-link {
   color: #f8f9fa;

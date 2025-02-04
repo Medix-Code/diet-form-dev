@@ -809,12 +809,29 @@ button .fa {
     gap: 20px; /* Espai entre elements dins el contenidor */
   }
 
-  /* Estils per al paràgraf */
+  /* Contenidor per a les icones */
+  .footer__icons {
+    width: 100%; /* Ocupa tot l'ample disponible */
+    position: relative; /* Per poder posicionar elements de forma absoluta */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centra la icona */
+  }
+
+  /* Estils per a la versió: posicionada absolutament a la dreta */
+  .app-version {
+    font-size: 0.8em;
+    opacity: 0.8;
+    margin: 0;
+    position: absolute;
+    right: 0;
+  }
+
+  /* Estils per als paràgrafs dins el footer */
   p {
     margin: 0 0 2px 0;
     font-size: 15px;
 
-    /* Enllaços dins del paràgraf */
     a {
       color: #f8f9fa;
       text-decoration: none;
@@ -824,19 +841,6 @@ button .fa {
         text-decoration: underline;
       }
     }
-  }
-  .app-version {
-    font-size: 0.9em;
-    opacity: 0.8;
-    margin: 0;
-  }
-
-  /* Contenidor per a les icones */
-  .footer__icons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
   }
 
   /* Estils per als enllaços amb icones */
@@ -861,7 +865,6 @@ button .fa {
     object-fit: contain;
   }
 
-  /* Efecte al passar el cursor sobre els icones */
   .icon:hover {
     transform: scale(1.2);
   }
