@@ -1,13 +1,54 @@
 @charset "UTF-8";
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* 
+  Definimos las variables CSS para el tema claro por defecto.
+  Estas variables se pueden utilizar en cualquier parte del código mediante la función var().
+*/
+:root {
+  /* Colores principales */
+  --primary-color: #343a40;
+  --secondary-color: #007bff;
+  /* Colores del tema claro */
+  --bg-color: #f8f9fa;
+  --text-color: #333;
+  /* Colores complementarios */
+  --white: #ffffff;
+  --black: #000000;
+  --light-grey: #f5f5f5;
+  --grey-border: #ddd;
+  --input-border: #ced4da;
+  /* Variables de tamaño y transición */
+  --top-bar-height: 60px;
+  --tab-height: 60px;
+  --font-size-base: 16px;
+  --transition-speed: 0.3s;
 }
 
+/* 
+  Definimos el tema oscuro. Cuando se aplique la clase .theme-dark al elemento raíz (por ejemplo, al body),
+  se sobreescribirán las variables CSS usadas en los estilos.
+*/
+.theme-dark {
+  --primary-color: #c92222;
+  --secondary-color: #007bff; /* Se puede ajustar si se desea */
+  /* Colores del tema oscuro */
+  --bg-color: #222;
+  --text-color: #eee;
+  /* Podemos mantener o ajustar las mismas medidas */
+  --top-bar-height: 60px;
+  --tab-height: 60px;
+  --font-size-base: 16px;
+}
+
+/* 
+  Usamos las variables CSS para definir el fondo y color de texto.
+  Así, cuando se cambie el tema (añadiendo o quitando la clase .theme-dark al body),
+  se actualizarán automáticamente.
+*/
 body {
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: var(--font-size-base);
+  background-color: var(--bg-color);
+  color: var(--text-color);
   min-height: 100vh;
   overflow-x: hidden;
   display: flex;
@@ -27,11 +68,11 @@ main {
   position: fixed;
   top: 0;
   left: 0;
-  height: 60px;
+  height: var(--top-bar-height);
   width: 100%;
   padding: 10px 20px;
-  background-color: #343a40;
-  border-bottom: 0.5px solid #ddd;
+  background-color: var(--primary-color);
+  border-bottom: 0.5px solid var(--grey-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,7 +90,7 @@ main {
   margin: 0;
   font-size: clamp(20px, 3vw, 30px);
   font-weight: bold;
-  color: #fff;
+  color: var(--white);
 }
 
 .button-group {
@@ -61,7 +102,7 @@ main {
 .ajustes-btn {
   position: relative;
   background-color: #1470c2;
-  color: #fff;
+  color: var(--white);
   border: none;
   border-radius: 8px;
   width: 48px;
@@ -84,8 +125,8 @@ main {
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: #ffffff;
-  border: 0px solid #ccc;
+  background-color: var(--white);
+  border: 0px solid var(--input-border);
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   padding: 0;
@@ -97,7 +138,7 @@ main {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease, visibility var(--transition-speed);
 }
 .ajustes-panel:not(.hidden) {
   opacity: 1;
@@ -112,11 +153,11 @@ main {
   display: flex;
   align-items: center;
   gap: 15px;
-  background-color: #f5f5f5;
-  border: 1px solid #ececec;
+  background-color: var(--light-grey);
+  border: 1px solid var(--input-border);
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
-  color: #333;
+  color: var(--text-color);
   box-sizing: border-box;
   text-align: left;
   border-radius: 0;
@@ -142,7 +183,7 @@ main {
   border-bottom-right-radius: 8px;
 }
 .ajustes-panel i {
-  color: #007bff;
+  color: var(--secondary-color);
   font-size: 18px;
   pointer-events: none;
   transition: color 0.3s ease;
@@ -159,13 +200,13 @@ main {
 
 .tabs-container {
   position: fixed;
-  top: 60px;
+  top: var(--top-bar-height);
   left: 0;
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--white);
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--grey-border);
   z-index: 900;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -190,14 +231,14 @@ button .fa {
   font-size: 16px;
   font-weight: normal;
   color: #919191;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
 }
 .tab:hover {
   background-color: #dee2e6;
 }
 .tab.active {
   font-weight: bold;
-  background-color: #ffffff;
+  background-color: var(--white);
   color: #495057;
   box-shadow: inset 0 -3px 0 #0a96e7;
 }
@@ -247,9 +288,9 @@ button .fa {
   padding-right: 15px;
   box-sizing: border-box;
   font-size: 16px;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--input-border);
   border-radius: 4px;
-  background-color: #fff;
+  background-color: var(--white);
   text-align: left;
 }
 .form-group select {
@@ -282,7 +323,7 @@ button .fa {
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border: none;
-  color: #000;
+  color: var(--black);
   transition: all 0.2s ease;
   cursor: pointer;
 }
@@ -303,7 +344,7 @@ button .fa {
   border: none;
   font-size: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  color: #fff;
+  color: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -326,7 +367,7 @@ button .fa {
 
 .service {
   padding: clamp(15px, 3vw, 30px) clamp(10px, 2vw, 20px);
-  background-color: #f8f9fa;
+  background-color: var(--bg-color);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -349,13 +390,13 @@ button .fa {
   display: flex;
   align-items: stretch;
   position: relative;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--input-border);
   border-radius: 4px;
   overflow: hidden;
   height: 40px;
 }
 .signature-group .input-with-icon:focus-within {
-  border-color: #343a40;
+  border-color: var(--primary-color);
   border-width: 2px;
   border-style: solid;
 }
@@ -377,9 +418,9 @@ button .fa {
   outline: none;
   align-items: center;
   justify-content: center;
-  background-color: #f9f9f9;
-  border-right: 1px solid #ced4da;
-  border: 0px solid #ced4da;
+  background-color: var(--white);
+  border-right: 1px solid var(--input-border);
+  border: 0px solid var(--input-border);
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   border-top-right-radius: 4px;
@@ -412,12 +453,12 @@ button .fa {
 .modal-content {
   position: relative;
   margin: 10% auto;
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 12px;
   padding: 20px 30px;
   max-width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn var(--transition-speed) ease-in-out;
 }
 .modal-content .modal-title {
   text-align: center;
@@ -429,8 +470,8 @@ button .fa {
   margin: 0;
   font-size: 22px;
   font-weight: bold;
-  color: #343a40;
-  border-bottom: 1px solid #ddd;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--grey-border);
   padding-bottom: 10px;
 }
 .modal-content p {
@@ -452,8 +493,8 @@ button .fa {
 }
 .close-modal-btn {
   display: block;
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--secondary-color);
+  color: var(--white);
   margin: 20px auto 0;
   font-size: 16px;
   padding: 12px 20px;
@@ -463,15 +504,15 @@ button .fa {
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.3s ease;
+  transition: background-color var(--transition-speed) ease;
 }
 .close-modal-btn:hover {
   background-color: #0056b3;
 }
 
 .diet-modal-content {
-  background-color: #f8f9fa;
-  border: 0px solid #ced4da;
+  background-color: var(--bg-color);
+  border: 0px solid var(--input-border);
   max-height: 80vh;
   overflow-y: auto;
 }
@@ -503,7 +544,7 @@ button .fa {
   align-items: center;
   justify-content: space-between;
   background-color: hsl(0, 0%, 95%);
-  border: 1px solid #ddd;
+  border: 1px solid var(--grey-border);
   border-radius: 8px;
   padding: 10px 15px;
   margin-bottom: 15px;
@@ -518,7 +559,7 @@ button .fa {
   height: 40px;
   border: 1px solid #c9c9c9;
   border-radius: 8px;
-  background-color: #ffffff;
+  background-color: var(--white);
   cursor: pointer;
   transition: all 0.3s ease;
   margin-left: 15px;
@@ -532,7 +573,7 @@ button .fa {
   color: #4ee711;
 }
 #diet-options li button.delete-diet i {
-  color: #000000;
+  color: var(--black);
   pointer-events: none;
 }
 
@@ -540,7 +581,7 @@ button .fa {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.937254902);
+  color: rgba(255, 255, 255, 0.94);
   font-size: 22px;
   gap: 20px;
   border: none;
@@ -575,7 +616,7 @@ button .fa {
   height: 250px;
   border: 2px dashed #aaa;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--white);
   position: relative;
 }
 .signature-canvas-container canvas {
@@ -600,7 +641,7 @@ button .fa {
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  color: #fff;
+  color: var(--white);
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 .modal-button.yes {
@@ -649,7 +690,7 @@ button .fa {
   min-width: 200px;
   max-width: 400px;
   background-color: #28a745;
-  color: #fff;
+  color: var(--white);
   padding: 12px 24px;
   border-radius: 8px;
   text-align: center;
@@ -683,8 +724,8 @@ button .fa {
   }
 }
 .footer {
-  background-color: #343a40;
-  color: #f8f9fa;
+  background-color: var(--primary-color);
+  color: var(--white);
   padding: 20px;
   border-top: 1px solid #495057;
 }
@@ -718,7 +759,7 @@ button .fa {
   font-size: 15px;
 }
 .footer p a {
-  color: #f8f9fa;
+  color: var(--white);
   text-decoration: none;
   font-weight: bold;
 }
@@ -727,7 +768,7 @@ button .fa {
   text-decoration: underline;
 }
 .footer .footer-icon-link {
-  color: #f8f9fa;
+  color: var(--white);
   font-size: 18px;
   transition: color 0.2s, transform 0.2s;
   text-decoration: none;
@@ -757,8 +798,8 @@ button .fa {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #fff;
-  color: #343a40;
+  background-color: var(--white);
+  color: var(--primary-color);
   padding: 20px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
@@ -801,7 +842,7 @@ button .fa {
 
 #install-prompt #install-button {
   background-color: #007bff;
-  color: #fff;
+  color: var(--white);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -812,7 +853,7 @@ button .fa {
 
 #install-prompt #dismiss-button {
   background-color: #5c6064;
-  color: #fff;
+  color: var(--white);
 }
 
 #install-prompt #dismiss-button:hover {
@@ -839,11 +880,11 @@ button .icon {
 }
 
 /* =======================================================
-   Media Query para TABLETS (entre 768px i 1024px)
+   Media Query para TABLETS (entre 768px y 1024px)
    ======================================================= */
 @media (max-width: 1024px) and (min-width: 769px) {
   .top-bar {
-    height: 56px;
+    height: calc(var(--top-bar-height) - 4px);
     padding: 8px 18px;
   }
   .ajustes-btn {
@@ -851,7 +892,7 @@ button .icon {
     height: 42px;
   }
   .tabs-container {
-    top: 56px;
+    top: calc(var(--top-bar-height) - 4px);
   }
   .tab {
     padding: 14px 12px;
@@ -893,7 +934,7 @@ button .icon {
   }
 }
 /* =======================================================
-   Media Query per a MÒBILS (fins a 768px)
+   Media Query para MÓVILES (hasta 768px)
    ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
@@ -985,7 +1026,7 @@ button .icon {
     font-size: 1.2rem;
     margin: 0;
     font-weight: bold;
-    color: #343a40;
+    color: var(--primary-color);
   }
   h3#diet-modal-title {
     font-size: 18px;
@@ -1012,7 +1053,7 @@ button .icon {
     font-size: 14px;
     border: 1px solid #c9c9c9;
     border-radius: 8px;
-    background-color: #ffffff;
+    background-color: var(--white);
     transition: all 0.3s ease;
     margin-left: 10px;
   }

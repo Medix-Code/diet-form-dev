@@ -5,15 +5,29 @@
   Definimos las variables CSS para el tema claro por defecto.
   Estas variables se pueden utilizar en cualquier parte del código mediante la función var().
 */
+
+// Variables generales de colores y tipografía
 :root {
-  --primary-color: #343a40; // Color principal (por ejemplo, para la cabecera)
+  /* Colores principales */
+  --primary-color: #343a40; // Color principal (ej. cabecera)
   --secondary-color: #007bff; // Color secundario
-  --transition-speed: 0.3s; // Velocidad de transición
-  --bg-color: #f8f9fa; // Color de fondo (tema claro)
-  --text-color: #333; // Color del texto (tema claro)
+
+  /* Colores del tema claro */
+  --bg-color: #f8f9fa; // Fondo (tema claro)
+  --text-color: #333; // Texto (tema claro)
+
+  /* Colores complementarios */
+  --white: #ffffff; // Blanco
+  --black: #000000; // Negro
+  --light-grey: #f5f5f5; // Gris muy claro
+  --grey-border: #ddd; // Gris para bordes y sombras ligeras
+  --input-border: #ced4da; // Color de borde de inputs
+
+  /* Variables de tamaño y transición */
   --top-bar-height: 60px; // Altura de la cabecera
   --tab-height: 60px; // Altura de las pestañas
   --font-size-base: 16px; // Tamaño base de fuente
+  --transition-speed: 0.3s; // Velocidad de transición
 }
 
 /* 
@@ -21,32 +35,22 @@
   se sobreescribirán las variables CSS usadas en los estilos.
 */
 .theme-dark {
-  --primary-color: #222;
-  --secondary-color: #90e20b; /* Se puede ajustar si se desea */
+  --primary-color: #c92222;
+  --secondary-color: #007bff; /* Se puede ajustar si se desea */
+
+  /* Colores del tema oscuro */
   --bg-color: #222;
   --text-color: #eee;
+
+  /* Podemos mantener o ajustar las mismas medidas */
   --top-bar-height: 60px;
   --tab-height: 60px;
   --font-size-base: 16px;
 }
 
-// ===========================================================================
-// IMPORTAMOS VARIABLES SCSS (para otros cálculos si se precisan)
-// ===========================================================================
-@use "variables" as *;
-
-// ===========================================================================
-// RESET Y ESTILOS GLOBALES
-// ===========================================================================
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 /* 
   Usamos las variables CSS para definir el fondo y color de texto.
-  Así, cuando cambiemos de tema (añadiendo o quitando la clase .theme-dark al body),
+  Así, cuando se cambie el tema (añadiendo o quitando la clase .theme-dark al body),
   se actualizarán automáticamente.
 */
 body {
@@ -82,7 +86,7 @@ main {
   background-color: var(
     --primary-color
   ); // Usamos la variable para el color principal
-  border-bottom: 0.5px solid #ddd;
+  border-bottom: 0.5px solid var(--grey-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -102,7 +106,7 @@ main {
   margin: 0;
   font-size: clamp(20px, 3vw, 30px);
   font-weight: bold;
-  color: #fff;
+  color: var(--white);
 }
 
 // ===========================================================================
@@ -117,7 +121,7 @@ main {
 .ajustes-btn {
   position: relative;
   background-color: #1470c2;
-  color: #fff;
+  color: var(--white);
   border: none;
   border-radius: 8px;
   width: 48px;
@@ -142,8 +146,8 @@ main {
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: #ffffff;
-  border: 0px solid #ccc;
+  background-color: var(--white);
+  border: 0px solid var(--input-border);
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   padding: 0;
@@ -155,7 +159,8 @@ main {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  transition: opacity var(--transition-speed) ease,
+    transform var(--transition-speed) ease, visibility var(--transition-speed);
 
   &:not(.hidden) {
     opacity: 1;
@@ -172,11 +177,11 @@ main {
     display: flex;
     align-items: center;
     gap: 15px;
-    background-color: #f5f5f5;
-    border: 1px solid #ececec;
+    background-color: var(--light-grey);
+    border: 1px solid var(--input-border);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
-    color: #333;
+    color: var(--text-color);
     box-sizing: border-box;
     text-align: left;
     border-radius: 0;
@@ -206,7 +211,7 @@ main {
   }
 
   i {
-    color: #007bff;
+    color: var(--secondary-color);
     font-size: 18px;
     pointer-events: none;
     transition: color 0.3s ease;
@@ -230,10 +235,10 @@ main {
   top: var(--top-bar-height);
   left: 0;
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--white);
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--grey-border);
   z-index: 900;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -265,7 +270,7 @@ button .fa {
   }
   &.active {
     font-weight: bold;
-    background-color: #ffffff;
+    background-color: var(--white);
     color: #495057;
     box-shadow: inset 0 -3px 0 #0a96e7;
   }
@@ -323,9 +328,9 @@ button .fa {
     padding-right: 15px;
     box-sizing: border-box;
     font-size: 16px;
-    border: 1px solid #ced4da;
+    border: 1px solid var(--input-border);
     border-radius: 4px;
-    background-color: #fff;
+    background-color: var(--white);
     text-align: left;
   }
 
@@ -363,7 +368,7 @@ button .fa {
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border: none;
-  color: #000;
+  color: var(--black);
   transition: all 0.2s ease;
   cursor: pointer;
 
@@ -385,7 +390,7 @@ button .fa {
   border: none;
   font-size: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  color: #fff;
+  color: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -409,7 +414,7 @@ button .fa {
 
 .service {
   padding: clamp(15px, 3vw, 30px) clamp(10px, 2vw, 20px);
-  background-color: #f8f9fa;
+  background-color: var(--bg-color);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -437,13 +442,13 @@ button .fa {
     display: flex;
     align-items: stretch;
     position: relative;
-    border: 1px solid #ced4da;
+    border: 1px solid var(--input-border);
     border-radius: 4px;
     overflow: hidden;
     height: 40px;
 
     &:focus-within {
-      border-color: #343a40;
+      border-color: var(--primary-color);
       border-width: 2px;
       border-style: solid;
     }
@@ -467,9 +472,9 @@ button .fa {
       outline: none;
       align-items: center;
       justify-content: center;
-      background-color: #f9f9f9;
-      border-right: 1px solid #ced4da;
-      border: 0px solid #ced4da;
+      background-color: var(--white);
+      border-right: 1px solid var(--input-border);
+      border: 0px solid var(--input-border);
       cursor: pointer;
       transition: background-color 0.3s, color 0.3s;
       border-top-right-radius: 4px;
@@ -509,12 +514,12 @@ button .fa {
 .modal-content {
   position: relative;
   margin: 10% auto;
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 12px;
   padding: 20px 30px;
   max-width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn var(--transition-speed) ease-in-out;
 
   .modal-title {
     text-align: center;
@@ -527,8 +532,8 @@ button .fa {
     margin: 0;
     font-size: 22px;
     font-weight: bold;
-    color: #343a40;
-    border-bottom: 1px solid #ddd;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--grey-border);
     padding-bottom: 10px;
   }
 
@@ -553,8 +558,8 @@ button .fa {
 
 .close-modal-btn {
   display: block;
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--secondary-color);
+  color: var(--white);
   margin: 20px auto 0;
   font-size: 16px;
   padding: 12px 20px;
@@ -575,8 +580,8 @@ button .fa {
 // MODAL DE GESTIÓN DE DIETAS
 // ===========================================================================
 .diet-modal-content {
-  background-color: #f8f9fa;
-  border: 0px solid #ced4da;
+  background-color: var(--bg-color);
+  border: 0px solid var(--input-border);
   max-height: 80vh;
   overflow-y: auto;
 }
@@ -608,7 +613,7 @@ button .fa {
   align-items: center;
   justify-content: space-between;
   background-color: hsl(0, 0%, 95%);
-  border: 1px solid #ddd;
+  border: 1px solid var(--grey-border);
   border-radius: 8px;
   padding: 10px 15px;
   margin-bottom: 15px;
@@ -624,7 +629,7 @@ button .fa {
     height: 40px;
     border: 1px solid #c9c9c9;
     border-radius: 8px;
-    background-color: #ffffff;
+    background-color: var(--white);
     cursor: pointer;
     transition: all 0.3s ease;
     margin-left: 15px;
@@ -641,7 +646,7 @@ button .fa {
   }
 
   button.delete-diet i {
-    color: #000000;
+    color: var(--black);
     pointer-events: none;
   }
 }
@@ -650,7 +655,7 @@ button .fa {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #ffffffef;
+  color: rgba(255, 255, 255, 0.94);
   font-size: 22px;
   gap: 20px;
   border: none;
@@ -690,7 +695,7 @@ button .fa {
   height: 250px;
   border: 2px dashed #aaa;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--white);
   position: relative;
 
   canvas {
@@ -719,7 +724,7 @@ button .fa {
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  color: #fff;
+  color: var(--white);
   transition: background-color 0.3s ease, transform 0.2s ease;
 
   &.yes {
@@ -776,7 +781,7 @@ button .fa {
   min-width: 200px; // Ancho mínimo
   max-width: 400px; // Límite máximo
   background-color: #28a745;
-  color: #fff;
+  color: var(--white);
   padding: 12px 24px;
   border-radius: 8px;
   text-align: center;
@@ -816,7 +821,7 @@ button .fa {
 // ===========================================================================
 .footer {
   background-color: var(--primary-color); // Se utiliza la variable del tema
-  color: #f8f9fa;
+  color: var(--white);
   padding: 20px;
   border-top: 1px solid #495057;
 
@@ -853,7 +858,7 @@ button .fa {
     font-size: 15px;
 
     a {
-      color: #f8f9fa;
+      color: var(--white);
       text-decoration: none;
       font-weight: bold;
       &:hover {
@@ -864,7 +869,7 @@ button .fa {
   }
 
   .footer-icon-link {
-    color: #f8f9fa;
+    color: var(--white);
     font-size: 18px;
     transition: color 0.2s, transform 0.2s;
     text-decoration: none;
@@ -900,8 +905,8 @@ button .fa {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #fff;
-  color: #343a40;
+  background-color: var(--white);
+  color: var(--primary-color);
   padding: 20px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
@@ -944,7 +949,7 @@ button .fa {
 
 #install-prompt #install-button {
   background-color: #007bff;
-  color: #fff;
+  color: var(--white);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -955,7 +960,7 @@ button .fa {
 
 #install-prompt #dismiss-button {
   background-color: #5c6064;
-  color: #fff;
+  color: var(--white);
 }
 
 #install-prompt #dismiss-button:hover {
@@ -1191,7 +1196,7 @@ button .icon {
       font-size: 14px;
       border: 1px solid #c9c9c9;
       border-radius: 8px;
-      background-color: #ffffff;
+      background-color: var(--white);
       transition: all 0.3s ease;
       margin-left: 10px;
 
