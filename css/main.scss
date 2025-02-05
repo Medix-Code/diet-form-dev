@@ -16,6 +16,8 @@
   /* Colores del tema claro */
   --bg-color: #f8faf8; // Fondo (tema claro)       (fondo general, fondo modal dietes)
   --text-color: #333; // Texto (tema claro)                          ( text Formulari)
+  --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
+  --border-top-footer: #1470c2; //  Borde top Footer
 
   /* Colores complementarios */
 
@@ -29,10 +31,10 @@
 
   --border-btt: #c9c9c9; // Btt No hhover
 
-  --bg-tab: #e9ecef; //Backgrond pestanyes
+  --bg-tab: #e9ecef; //Backgrond pestanyes no actives
   --txtcolor-tab: #919191; //TextColor pestanyes
   --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
-  --bg-tab-active: #495057; //Textcolor pestanyes
+  --bg-tab-active: #575149fa; //Textcolor pestanyes
 
   /* Variables de tamaño y transición */
   --top-bar-height: 60px; // Altura de la cabecera
@@ -50,6 +52,10 @@
   --bg-transp-modal: rgba(0, 0, 0, 0.6); // transperencia modal
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
   --prompt_box_shadow: rgba(0, 0, 0, 0.3); // Prompt
+
+  --btt-signature: rgba(173, 173, 173, 0.15); // Signature btt
+  --bg-signature-hover: #f1f1f1; // Signature bg hover
+  --btt-signature-hover: #444; // Signature color hover
 
   /*Servicios*/
   --service-1-bg: #e9f7ef;
@@ -73,6 +79,8 @@
   /* Colors del tema fosc */
   --bg-color: #121212; /* Fons fosc */
   --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
+  --border-bottom-topbar: #343a40; //  Borde sota TopBar
+  --border-top-footer: #1470c2; //  Borde top Footer
 
   /* Colors complementaris */
   --light-grey: #2e2e2e; /* Grau fosc per elements secundaris */
@@ -105,6 +113,9 @@
   --bg-transp-modal: rgba(0, 0, 0, 0.6); /* Transp. per a modals */
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --prompt_box_shadow: rgba(0, 0, 0, 0.5); /* Ombra una mica més marcada */
+  --btt-signature: rgba(94, 94, 94, 0.15); // Signature btt
+  --bg-signature-hover: #f1f1f1; // Signature bg hover
+  --btt-signature-hover: #444; // Signature color hover
 
   /* Serveis (pots adaptar aquests colors segons la teva identitat visual) */
   --service-1-bg: #1e2a1e;
@@ -153,7 +164,7 @@ main {
   left: 0;
   height: var(--top-bar-height);
   width: 100%;
-
+  border-bottom: 1px solid var(--border-bottom-topbar);
   background-color: var(--primary-color);
   display: flex;
   justify-content: space-between;
@@ -550,7 +561,7 @@ button .fa {
       outline: none;
       align-items: center;
       justify-content: center;
-      background-color: var(--bg-color);
+      background-color: var(--btt-signature);
       border-right: 1px solid var(--input-border);
       border: 0px solid var(--input-border);
       cursor: pointer;
@@ -559,7 +570,7 @@ button .fa {
       border-bottom-right-radius: 4px;
 
       i {
-        color: #888;
+        color: #000000;
         font-size: 18px;
         transition: color 0.3s;
       }
@@ -884,11 +895,10 @@ button .fa {
 // FOOTER
 // ===========================================================================
 .footer {
-  background-color: var(--primary-color); // Se utiliza la variable del tema
+  background-color: var(--primary-color);
   color: var(--text-color);
   padding: 20px;
-
-  border-top: 1px solid var(--bg-tab-active);
+  border-top: 1px solid var(--border-top-footer);
 
   .footer__container {
     max-width: 100%;

@@ -11,6 +11,8 @@
   /* Colores del tema claro */
   --bg-color: #f8faf8;
   --text-color: #333;
+  --border-bottom-topbar: #f1f1f1;
+  --border-top-footer: #1470c2;
   /* Colores complementarios */
   --white: #ffffff;
   --black: #000000;
@@ -23,7 +25,7 @@
   --bg-tab: #e9ecef;
   --txtcolor-tab: #919191;
   --bg-tab-hover: #dee2e6;
-  --bg-tab-active: #495057;
+  --bg-tab-active: #575149fa;
   /* Variables de tamaño y transición */
   --top-bar-height: 60px;
   --tab-height: 60px;
@@ -38,6 +40,9 @@
   --bg-transp-modal: rgba(0, 0, 0, 0.6);
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --prompt_box_shadow: rgba(0, 0, 0, 0.3);
+  --btt-signature: rgba(173, 173, 173, 0.15);
+  --bg-signature-hover: #f1f1f1;
+  --btt-signature-hover: #444;
   /*Servicios*/
   --service-1-bg: #e9f7ef;
   --service-1-border: #8ddfd0;
@@ -59,6 +64,8 @@
   /* Colors del tema fosc */
   --bg-color: #121212; /* Fons fosc */
   --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
+  --border-bottom-topbar: #343a40;
+  --border-top-footer: #1470c2;
   /* Colors complementaris */
   --light-grey: #2e2e2e; /* Grau fosc per elements secundaris */
   --grey-border: #444444; /* Bordos i ombres en to més fosc */
@@ -85,6 +92,9 @@
   --bg-transp-modal: rgba(0, 0, 0, 0.6); /* Transp. per a modals */
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --prompt_box_shadow: rgba(0, 0, 0, 0.5); /* Ombra una mica més marcada */
+  --btt-signature: rgba(94, 94, 94, 0.15);
+  --bg-signature-hover: #f1f1f1;
+  --btt-signature-hover: #444;
   /* Serveis (pots adaptar aquests colors segons la teva identitat visual) */
   --service-1-bg: #1e2a1e;
   --service-1-border: #8ddfd0;
@@ -129,6 +139,7 @@ main {
   left: 0;
   height: var(--top-bar-height);
   width: 100%;
+  border-bottom: 1px solid var(--border-bottom-topbar);
   background-color: var(--primary-color);
   display: flex;
   justify-content: space-between;
@@ -484,7 +495,7 @@ button .fa {
   outline: none;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-color);
+  background-color: var(--btt-signature);
   border-right: 1px solid var(--input-border);
   border: 0px solid var(--input-border);
   cursor: pointer;
@@ -493,7 +504,7 @@ button .fa {
   border-bottom-right-radius: 4px;
 }
 .signature-group .input-with-icon .signature-btn i {
-  color: #888;
+  color: #000000;
   font-size: 18px;
   transition: color 0.3s;
 }
@@ -780,7 +791,7 @@ button .fa {
   background-color: var(--primary-color);
   color: var(--text-color);
   padding: 20px;
-  border-top: 1px solid var(--bg-tab-active);
+  border-top: 1px solid var(--border-top-footer);
 }
 .footer .footer__container {
   max-width: 100%;
