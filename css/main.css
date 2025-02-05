@@ -106,6 +106,10 @@
   --service-4-border: #e1b6f4;
 }
 
+html {
+  font-size: 16px;
+}
+
 /* 
   Usamos las variables CSS para definir el fondo y color de texto.
   Así, cuando se cambie el tema (añadiendo o quitando la clase .theme-dark al body),
@@ -151,7 +155,7 @@ main {
   line-height: 1.4;
   text-align: left;
   margin: 20px;
-  font-size: clamp(20px, 2vw, 26px);
+  font-size: 1.5rem;
   font-weight: bold;
   color: var(--text-color);
 }
@@ -282,7 +286,7 @@ button .fa {
   background: var(--bg-tab);
   border: none;
   display: flex;
-  font-size: 16px;
+  font-size: 1.125rem;
   font-weight: normal;
   color: var(--txtcolor-tab);
   transition: all var(--transition-speed) ease;
@@ -934,7 +938,7 @@ button .icon {
     padding: 0px 0px;
   }
   .title {
-    font-size: clamp(18px, 2vw, 22px);
+    font-size: 1.5rem;
   }
   .ajustes-btn {
     width: 42px;
@@ -946,7 +950,7 @@ button .icon {
   }
   .tab {
     padding: 14px 12px;
-    font-size: 15px;
+    font-size: 1.125rem; /* Equival a 18px */
   }
   main {
     padding-top: 110px;
@@ -994,7 +998,7 @@ button .icon {
     padding: 0px 0px;
   }
   .title {
-    font-size: clamp(16px, 3vw, 20px);
+    font-size: 1.375rem; /* Aproximadament 22px */
   }
   .button-group {
     flex-direction: row;
@@ -1027,7 +1031,7 @@ button .icon {
   .tab {
     min-height: 8px;
     padding: 14px 16px;
-    font-size: 16px;
+    font-size: 1rem;
   }
   .tabs-container {
     top: calc(var(--tab-height) - 10px);
