@@ -5,7 +5,7 @@
 */
 :root {
   /* Colores principales */
-  --primary-color: #343a40;
+  --primary-color: #fafafa;
   --secondary-color: #1470c2;
   --secondary-color-hover: #0056b3;
   /* Colores del tema claro */
@@ -37,6 +37,7 @@
   --bg-confirm-no-hover: #c82333;
   --bg-transp-modal: rgba(0, 0, 0, 0.6);
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
+  --prompt_box_shadow: rgba(0, 0, 0, 0.3);
   /*Servicios*/
   --service-1-bg: #e9f7ef;
   --service-1-border: #8ddfd0;
@@ -54,10 +55,46 @@
 */
 .theme-dark {
   --primary-color: #343a40;
-  --secondary-color: #007bff;
+  --secondary-color: #1470c2;
   /* Colores del tema oscuro */
-  --bg-color: #222;
-  --text-color: #eee;
+  --bg-color: #f8faf8;
+  --text-color: #333;
+  /* Colores complementarios */
+  --white: #ffffff;
+  --black: #000000;
+  --light-grey: #f5f5f5;
+  --grey-border: #ddddddea;
+  --input-border: #ced4da;
+  --bgcolor-hover: #e0e0e0;
+  --bgcolor-active: #d5d5d5;
+  --border-btt: #c9c9c9;
+  --bg-tab: #e9ecef;
+  --txtcolor-tab: #919191;
+  --bg-tab-hover: #dee2e6;
+  --bg-tab-active: #495057;
+  /* Variables de tamaño y transición */
+  --top-bar-height: 60px;
+  --tab-height: 60px;
+  --font-size-base: 16px;
+  --transition-speed: 0.3s;
+  --textfield-error: rgb(255, 0, 0);
+  --textfield-error-bg: #ffe5e5;
+  --btt-confirm: #28a745;
+  --bg-confirm: #218838;
+  --bg-confirm-no: #dc3545;
+  --bg-confirm-no-hover: #c82333;
+  --bg-transp-modal: rgba(0, 0, 0, 0.6);
+  --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
+  --prompt_box_shadow: rgba(0, 0, 0, 0.3);
+  /*Servicios*/
+  --service-1-bg: #e9f7ef;
+  --service-1-border: #8ddfd0;
+  --service-2-bg: #e8f4fd;
+  --service-2-border: #bad7f9;
+  --service-3-bg: #fdf0e6;
+  --service-3-border: #f0cdaa;
+  --service-4-bg: #f9e6ff;
+  --service-4-border: #e1b6f4;
 }
 
 /* 
@@ -106,7 +143,7 @@ main {
   margin: 20px;
   font-size: clamp(20px, 2vw, 26px);
   font-weight: bold;
-  color: var(--white);
+  color: var(--text-color);
 }
 
 .button-group {
@@ -118,7 +155,7 @@ main {
 .ajustes-btn {
   position: relative;
   background-color: var(--secondary-color);
-  color: var(--white);
+  color: var(--text-color);
   border: none;
   border-radius: 8px;
   width: 48px;
@@ -141,7 +178,7 @@ main {
   position: absolute;
   top: 80%;
   right: 20%;
-  background-color: var(--white);
+  background-color: var(--bg-color);
   border: 0px solid var(--input-border);
   border-radius: 8px;
   box-shadow: 0 8px 16px var(--bg-transp-ajustes);
@@ -210,7 +247,7 @@ main {
   top: var(--tab-height);
   left: 0;
   width: 100%;
-  background-color: var(--white);
+  background-color: var(--bg-color);
   display: flex;
   justify-content: center;
   border-bottom: 1px solid var(--grey-border);
@@ -245,7 +282,7 @@ button .fa {
 }
 .tab.active {
   font-weight: bold;
-  background-color: var(--white);
+  background-color: var(--bg-color);
   color: var(--bg-tab-active);
   box-shadow: inset 0 -3px 0 var(--secondary-color);
 }
@@ -297,7 +334,7 @@ button .fa {
   font-size: 16px;
   border: 1px solid var(--input-border);
   border-radius: 4px;
-  background-color: var(--white);
+  background-color: var(--bg-color);
   text-align: left;
 }
 .form-group select {
@@ -364,7 +401,7 @@ button .fa {
   border: none;
   font-size: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  color: var(--white);
+  color: var(--text-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -447,7 +484,7 @@ button .fa {
   outline: none;
   align-items: center;
   justify-content: center;
-  background-color: var(--white);
+  background-color: var(--bg-color);
   border-right: 1px solid var(--input-border);
   border: 0px solid var(--input-border);
   cursor: pointer;
@@ -482,7 +519,7 @@ button .fa {
 .modal-content {
   position: relative;
   margin: 10% auto;
-  background-color: var(--white);
+  background-color: var(--bg-color);
   border-radius: 12px;
   padding: 20px 30px;
   max-width: 500px;
@@ -523,7 +560,7 @@ button .fa {
 .close-modal-btn {
   display: block;
   background-color: var(--secondary-color);
-  color: var(--white);
+  color: var(--text-color);
   margin: 20px auto 0;
   font-size: 16px;
   padding: 12px 20px;
@@ -581,7 +618,7 @@ button .fa {
   height: 40px;
   border: 1px solid var(--border-btt);
   border-radius: 8px;
-  background-color: var(--white);
+  background-color: var(--bg-color);
   cursor: pointer;
   transition: all 0.3s ease;
   margin-left: 15px;
@@ -631,7 +668,7 @@ button .fa {
   height: 250px;
   border: 2px dashed var(--bgcolor-active);
   border-radius: 8px;
-  background-color: var(--white);
+  background-color: var(--bg-color);
   position: relative;
 }
 .signature-canvas-container canvas {
@@ -657,7 +694,7 @@ button .fa {
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  color: var(--white);
+  color: var(--text-color);
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 .modal-button.yes {
@@ -706,7 +743,7 @@ button .fa {
   min-width: 200px;
   max-width: 400px;
   background-color: var(--btt-confirm);
-  color: var(--white);
+  color: var(--text-color);
   padding: 12px 24px;
   border-radius: 8px;
   text-align: center;
@@ -741,7 +778,7 @@ button .fa {
 }
 .footer {
   background-color: var(--primary-color);
-  color: var(--white);
+  color: var(--text-color);
   padding: 20px;
   border-top: 1px solid var(--bg-tab-active);
 }
@@ -775,7 +812,7 @@ button .fa {
   font-size: 15px;
 }
 .footer p a {
-  color: var(--white);
+  color: var(--text-color);
   text-decoration: none;
   font-weight: bold;
 }
@@ -804,12 +841,12 @@ button .fa {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: var(--white);
+  background-color: var(--bg-color);
   color: var(--primary-color);
   padding: 20px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 -2px 10px var(--prompt_box_shadow);
   text-align: center;
   z-index: 9999;
   box-sizing: border-box;
@@ -848,7 +885,7 @@ button .fa {
 
 #install-prompt #install-button {
   background-color: var(--secondary-color);
-  color: var(--white);
+  color: var(--text-color);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -859,7 +896,7 @@ button .fa {
 
 #install-prompt #dismiss-button {
   background-color: #5c6064;
-  color: var(--white);
+  color: var(--text-color);
 }
 
 #install-prompt #dismiss-button:hover {
@@ -1058,7 +1095,7 @@ button .icon {
     font-size: 14px;
     border: 1px solid var(--border-btt);
     border-radius: 8px;
-    background-color: var(--white);
+    background-color: var(--bg-color);
     transition: all 0.3s ease;
     margin-left: 10px;
   }
