@@ -1,9 +1,9 @@
 /**
  * Lògica relacionada amb els panells de Serveis.
- * Abans era "services.js"
+ *
  */
 
-// Array amb les classes de color
+// Array amb les classes de servei
 export const serviceColors = [
   "service-1",
   "service-2",
@@ -11,44 +11,24 @@ export const serviceColors = [
   "service-4",
 ];
 
-// Colors de fons i vores
-export const serviceDynamicColors = {
-  "service-1": { background: "#e9f7ef", border: "#8ddfd0" },
-  "service-2": { background: "#e8f4fd", border: "#bad7f9" },
-  "service-3": { background: "#fdf0e6", border: "#f0cdaa" },
-  "service-4": { background: "#f9e6ff", border: "#e1b6f4" },
-};
-
 // Índex de servei actual
 let currentServiceIndex = 0;
 
-/**
- * Retorna l'índex del servei actual
- */
 export function getCurrentServiceIndex() {
   return currentServiceIndex;
 }
 
-/**
- * Actualitza l'índex del servei actual
- */
 function setCurrentServiceIndex(index) {
   currentServiceIndex = index;
 }
 
 const servicesContainer = document.getElementById("services-container");
 
-/**
- * Inicialitza els serveis
- */
 export function initServices() {
   createServiceButtons();
   showService(currentServiceIndex);
 }
 
-/**
- * Crea els botons per cada servei
- */
 function createServiceButtons() {
   const container = document.getElementById("service-buttons-container");
   const allServices = servicesContainer.querySelectorAll(".service");
@@ -56,12 +36,9 @@ function createServiceButtons() {
 
   allServices.forEach((_, i) => {
     const btn = document.createElement("button");
-    btn.className = "service-button";
+    // Afegim la classe "service-button" i la classe específica segons l'índex (service-1, service-2, etc.)
+    btn.className = `service-button ${serviceColors[i]}`;
     btn.textContent = `S${i + 1}`;
-
-    const serviceClass = serviceColors[i];
-    btn.style.backgroundColor =
-      serviceDynamicColors[serviceClass]?.border || "#17a2b8";
 
     btn.addEventListener("click", () => {
       showService(i);
@@ -71,9 +48,6 @@ function createServiceButtons() {
   });
 }
 
-/**
- * Mostra el servei seleccionat, amaga la resta
- */
 function showService(index) {
   const allServices = servicesContainer.querySelectorAll(".service");
   setCurrentServiceIndex(index);
@@ -82,26 +56,24 @@ function showService(index) {
     serviceEl.style.display = i === index ? "block" : "none";
   });
 
-  const squares = document.querySelectorAll(".service-button");
-  squares.forEach((sq, i) => {
+  const buttons = document.querySelectorAll(".service-button");
+  buttons.forEach((btn, i) => {
     if (i === index) {
-      sq.classList.add("active-square");
-      sq.style.opacity = "1";
+      btn.classList.add("active-square");
+      btn.style.opacity = "1";
     } else {
-      sq.classList.remove("active-square");
-      sq.style.opacity = "0.5";
+      btn.classList.remove("active-square");
+      btn.style.opacity = "0.5";
     }
   });
 
   const clearButton = document.getElementById("clear-selected-service");
   if (clearButton) {
-    updateClearButtonColor(clearButton, index);
+    // El botó ja té la classe de servei, només cal actualitzar si és necessari
+    clearButton.className = `clear-selected-btn ${serviceColors[index]}`;
   }
 }
 
-/**
- * Neteja els camps d'un servei
- */
 export function clearServiceFields(serviceEl) {
   serviceEl
     .querySelectorAll('input[type="text"], input[type="time"]')
@@ -116,17 +88,6 @@ export function clearServiceFields(serviceEl) {
   });
 }
 
-/**
- * Actualitza el color del botó "Netejar servei seleccionat"
- */
-export function updateClearButtonColor(button, serviceIndex) {
-  const colorClass = serviceColors[serviceIndex] || "";
-  button.className = `clear-selected-btn ${colorClass}`;
-}
-
-/**
- * Valida un número de servei (exactament 9 dígits)
- */
 export function validateServiceNumber(value) {
   const regex = /^\d{9}$/;
   return regex.test(value);

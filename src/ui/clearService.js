@@ -1,10 +1,8 @@
 /**
  * Botó per netejar el servei seleccionat
- * Abans era "clearService.js"
  */
 
 import {
-  updateClearButtonColor,
   getCurrentServiceIndex,
   clearServiceFields,
 } from "../services/servicesPanelManager.js";
@@ -18,7 +16,12 @@ export function setupClearSelectedService() {
   const allServices = document.querySelectorAll(".service");
   if (!clearBtn || !allServices.length) return;
 
-  updateClearButtonColor(clearBtn, getCurrentServiceIndex());
+  // Actualitza el botó directament, per exemple:
+  const serviceColors = ["service-1", "service-2", "service-3", "service-4"];
+  clearBtn.className = `clear-selected-btn ${
+    serviceColors[getCurrentServiceIndex()]
+  }`;
+
   clearBtn.addEventListener("click", () => {
     const index = getCurrentServiceIndex();
     const activeService = allServices[index];

@@ -6,9 +6,10 @@
 :root {
   /* Colores principales */
   --primary-color: #343a40;
-  --secondary-color: #007bff;
+  --secondary-color: #1470c2;
+  --secondary-color-hover: #0056b3;
   /* Colores del tema claro */
-  --bg-color: #f8f9fa;
+  --bg-color: #f8faf8;
   --text-color: #333;
   /* Colores complementarios */
   --white: #ffffff;
@@ -16,11 +17,35 @@
   --light-grey: #f5f5f5;
   --grey-border: #ddddddea;
   --input-border: #ced4da;
+  --bgcolor-hover: #e0e0e0;
+  --bgcolor-active: #d5d5d5;
+  --border-btt: #c9c9c9;
+  --bg-tab: #e9ecef;
+  --txtcolor-tab: #919191;
+  --bg-tab-hover: #dee2e6;
+  --bg-tab-active: #495057;
   /* Variables de tamaño y transición */
   --top-bar-height: 60px;
   --tab-height: 60px;
   --font-size-base: 16px;
   --transition-speed: 0.3s;
+  --textfield-error: rgb(255, 0, 0);
+  --textfield-error-bg: #ffe5e5;
+  --btt-confirm: #28a745;
+  --bg-confirm: #218838;
+  --bg-confirm-no: #dc3545;
+  --bg-confirm-no-hover: #c82333;
+  --bg-transp-modal: rgba(0, 0, 0, 0.6);
+  --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
+  /*Servicios*/
+  --service-1-bg: #e9f7ef;
+  --service-1-border: #8ddfd0;
+  --service-2-bg: #e8f4fd;
+  --service-2-border: #bad7f9;
+  --service-3-bg: #fdf0e6;
+  --service-3-border: #f0cdaa;
+  --service-4-bg: #f9e6ff;
+  --service-4-border: #e1b6f4;
 }
 
 /* 
@@ -28,8 +53,8 @@
   se sobreescribirán las variables CSS usadas en los estilos.
 */
 .theme-dark {
-  --primary-color: #222;
-  --secondary-color: #007bff; /* Se puede ajustar si se desea */
+  --primary-color: #343a40;
+  --secondary-color: #007bff;
   /* Colores del tema oscuro */
   --bg-color: #222;
   --text-color: #eee;
@@ -92,7 +117,7 @@ main {
 
 .ajustes-btn {
   position: relative;
-  background-color: #1470c2;
+  background-color: var(--secondary-color);
   color: var(--white);
   border: none;
   border-radius: 8px;
@@ -103,7 +128,7 @@ main {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px var(--bg-transp-ajustes);
 }
 .ajustes-btn .icon {
   transition: transform 0.3s ease;
@@ -119,7 +144,7 @@ main {
   background-color: var(--white);
   border: 0px solid var(--input-border);
   border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 16px var(--bg-transp-ajustes);
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -154,14 +179,14 @@ main {
   border-radius: 0;
 }
 .ajustes-panel .big-btn:hover {
-  background-color: #e0e0e0;
+  background-color: var(--bgcolor-hover);
 }
 .ajustes-panel .big-btn:active {
-  background-color: #d5d5d5;
+  background-color: var(--bgcolor-active);
 }
 .ajustes-panel .big-btn i {
   font-size: 18px;
-  color: #555;
+  color: var(--primary-color);
   pointer-events: none;
   transition: color 0.3s ease;
 }
@@ -179,15 +204,6 @@ main {
   pointer-events: none;
   transition: color 0.3s ease;
 }
-.ajustes-panel .generate-pdf i {
-  color: #28a745;
-}
-.ajustes-panel #manage-diets i {
-  color: #ffc107;
-}
-.ajustes-panel #save-diet i {
-  color: #17a2b8;
-}
 
 .tabs-container {
   position: fixed;
@@ -199,7 +215,7 @@ main {
   justify-content: center;
   border-bottom: 1px solid var(--grey-border);
   z-index: 900;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px var(--bg-transp-ajustes);
 }
 
 button .fas,
@@ -216,22 +232,22 @@ button .fa {
   justify-content: center;
   padding: 15px 10px;
   cursor: pointer;
-  background: #e9ecef;
+  background: var(--bg-tab);
   border: none;
   display: flex;
   font-size: 16px;
   font-weight: normal;
-  color: #919191;
+  color: var(--txtcolor-tab);
   transition: all var(--transition-speed) ease;
 }
 .tab:hover {
-  background-color: #dee2e6;
+  background-color: var(--bg-tab-hover);
 }
 .tab.active {
   font-weight: bold;
   background-color: var(--white);
-  color: #495057;
-  box-shadow: inset 0 -3px 0 #0a96e7;
+  color: var(--bg-tab-active);
+  box-shadow: inset 0 -3px 0 var(--secondary-color);
 }
 
 .tab-content-container {
@@ -253,11 +269,11 @@ button .fa {
 
 @keyframes blinkErrorAnim {
   0% {
-    color: #dc3545;
+    color: var(--textfield-error);
   }
   100% {
-    background-color: #e9ecef;
-    color: #495057;
+    background-color: var(--bg-tab);
+    color: var(--bg-tab-active);
   }
 }
 .form-group {
@@ -290,8 +306,8 @@ button .fa {
 }
 
 .input-error {
-  border: 2px solid red !important;
-  background-color: #ffe5e5 !important;
+  border: 2px solid var(--textfield-error) !important;
+  background-color: var(--textfield-error-bg) !important;
 }
 
 .service-controls {
@@ -312,19 +328,32 @@ button .fa {
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px var(--bg-transp-ajustes);
   border: none;
   color: var(--black);
   transition: all 0.2s ease;
   cursor: pointer;
+  /* Canvi de color quan es clica (active) */
 }
-.service-button:hover {
-  opacity: 0.8;
+.service-button.service-1 {
+  background-color: var(--service-1-border);
+}
+.service-button.service-2 {
+  background-color: var(--service-2-border);
+}
+.service-button.service-3 {
+  background-color: var(--service-3-border);
+}
+.service-button.service-4 {
+  background-color: var(--service-4-border);
+}
+.service-button:active {
+  filter: brightness(0.9);
 }
 
 .active-square {
   transform: scale(1.05);
-  border: 1px solid rgb(114, 114, 114);
+  border: 1px solid var(--bg-tab-active);
 }
 
 .clear-selected-btn {
@@ -340,41 +369,50 @@ button .fa {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-color: #6c757d;
+  background-color: var(--bg-tab-active);
   transition: background-color 0.3s ease;
+  transition: filter 0.3s ease;
+  /* Canvi de color al passar el ratolí */
+  /* Canvi de color quan es clica (active) */
 }
 .clear-selected-btn.service-1 {
-  background-color: #8ddfd0;
+  background-color: var(--service-1-border);
 }
 .clear-selected-btn.service-2 {
-  background-color: #bad7f9;
+  background-color: var(--service-2-border);
 }
 .clear-selected-btn.service-3 {
-  background-color: #f0cdaa;
+  background-color: var(--service-3-border);
 }
 .clear-selected-btn.service-4 {
-  background-color: #e1b6f4;
+  background-color: var(--service-4-border);
+}
+.clear-selected-btn:hover {
+  filter: brightness(0.95);
+}
+.clear-selected-btn:active {
+  filter: brightness(0.9);
 }
 
 .service {
   padding: clamp(15px, 3vw, 30px) clamp(10px, 2vw, 20px);
   background-color: var(--bg-color);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px var(--bg-transp-ajustes);
   position: relative;
   border: 2px dashed transparent;
 }
 .service.service-1 {
-  background-color: #e9f7ef;
+  background-color: var(--service-1-bg);
 }
 .service.service-2 {
-  background-color: #e8f4fd;
+  background-color: var(--service-2-bg);
 }
 .service.service-3 {
-  background-color: #fdf0e6;
+  background-color: var(--service-3-bg);
 }
 .service.service-4 {
-  background-color: #f9e6ff;
+  background-color: var(--service-4-bg);
 }
 
 .signature-group .input-with-icon {
@@ -437,7 +475,7 @@ button .fa {
   width: 100%;
   height: 100%;
   z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: var(--bg-transp-modal);
   overflow: auto;
 }
 
@@ -448,7 +486,7 @@ button .fa {
   border-radius: 12px;
   padding: 20px 30px;
   max-width: 500px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px var(--bg-transp-ajustes);
   animation: fadeIn var(--transition-speed) ease-in-out;
 }
 .modal-content .modal-title {
@@ -468,7 +506,7 @@ button .fa {
 .modal-content p {
   font-size: 16px;
   line-height: 1.6;
-  color: #495057;
+  color: var(--bg-tab-active);
   margin: 20px 0;
 }
 
@@ -498,7 +536,7 @@ button .fa {
   transition: background-color var(--transition-speed) ease;
 }
 .close-modal-btn:hover {
-  background-color: #0056b3;
+  background-color: var(--secondary-color-hover);
 }
 
 .diet-modal-content {
@@ -511,16 +549,9 @@ button .fa {
 #diet-modal-title {
   font-size: 24px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 20px;
   text-align: center;
-}
-
-.no-diets-text {
-  margin: 0 0 20px 0;
-  text-align: center;
-  color: #555;
-  font-style: italic;
 }
 
 #diet-options {
@@ -534,7 +565,7 @@ button .fa {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: hsl(0, 0%, 95%);
+  background-color: var(--light-grey);
   border: 1px solid var(--grey-border);
   border-radius: 8px;
   padding: 10px 15px;
@@ -543,12 +574,12 @@ button .fa {
 }
 #diet-options li span {
   font-size: 15px;
-  color: #333;
+  color: var(--text-color);
 }
 #diet-options li button.delete-diet {
   width: 40px;
   height: 40px;
-  border: 1px solid #c9c9c9;
+  border: 1px solid var(--border-btt);
   border-radius: 8px;
   background-color: var(--white);
   cursor: pointer;
@@ -556,12 +587,7 @@ button .fa {
   margin-left: 15px;
 }
 #diet-options li button.delete-diet:hover {
-  background-color: #f0f0f0;
-  color: #8a8a8a;
-}
-#diet-options li button.delete-diet:active {
-  background-color: #e0e0e0;
-  color: #4ee711;
+  background-color: var(--grey-border);
 }
 #diet-options li button.delete-diet i {
   color: var(--black);
@@ -572,7 +598,6 @@ button .fa {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.94);
   font-size: 22px;
   gap: 20px;
   border: none;
@@ -584,7 +609,7 @@ button .fa {
   text-decoration: none;
 }
 .btn-modal:hover {
-  background-color: #0056b3;
+  background-color: var(--secondary-color-hover);
 }
 
 #signature-modal {
@@ -592,7 +617,7 @@ button .fa {
 }
 
 .signature-modal-content {
-  max-width: 40%;
+  width: 50%;
   text-align: center;
   position: relative;
 }
@@ -604,7 +629,7 @@ button .fa {
   margin: 20px auto;
   width: 100%;
   height: 250px;
-  border: 2px dashed #aaa;
+  border: 2px dashed var(--bgcolor-active);
   border-radius: 8px;
   background-color: var(--white);
   position: relative;
@@ -626,7 +651,8 @@ button .fa {
 
 .modal-button {
   flex: 1;
-  padding: 15px;
+  min-height: 44px;
+  padding: 10px 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -635,31 +661,31 @@ button .fa {
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 .modal-button.yes {
-  background-color: #28a745;
+  background-color: var(--btt-confirm);
 }
 .modal-button.yes:hover {
-  background-color: #218838;
+  background-color: var(--bg-confirm);
 }
 .modal-button.no, .modal-button.cancel {
-  background-color: #dc3545;
+  background-color: var(--bg-confirm-no);
 }
 .modal-button.no:hover, .modal-button.cancel:hover {
-  background-color: #c82333;
+  background-color: var(--bg-confirm-no-hover);
 }
 .modal-button.accept {
-  background-color: #28a745;
+  background-color: var(--btt-confirm);
 }
 .modal-button.accept:hover {
-  background-color: #218838;
+  background-color: var(--bg-confirm);
 }
 
 .disabled-button {
-  background-color: #6c757d;
+  background-color: var(--bg-tab-active);
   cursor: not-allowed;
   opacity: 0.65;
 }
 .disabled-button:hover {
-  background-color: #6c757d;
+  background-color: var(--bg-tab-active);
 }
 
 #toast-container {
@@ -679,20 +705,20 @@ button .fa {
   width: 30vw;
   min-width: 200px;
   max-width: 400px;
-  background-color: #28a745;
+  background-color: var(--btt-confirm);
   color: var(--white);
   padding: 12px 24px;
   border-radius: 8px;
   text-align: center;
   animation: fadeInOut 3s forwards;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px var(--black);
   font-size: 16px;
 }
 .toast.success {
-  background-color: #28a745;
+  background-color: var(--btt-confirm);
 }
 .toast.error {
-  background-color: #dc3545;
+  background-color: var(--bg-confirm-no);
 }
 
 @keyframes fadeInOut {
@@ -717,7 +743,7 @@ button .fa {
   background-color: var(--primary-color);
   color: var(--white);
   padding: 20px;
-  border-top: 1px solid #495057;
+  border-top: 1px solid var(--bg-tab-active);
 }
 .footer .footer__container {
   max-width: 100%;
@@ -754,18 +780,8 @@ button .fa {
   font-weight: bold;
 }
 .footer p a:hover {
-  color: #00bfff;
+  color: var(--sec-color);
   text-decoration: underline;
-}
-.footer .footer-icon-link {
-  color: var(--white);
-  font-size: 18px;
-  transition: color 0.2s, transform 0.2s;
-  text-decoration: none;
-}
-.footer .footer-icon-link:hover {
-  color: #00bfff;
-  transform: scale(1.1);
 }
 .footer .icon {
   width: 24px;
@@ -831,13 +847,13 @@ button .fa {
 }
 
 #install-prompt #install-button {
-  background-color: #007bff;
+  background-color: var(--secondary-color);
   color: var(--white);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 #install-prompt #install-button:hover {
-  background-color: #0056b3;
+  background-color: var(--secondary-color-hover);
   transform: scale(1.05);
 }
 
@@ -857,16 +873,8 @@ button .icon {
   height: 1.3em;
 }
 
-.big-btn:active {
-  background-color: #f0e68c;
-}
-
 #diet-options li:active {
-  background-color: #f5d3d3;
-}
-
-.delete-diet:active {
-  background-color: #f5d3d3;
+  background-color: var(--border-btt);
 }
 
 /* =======================================================
@@ -883,6 +891,7 @@ button .icon {
   .ajustes-btn {
     width: 42px;
     height: 42px;
+    margin: 18px;
   }
   .tabs-container {
     top: calc(var(--tab-height) - 4px);
@@ -921,9 +930,8 @@ button .icon {
   }
   .signature-modal-content {
     overflow-x: hidden;
-    width: 60%;
-    max-height: 90vh;
-    max-width: 90%;
+    width: 80%;
+    max-height: 50%;
   }
   .signature-canvas-container {
     height: 230px;
@@ -948,6 +956,7 @@ button .icon {
   .ajustes-btn {
     width: 36px;
     height: 36px;
+    margin: 14px;
     border-radius: 8px;
   }
   .ajustes-btn i {
@@ -1047,7 +1056,7 @@ button .icon {
     width: 34px;
     height: 34px;
     font-size: 14px;
-    border: 1px solid #c9c9c9;
+    border: 1px solid var(--border-btt);
     border-radius: 8px;
     background-color: var(--white);
     transition: all 0.3s ease;
@@ -1058,7 +1067,7 @@ button .icon {
   }
   .modal-buttons {
     flex-direction: row;
-    gap: 40px;
+    gap: 20px;
     margin-top: 20px;
   }
   .signature-modal-content {
