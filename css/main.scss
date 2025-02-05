@@ -337,7 +337,7 @@ button .fa {
   &.active {
     font-weight: bold;
     background-color: var(--bg-color);
-    color: var(--bg-tab-active);
+    color: var(--text-color);
     box-shadow: inset 0 -3px 0 var(--secondary-color);
   }
 }
@@ -633,7 +633,7 @@ button .fa {
   p {
     font-size: 16px;
     line-height: 1.6;
-    color: var(--bg-tab-active);
+    color: var(--text-color);
     margin: 20px 0;
   }
 }
@@ -830,12 +830,12 @@ button .fa {
 }
 
 .disabled-button {
-  background-color: var(--bg-tab-active);
+  background-color: var(--text-color);
   cursor: not-allowed;
   opacity: 0.65;
 
   &:hover {
-    background-color: var(--bg-tab-active);
+    background-color: var(--text-color);
   }
 }
 
