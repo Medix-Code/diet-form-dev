@@ -23,10 +23,10 @@
   --textfield-error-bg: #e0c7c7;
   --text-field-color: #333; /* Text camps */
   --input-border: #ced4da;
+  --border-textfield-focus: rgb(80, 80, 80);
   /* SIGNATURE*/
   --btt-signature: rgba(173, 173, 173, 0.15);
   --bg-signature-hover: #f1f1f1;
-  --border-signature-focus: #000000;
   /* FOOTER*/
   --border-top-footer: #f1f1f1;
   --text-color-footer: #ffffff;
@@ -372,6 +372,17 @@ button .fa {
   background-color: var(--textfield);
   text-align: left;
 }
+.form-group input[type=date]:focus,
+.form-group input[type=datetime-local]:focus,
+.form-group input[type=time]:focus,
+.form-group select:focus {
+  outline: none;
+  border: 2px solid var(--border-textfield-focus);
+}
+.form-group input[type=text]:not(.txt-person1):not(.txt-person2):focus {
+  outline: none;
+  border: 2px solid var(--border-textfield-focus);
+}
 .form-group select {
   text-align: left;
   line-height: 1.4;
@@ -497,7 +508,7 @@ button .fa {
   height: 40px;
 }
 .signature-group .input-with-icon:focus-within {
-  border-color: var(--border-signature-focus);
+  border-color: var(--border-textfield-focus);
   border-width: 2px;
   border-style: solid;
 }
@@ -779,7 +790,7 @@ button .fa {
   min-width: 200px;
   max-width: 400px;
   background-color: var(--btt-confirm);
-  color: var(--text-color);
+  color: var(--text-color-footer);
   padding: 12px 24px;
   border-radius: 8px;
   text-align: center;
@@ -827,7 +838,7 @@ button .fa {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 10px;
 }
 .footer .footer__icons {
   width: 100%;
@@ -842,7 +853,6 @@ button .fa {
   border: none;
   font-size: 24px;
   cursor: pointer;
-  padding: 5px;
   transition: transform 0.3s ease;
 }
 .footer .theme-icon-btn:hover {
@@ -1121,11 +1131,10 @@ button .icon {
     font-size: 16px;
   }
   #about-title {
-    text-align: center;
+    text-align: left;
     font-size: 1.2rem;
     margin: 0;
     font-weight: bold;
-    color: var(--primary-color);
   }
   h3#diet-modal-title {
     font-size: 18px;

@@ -25,15 +25,16 @@
   --line-tab: #165b98; /*Línia sota pestanya activa */
 
   /* TEXTFIELD*/
-  --textfield: #f8faf8; // TextFieds
+  --textfield: #f8faf8; // TextField Fons
   --textfield-error: #ec1710; // Borde camp
   --textfield-error-bg: #e0c7c7; // Fons camp error
   --text-field-color: #333; /* Text camps */
   --input-border: #ced4da; // Color de borde camps
+  --border-textfield-focus: rgb(80, 80, 80); // Borde camps focus, Personal
+
   /* SIGNATURE*/
   --btt-signature: rgba(173, 173, 173, 0.15); // Signature btt
   --bg-signature-hover: #f1f1f1; // Signature bg hover
-  --border-signature-focus: #000000; // Borde camps TES
 
   /* FOOTER*/
   --border-top-footer: #f1f1f1; //  Borde top Footer
@@ -426,6 +427,24 @@ button .fa {
     text-align: left;
   }
 
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="time"],
+  select {
+    &:focus {
+      outline: none;
+      border: 2px solid var(--border-textfield-focus);
+    }
+  }
+
+  // Estils de focus per als inputs de tipus text que NO tinguin les classes .text-conductor i .text-ajudant
+  input[type="text"]:not(.txt-person1):not(.txt-person2) {
+    &:focus {
+      outline: none; // Eliminem el focus per defecte del navegador
+      border: 2px solid var(--border-textfield-focus); // Estil de focus
+    }
+  }
+
   select {
     text-align: left;
     line-height: 1.4;
@@ -566,7 +585,7 @@ button .fa {
     height: 40px;
 
     &:focus-within {
-      border-color: var(--border-signature-focus);
+      border-color: var(--border-textfield-focus);
       border-width: 2px;
       border-style: solid;
     }
@@ -886,7 +905,7 @@ button .fa {
   min-width: 200px; // Ancho mínimo
   max-width: 400px; // Límite máximo
   background-color: var(--btt-confirm);
-  color: var(--text-color);
+  color: var(--text-color-footer);
   padding: 12px 24px;
   border-radius: 8px;
   text-align: center;
@@ -939,7 +958,7 @@ button .fa {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: 10px;
   }
 
   // Contenidor per als tres botons / icones
@@ -948,7 +967,7 @@ button .fa {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 10px; // Opcional: afegeix un padding per separar dels extrems
+    padding: 0 10px;
   }
 
   .theme-icon-btn {
@@ -957,7 +976,7 @@ button .fa {
     border: none;
     font-size: 24px;
     cursor: pointer;
-    padding: 5px;
+
     transition: transform 0.3s ease;
 
     &:hover {
@@ -1284,11 +1303,10 @@ button .icon {
   }
 
   #about-title {
-    text-align: center;
+    text-align: left;
     font-size: 1.2rem;
     margin: 0;
     font-weight: bold;
-    color: var(--primary-color);
   }
 
   h3#diet-modal-title {
