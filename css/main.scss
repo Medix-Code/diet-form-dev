@@ -67,54 +67,54 @@
   se sobreescribirán las variables CSS usadas en los estilos.
 */
 .theme-dark {
-  --primary-color: #343a40; // Color principal (ej. cabecera)
-  --secondary-color: #1470c2; // Color secundario
+  --primary-color: #343a40; /* Color principal, per exemple per a la capçalera */
+  --secondary-color: #1470c2; /* Color secundari, pots mantenir-lo o ajustar-lo */
 
-  /* Colores del tema oscuro */
-  --bg-color: #f8faf8; // Fondo (tema claro)       (fondo general, fondo modal dietes)
-  --text-color: #333; // Texto (tema claro)                          ( text Formulari)
+  /* Colors del tema fosc */
+  --bg-color: #121212; /* Fons fosc */
+  --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
 
-  /* Colores complementarios */
-  --white: #ffffff; // Blanco       (camps formulari, pestanya activa, text footer medix, fons modal info, title, fons boto papelera reciclatge dietes, fons carrega y guiarda dieta, i el text dels botons confiramcioo, fons modal signature i text botons)
-  --black: #000000; // Negro
-  --light-grey: #f5f5f5; // Gris muy claro
-  --grey-border: #ddddddea; // Gris para bordes y sombras ligeras
-  --input-border: #ced4da; // Color de borde de inputs
-  --bgcolor-hover: #e0e0e0; //Passa ratoli per damunt
-  --bgcolor-active: #d5d5d5; //Clica
+  /* Colors complementaris */
+  --white: #ffffff; /* Es manté per elements que ho requereixen */
+  --black: #000000;
+  --light-grey: #2e2e2e; /* Grau fosc per elements secundaris */
+  --grey-border: #444444; /* Bordos i ombres en to més fosc */
+  --input-border: #555555; /* Bord dels inputs */
+  --bgcolor-hover: #333333; /* Fons en estat hover */
+  --bgcolor-active: #444444; /* Fons en estat actiu */
 
-  --border-btt: #c9c9c9; // Btt No hhover
+  --border-btt: #555555; /* Bord per botons en estat normal */
 
-  --bg-tab: #e9ecef; //Backgrond pestanyes
-  --txtcolor-tab: #919191; //TextColor pestanyes
-  --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
-  --bg-tab-active: #495057; //Textcolor pestanyes
+  --bg-tab: #2c2c2c; /* Fons de les pestanyes */
+  --txtcolor-tab: #aaaaaa; /* Color del text de les pestanyes */
+  --bg-tab-hover: #3a3a3a; /* Fons de pestanya en estat hover */
+  --bg-tab-active: #007bff; /* Fons de pestanya activa */
 
-  /* Variables de tamaño y transición */
-  --top-bar-height: 60px; // Altura de la cabecera
-  --tab-height: 60px; // Altura de las pestañas
-  --font-size-base: 16px; // Tamaño base de fuente
-  --transition-speed: 0.3s; // Velocidad de transición
+  /* Variables de mida i transició */
+  --top-bar-height: 60px;
+  --tab-height: 60px;
+  --font-size-base: 16px;
+  --transition-speed: 0.3s;
 
-  --textfield-error: rgb(255, 0, 0); // Error campo texto borde
-  --textfield-error-bg: #ffe5e5; // Error campo texto bg
-  --btt-confirm: #28a745; // Confirmacio btt entre altres
-  --bg-confirm: #218838; // Bg confirmacio buttons entre altres
-  --bg-confirm-no: #dc3545; // Btt No
-  --bg-confirm-no-hover: #c82333; // Btt No hhover
+  --textfield-error: rgb(255, 0, 0);
+  --textfield-error-bg: #5a0000; /* Fons d'error més fosc */
+  --btt-confirm: #28a745;
+  --bg-confirm: #218838;
+  --bg-confirm-no: #dc3545;
+  --bg-confirm-no-hover: #c82333;
 
-  --bg-transp-modal: rgba(0, 0, 0, 0.6); // transperencia modal
-  --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
-  --prompt_box_shadow: rgba(0, 0, 0, 0.3); // Prompt
+  --bg-transp-modal: rgba(0, 0, 0, 0.6); /* Transp. per a modals */
+  --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
+  --prompt_box_shadow: rgba(0, 0, 0, 0.5); /* Ombra una mica més marcada */
 
-  /*Servicios*/
-  --service-1-bg: #e9f7ef;
+  /* Serveis (pots adaptar aquests colors segons la teva identitat visual) */
+  --service-1-bg: #1e2a1e;
   --service-1-border: #8ddfd0;
-  --service-2-bg: #e8f4fd;
+  --service-2-bg: #1e2a2e;
   --service-2-border: #bad7f9;
-  --service-3-bg: #fdf0e6;
+  --service-3-bg: #2a1e1e;
   --service-3-border: #f0cdaa;
-  --service-4-bg: #f9e6ff;
+  --service-4-bg: #2a1e2a;
   --service-4-border: #e1b6f4;
 }
 
