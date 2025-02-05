@@ -6,14 +6,17 @@
 :root {
   /* Colores principales */
   --primary-color: #f8faf8;
-  --secondary-color: #1b71bd;
+  --secondary-color: #165b98;
   --secondary-color-hover: #0056b3;
+  --text-color: #242424;
+  /* TopBar */
+  --border-bottom-topbar: #f1f1f1;
   /*TAB*/
   --bg-tab-active: #f8faf8;
   --bg-tab: #e9ecef;
   --txtcolor-tab: #919191;
   --bg-tab-hover: #dee2e6;
-  --line-tab: #4aa3ff; /*Línia sota pestanya activa */
+  --line-tab: #165b98; /*Línia sota pestanya activa */
   /* TEXTFIELD*/
   --textfield: #f8faf8;
   --textfield-error: #ec1710;
@@ -24,14 +27,12 @@
   --btt-signature: rgba(173, 173, 173, 0.15);
   --bg-signature-hover: #f1f1f1;
   --border-signature-focus: #000000;
-  --txt-signature: #919191;
   /* FOOTER*/
   --border-top-footer: #f1f1f1;
-  --text-color-footer: #f1f1f1;
-  --bg-footer: #1b71bd;
+  --text-color-footer: #ffffff;
+  --bg-footer: #165b98;
   /* GENERAL*/
   --bg-color: #f8faf8;
-  --border-bottom-topbar: #f1f1f1;
   --grey-border: #ddddddea;
   /* Btn Ajustes*/
   --bgcolor-hover: #e0e0e0;
@@ -41,19 +42,13 @@
   --border-btt: #c9c9c9;
   /* Modal. General / Btn confirmació*/
   --bg-transp-modal: rgba(0, 0, 0, 0.904);
-  --btt-confirm: #28a745;
-  --bg-confirm: #218838;
-  --bg-confirm-no: #dc3545;
-  --bg-confirm-no-hover: #c82333;
-  /* Colores complementarios */
-  --white: #ffffff;
+  --btt-confirm: #186329;
+  --bg-confirm: #1f7934;
+  --bg-confirm-no: #a01c2a;
+  --bg-confirm-no-hover: #bd2231;
+  --txt-btn-confirm: #ffffff;
   --black: #000000;
   --light-grey: #f5f5f5;
-  /* Variables de tamaño y transición */
-  --top-bar-height: 60px;
-  --tab-height: 60px;
-  --font-size-base: 16px;
-  --transition-speed: 0.3s;
   /* PROMPT */
   --prompt_box_shadow: rgba(0, 0, 0, 0.3);
   /*Servicios*/
@@ -65,6 +60,12 @@
   --service-3-border: #f0cdaa;
   --service-4-bg: #f9e6ff;
   --service-4-border: #e1b6f4;
+  --border-btn-service: #747474;
+  /* Variables de tamaño y transición */
+  --top-bar-height: 60px;
+  --tab-height: 60px;
+  --font-size-base: 16px;
+  --transition-speed: 0.3s;
 }
 
 /* 
@@ -83,6 +84,7 @@
   --line-tab: #4aa3ff; /*Línia sota pestanya activa */
   /* Colors del tema fosc */
   --bg-color: #1e1e1e; /* Fons fosc */
+  /* TopBar */
   --border-bottom-topbar: #444;
   /* FOOTER */
   --border-top-footer: #333333;
@@ -121,6 +123,7 @@
   --service-3-border: #f0cdaa;
   --service-4-bg: #2a1e2a;
   --service-4-border: #e1b6f4;
+  --border-btn-service: #ffffff;
 }
 
 html {
@@ -399,7 +402,7 @@ button .fa {
   font-weight: bold;
   box-shadow: 0 2px 4px var(--bg-transp-ajustes);
   border: none;
-  color: var(--black);
+  color: var(--text-color);
   transition: all 0.2s ease;
   cursor: pointer;
   /* Canvi de color quan es clica (active) */
@@ -422,7 +425,7 @@ button .fa {
 
 .active-square {
   transform: scale(1.05);
-  border: 1px solid var(--bg-tab-active);
+  border: 1px solid var(--border-btn-service);
 }
 
 .clear-selected-btn {
@@ -565,7 +568,7 @@ button .fa {
   margin: 0;
   font-size: 22px;
   font-weight: bold;
-  color: var(--primary-color);
+  color: var(--text-color);
   border-bottom: 1px solid var(--grey-border);
   padding-bottom: 10px;
 }
@@ -589,7 +592,7 @@ button .fa {
 .close-modal-btn {
   display: block;
   background-color: var(--secondary-color);
-  color: var(--text-color);
+  color: var(--text-color-footer);
   margin: 20px auto 0;
   font-size: 16px;
   padding: 12px 20px;
@@ -682,13 +685,14 @@ button .fa {
   z-index: 9999;
 }
 
+#signature-title {
+  color: var(--text-color);
+}
+
 .signature-modal-content {
   width: 50%;
   text-align: center;
   position: relative;
-}
-.signature-modal-content h2#signature-title {
-  color: var(--txt-signature);
 }
 .signature-modal-content p.signature-instruction {
   text-align: left;
@@ -726,7 +730,7 @@ button .fa {
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  color: var(--text-color);
+  color: var(--txt-btn-confirm);
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 .modal-button.yes {
@@ -834,6 +838,7 @@ button .fa {
 }
 .footer .theme-icon-btn {
   background: transparent;
+  color: var(--button-text);
   border: none;
   font-size: 24px;
   cursor: pointer;

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
   // Colors per als dos modes
-  const lightThemeColor = "#1b71bd"; // Color de fons del tema clar
+  const lightThemeColor = "#165B98"; // Color de fons del tema clar
   const darkThemeColor = "#343a40"; // Color de fons del tema fosc
 
   // Funció per establir el tema i actualitzar la imatge de l'icona

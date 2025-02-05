@@ -10,15 +10,19 @@
 :root {
   /* Colores principales */
   --primary-color: #f8faf8; // Color principal (ej. cabecera)        (TOP, FOOTER)
-  --secondary-color: #1b71bd; // Color secundario  )             (/info boto aceptar)
+  --secondary-color: #165b98; // Color secundario  )             (/info boto aceptar)
   --secondary-color-hover: #0056b3;
+  --text-color: #242424; // Text Title
+
+  /* TopBar */
+  --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
 
   /*TAB*/
   --bg-tab-active: #f8faf8; //Textcolor pestanyes
   --bg-tab: #e9ecef; //Backgrond pestanyes no actives
   --txtcolor-tab: #919191; //TextColor pestanyes
   --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
-  --line-tab: #4aa3ff; /*Línia sota pestanya activa */
+  --line-tab: #165b98; /*Línia sota pestanya activa */
 
   /* TEXTFIELD*/
   --textfield: #f8faf8; // TextFieds
@@ -30,17 +34,14 @@
   --btt-signature: rgba(173, 173, 173, 0.15); // Signature btt
   --bg-signature-hover: #f1f1f1; // Signature bg hover
   --border-signature-focus: #000000; // Borde camps TES
-  --txt-signature: #919191; // Text Title
 
   /* FOOTER*/
   --border-top-footer: #f1f1f1; //  Borde top Footer
-  --text-color-footer: #f1f1f1; // Text color Footer
-  --bg-footer: #1b71bd; // Fondo footer
+  --text-color-footer: #ffffff; // Text color Footer
+  --bg-footer: #165b98; // Fondo footer
 
   /* GENERAL*/
   --bg-color: #f8faf8; //  Fons
-  --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
-
   --grey-border: #ddddddea; // Gris para bordes y sombras ligeras
 
   /* Btn Ajustes*/
@@ -53,21 +54,14 @@
 
   /* Modal. General / Btn confirmació*/
   --bg-transp-modal: rgba(0, 0, 0, 0.904); // Transperencia modals
-  --btt-confirm: #28a745; // Confirmacio btt entre altres
-  --bg-confirm: #218838; // Bg confirmacio buttons entre altres
-  --bg-confirm-no: #dc3545; // Btt No
-  --bg-confirm-no-hover: #c82333; // Btt No hhover
+  --btt-confirm: #186329; // Confirmacio btt entre altres
+  --bg-confirm: #1f7934; // Bg confirmacio buttons entre altres
+  --bg-confirm-no: #a01c2a; // Btt No
+  --bg-confirm-no-hover: #bd2231; // Btt No hover
+  --txt-btn-confirm: #ffffff; //
 
-  /* Colores complementarios */
-  --white: #ffffff; // Blanco       (camps formulari, pestanya activa, text footer medix, fons modal info, title, fons boto papelera reciclatge dietes, fons carrega y guiarda dieta, i el text dels botons confiramcioo, fons modal signature i text botons)
   --black: #000000; // Negro
   --light-grey: #f5f5f5; // Gris muy claro
-
-  /* Variables de tamaño y transición */
-  --top-bar-height: 60px; // Altura de la cabecera
-  --tab-height: 60px; // Altura de las pestañas
-  --font-size-base: 16px; // Tamaño base de fuente
-  --transition-speed: 0.3s; // Velocidad de transición
 
   /* PROMPT */
   --prompt_box_shadow: rgba(0, 0, 0, 0.3); // Prompt
@@ -81,6 +75,13 @@
   --service-3-border: #f0cdaa;
   --service-4-bg: #f9e6ff;
   --service-4-border: #e1b6f4;
+  --border-btn-service: #747474;
+
+  /* Variables de tamaño y transición */
+  --top-bar-height: 60px; // Altura de la cabecera
+  --tab-height: 60px; // Altura de las pestañas
+  --font-size-base: 16px; // Tamaño base de fuente
+  --transition-speed: 0.3s; // Velocidad de transición
 }
 
 /* 
@@ -101,6 +102,8 @@
 
   /* Colors del tema fosc */
   --bg-color: #1e1e1e; /* Fons fosc */
+
+  /* TopBar */
   --border-bottom-topbar: #444; //  Borde sota TopBar
 
   /* FOOTER */
@@ -147,6 +150,7 @@
   --service-3-border: #f0cdaa;
   --service-4-bg: #2a1e2a;
   --service-4-border: #e1b6f4;
+  --border-btn-service: #ffffff;
 }
 
 html {
@@ -456,7 +460,7 @@ button .fa {
   font-weight: bold;
   box-shadow: 0 2px 4px var(--bg-transp-ajustes);
   border: none;
-  color: var(--black);
+  color: var(--text-color);
   transition: all 0.2s ease;
   cursor: pointer;
 
@@ -481,7 +485,7 @@ button .fa {
 
 .active-square {
   transform: scale(1.05);
-  border: 1px solid var(--bg-tab-active);
+  border: 1px solid var(--border-btn-service);
 }
 
 // Ic borrar
@@ -643,7 +647,7 @@ button .fa {
     margin: 0;
     font-size: 22px;
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--text-color);
     border-bottom: 1px solid var(--grey-border);
     padding-bottom: 10px;
   }
@@ -670,7 +674,7 @@ button .fa {
 .close-modal-btn {
   display: block;
   background-color: var(--secondary-color);
-  color: var(--text-color);
+  color: var(--text-color-footer);
   margin: 20px auto 0;
   font-size: 16px;
   padding: 12px 20px;
@@ -775,14 +779,14 @@ button .fa {
   z-index: 9999;
 }
 
+#signature-title {
+  color: var(--text-color);
+}
+
 .signature-modal-content {
   width: 50%;
   text-align: center;
   position: relative;
-
-  h2#signature-title {
-    color: var(--txt-signature);
-  }
 
   p.signature-instruction {
     text-align: left;
@@ -825,7 +829,7 @@ button .fa {
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px; // Entre 14px y 16px, según el diseño
-  color: var(--text-color);
+  color: var(--txt-btn-confirm);
   transition: background-color 0.3s ease, transform 0.2s ease;
 
   &.yes {
@@ -947,9 +951,9 @@ button .fa {
     padding: 0 10px; // Opcional: afegeix un padding per separar dels extrems
   }
 
-  // Botó de tema: es posicionarà a la dreta
   .theme-icon-btn {
     background: transparent;
+    color: var(--button-text);
     border: none;
     font-size: 24px;
     cursor: pointer;
