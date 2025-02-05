@@ -547,7 +547,14 @@
       <div class="footer__container">
         <p>© 2025 Medix</p>
         <div class="footer__icons">
-          <button id="theme-toggle-btn">☀ Mode Clar</button>
+          <!-- Botó per canviar el tema (només icona) -->
+          <button
+            id="theme-toggle-btn"
+            class="theme-icon-btn"
+            aria-label="Canviar tema"
+          >
+            🌙
+          </button>
 
           <!-- Icona d'informació -->
           <a
@@ -558,6 +565,7 @@
           >
             <img src="assets/icons/info.svg" alt="Info" class="icon" />
           </a>
+
           <!-- Versió a la dreta de la icona -->
           <p class="app-version">v. <span id="app-version"></span></p>
         </div>

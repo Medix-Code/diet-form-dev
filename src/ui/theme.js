@@ -12,13 +12,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (theme === "dark") {
       body.classList.add("theme-dark");
       localStorage.setItem("theme", "dark");
-      themeToggleBtn.textContent = "🌙 Mode Fosc";
+      themeToggleBtn.innerHTML = "🌞"; // Canvia la icona al sol
       if (themeColorMeta)
         themeColorMeta.setAttribute("content", darkThemeColor);
     } else {
       body.classList.remove("theme-dark");
       localStorage.setItem("theme", "light");
-      themeToggleBtn.textContent = "☀ Mode Clar";
+      themeToggleBtn.innerHTML = "🌙"; // Canvia la icona a la lluna
       if (themeColorMeta)
         themeColorMeta.setAttribute("content", lightThemeColor);
     }

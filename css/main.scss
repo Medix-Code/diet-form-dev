@@ -28,8 +28,6 @@
   --text-color-footer: #f1f1f1; // Text color Footer
   --bg-footer: #1b71bd; // Fondo footer
 
-  --text-field-color: #333; /* Text camps */
-
   /* Colores complementarios */
 
   --white: #ffffff; // Blanco       (camps formulari, pestanya activa, text footer medix, fons modal info, title, fons boto papelera reciclatge dietes, fons carrega y guiarda dieta, i el text dels botons confiramcioo, fons modal signature i text botons)
@@ -48,6 +46,7 @@
   --font-size-base: 16px; // Tamaño base de fuente
   --transition-speed: 0.3s; // Velocidad de transición
 
+  --text-field-color: #333; /* Text camps */
   --textfield: #f8faf8; // TextFieds
   --textfield-error-bg: #5a0000; // Error campo texto bg
   --btt-confirm: #28a745; // Confirmacio btt entre altres
@@ -107,12 +106,13 @@
 
   --border-btt: #555555; /* Bord per botons en estat normal */
 
-  /* Campos de texto */
+  /* TEXTFIELD*/
   --textfield: #2a2a2a; // TextFieds
   --textfield-error: #dc3545;
   --textfield-error-bg: #5a0000; /* Fons d'error més fosc */
   --text-field-color: #ffffff; /* Text camps */
 
+  /* BTT*/
   --btt-confirm: #28a745;
   --bg-confirm: #218838;
   --bg-confirm-no: #dc3545;
@@ -121,8 +121,10 @@
   --bg-transp-modal: rgba(0, 0, 0, 0.6); /* Transp. per a modals */
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --prompt_box_shadow: rgba(0, 0, 0, 0.5); /* Ombra una mica més marcada */
-  --btt-signature: rgba(94, 94, 94, 0.15); // Signature btt
-  --bg-signature-hover: #f1f1f1; // Signature bg hover
+
+  /* SIGNATURE*/
+  --btt-signature: rgba(255, 255, 255, 0.15); // Signature btt
+  --bg-signature-hover: #8f8f8f; // Signature bg hover
   --btt-signature-hover: #444; // Signature color hover
 
   /* Serveis */
@@ -930,6 +932,20 @@ button .fa {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .theme-icon-btn {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s ease;
+  }
+
+  /* 🔹 Efecte en hover */
+  .theme-icon-btn:hover {
+    transform: scale(1.1);
   }
 
   .app-version {

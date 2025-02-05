@@ -21,7 +21,6 @@
   --border-top-footer: #f1f1f1;
   --text-color-footer: #f1f1f1;
   --bg-footer: #1b71bd;
-  --text-field-color: #333; /* Text camps */
   /* Colores complementarios */
   --white: #ffffff;
   --black: #000000;
@@ -36,6 +35,7 @@
   --tab-height: 60px;
   --font-size-base: 16px;
   --transition-speed: 0.3s;
+  --text-field-color: #333; /* Text camps */
   --textfield: #f8faf8;
   --textfield-error-bg: #5a0000;
   --btt-confirm: #28a745;
@@ -87,11 +87,12 @@
   --bgcolor-hover: #292929; /* Fons en estat hover */
   --bgcolor-active: #444444; /* Fons en estat actiu */
   --border-btt: #555555; /* Bord per botons en estat normal */
-  /* Campos de texto */
+  /* TEXTFIELD*/
   --textfield: #2a2a2a;
   --textfield-error: #dc3545;
   --textfield-error-bg: #5a0000; /* Fons d'error més fosc */
   --text-field-color: #ffffff; /* Text camps */
+  /* BTT*/
   --btt-confirm: #28a745;
   --bg-confirm: #218838;
   --bg-confirm-no: #dc3545;
@@ -99,8 +100,9 @@
   --bg-transp-modal: rgba(0, 0, 0, 0.6); /* Transp. per a modals */
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --prompt_box_shadow: rgba(0, 0, 0, 0.5); /* Ombra una mica més marcada */
-  --btt-signature: rgba(94, 94, 94, 0.15);
-  --bg-signature-hover: #f1f1f1;
+  /* SIGNATURE*/
+  --btt-signature: rgba(255, 255, 255, 0.15);
+  --bg-signature-hover: #8f8f8f;
   --btt-signature-hover: #444;
   /* Serveis */
   --service-1-bg: #1e2a1e;
@@ -803,6 +805,7 @@ button .fa {
   color: var(--text-color-footer);
   padding: 20px;
   border-top: 1px solid var(--border-top-footer);
+  /* 🔹 Efecte en hover */
 }
 .footer .footer__container {
   max-width: 100%;
@@ -821,6 +824,17 @@ button .fa {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.footer .theme-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.3s ease;
+}
+.footer .theme-icon-btn:hover {
+  transform: scale(1.1);
 }
 .footer .app-version {
   font-size: 0.8em;
