@@ -13,12 +13,22 @@
   --secondary-color: #1b71bd; // Color secundario  )             (/info boto aceptar)
   --secondary-color-hover: #0056b3;
 
+  /*TAB*/
+  --bg-tab-active: #f8faf8; //Textcolor pestanyes
+  --bg-tab: #e9ecef; //Backgrond pestanyes no actives
+  --txtcolor-tab: #919191; //TextColor pestanyes
+  --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
+  --line-tab: #4aa3ff; /*Línia sota pestanya activa */
+
   /* Colores del tema claro */
   --bg-color: #f8faf8; // Fondo (tema claro)       (fondo general, fondo modal dietes)
   --text-color: #333; // Texto (tema claro)                          ( text Formulari)
   --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
   --border-top-footer: #f1f1f1; //  Borde top Footer
   --text-color-footer: #f1f1f1; // Text color Footer
+  --bg-footer: #1b71bd; // Fondo footer
+
+  --text-field-color: #333; /* Text camps */
 
   /* Colores complementarios */
 
@@ -31,11 +41,6 @@
   --bgcolor-active: #d5d5d5; //Clica
 
   --border-btt: #c9c9c9; // Btt No hhover
-
-  --bg-tab: #e9ecef; //Backgrond pestanyes no actives
-  --txtcolor-tab: #919191; //TextColor pestanyes
-  --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
-  --bg-tab-active: #575149fa; //Textcolor pestanyes
 
   /* Variables de tamaño y transición */
   --top-bar-height: 60px; // Altura de la cabecera
@@ -78,36 +83,36 @@
   --secondary-color: #1470c2; /* Color secundari, pots mantenir-lo o ajustar-lo */
   --secondary-color-hover: #0056b3;
 
+  /*TAB*/
+  --bg-tab-active: #1e1e1e; /* Fons de pestanya activa */
+  --bg-tab: #2c2c2c; /* Fons de les pestanyes NO ACTIVES */
+  --txtcolor-tab: #aaaaaa; /* Text pesetanya NO ACTIU */
+  --bg-tab-hover: #3a3a3a; /* Fons de pestanya en estat hover */
+  --line-tab: #4aa3ff; /*Línia sota pestanya activa */
+
   /* Colors del tema fosc */
-  --bg-color: #24272b; /* Fons fosc */
+  --bg-color: #1e1e1e; /* Fons fosc */
   --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
-  --border-bottom-topbar: #343a40; //  Borde sota TopBar
-  --border-top-footer: #1470c2; //  Borde top Footer
-  --text-color-footer: #f1f1f1; // Text color Footer
+  --border-bottom-topbar: #444; //  Borde sota TopBar
+  --border-top-footer: #333333; //  Borde top Footer
+  --text-color-footer: #b0b0b0; // Text color Footer
+  --bg-footer: #202020; // Fondo footer
 
   /* Colors complementaris */
   --light-grey: #2e2e2e; /* Grau fosc per elements secundaris */
   --grey-border: #444444; /* Bordos i ombres en to més fosc */
   --input-border: #555555; /* Bord dels inputs */
-  --bgcolor-hover: #333333; /* Fons en estat hover */
+  --bgcolor-hover: #292929; /* Fons en estat hover */
   --bgcolor-active: #444444; /* Fons en estat actiu */
 
   --border-btt: #555555; /* Bord per botons en estat normal */
 
-  --bg-tab: #2c2c2c; /* Fons de les pestanyes */
-  --txtcolor-tab: #aaaaaa; /* Color del text de les pestanyes */
-  --bg-tab-hover: #3a3a3a; /* Fons de pestanya en estat hover */
-  --bg-tab-active: #007bff; /* Fons de pestanya activa */
-
-  /* Variables de mida i transició */
-  --top-bar-height: 60px;
-  --tab-height: 60px;
-  --font-size-base: 16px;
-  --transition-speed: 0.3s;
-
-  --textfield: #f8faf8; // TextFieds
-  --textfield-error: rgb(255, 0, 0);
+  /* Campos de texto */
+  --textfield: #2a2a2a; // TextFieds
+  --textfield-error: #dc3545;
   --textfield-error-bg: #5a0000; /* Fons d'error més fosc */
+  --text-field-color: #ffffff; /* Text camps */
+
   --btt-confirm: #28a745;
   --bg-confirm: #218838;
   --bg-confirm-no: #dc3545;
@@ -120,7 +125,7 @@
   --bg-signature-hover: #f1f1f1; // Signature bg hover
   --btt-signature-hover: #444; // Signature color hover
 
-  /* Serveis (pots adaptar aquests colors segons la teva identitat visual) */
+  /* Serveis */
   --service-1-bg: #1e2a1e;
   --service-1-border: #8ddfd0;
   --service-2-bg: #1e2a2e;
@@ -339,9 +344,9 @@ button .fa {
   }
   &.active {
     font-weight: bold;
-    background-color: var(--bg-color);
+    background-color: var(--bg-tab-active);
     color: var(--text-color);
-    box-shadow: inset 0 -3px 0 var(--secondary-color);
+    box-shadow: inset 0 -3px 0 var(--line-tab);
   }
 }
 
@@ -396,7 +401,7 @@ button .fa {
     padding-left: 15px;
     padding-right: 15px;
     box-sizing: border-box;
-    color: var(--text-color);
+    color: var(--text-field-color);
     font-size: 16px;
     border: 1px solid var(--input-border);
     border-radius: 4px;
@@ -902,7 +907,7 @@ button .fa {
 // FOOTER
 // ===========================================================================
 .footer {
-  background-color: var(--secondary-color);
+  background-color: var(--bg-footer);
   color: var(--text-color-footer);
   padding: 20px;
   border-top: 1px solid var(--border-top-footer);
