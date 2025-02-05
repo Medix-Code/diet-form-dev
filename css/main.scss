@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap");
+
 // ===========================================================================
 // VARIABLES CSS PARA TEMAS (LIGHT y DARK)
 // ===========================================================================
@@ -34,7 +36,7 @@
 
   /* SIGNATURE*/
   --btt-signature: rgba(173, 173, 173, 0.15); // Signature btt
-  --bg-signature-hover: #f1f1f1; // Signature bg hover
+  --bg-signature-hover: #acacac; // Signature bg hover
 
   /* FOOTER*/
   --border-top-footer: #f1f1f1; //  Borde top Footer
@@ -66,6 +68,14 @@
 
   /* PROMPT */
   --prompt_box_shadow: rgba(0, 0, 0, 0.3); // Prompt
+
+  /*TOAST*/
+  // Toast colors
+  --toast-success-bg: #28a745; // Verd vibrant per a èxit
+  --toast-error-bg: #dc3545; // Vermell intens per a errors
+  --toast-text-color: #ffffff; // Text blanc per un bon contrast
+  // Opcional: millora la ombra amb una mica de transparència
+  --toast-box-shadow: rgba(0, 0, 0, 0.15);
 
   /*Servicios*/
   --service-1-bg: #e9f7ef;
@@ -155,7 +165,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 16p;
 }
 
 /* 
@@ -164,7 +174,7 @@ html {
   se actualizarán automáticamente.
 */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: var(--font-size-base);
   background-color: var(--bg-color);
   color: var(--text-color);
@@ -207,7 +217,7 @@ main {
   text-align: left;
   margin: 20px;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 600;
   color: var(--text-color);
 }
 
@@ -727,6 +737,10 @@ button .fa {
   margin-bottom: 20px;
   text-align: center;
 }
+.no-diets-text {
+  font-style: italic;
+  text-align: center;
+}
 
 #diet-options {
   list-style: none;
@@ -901,23 +915,24 @@ button .fa {
 }
 
 .toast {
-  width: 30vw; // Ancho al 30% del viewport
-  min-width: 200px; // Ancho mínimo
-  max-width: 400px; // Límite máximo
-  background-color: var(--btt-confirm);
-  color: var(--text-color-footer);
+  width: 30vw; // 30% de l'ample del viewport
+  min-width: 200px; // Amplada mínima
+  max-width: 400px; // Amplada màxima
+  background-color: var(--toast-success-bg); // Valor per defecte (èxit)
+  color: var(--toast-text-color);
   padding: 12px 24px;
   border-radius: 8px;
   text-align: center;
   animation: fadeInOut 3s forwards;
-  box-shadow: 0 2px 6px var(--black);
+  box-shadow: 0 2px 6px var(--toast-box-shadow);
   font-size: 16px;
 
   &.success {
-    background-color: var(--btt-confirm);
+    background-color: var(--toast-success-bg);
   }
+
   &.error {
-    background-color: var(--bg-confirm-no);
+    background-color: var(--toast-error-bg);
   }
 }
 
