@@ -14,40 +14,48 @@
   --txtcolor-tab: #919191;
   --bg-tab-hover: #dee2e6;
   --line-tab: #4aa3ff; /*Línia sota pestanya activa */
-  /* Colores del tema claro */
-  --bg-color: #f8faf8;
-  --text-color: #333;
-  --border-bottom-topbar: #f1f1f1;
+  /* TEXTFIELD*/
+  --textfield: #f8faf8;
+  --textfield-error: #ec1710;
+  --textfield-error-bg: #e0c7c7;
+  --text-field-color: #333; /* Text camps */
+  --input-border: #ced4da;
+  /* SIGNATURE*/
+  --btt-signature: rgba(173, 173, 173, 0.15);
+  --bg-signature-hover: #f1f1f1;
+  --border-signature-focus: #000000;
+  --txt-signature: #919191;
+  /* FOOTER*/
   --border-top-footer: #f1f1f1;
   --text-color-footer: #f1f1f1;
   --bg-footer: #1b71bd;
+  /* GENERAL*/
+  --bg-color: #f8faf8;
+  --border-bottom-topbar: #f1f1f1;
+  --grey-border: #ddddddea;
+  /* Btn Ajustes*/
+  --bgcolor-hover: #e0e0e0;
+  --bgcolor-active: #d5d5d5;
+  --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
+  /* Modal MisDietas*/
+  --border-btt: #c9c9c9;
+  /* Modal. General / Btn confirmació*/
+  --bg-transp-modal: rgba(0, 0, 0, 0.904);
+  --btt-confirm: #28a745;
+  --bg-confirm: #218838;
+  --bg-confirm-no: #dc3545;
+  --bg-confirm-no-hover: #c82333;
   /* Colores complementarios */
   --white: #ffffff;
   --black: #000000;
   --light-grey: #f5f5f5;
-  --grey-border: #ddddddea;
-  --input-border: #ced4da;
-  --bgcolor-hover: #e0e0e0;
-  --bgcolor-active: #d5d5d5;
-  --border-btt: #c9c9c9;
   /* Variables de tamaño y transición */
   --top-bar-height: 60px;
   --tab-height: 60px;
   --font-size-base: 16px;
   --transition-speed: 0.3s;
-  --text-field-color: #333; /* Text camps */
-  --textfield: #f8faf8;
-  --textfield-error-bg: #5a0000;
-  --btt-confirm: #28a745;
-  --bg-confirm: #218838;
-  --bg-confirm-no: #dc3545;
-  --bg-confirm-no-hover: #c82333;
-  --bg-transp-modal: rgba(0, 0, 0, 0.6);
-  --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
+  /* PROMPT */
   --prompt_box_shadow: rgba(0, 0, 0, 0.3);
-  --btt-signature: rgba(173, 173, 173, 0.15);
-  --bg-signature-hover: #f1f1f1;
-  --btt-signature-hover: #444;
   /*Servicios*/
   --service-1-bg: #e9f7ef;
   --service-1-border: #8ddfd0;
@@ -75,8 +83,8 @@
   --line-tab: #4aa3ff; /*Línia sota pestanya activa */
   /* Colors del tema fosc */
   --bg-color: #1e1e1e; /* Fons fosc */
-  --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
   --border-bottom-topbar: #444;
+  /* FOOTER */
   --border-top-footer: #333333;
   --text-color-footer: #b0b0b0;
   --bg-footer: #202020;
@@ -103,8 +111,8 @@
   /* SIGNATURE*/
   --btt-signature: rgba(255, 255, 255, 0.15);
   --bg-signature-hover: #8f8f8f;
-  --btt-signature-hover: #444;
-  /* Serveis */
+  --border-signature-focus: #4aa3ff;
+  /* SERVICES */
   --service-1-bg: #1e2a1e;
   --service-1-border: #8ddfd0;
   --service-2-bg: #1e2a2e;
@@ -486,7 +494,7 @@ button .fa {
   height: 40px;
 }
 .signature-group .input-with-icon:focus-within {
-  border-color: var(--primary-color);
+  border-color: var(--border-signature-focus);
   border-width: 2px;
   border-style: solid;
 }
@@ -517,15 +525,12 @@ button .fa {
   border-bottom-right-radius: 4px;
 }
 .signature-group .input-with-icon .signature-btn i {
-  color: #000000;
+  color: var(--btn-signature-i);
   font-size: 18px;
   transition: color 0.3s;
 }
 .signature-group .input-with-icon .signature-btn:hover {
-  background-color: #f1f1f1;
-}
-.signature-group .input-with-icon .signature-btn:hover i {
-  color: #444;
+  background-color: var(--bg-signature-hover);
 }
 
 .modal {
@@ -681,6 +686,9 @@ button .fa {
   width: 50%;
   text-align: center;
   position: relative;
+}
+.signature-modal-content h2#signature-title {
+  color: var(--txt-signature);
 }
 .signature-modal-content p.signature-instruction {
   text-align: left;

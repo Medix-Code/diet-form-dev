@@ -20,25 +20,48 @@
   --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
   --line-tab: #4aa3ff; /*Línia sota pestanya activa */
 
-  /* Colores del tema claro */
-  --bg-color: #f8faf8; // Fondo (tema claro)       (fondo general, fondo modal dietes)
-  --text-color: #333; // Texto (tema claro)                          ( text Formulari)
-  --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
+  /* TEXTFIELD*/
+  --textfield: #f8faf8; // TextFieds
+  --textfield-error: #ec1710; // Borde camp
+  --textfield-error-bg: #e0c7c7; // Fons camp error
+  --text-field-color: #333; /* Text camps */
+  --input-border: #ced4da; // Color de borde camps
+  /* SIGNATURE*/
+  --btt-signature: rgba(173, 173, 173, 0.15); // Signature btt
+  --bg-signature-hover: #f1f1f1; // Signature bg hover
+  --border-signature-focus: #000000; // Borde camps TES
+  --txt-signature: #919191; // Text Title
+
+  /* FOOTER*/
   --border-top-footer: #f1f1f1; //  Borde top Footer
   --text-color-footer: #f1f1f1; // Text color Footer
   --bg-footer: #1b71bd; // Fondo footer
 
-  /* Colores complementarios */
+  /* GENERAL*/
+  --bg-color: #f8faf8; //  Fons
+  --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
 
+  --grey-border: #ddddddea; // Gris para bordes y sombras ligeras
+
+  /* Btn Ajustes*/
+  --bgcolor-hover: #e0e0e0; // Btn ajustes hover
+  --bgcolor-active: #d5d5d5; // Btn ajustes active, click
+  --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
+
+  /* Modal MisDietas*/
+  --border-btt: #c9c9c9; // Icon Papelera Border
+
+  /* Modal. General / Btn confirmació*/
+  --bg-transp-modal: rgba(0, 0, 0, 0.904); // Transperencia modals
+  --btt-confirm: #28a745; // Confirmacio btt entre altres
+  --bg-confirm: #218838; // Bg confirmacio buttons entre altres
+  --bg-confirm-no: #dc3545; // Btt No
+  --bg-confirm-no-hover: #c82333; // Btt No hhover
+
+  /* Colores complementarios */
   --white: #ffffff; // Blanco       (camps formulari, pestanya activa, text footer medix, fons modal info, title, fons boto papelera reciclatge dietes, fons carrega y guiarda dieta, i el text dels botons confiramcioo, fons modal signature i text botons)
   --black: #000000; // Negro
   --light-grey: #f5f5f5; // Gris muy claro
-  --grey-border: #ddddddea; // Gris para bordes y sombras ligeras
-  --input-border: #ced4da; // Color de borde de inputs
-  --bgcolor-hover: #e0e0e0; //Passa ratoli per damunt
-  --bgcolor-active: #d5d5d5; //Clica
-
-  --border-btt: #c9c9c9; // Btt No hhover
 
   /* Variables de tamaño y transición */
   --top-bar-height: 60px; // Altura de la cabecera
@@ -46,21 +69,8 @@
   --font-size-base: 16px; // Tamaño base de fuente
   --transition-speed: 0.3s; // Velocidad de transición
 
-  --text-field-color: #333; /* Text camps */
-  --textfield: #f8faf8; // TextFieds
-  --textfield-error-bg: #5a0000; // Error campo texto bg
-  --btt-confirm: #28a745; // Confirmacio btt entre altres
-  --bg-confirm: #218838; // Bg confirmacio buttons entre altres
-  --bg-confirm-no: #dc3545; // Btt No
-  --bg-confirm-no-hover: #c82333; // Btt No hhover
-
-  --bg-transp-modal: rgba(0, 0, 0, 0.6); // transperencia modal
-  --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
+  /* PROMPT */
   --prompt_box_shadow: rgba(0, 0, 0, 0.3); // Prompt
-
-  --btt-signature: rgba(173, 173, 173, 0.15); // Signature btt
-  --bg-signature-hover: #f1f1f1; // Signature bg hover
-  --btt-signature-hover: #444; // Signature color hover
 
   /*Servicios*/
   --service-1-bg: #e9f7ef;
@@ -91,8 +101,9 @@
 
   /* Colors del tema fosc */
   --bg-color: #1e1e1e; /* Fons fosc */
-  --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
   --border-bottom-topbar: #444; //  Borde sota TopBar
+
+  /* FOOTER */
   --border-top-footer: #333333; //  Borde top Footer
   --text-color-footer: #b0b0b0; // Text color Footer
   --bg-footer: #202020; // Fondo footer
@@ -125,9 +136,9 @@
   /* SIGNATURE*/
   --btt-signature: rgba(255, 255, 255, 0.15); // Signature btt
   --bg-signature-hover: #8f8f8f; // Signature bg hover
-  --btt-signature-hover: #444; // Signature color hover
+  --border-signature-focus: #4aa3ff;
 
-  /* Serveis */
+  /* SERVICES */
   --service-1-bg: #1e2a1e;
   --service-1-border: #8ddfd0;
   --service-2-bg: #1e2a2e;
@@ -551,7 +562,7 @@ button .fa {
     height: 40px;
 
     &:focus-within {
-      border-color: var(--primary-color);
+      border-color: var(--border-signature-focus);
       border-width: 2px;
       border-style: solid;
     }
@@ -584,16 +595,13 @@ button .fa {
       border-bottom-right-radius: 4px;
 
       i {
-        color: #000000;
+        color: var(--btn-signature-i);
         font-size: 18px;
         transition: color 0.3s;
       }
 
       &:hover {
-        background-color: #f1f1f1;
-      }
-      &:hover i {
-        color: #444;
+        background-color: var(--bg-signature-hover);
       }
     }
   }
@@ -771,6 +779,10 @@ button .fa {
   width: 50%;
   text-align: center;
   position: relative;
+
+  h2#signature-title {
+    color: var(--txt-signature);
+  }
 
   p.signature-instruction {
     text-align: left;

@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const themeToggleBtn = document.getElementById("theme-toggle-btn");
+  const themeIcon = document.getElementById("theme-icon");
   const body = document.body;
   const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
@@ -7,18 +8,20 @@ document.addEventListener("DOMContentLoaded", function () {
   const lightThemeColor = "#1b71bd"; // Color de fons del tema clar
   const darkThemeColor = "#343a40"; // Color de fons del tema fosc
 
-  // Funció per establir el tema i actualitzar el meta
+  // Funció per establir el tema i actualitzar la imatge de l'icona
   function setTheme(theme) {
     if (theme === "dark") {
       body.classList.add("theme-dark");
       localStorage.setItem("theme", "dark");
-      themeToggleBtn.innerHTML = "🌞"; // Canvia la icona al sol
+      // Canvia la imatge a la del sol per indicar que està en mode fosc
+      themeIcon.src = "assets/icons/sun.svg";
       if (themeColorMeta)
         themeColorMeta.setAttribute("content", darkThemeColor);
     } else {
       body.classList.remove("theme-dark");
       localStorage.setItem("theme", "light");
-      themeToggleBtn.innerHTML = "🌙"; // Canvia la icona a la lluna
+      // Canvia la imatge a la de la lluna per indicar que està en mode clar
+      themeIcon.src = "assets/icons/moon.svg";
       if (themeColorMeta)
         themeColorMeta.setAttribute("content", lightThemeColor);
     }
