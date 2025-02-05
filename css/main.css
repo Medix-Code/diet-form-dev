@@ -244,6 +244,7 @@ main {
   justify-content: flex-start;
   padding: 12px 20px;
   font-size: 15px;
+  font-weight: 400;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -314,7 +315,7 @@ button .fa {
   border: none;
   display: flex;
   font-size: 1.125rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--txtcolor-tab);
   transition: all var(--transition-speed) ease;
 }
