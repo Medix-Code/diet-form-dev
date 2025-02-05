@@ -17,7 +17,8 @@
   --bg-color: #f8faf8; // Fondo (tema claro)       (fondo general, fondo modal dietes)
   --text-color: #333; // Texto (tema claro)                          ( text Formulari)
   --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
-  --border-top-footer: #1470c2; //  Borde top Footer
+  --border-top-footer: #f1f1f1; //  Borde top Footer
+  --text-color-footer: #f1f1f1; // Text color Footer
 
   /* Colores complementarios */
 
@@ -81,6 +82,7 @@
   --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
   --border-bottom-topbar: #343a40; //  Borde sota TopBar
   --border-top-footer: #1470c2; //  Borde top Footer
+  --text-color-footer: #f1f1f1; // Text color Footer
 
   /* Colors complementaris */
   --light-grey: #2e2e2e; /* Grau fosc per elements secundaris */
@@ -899,8 +901,8 @@ button .fa {
 // FOOTER
 // ===========================================================================
 .footer {
-  background-color: var(--primary-color);
-  color: var(--text-color);
+  background-color: var(--secondary-color);
+  color: var(--text-color-footer);
   padding: 20px;
   border-top: 1px solid var(--border-top-footer);
 

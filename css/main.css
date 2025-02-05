@@ -12,7 +12,8 @@
   --bg-color: #f8faf8;
   --text-color: #333;
   --border-bottom-topbar: #f1f1f1;
-  --border-top-footer: #1470c2;
+  --border-top-footer: #f1f1f1;
+  --text-color-footer: #f1f1f1;
   /* Colores complementarios */
   --white: #ffffff;
   --black: #000000;
@@ -66,6 +67,7 @@
   --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
   --border-bottom-topbar: #343a40;
   --border-top-footer: #1470c2;
+  --text-color-footer: #f1f1f1;
   /* Colors complementaris */
   --light-grey: #2e2e2e; /* Grau fosc per elements secundaris */
   --grey-border: #444444; /* Bordos i ombres en to més fosc */
@@ -792,8 +794,8 @@ button .fa {
   }
 }
 .footer {
-  background-color: var(--primary-color);
-  color: var(--text-color);
+  background-color: var(--secondary-color);
+  color: var(--text-color-footer);
   padding: 20px;
   border-top: 1px solid var(--border-top-footer);
 }
