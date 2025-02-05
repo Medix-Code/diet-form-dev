@@ -9,7 +9,7 @@ function updateThemeColor(isDark) {
     metaThemeColor.setAttribute("content", "#731e7a");
   } else {
     // Canvia aquest valor pel color que vulguis per al mode clar
-    metaThemeColor.setAttribute("content", "#DE4F28");
+    metaThemeColor.setAttribute("content", "#1470c2");
   }
 }
 
