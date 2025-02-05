@@ -998,7 +998,7 @@ button .icon {
     padding: 0px 0px;
   }
   .title {
-    font-size: 1.375rem; /* Aproximadament 22px */
+    font-size: 1.2rem; /* Aproximadament 22px */
   }
   .button-group {
     flex-direction: row;
