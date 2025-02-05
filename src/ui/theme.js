@@ -9,31 +9,34 @@ function updateThemeColor(isDark) {
     metaThemeColor.setAttribute("content", "#731e7a");
   } else {
     // Canvia aquest valor pel color que vulguis per al mode clar
-    metaThemeColor.setAttribute("content", "#1470c2");
+    metaThemeColor.setAttribute("content", "#DE4F28");
   }
 }
 
-// Detecta si l'usuari prefereix el mode fosc
+// Funció per aplicar o treure la classe segons la preferència
+function applyTheme(isDark) {
+  if (isDark) {
+    document.body.classList.add("theme-dark");
+    updateThemeColor(true);
+  } else {
+    document.body.classList.remove("theme-dark");
+    updateThemeColor(false);
+  }
+}
+
+// Comprovem la preferència inicial del sistema
 if (
   window.matchMedia &&
   window.matchMedia("(prefers-color-scheme: dark)").matches
 ) {
-  document.body.classList.add("theme-dark");
-  updateThemeColor(true);
+  applyTheme(true);
 } else {
-  document.body.classList.remove("theme-dark");
-  updateThemeColor(false);
+  applyTheme(false);
 }
 
-// Escolta els canvis en la preferència del mode en temps real
+// Escoltem els canvis en la preferència en temps real
 window
   .matchMedia("(prefers-color-scheme: dark)")
   .addEventListener("change", (event) => {
-    if (event.matches) {
-      document.body.classList.add("theme-dark");
-      updateThemeColor(true);
-    } else {
-      document.body.classList.remove("theme-dark");
-      updateThemeColor(false);
-    }
+    applyTheme(event.matches);
   });
