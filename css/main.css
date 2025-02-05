@@ -6,7 +6,7 @@
 :root {
   /* Colores principales */
   --primary-color: #f8faf8;
-  --secondary-color: #1470c2;
+  --secondary-color: #1b71bd;
   --secondary-color-hover: #0056b3;
   /* Colores del tema claro */
   --bg-color: #f8faf8;
@@ -33,7 +33,7 @@
   --font-size-base: 16px;
   --transition-speed: 0.3s;
   --textfield: #f8faf8;
-  --textfield-error-bg: #ffe5e5;
+  --textfield-error-bg: #5a0000;
   --btt-confirm: #28a745;
   --bg-confirm: #218838;
   --bg-confirm-no: #dc3545;
@@ -60,10 +60,11 @@
   se sobreescribirán las variables CSS usadas en los estilos.
 */
 .theme-dark {
-  --primary-color: #731e7a; /* Color principal, per exemple per a la capçalera 40343f   */
+  --primary-color: #e218c1; /* Color principal, per exemple per a la capçalera 343a40   */
   --secondary-color: #1470c2; /* Color secundari, pots mantenir-lo o ajustar-lo */
+  --secondary-color-hover: #0056b3;
   /* Colors del tema fosc */
-  --bg-color: #121212; /* Fons fosc */
+  --bg-color: #e218c1; /* Fons fosc */
   --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
   --border-bottom-topbar: #343a40;
   --border-top-footer: #1470c2;

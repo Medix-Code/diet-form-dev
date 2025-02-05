@@ -10,7 +10,7 @@
 :root {
   /* Colores principales */
   --primary-color: #f8faf8; // Color principal (ej. cabecera)        (TOP, FOOTER)
-  --secondary-color: #1470c2; // Color secundario  )             (/info boto aceptar)
+  --secondary-color: #1b71bd; // Color secundario  )             (/info boto aceptar)
   --secondary-color-hover: #0056b3;
 
   /* Colores del tema claro */
@@ -44,7 +44,7 @@
   --transition-speed: 0.3s; // Velocidad de transición
 
   --textfield: #f8faf8; // TextFieds
-  --textfield-error-bg: #ffe5e5; // Error campo texto bg
+  --textfield-error-bg: #5a0000; // Error campo texto bg
   --btt-confirm: #28a745; // Confirmacio btt entre altres
   --bg-confirm: #218838; // Bg confirmacio buttons entre altres
   --bg-confirm-no: #dc3545; // Btt No
@@ -74,11 +74,12 @@
   se sobreescribirán las variables CSS usadas en los estilos.
 */
 .theme-dark {
-  --primary-color: #731e7a; /* Color principal, per exemple per a la capçalera 40343f   */
+  --primary-color: #e218c1; /* Color principal, per exemple per a la capçalera 343a40   */
   --secondary-color: #1470c2; /* Color secundari, pots mantenir-lo o ajustar-lo */
+  --secondary-color-hover: #0056b3;
 
   /* Colors del tema fosc */
-  --bg-color: #121212; /* Fons fosc */
+  --bg-color: #e218c1; /* Fons fosc */
   --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
   --border-bottom-topbar: #343a40; //  Borde sota TopBar
   --border-top-footer: #1470c2; //  Borde top Footer

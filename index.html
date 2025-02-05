@@ -3,17 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="theme-color"
-      content="#DE4F28"
-      media="(prefers-color-scheme: theme-light)"
-    />
-    <meta
-      name="theme-color"
-      content="#731e7a"
-      media="(prefers-color-scheme: theme-dark)"
-    />
-
+    <meta name="theme-color" content="#f8faf8" />
     <meta name="author" content="Medix" />
     <meta
       name="description"
@@ -557,6 +547,8 @@
       <div class="footer__container">
         <p>© 2025 Medix</p>
         <div class="footer__icons">
+          <button id="theme-toggle-btn">☀ Mode Clar</button>
+
           <!-- Icona d'informació -->
           <a
             href="#about-modal"
@@ -645,7 +637,8 @@
     </script>
 
     <!-- Import del codi principal, ara al directori 'src/' -->
-    <script src="./src/ui/theme.js"></script>
+
     <script type="module" src="./src/app.js"></script>
+    <script src="./src/ui/theme.js"></script>
   </body>
 </html>
