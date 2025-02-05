@@ -6,7 +6,7 @@ const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 function updateThemeColor(isDark) {
   if (isDark) {
     // Canvia aquest valor pel color que vulguis per al mode fosc
-    metaThemeColor.setAttribute("content", "#000000");
+    metaThemeColor.setAttribute("content", "#343a40");
   } else {
     // Canvia aquest valor pel color que vulguis per al mode clar
     metaThemeColor.setAttribute("content", "#ffffff");
