@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Colors per als dos modes
   const lightThemeColor = "#f8faf8"; // Color de fons del tema clar
-  const darkThemeColor = "#343a40"; // Color de fons del tema fosc
+  const darkThemeColor = "#5a0000"; // Color de fons del tema fosc
 
   // Funció per establir el tema i actualitzar el meta
   function setTheme(theme) {

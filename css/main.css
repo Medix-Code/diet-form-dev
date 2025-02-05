@@ -60,11 +60,11 @@
   se sobreescribirán las variables CSS usadas en los estilos.
 */
 .theme-dark {
-  --primary-color: #e218c1; /* Color principal, per exemple per a la capçalera 343a40   */
+  --primary-color: #343a40; /* Color principal, per exemple per a la capçalera    */
   --secondary-color: #1470c2; /* Color secundari, pots mantenir-lo o ajustar-lo */
   --secondary-color-hover: #0056b3;
   /* Colors del tema fosc */
-  --bg-color: #e218c1; /* Fons fosc */
+  --bg-color: #24272b; /* Fons fosc */
   --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
   --border-bottom-topbar: #343a40;
   --border-top-footer: #1470c2;
