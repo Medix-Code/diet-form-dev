@@ -5,7 +5,7 @@
 */
 :root {
   /* Colores principales */
-  --primary-color: #f3f3f3;
+  --primary-color: #f8faf8;
   --secondary-color: #1470c2;
   --secondary-color-hover: #0056b3;
   /* Colores del tema claro */
@@ -29,7 +29,7 @@
   --tab-height: 60px;
   --font-size-base: 16px;
   --transition-speed: 0.3s;
-  --textfield-error: rgb(255, 0, 0);
+  --textfield: #f8faf8;
   --textfield-error-bg: #ffe5e5;
   --btt-confirm: #28a745;
   --bg-confirm: #218838;
@@ -60,8 +60,6 @@
   --bg-color: #121212; /* Fons fosc */
   --text-color: #e0e0e0; /* Text clar per contrastar amb el fons */
   /* Colors complementaris */
-  --white: #ffffff; /* Es manté per elements que ho requereixen */
-  --black: #000000;
   --light-grey: #2e2e2e; /* Grau fosc per elements secundaris */
   --grey-border: #444444; /* Bordos i ombres en to més fosc */
   --input-border: #555555; /* Bord dels inputs */
@@ -77,6 +75,7 @@
   --tab-height: 60px;
   --font-size-base: 16px;
   --transition-speed: 0.3s;
+  --textfield: #f8faf8;
   --textfield-error: rgb(255, 0, 0);
   --textfield-error-bg: #5a0000; /* Fons d'error més fosc */
   --btt-confirm: #28a745;
@@ -331,10 +330,11 @@ button .fa {
   padding-left: 15px;
   padding-right: 15px;
   box-sizing: border-box;
+  color: var(--text-color);
   font-size: 16px;
   border: 1px solid var(--input-border);
   border-radius: 4px;
-  background-color: var(--bg-color);
+  background-color: var(--textfield);
   text-align: left;
 }
 .form-group select {
