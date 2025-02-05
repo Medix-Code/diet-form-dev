@@ -926,14 +926,16 @@ button .fa {
     gap: 20px;
   }
 
+  // Contenidor per als tres botons / icones
   .footer__icons {
     width: 100%;
-    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0 10px; // Opcional: afegeix un padding per separar dels extrems
   }
 
+  // Botó de tema: es posicionarà a la dreta
   .theme-icon-btn {
     background: transparent;
     border: none;
@@ -941,19 +943,31 @@ button .fa {
     cursor: pointer;
     padding: 5px;
     transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 
-  /* 🔹 Efecte en hover */
-  .theme-icon-btn:hover {
-    transform: scale(1.1);
+  // Botó d'info: es posicionarà al centre
+  .info-btn {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 
+  // Versió de l'app: es posicionarà a l'esquerra
   .app-version {
     font-size: 0.8em;
     opacity: 0.8;
     margin: 0;
-    position: absolute;
-    right: 0;
   }
 
   p {
@@ -978,10 +992,10 @@ button .fa {
     vertical-align: middle;
     transition: transform 0.3s ease;
     object-fit: contain;
-  }
 
-  .icon:hover {
-    transform: scale(1.2);
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 }
 
