@@ -1174,13 +1174,15 @@ button .icon {
     pointer-events: none;
     transition: color 0.3s ease;
   }
+  .ajustes-panel .big-btn {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Línia molt suau */
+  }
   .ajustes-panel .big-btn:first-child {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
   }
   .ajustes-panel .big-btn:last-child {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-bottom: none;
   }
   .tab {
     min-height: 8px;
