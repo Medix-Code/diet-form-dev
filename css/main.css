@@ -238,28 +238,18 @@ main {
   outline: none;
   border-radius: 8px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
-  padding: 8px;
 }
-.ajustes-btn .bar {
-  display: block;
+.ajustes-btn .icon {
+  fill: currentColor;
   width: 36px;
-  height: 4px;
-  background-color: currentColor;
-  margin: 4px 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  height: 36px;
+  transition: transform 0.3s ease;
 }
-.ajustes-btn.open .bar:nth-child(1) {
-  transform: translateY(14px) rotate(40deg);
-}
-.ajustes-btn.open .bar:nth-child(2) {
-  opacity: 0;
-}
-.ajustes-btn.open .bar:nth-child(3) {
-  transform: translateY(-10px) rotate(-40deg);
+.ajustes-btn.open .icon {
+  transform: rotate(90deg);
 }
 
 .ajustes-panel {
@@ -1054,6 +1044,15 @@ button .icon {
   }
   .top-bar__title {
     font-size: 28px;
+  }
+  .ajustes-btn {
+    width: 42px;
+    height: 42px;
+  }
+  .ajustes-btn .icon {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
   }
   .tabs-container {
     top: calc(var(--tab-height) - 4px);
