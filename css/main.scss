@@ -9,7 +9,7 @@
 // Variables generales de colores y tipografía
 :root {
   /* Colores principales */
-  --primary-color: #6e16e9; // Color principal (ej. cabecera)        m'agrada: 2ead9e
+  --primary-color: #fefeff; // Color principal (ej. cabecera)        m'agrada: 2ead9e
   --secondary-color: #004aad; // Color secundario  )             (165b98)
   --secondary-color-hover: #0056b3;
   --text-color: #333333; // Text Title
@@ -24,7 +24,7 @@
   --bg-tab: #f3f3f3; /*pestanyes no actives*/
   --txtcolor-tab: #4a4a4a; //TextColor pestanyes descativada
   --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
-  --line-tab: #165b98; /*Línia sota pestanya activa */
+  --line-tab: #2ead9e; /*Línia sota pestanya activa */
 
   /* TEXTFIELD*/
   --textfield: #fefeff; // TextField Fons
@@ -40,7 +40,7 @@
   /* FOOTER*/
   --border-top-footer: #f1f1f1; //  Borde top Footer
   --text-color-footer: #ffffff; // Text color Footer
-  --bg-footer: #004aad; // Fondo footer
+  --bg-footer: #343a40; // Fondo footer
 
   /* GENERAL*/
   --bg-color: #fefeff; //  Fons
@@ -235,7 +235,7 @@ main {
   font-style: normal;
   padding-left: 19px;
   letter-spacing: 0px;
-  color: #ffffff;
+  color: #000000;
   /* Opcional: si vols que el text es mantingui centrat dins del seu contenidor */
   text-align: center;
 }
