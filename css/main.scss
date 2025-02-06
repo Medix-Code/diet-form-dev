@@ -15,7 +15,7 @@
   --secondary-color: #165b98; // Color secundario  )             (165b98)
   --secondary-color-hover: #0056b3;
   --text-color: #333333; // Text Title
-  --subtext-color: #555555; // Text subtext
+  --subtext-color: #444444; // Text subtext
 
   /* TopBar */
   --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
@@ -51,6 +51,7 @@
   --bgcolor-hover: #e0e0e0; // Btn ajustes hover
   --bgcolor-active: #d5d5d5; // Btn ajustes active, click
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
+  --border-btn-ajustes: rgba(204, 204, 204, 0.3); // Borde Btn ajustes
 
   /* Modal MisDietas*/
   --border-btt: #c9c9c9; // Icon Papelera Border
@@ -291,7 +292,7 @@ main {
     align-items: center;
     gap: 15px;
     background-color: var(--light-grey);
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--border-btn-ajustes);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
     color: var(--text-color);
@@ -688,7 +689,7 @@ button .fa {
     font-size: 16px;
     line-height: 1.6;
     color: var(--text-color);
-    margin: 20px 0;
+    margin: 15px 0;
   }
 }
 
@@ -817,6 +818,7 @@ button .fa {
 
 #signature-title {
   color: var(--text-color);
+  text-align: center;
 }
 
 .signature-modal-content {
@@ -826,6 +828,7 @@ button .fa {
 
   p.signature-instruction {
     text-align: left;
+    font-weight: 300;
   }
 }
 
@@ -964,7 +967,7 @@ button .fa {
 .footer {
   background-color: var(--bg-footer);
   color: var(--text-color-footer);
-  padding: 20px;
+  padding: 20px 20px;
   border-top: 1px solid var(--border-top-footer);
 
   .footer__container {
@@ -985,7 +988,6 @@ button .fa {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 10px;
   }
 
   // Botó per canviar el tema
@@ -994,6 +996,7 @@ button .fa {
     color: var(--button-text);
     border: none;
     font-size: 24px;
+
     cursor: pointer;
     transition: transform var(--transition-speed) ease;
 
@@ -1009,7 +1012,7 @@ button .fa {
     border: none;
     font-size: 24px;
     cursor: pointer;
-    padding: 5px;
+
     transition: transform var(--transition-speed) ease;
 
     &:hover,

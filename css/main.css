@@ -10,7 +10,7 @@
   --secondary-color: #165b98;
   --secondary-color-hover: #0056b3;
   --text-color: #333333;
-  --subtext-color: #555555;
+  --subtext-color: #444444;
   /* TopBar */
   --border-bottom-topbar: #f1f1f1;
   /*TAB*/
@@ -40,6 +40,7 @@
   --bgcolor-hover: #e0e0e0;
   --bgcolor-active: #d5d5d5;
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
+  --border-btn-ajustes: rgba(204, 204, 204, 0.3);
   /* Modal MisDietas*/
   --border-btt: #c9c9c9;
   /* Modal. General / Btn confirmació*/
@@ -250,7 +251,7 @@ main {
   align-items: center;
   gap: 15px;
   background-color: var(--light-grey);
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-btn-ajustes);
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
   color: var(--text-color);
@@ -597,7 +598,7 @@ button .fa {
   font-size: 16px;
   line-height: 1.6;
   color: var(--text-color);
-  margin: 20px 0;
+  margin: 15px 0;
 }
 
 @keyframes fadeIn {
@@ -713,6 +714,7 @@ button .fa {
 
 #signature-title {
   color: var(--text-color);
+  text-align: center;
 }
 
 .signature-modal-content {
@@ -722,6 +724,7 @@ button .fa {
 }
 .signature-modal-content p.signature-instruction {
   text-align: left;
+  font-weight: 300;
 }
 
 .signature-canvas-container {
@@ -841,7 +844,7 @@ button .fa {
 .footer {
   background-color: var(--bg-footer);
   color: var(--text-color-footer);
-  padding: 20px;
+  padding: 20px 20px;
   border-top: 1px solid var(--border-top-footer);
 }
 .footer .footer__container {
@@ -860,7 +863,6 @@ button .fa {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
 }
 .footer .theme-icon-btn {
   background: transparent;
@@ -878,7 +880,6 @@ button .fa {
   border: none;
   font-size: 24px;
   cursor: pointer;
-  padding: 5px;
   transition: transform var(--transition-speed) ease;
 }
 .footer .footer-icon-link:hover, .footer .footer-icon-link:focus {
