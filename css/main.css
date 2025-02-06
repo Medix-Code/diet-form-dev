@@ -601,7 +601,7 @@ button .fa {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1000;
+  z-index: 1200;
   background-color: var(--bg-transp-modal);
   overflow: auto;
 }
@@ -1174,10 +1174,11 @@ button .icon {
     pointer-events: none;
     transition: color 0.3s ease;
   }
-  .big-btn:first-child {
-    margin-top: -10px;
+  .ajustes-panel .big-btn:first-child {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
   }
-  .big-btn:last-child {
+  .ajustes-panel .big-btn:last-child {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
   }
