@@ -27,7 +27,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#004aad" />
-    <meta name="author" content="Medix" />
+    <meta name="author" content="TESHub" />
     <meta
       name="description"
       content="Aplicació per gestionar dietes amb formularis accessibles i funcionalitat PWA."
@@ -576,28 +576,51 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-      <div class="footer__container">
-        <p>© 2025 Medix</p>
+      <!-- Contingut del footer -->
+      <div class="footer__content">
+        <!-- 1a fila: icones -->
         <div class="footer__icons">
-          <!-- Botó per canviar el tema (ara amb imatge de la carpeta assets) -->
-
+          <!-- Botó per canviar el tema (dark mode) -->
           <button
             id="theme-toggle-btn"
-            class="theme-icon-btn"
+            class="footer-btn"
             aria-label="Canviar tema"
           >
             <img
               id="theme-icon"
               src="assets/icons/moon.svg"
-              alt="Icono de tema"
+              alt="Icona de tema"
               class="icon"
             />
           </button>
 
-          <button class="footer-info" id="openInfo">Más información</button>
+          <a
+            href="#openInfo"
+            class="footer-btn"
+            role="button"
+            aria-label="Información acerca de la aplicación"
+          >
+            <img src="assets/icons/info.svg" alt="" class="icon" />
+          </a>
 
-          <!-- Versió a la dreta de la icona -->
-          <p class="app-version">v. <span id="app-version"></span></p>
+          <!-- Botó de donacions amb icona -->
+          <a
+            href="https://www.paypal.com/donate/?hosted_button_id=XPFGNJ33CECHJ"
+            id="openDonation"
+            class="footer-btn"
+            aria-label="Donacions"
+          >
+            <img
+              src="assets/icons/donation.svg"
+              alt="Icona de donacions"
+              class="icon"
+            />
+          </a>
+        </div>
+
+        <!-- 2a fila: text del footer -->
+        <div class="footer__text">
+          <p>©2025 THub</p>
         </div>
       </div>
     </footer>
@@ -648,15 +671,6 @@
         </div>
       </div>
     </div>
-
-    <script>
-      fetch("version.json")
-        .then((response) => response.json())
-        .then((data) => {
-          document.getElementById("app-version").textContent = data.version;
-        })
-        .catch((err) => console.error("Error carregant la versió", err));
-    </script>
 
     <!-- PDF-lib (CDN) -->
     <script

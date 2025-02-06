@@ -1006,37 +1006,37 @@ button .fa {
 // ===========================================================================
 // FOOTER
 // ===========================================================================
+
 .footer {
-  margin-top: 50px;
+  margin-top: 60px;
   background-color: var(--bg-footer);
   color: var(--text-color-footer);
-  padding: 20px 20px;
-  border-top: 1px solid var(--border-top-footer);
+  padding: 20px;
+  text-align: center;
+  font-family: sans-serif;
 
-  .footer__container {
-    max-width: 100%;
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
+  .footer__content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    /* Eliminem 'gap' perquè utilitzem marges específics */
   }
 
-  // Contenidor per als botons / icones
   .footer__icons {
-    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 30px;
   }
 
-  // Botó per canviar el tema
-  .theme-icon-btn {
-    background: transparent;
+  .footer__text p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.8;
+  }
 
+  .footer-btn {
+    background: transparent;
     border: none;
     cursor: pointer;
     transition: transform var(--transition-speed) ease;
@@ -1047,58 +1047,11 @@ button .fa {
     }
   }
 
-  .footer-info {
-    cursor: pointer;
-    color: var(--text-color-footer);
-    background: transparent;
-    text-decoration: underline;
-    border: none;
-    padding: 0;
-    font-weight: 300;
-    font-size: 1rem;
-
-    transition: transform var(--transition-speed) ease,
-      color var(--transition-speed) ease;
-  }
-
-  // Versió de l'app (posicionada a la dreta)
-  .app-version {
-    font-size: 0.8em;
-    opacity: 0.8;
-    margin: 0;
-  }
-
-  // Estils per als paràgrafs generals dins del footer
-  p {
-    margin: 0 0 2px 0;
-    font-size: 15px;
-    font-weight: 400;
-    a {
-      color: var(--text-color);
-      text-decoration: none;
-      font-weight: bold;
-
-      &:hover,
-      &:focus {
-        color: var(--sec-color);
-        text-decoration: underline;
-      }
-    }
-  }
-
-  // Estils per als icones
   .icon {
     width: var(--icon-size);
     height: var(--icon-size);
-    display: inline-block;
-    vertical-align: middle;
-    transition: transform var(--transition-speed) ease;
     object-fit: contain;
-
-    &:hover,
-    &:focus {
-      transform: scale(1.2);
-    }
+    transition: transform var(--transition-speed) ease;
   }
 }
 
