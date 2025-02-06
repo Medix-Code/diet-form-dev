@@ -23,13 +23,13 @@
   /*TAB*/
 
   --bg-tab-active: #fefeff; /* Fons de pestanya activa */
-  --bg-tab: #e9ecef; //Backgrond pestanyes no actives
-  --txtcolor-tab: #919191; //TextColor pestanyes
+  --bg-tab: #ececec; /*pestanyes no actives*/
+  --txtcolor-tab: #4a4a4a; //TextColor pestanyes descativada
   --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
   --line-tab: #165b98; /*Línia sota pestanya activa */
 
   /* TEXTFIELD*/
-  --textfield: #f8faf8; // TextField Fons
+  --textfield: #fefeff; // TextField Fons
   --textfield-error: #ec1710; // Borde camp
   --textfield-error-bg: #e0c7c7; // Fons camp error
   --input-border: #ced4da; // Color de borde camps
@@ -1188,7 +1188,7 @@ button .icon {
     padding: 14px 12px;
     font-size: 0.9rem;
     &.active {
-      font-size: 1.125rem;
+      font-size: 1rem;
     }
   }
 
@@ -1281,13 +1281,13 @@ button .icon {
       gap: 20px;
     }
   }
-  º .tab {
+  .tab {
     min-height: 8px;
     padding: 14px 16px;
 
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     &.active {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
   }
 
@@ -1296,7 +1296,7 @@ button .icon {
   }
 
   .tab-content-container {
-    margin-top: 130px;
+    margin-top: 140px;
   }
 
   input[type="text"],
