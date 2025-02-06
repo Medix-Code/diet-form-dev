@@ -10,7 +10,7 @@
   --secondary-color: #165b98;
   --secondary-color-hover: #0056b3;
   --text-color: #333333;
-  --subtext-color: #666666;
+  --subtext-color: #555555;
   /* TopBar */
   --border-bottom-topbar: #f1f1f1;
   /*TAB*/
@@ -44,10 +44,10 @@
   --border-btt: #c9c9c9;
   /* Modal. General / Btn confirmació*/
   --bg-transp-modal: rgba(0, 0, 0, 0.904);
-  --btt-confirm: #186329;
-  --bg-confirm: #1f7934;
-  --bg-confirm-no: #a01c2a;
-  --bg-confirm-no-hover: #bd2231;
+  --btt-confirm: #28a745;
+  --bg-confirm: #218838;
+  --bg-confirm-no: #dc3545;
+  --bg-confirm-no-hover: #c82333;
   --txt-btn-confirm: #ffffff;
   --black: #000000;
   --light-grey: #f5f5f5;
@@ -1145,7 +1145,7 @@ button .icon {
     font-size: 16px;
   }
   #about-title {
-    text-align: left;
+    text-align: center;
     font-size: 1.2rem;
     margin: 0;
     font-weight: bold;
@@ -1190,7 +1190,7 @@ button .icon {
   .signature-modal-content {
     overflow-x: hidden;
     width: 80%;
-    max-height: 90vh;
+    max-height: 80vh;
     max-width: 90%;
   }
   .signature-canvas-container {
