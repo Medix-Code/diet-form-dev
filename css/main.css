@@ -5,13 +5,14 @@
 */
 :root {
   /* Colores principales */
-  --primary-color: #004aad;
+  --primary-color: #a6c8f0;
   --secondary-color: #004aad;
   --secondary-color-hover: #0056b3;
   --text-color: #333333;
   --subtext-color: #444444;
   /* TopBar */
   --border-bottom-topbar: #f1f1f1;
+  --title-color: #303030;
   /*TAB*/
   --bg-tab-active: #fefeff; /* Fons de pestanya activa */
   --bg-tab: #f3f3f3; /*pestanyes no actives*/
@@ -201,7 +202,7 @@ main {
   font-style: normal;
   padding-left: 19px;
   letter-spacing: 0px;
-  color: #ffffff;
+  color: var(--title-color);
   /* Opcional: si vols que el text es mantingui centrat dins del seu contenidor */
   text-align: center;
 }
