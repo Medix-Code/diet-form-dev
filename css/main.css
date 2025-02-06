@@ -5,7 +5,7 @@
 */
 :root {
   /* Colores principales */
-  --primary-color: #fefeff;
+  --primary-color: #004aad;
   --secondary-color: #004aad;
   --secondary-color-hover: #0056b3;
   --text-color: #333333;
@@ -30,7 +30,7 @@
   /* FOOTER*/
   --border-top-footer: #f1f1f1;
   --text-color-footer: #ffffff;
-  --bg-footer: #165b98;
+  --bg-footer: #004aad;
   /* GENERAL*/
   --bg-color: #fefeff;
   --grey-border: #ddddddea;
