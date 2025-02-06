@@ -365,8 +365,8 @@ button .fa {
   background: var(--bg-tab);
   border: none;
   display: flex;
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 400;
   color: var(--txtcolor-tab);
   transition: all var(--transition-speed) ease;
 
@@ -374,6 +374,7 @@ button .fa {
     background-color: var(--bg-tab-hover);
   }
   &.active {
+    font-size: 1.125rem;
     font-weight: 600;
     background-color: var(--bg-tab-active);
     color: var(--text-color);
