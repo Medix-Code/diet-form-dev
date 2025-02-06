@@ -315,7 +315,7 @@ button .fa {
   border: none;
   display: flex;
   font-size: 1.125rem;
-  font-weight: 400;
+  font-weight: 600;
   color: var(--txtcolor-tab);
   transition: all var(--transition-speed) ease;
 }
@@ -343,7 +343,7 @@ button .fa {
 
 .tab.error-tab {
   animation: blinkErrorAnim 1s ease-in-out infinite alternate;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 @keyframes blinkErrorAnim {
@@ -352,7 +352,7 @@ button .fa {
   }
   100% {
     background-color: var(--bg-tab);
-    color: var(--bg-tab-active);
+    color: var(--txtcolor-tab);
   }
 }
 .form-group {
