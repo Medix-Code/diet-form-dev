@@ -22,7 +22,7 @@
   /* TEXTFIELD*/
   --textfield: #fefeff;
   --textfield-error: #ec1710;
-  --textfield-error-bg: #e0c7c7;
+  --textfield-error-bg: #f5e9e9;
   --input-border: #ced4da;
   --border-textfield-focus: rgb(80, 80, 80);
   /* SIGNATURE*/
@@ -187,7 +187,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 20px;
+  padding-left: 19px;
 }
 
 .button-group {
@@ -220,8 +220,8 @@ main {
 
 .ajustes-panel {
   position: absolute;
-  top: 80%;
-  right: 20%;
+  top: 90%;
+  right: 53%;
   background-color: var(--bg-color);
   border: 0px solid var(--input-border);
   border-radius: 8px;
@@ -376,13 +376,13 @@ button .fa {
   width: 100%;
   padding-left: 15px;
   padding-right: 15px;
-  box-sizing: border-box;
-  color: var(--subtext-color);
   font-size: 16px;
   font-weight: 300;
-  border: 1px solid var(--input-border);
   border-radius: 4px;
+  border: 1px solid var(--input-border);
   background-color: var(--textfield);
+  color: var(--subtext-color);
+  box-sizing: border-box;
   text-align: left;
 }
 .form-group input[type=date]:focus,
@@ -1117,7 +1117,7 @@ button .icon {
     top: calc(var(--tab-height) + 12px);
   }
   .tab-content-container {
-    margin-top: 140px;
+    margin-top: 130px;
   }
   input[type=text],
   input[type=date],
