@@ -1152,7 +1152,7 @@ button .icon {
 @media (max-width: 1024px) and (min-width: 769px) {
   // Reducción ligera de la altura del top-bar y botones
   .top-bar {
-    height: calc(var(--top-bar-height) - 4px);
+    height: calc(var(--top-bar-height) + 20px);
     padding: 0px 0px;
   }
 
@@ -1228,7 +1228,7 @@ button .icon {
    ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
-    height: calc(var(--top-bar-height) - 10px);
+    height: calc(var(--top-bar-height) + 30px);
     padding: 0px 0px;
   }
 
