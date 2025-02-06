@@ -234,9 +234,9 @@ main {
   margin: 0;
   font-family: "Yeseva One", sans-serif;
   font-size: 36px;
-  font-weight: 400;
+  font-weight: 300;
   font-style: normal;
-  padding-left: 19px;
+  padding-left: 20px;
   letter-spacing: 0px;
   color: var(--title-color);
   /* Opcional: si vols que el text es mantingui centrat dins del seu contenidor */
@@ -278,21 +278,31 @@ main {
   outline: none; // Treu l'outline en focus
   border-radius: 8px;
   display: flex;
-  align-items: center;
+  flex-direction: column; // Col·loca les línies en columna
   justify-content: center;
+  align-items: center;
   cursor: pointer;
-  //box-shadow: 0 2px 5px var(--bg-transp-ajustes); // Opcional: treu l'ombra si no la vols
+  padding: 8px; // Opcional: afegeix una mica d'espai interior
 
-  .icon {
-    fill: currentColor;
+  .bar {
+    display: block;
     width: 36px;
-    height: 36px;
-    transition: transform 0.3s ease;
+    height: 4px;
+    background-color: currentColor;
+    margin: 4px 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
-  // Rotació de la icona quan el botó està obert
-  &.open .icon {
-    transform: rotate(90deg);
+  &.open {
+    .bar:nth-child(1) {
+      transform: translateY(14px) rotate(40deg);
+    }
+    .bar:nth-child(2) {
+      opacity: 0;
+    }
+    .bar:nth-child(3) {
+      transform: translateY(-10px) rotate(-40deg);
+    }
   }
 }
 
@@ -1205,16 +1215,6 @@ button .icon {
     font-size: 28px;
   }
 
-  .ajustes-btn {
-    width: 42px;
-    height: 42px;
-    .icon {
-      width: 32px;
-      height: 32px;
-      transition: transform 0.3s ease;
-    }
-  }
-
   .tabs-container {
     top: calc(var(--tab-height) - 4px);
   }
@@ -1291,31 +1291,73 @@ button .icon {
     margin-left: auto;
   }
 
-  .ajustes-btn {
-    width: 36px;
-    height: 36px;
-    .icon {
-      width: 36px;
-      height: 36px;
-      transition: transform 0.3s ease;
-    }
-  }
-
-  .ajustes-btn .icon {
-    transition: transform 0.3s ease;
-  }
-  .ajustes-btn.open .icon {
-    transform: rotate(90deg);
-  }
-
   .ajustes-panel {
-    min-width: 180px;
+    position: fixed;
+    top: calc(
+      var(--top-bar-height)
+    ); // Col·loca el panell just a sota de la topbar
+    left: 0;
+    right: 0;
+    width: 100vw;
+    background-color: var(--bg-color);
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 8px 16px var(--bg-transp-ajustes);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    z-index: 1100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity var(--transition-speed) ease,
+      transform var(--transition-speed) ease, visibility var(--transition-speed);
+
+    &:not(.hidden) {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    // Estils per als botons grans dins del panell
     .big-btn {
-      padding: 12px 15px;
+      width: 100%;
+      justify-content: flex-start;
+      padding: 12px 20px;
       font-size: 15px;
+      font-weight: 200;
+      display: flex;
+      align-items: center;
       gap: 20px;
+      background-color: var(--bg-btn-ajustes);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease,
+        transform 0.2s ease;
+      color: var(--text-color);
+      box-sizing: border-box;
+      text-align: left;
+      border-radius: 0;
+
+      &:hover {
+        background-color: var(--bgcolor-hover);
+        transform: scale(1.02);
+      }
+      &:active {
+        background-color: var(--bgcolor-active);
+        transform: scale(0.98);
+      }
+
+      i {
+        font-size: 20px;
+        color: var(--primary-color);
+        pointer-events: none;
+        transition: color 0.3s ease;
+      }
     }
   }
+
   .tab {
     min-height: 8px;
     padding: 14px 16px;
