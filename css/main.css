@@ -179,7 +179,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000;
+  z-index: 1100;
 }
 
 .top-bar__center {
@@ -1119,7 +1119,7 @@ button .icon {
   }
   .ajustes-panel {
     position: fixed;
-    top: calc(var(--top-bar-height));
+    top: calc(var(--top-bar-height) + 10px);
     left: 0;
     right: 0;
     width: 100vw;
@@ -1131,7 +1131,7 @@ button .icon {
     display: flex;
     flex-direction: column;
     gap: 0;
-    z-index: 1100;
+    z-index: 1000;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
