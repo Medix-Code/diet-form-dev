@@ -9,7 +9,7 @@
 // Variables generales de colores y tipografía
 :root {
   /* Colores principales */
-  --primary-color: #004aad; // Color principal (ej. cabecera)        (TOP, FOOTER)
+  --primary-color: #2a9d8f; // Color principal (ej. cabecera)        (TOP, FOOTER)
   --secondary-color: #004aad; // Color secundario  )             (165b98)
   --secondary-color-hover: #0056b3;
   --text-color: #333333; // Text Title
@@ -235,10 +235,27 @@ main {
   font-style: normal;
   padding-left: 19px;
   letter-spacing: 0px;
-  color: #f3f3f3;
+  color: #000000;
   /* Opcional: si vols que el text es mantingui centrat dins del seu contenidor */
   text-align: center;
 }
+
+/*
+.top-bar__title {
+  margin: 0;
+  font-family: "Roboto Serif", serif;
+  font-optical-sizing: auto;
+  font-size: 28px;
+
+  font-style: normal;
+  font-variation-settings: "wdth" 100, "GRAD" 0;
+  padding-left: 19px;
+  letter-spacing: 0px;
+  color: #f3f3f3;
+
+  text-align: center;
+}
+*/
 
 // ===========================================================================
 // BOTONES DE AJUSTES Y PANEL DE AJUSTES
