@@ -1022,7 +1022,7 @@ button .icon {
     padding: 0px 0px;
   }
   .top-bar__title {
-    font-size: 34px;
+    font-size: 28px;
   }
   .ajustes-btn {
     width: 42px;
@@ -1089,7 +1089,7 @@ button .icon {
     padding: 0px 0px;
   }
   .top-bar__title {
-    font-size: 30px;
+    font-size: 24px;
   }
   .button-group {
     flex-direction: row;
