@@ -1046,6 +1046,9 @@ button .fa {
       transform: scale(1.1);
     }
   }
+  .footer-btn:active {
+    transform: scale(1.2);
+  }
 
   .icon {
     width: var(--icon-size);

@@ -911,6 +911,9 @@ button .fa {
 .footer .footer-btn:hover, .footer .footer-btn:focus {
   transform: scale(1.1);
 }
+.footer .footer-btn:active {
+  transform: scale(1.2);
+}
 .footer .icon {
   width: var(--icon-size);
   height: var(--icon-size);
