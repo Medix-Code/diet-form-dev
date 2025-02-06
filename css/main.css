@@ -867,24 +867,23 @@ button .fa {
 }
 .footer .theme-icon-btn {
   background: transparent;
-  color: var(--button-text);
   border: none;
-  font-size: 24px;
   cursor: pointer;
   transition: transform var(--transition-speed) ease;
 }
 .footer .theme-icon-btn:hover, .footer .theme-icon-btn:focus {
   transform: scale(1.1);
 }
-.footer .footer-icon-link {
-  background: transparent;
-  border: none;
-  font-size: 24px;
+.footer .footer-info {
   cursor: pointer;
-  transition: transform var(--transition-speed) ease;
-}
-.footer .footer-icon-link:hover, .footer .footer-icon-link:focus {
-  transform: scale(1.1);
+  color: var(--text-color-footer);
+  background: transparent;
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  font-weight: 300;
+  font-size: 1rem;
+  transition: transform var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 .footer .app-version {
   font-size: 0.8em;
