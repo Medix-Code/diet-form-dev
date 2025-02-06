@@ -327,7 +327,7 @@ main {
     justify-content: flex-start;
     padding: 12px 20px;
     font-size: 15px;
-    font-weight: 400;
+    font-weight: 100;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -518,7 +518,7 @@ button .fa {
   display: flex;
   align-items: center;
   gap: 30px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 #service-buttons-container {
@@ -1006,6 +1006,7 @@ button .fa {
 // FOOTER
 // ===========================================================================
 .footer {
+  margin-top: 50px;
   background-color: var(--bg-footer);
   color: var(--text-color-footer);
   padding: 20px 20px;
@@ -1230,7 +1231,7 @@ button .icon {
   }
 
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
   }
 
   input[type="text"],
@@ -1352,8 +1353,12 @@ button .icon {
     margin-bottom: 8px;
   }
 
+  main {
+    padding-top: 110px;
+  }
+
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
   }
 
   .toast {
