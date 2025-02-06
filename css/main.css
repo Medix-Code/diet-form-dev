@@ -31,7 +31,7 @@
   /* FOOTER*/
   --border-top-footer: #f1f1f1;
   --text-color-footer: #ffffff;
-  --bg-footer: #343a40;
+  --bg-footer: #004aad;
   /* GENERAL*/
   --bg-color: #fefeff;
   --grey-border: #ddddddea;
@@ -265,7 +265,7 @@ main {
   flex-direction: column;
   gap: 0;
   z-index: 1100;
-  min-width: 180px;
+  min-width: 200px;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
@@ -281,10 +281,10 @@ main {
   justify-content: flex-start;
   padding: 12px 20px;
   font-size: 15px;
-  font-weight: 100;
+  font-weight: 200;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
   background-color: var(--bg-btn-ajustes);
   border: 1px solid var(--border-btn-ajustes);
   cursor: pointer;
@@ -1122,8 +1122,8 @@ button .icon {
     height: 36px;
   }
   .ajustes-btn .icon {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     transition: transform 0.3s ease;
   }
   .ajustes-btn .icon {
@@ -1133,11 +1133,11 @@ button .icon {
     transform: rotate(90deg);
   }
   .ajustes-panel {
-    min-width: 150px;
+    min-width: 180px;
   }
   .ajustes-panel .big-btn {
     padding: 12px 15px;
-    font-size: 14px;
+    font-size: 15px;
     gap: 20px;
   }
   .tab {
