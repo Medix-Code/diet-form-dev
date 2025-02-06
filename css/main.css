@@ -180,34 +180,38 @@ main {
   z-index: 1000;
 }
 
-.logo {
-  margin: 20px;
-  height: 50px; /* Ajusta la mida segons necessitis */
-  width: auto; /* Manté la proporció */
+.logo img {
+  height: 50px;
+  width: auto;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
 }
 
 .button-group {
   position: relative;
   display: flex;
   gap: 10px;
+  padding-right: 20px;
 }
 
 .ajustes-btn {
   position: relative;
-  background-color: var(--secondary-color);
+  background-color: transparent;
   color: var(--text-color);
   border: none;
+  outline: none;
   border-radius: 8px;
-  width: 48px;
-  height: 48px;
   display: flex;
-  margin: 18px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px var(--bg-transp-ajustes);
 }
 .ajustes-btn .icon {
+  width: 36px;
+  height: 36px;
   transition: transform 0.3s ease;
 }
 .ajustes-btn.open .icon {
@@ -1000,16 +1004,20 @@ button .icon {
    ======================================================= */
 @media (max-width: 1024px) and (min-width: 769px) {
   .top-bar {
-    height: calc(var(--top-bar-height) + 20px);
+    height: calc(var(--top-bar-height) - 4px);
     padding: 0px 0px;
   }
-  .logo {
-    height: 40px; /* Una mica més petita en mòbils */
+  .logo img {
+    height: 42px;
   }
   .ajustes-btn {
     width: 42px;
     height: 42px;
-    margin: 18px;
+  }
+  .ajustes-btn .icon {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
   }
   .tabs-container {
     top: calc(var(--tab-height) - 4px);
@@ -1063,11 +1071,11 @@ button .icon {
    ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
-    height: calc(var(--top-bar-height) + 20px);
+    height: calc(var(--top-bar-height) - 10px);
     padding: 0px 0px;
   }
-  .logo {
-    height: 40px; /* Una mica més petita en mòbils */
+  .logo img {
+    height: 40px;
   }
   .button-group {
     flex-direction: row;
@@ -1077,11 +1085,11 @@ button .icon {
   .ajustes-btn {
     width: 36px;
     height: 36px;
-    margin: 14px;
-    border-radius: 8px;
   }
-  .ajustes-btn i {
-    font-size: 20px;
+  .ajustes-btn .icon {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.3s ease;
   }
   .ajustes-btn .icon {
     transition: transform 0.3s ease;

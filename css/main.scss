@@ -214,10 +214,14 @@ main {
   z-index: 1000;
 }
 
-.logo {
-  margin: 20px;
-  height: 50px; /* Ajusta la mida segons necessitis */
-  width: auto; /* Manté la proporció */
+.logo img {
+  height: 50px;
+  width: auto;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
 }
 
 // ===========================================================================
@@ -227,26 +231,30 @@ main {
   position: relative;
   display: flex;
   gap: 10px;
+  padding-right: 20px;
 }
 
 .ajustes-btn {
   position: relative;
-  background-color: var(--secondary-color);
+  background-color: transparent; // Fons transparent
   color: var(--text-color);
-  border: none;
+  border: none; // Treu la borda
+  outline: none; // Treu l'outline en focus
   border-radius: 8px;
-  width: 48px;
-  height: 48px;
+
   display: flex;
-  margin: 18px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px var(--bg-transp-ajustes);
+  //box-shadow: 0 2px 5px var(--bg-transp-ajustes); // Opcional: treu l'ombra si no la vols
+
   .icon {
+    width: 36px;
+    height: 36px;
     transition: transform 0.3s ease;
   }
-  // Rotación de la icono cuando el botón está abierto
+
+  // Rotació de la icona quan el botó està obert
   &.open .icon {
     transform: rotate(90deg);
   }
@@ -1152,18 +1160,22 @@ button .icon {
 @media (max-width: 1024px) and (min-width: 769px) {
   // Reducción ligera de la altura del top-bar y botones
   .top-bar {
-    height: calc(var(--top-bar-height) + 20px);
+    height: calc(var(--top-bar-height) - 4px);
     padding: 0px 0px;
   }
 
-  .logo {
-    height: 40px; /* Una mica més petita en mòbils */
+  .logo img {
+    height: 42px;
   }
 
   .ajustes-btn {
     width: 42px;
     height: 42px;
-    margin: 18px;
+    .icon {
+      width: 32px;
+      height: 32px;
+      transition: transform 0.3s ease;
+    }
   }
 
   .tabs-container {
@@ -1228,12 +1240,12 @@ button .icon {
    ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
-    height: calc(var(--top-bar-height) + 20px);
+    height: calc(var(--top-bar-height) - 10px);
     padding: 0px 0px;
   }
 
-  .logo {
-    height: 40px; /* Una mica més petita en mòbils */
+  .logo img {
+    height: 40px;
   }
 
   .button-group {
@@ -1245,10 +1257,10 @@ button .icon {
   .ajustes-btn {
     width: 36px;
     height: 36px;
-    margin: 14px;
-    border-radius: 8px;
-    i {
-      font-size: 20px;
+    .icon {
+      width: 28px;
+      height: 28px;
+      transition: transform 0.3s ease;
     }
   }
 
