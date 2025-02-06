@@ -214,16 +214,28 @@ main {
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
-}
 
-.logo img {
-  height: 50px;
-  width: auto;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 19px;
+  &__left {
+    display: flex;
+    align-items: center;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+      text-decoration: none; // Elimina el subratllat del link, si escau
+
+      // Per posar un espai entre els dos logos, afegim marge dret al primer
+      .logo-dibuix {
+        margin-right: 0px;
+      }
+
+      img {
+        height: 50px;
+        width: auto;
+      }
+    }
+  }
 }
 
 // ===========================================================================
@@ -1242,7 +1254,7 @@ button .icon {
    ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
-    height: calc(var(--top-bar-height) + 12px);
+    height: calc(var(--top-bar-height) + 10px);
     padding: 0px 0px;
   }
 
@@ -1292,11 +1304,11 @@ button .icon {
   }
 
   .tabs-container {
-    top: calc(var(--tab-height) + 12px);
+    top: calc(var(--tab-height) + 10px);
   }
 
   .tab-content-container {
-    margin-top: 130px;
+    margin-top: 125px;
   }
 
   input[type="text"],

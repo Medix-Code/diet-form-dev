@@ -179,15 +179,22 @@ main {
   align-items: center;
   z-index: 1000;
 }
-
-.logo img {
+.top-bar__left {
+  display: flex;
+  align-items: center;
+}
+.top-bar__left .logo {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  text-decoration: none;
+}
+.top-bar__left .logo .logo-dibuix {
+  margin-right: 0px;
+}
+.top-bar__left .logo img {
   height: 50px;
   width: auto;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 19px;
 }
 
 .button-group {
@@ -1071,7 +1078,7 @@ button .icon {
    ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
-    height: calc(var(--top-bar-height) + 12px);
+    height: calc(var(--top-bar-height) + 10px);
     padding: 0px 0px;
   }
   .logo img {
@@ -1114,10 +1121,10 @@ button .icon {
     font-size: 1rem;
   }
   .tabs-container {
-    top: calc(var(--tab-height) + 12px);
+    top: calc(var(--tab-height) + 10px);
   }
   .tab-content-container {
-    margin-top: 130px;
+    margin-top: 125px;
   }
   input[type=text],
   input[type=date],
