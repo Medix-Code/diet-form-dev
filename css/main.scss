@@ -41,7 +41,7 @@
   /* FOOTER*/
   --border-top-footer: #f1f1f1; //  Borde top Footer
   --text-color-footer: #ffffff; // Text color Footer
-  --bg-footer: #165b98; // Fondo footer
+  --bg-footer: #343a40; // Fondo footer
 
   /* GENERAL*/
   --bg-color: #f8faf8; //  Fons
@@ -56,7 +56,7 @@
   --border-btt: #c9c9c9; // Icon Papelera Border
 
   /* Modal. General / Btn confirmació*/
-  --bg-transp-modal: rgba(0, 0, 0, 0.904); // Transperencia modals
+  --bg-transp-modal: rgba(0, 0, 0, 0.6); // Transperencia modals
   --btt-confirm: #28a745; // Confirmacio btt entre altres
   --bg-confirm: #218838; // Bg confirmacio buttons entre altres
   --bg-confirm-no: #dc3545; // Btt No
@@ -93,6 +93,7 @@
   --tab-height: 60px; // Altura de las pestañas
   --font-size-base: 16px; // Tamaño base de fuente
   --transition-speed: 0.3s; // Velocidad de transición
+  --icon-size: 24px; // Variables per als icones
 }
 
 /* 
@@ -978,7 +979,7 @@ button .fa {
     gap: 10px;
   }
 
-  // Contenidor per als tres botons / icones
+  // Contenidor per als botons / icones
   .footer__icons {
     width: 100%;
     display: flex;
@@ -987,65 +988,72 @@ button .fa {
     padding: 0 10px;
   }
 
+  // Botó per canviar el tema
   .theme-icon-btn {
     background: transparent;
     color: var(--button-text);
     border: none;
     font-size: 24px;
     cursor: pointer;
+    transition: transform var(--transition-speed) ease;
 
-    transition: transform 0.3s ease;
-
-    &:hover {
+    &:hover,
+    &:focus {
       transform: scale(1.1);
     }
   }
 
-  // Botó d'info: es posicionarà al centre
-  .info-btn {
+  // Botó d'info (enllaç d'icona)
+  .footer-icon-link {
     background: transparent;
     border: none;
     font-size: 24px;
     cursor: pointer;
     padding: 5px;
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-speed) ease;
 
-    &:hover {
+    &:hover,
+    &:focus {
       transform: scale(1.1);
     }
   }
 
-  // Versió de l'app: es posicionarà a l'esquerra
+  // Versió de l'app (posicionada a la dreta)
   .app-version {
     font-size: 0.8em;
     opacity: 0.8;
     margin: 0;
   }
 
+  // Estils per als paràgrafs generals dins del footer
   p {
     margin: 0 0 2px 0;
     font-size: 15px;
-
+    font-weight: 400;
     a {
       color: var(--text-color);
       text-decoration: none;
       font-weight: bold;
-      &:hover {
+
+      &:hover,
+      &:focus {
         color: var(--sec-color);
         text-decoration: underline;
       }
     }
   }
 
+  // Estils per als icones
   .icon {
-    width: 24px;
-    height: 24px;
+    width: var(--icon-size);
+    height: var(--icon-size);
     display: inline-block;
     vertical-align: middle;
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-speed) ease;
     object-fit: contain;
 
-    &:hover {
+    &:hover,
+    &:focus {
       transform: scale(1.2);
     }
   }

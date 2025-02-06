@@ -32,7 +32,7 @@
   /* FOOTER*/
   --border-top-footer: #f1f1f1;
   --text-color-footer: #ffffff;
-  --bg-footer: #165b98;
+  --bg-footer: #343a40;
   /* GENERAL*/
   --bg-color: #f8faf8;
   --grey-border: #ddddddea;
@@ -43,7 +43,7 @@
   /* Modal MisDietas*/
   --border-btt: #c9c9c9;
   /* Modal. General / Btn confirmació*/
-  --bg-transp-modal: rgba(0, 0, 0, 0.904);
+  --bg-transp-modal: rgba(0, 0, 0, 0.6);
   --btt-confirm: #28a745;
   --bg-confirm: #218838;
   --bg-confirm-no: #dc3545;
@@ -73,6 +73,7 @@
   --tab-height: 60px;
   --font-size-base: 16px;
   --transition-speed: 0.3s;
+  --icon-size: 24px;
 }
 
 /* 
@@ -867,20 +868,20 @@ button .fa {
   border: none;
   font-size: 24px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-speed) ease;
 }
-.footer .theme-icon-btn:hover {
+.footer .theme-icon-btn:hover, .footer .theme-icon-btn:focus {
   transform: scale(1.1);
 }
-.footer .info-btn {
+.footer .footer-icon-link {
   background: transparent;
   border: none;
   font-size: 24px;
   cursor: pointer;
   padding: 5px;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-speed) ease;
 }
-.footer .info-btn:hover {
+.footer .footer-icon-link:hover, .footer .footer-icon-link:focus {
   transform: scale(1.1);
 }
 .footer .app-version {
@@ -891,25 +892,26 @@ button .fa {
 .footer p {
   margin: 0 0 2px 0;
   font-size: 15px;
+  font-weight: 400;
 }
 .footer p a {
   color: var(--text-color);
   text-decoration: none;
   font-weight: bold;
 }
-.footer p a:hover {
+.footer p a:hover, .footer p a:focus {
   color: var(--sec-color);
   text-decoration: underline;
 }
 .footer .icon {
-  width: 24px;
-  height: 24px;
+  width: var(--icon-size);
+  height: var(--icon-size);
   display: inline-block;
   vertical-align: middle;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-speed) ease;
   object-fit: contain;
 }
-.footer .icon:hover {
+.footer .icon:hover, .footer .icon:focus {
   transform: scale(1.2);
 }
 
