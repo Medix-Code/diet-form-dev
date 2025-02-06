@@ -1195,6 +1195,10 @@ button .icon {
   .ajustes-panel .big-btn:last-child {
     border-bottom: none;
   }
+  /* Quan passi el cursor per sobre (hover), també mantenim les cantonades rectes */
+  .ajustes-panel .big-btn:hover {
+    border-radius: 0 !important; /* Evita que es vegin les cantonades arrodonides en hover */
+  }
   .tab {
     min-height: 8px;
     padding: 14px 16px;
