@@ -1114,7 +1114,7 @@ button .icon {
     font-size: 1.1rem;
   }
   .tabs-container {
-    top: calc(var(--tab-height) - 10px);
+    top: calc(var(--tab-height) + 15px);
   }
   .tab-content-container {
     margin-top: 110px;

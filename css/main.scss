@@ -1291,7 +1291,7 @@ button .icon {
   }
 
   .tabs-container {
-    top: calc(var(--tab-height) - 10px);
+    top: calc(var(--tab-height) + 15px);
   }
 
   .tab-content-container {
