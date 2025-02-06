@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap");
 /* 
   Definimos las variables CSS para el tema claro por defecto.
   Estas variables se pueden utilizar en cualquier parte del código mediante la función var().
@@ -180,14 +179,27 @@ main {
   z-index: 1000;
 }
 
-.logo img {
-  height: 50px;
-  width: auto;
-  flex: 1;
+.logo-title {
   display: flex;
-  justify-content: center;
   align-items: center;
+  gap: 10px;
   padding-left: 19px;
+  text-decoration: none;
+}
+
+.logo-title img {
+  height: 30px;
+  width: auto;
+}
+
+.top-bar__title {
+  margin: 0;
+  font-family: "Yeseva One", sans-serif;
+  font-size: 32px;
+  font-weight: 200;
+  font-style: normal;
+  letter-spacing: 0px;
+  color: #004aad;
 }
 
 .button-group {
