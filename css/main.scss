@@ -23,7 +23,7 @@
   /*TAB*/
 
   --bg-tab-active: #fefeff; /* Fons de pestanya activa */
-  --bg-tab: #ececec; /*pestanyes no actives*/
+  --bg-tab: #f3f3f3; /*pestanyes no actives*/
   --txtcolor-tab: #4a4a4a; //TextColor pestanyes descativada
   --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
   --line-tab: #165b98; /*Línia sota pestanya activa */
@@ -34,10 +34,10 @@
   --textfield-error-bg: #e0c7c7; // Fons camp error
   --input-border: #ced4da; // Color de borde camps
   --border-textfield-focus: rgb(80, 80, 80); // Borde camps focus, Personal
-  font-weight: 300;
+
   /* SIGNATURE*/
-  --btt-signature: rgba(173, 173, 173, 0.15); // Signature btt
-  --bg-signature-hover: #acacac; // Signature bg hover
+  --btt-signature: #f3f3f3; // Signature btt
+  --bg-signature-hover: #2c2727; // Signature bg hover
 
   /* FOOTER*/
   --border-top-footer: #f1f1f1; //  Borde top Footer
