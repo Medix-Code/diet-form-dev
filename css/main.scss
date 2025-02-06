@@ -235,7 +235,7 @@ main {
   font-style: normal;
   padding-left: 19px;
   letter-spacing: 0px;
-  color: #165b98;
+  color: #f3f3f3;
   /* Opcional: si vols que el text es mantingui centrat dins del seu contenidor */
   text-align: center;
 }
@@ -257,7 +257,6 @@ main {
   border: none; // Treu la borda
   outline: none; // Treu l'outline en focus
   border-radius: 8px;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -265,6 +264,7 @@ main {
   //box-shadow: 0 2px 5px var(--bg-transp-ajustes); // Opcional: treu l'ombra si no la vols
 
   .icon {
+    fill: currentColor;
     width: 36px;
     height: 36px;
     transition: transform 0.3s ease;
