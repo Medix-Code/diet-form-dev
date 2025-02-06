@@ -214,13 +214,10 @@ main {
   z-index: 1000;
 }
 
-.title {
-  line-height: 1.4;
-  text-align: left;
+.logo {
   margin: 20px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-color);
+  height: 50px; /* Ajusta la mida segons necessitis */
+  width: auto; /* Manté la proporció */
 }
 
 // ===========================================================================
@@ -1159,8 +1156,8 @@ button .icon {
     padding: 0px 0px;
   }
 
-  .title {
-    font-size: 1.5rem;
+  .logo {
+    height: 40px; /* Una mica més petita en mòbils */
   }
 
   .ajustes-btn {
@@ -1235,8 +1232,8 @@ button .icon {
     padding: 0px 0px;
   }
 
-  .title {
-    font-size: 1.14rem;
+  .logo {
+    height: 40px; /* Una mica més petita en mòbils */
   }
 
   .button-group {
