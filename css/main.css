@@ -5,14 +5,14 @@
 */
 :root {
   /* Colores principales */
-  --primary-color: #a6c8f0;
+  --primary-color: #fefeff;
   --secondary-color: #004aad;
   --secondary-color-hover: #0056b3;
   --text-color: #333333;
   --subtext-color: #444444;
   /* TopBar */
   --border-bottom-topbar: #f1f1f1;
-  --title-color: #303030;
+  --title-color: #000000;
   /*TAB*/
   --bg-tab-active: #fefeff; /* Fons de pestanya activa */
   --bg-tab: #f3f3f3; /*pestanyes no actives*/
