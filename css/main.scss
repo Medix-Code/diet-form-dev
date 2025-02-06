@@ -1240,7 +1240,7 @@ button .icon {
    ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
-    height: calc(var(--top-bar-height) - 10px);
+    height: calc(var(--top-bar-height) + 15px);
     padding: 0px 0px;
   }
 
