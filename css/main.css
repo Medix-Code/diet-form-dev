@@ -6,7 +6,7 @@
 */
 :root {
   /* Colores principales */
-  --primary-color: #f8faf8;
+  --primary-color: #fefeff;
   --secondary-color: #165b98;
   --secondary-color-hover: #0056b3;
   --text-color: #333333;
@@ -1071,7 +1071,7 @@ button .icon {
    ======================================================= */
 @media (max-width: 768px) {
   .top-bar {
-    height: calc(var(--top-bar-height) + 15px);
+    height: calc(var(--top-bar-height) + 12px);
     padding: 0px 0px;
   }
   .logo img {
@@ -1105,16 +1105,16 @@ button .icon {
     font-size: 14px;
     gap: 20px;
   }
-  .tab {
+  º .tab {
     min-height: 8px;
     padding: 14px 16px;
     font-size: 0.95rem;
   }
-  .tab.active {
+  º .tab.active {
     font-size: 1.1rem;
   }
   .tabs-container {
-    top: calc(var(--tab-height) + 15px);
+    top: calc(var(--tab-height) + 12px);
   }
   .tab-content-container {
     margin-top: 110px;
