@@ -14,7 +14,7 @@
   /* TopBar */
   --border-bottom-topbar: #f1f1f1;
   /*TAB*/
-  --bg-tab-active: #f8faf8;
+  --bg-tab-active: #fefeff; /* Fons de pestanya activa */
   --bg-tab: #e9ecef;
   --txtcolor-tab: #919191;
   --bg-tab-hover: #dee2e6;
@@ -34,13 +34,14 @@
   --text-color-footer: #ffffff;
   --bg-footer: #165b98;
   /* GENERAL*/
-  --bg-color: #f8faf8;
+  --bg-color: #fefeff;
   --grey-border: #ddddddea;
   /* Btn Ajustes*/
   --bgcolor-hover: #e0e0e0;
   --bgcolor-active: #d5d5d5;
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --border-btn-ajustes: rgba(204, 204, 204, 0.3);
+  --bg-btn-ajustes: #fefeff;
   /* Modal MisDietas*/
   --border-btt: #c9c9c9;
   /* Modal. General / Btn confirmació*/
@@ -251,7 +252,7 @@ main {
   display: flex;
   align-items: center;
   gap: 15px;
-  background-color: var(--light-grey);
+  background-color: var(--bg-btn-ajustes);
   border: 1px solid var(--border-btn-ajustes);
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
@@ -1033,7 +1034,7 @@ button .icon {
     padding-top: 110px;
   }
   .form-group {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
   input[type=text],
   input[type=date],
@@ -1117,7 +1118,7 @@ button .icon {
     top: calc(var(--tab-height) + 12px);
   }
   .tab-content-container {
-    margin-top: 110px;
+    margin-top: 130px;
   }
   input[type=text],
   input[type=date],
@@ -1137,7 +1138,7 @@ button .icon {
     margin-bottom: 8px;
   }
   .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
   .toast {
     width: 80vw;

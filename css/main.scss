@@ -21,7 +21,8 @@
   --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
 
   /*TAB*/
-  --bg-tab-active: #f8faf8; //Textcolor pestanyes
+
+  --bg-tab-active: #fefeff; /* Fons de pestanya activa */
   --bg-tab: #e9ecef; //Backgrond pestanyes no actives
   --txtcolor-tab: #919191; //TextColor pestanyes
   --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
@@ -44,7 +45,7 @@
   --bg-footer: #165b98; // Fondo footer
 
   /* GENERAL*/
-  --bg-color: #f8faf8; //  Fons
+  --bg-color: #fefeff; //  Fons
   --grey-border: #ddddddea; // Gris para bordes y sombras ligeras
 
   /* Btn Ajustes*/
@@ -52,6 +53,7 @@
   --bgcolor-active: #d5d5d5; // Btn ajustes active, click
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
   --border-btn-ajustes: rgba(204, 204, 204, 0.3); // Borde Btn ajustes
+  --bg-btn-ajustes: #fefeff; // Fons boto ajustes
 
   /* Modal MisDietas*/
   --border-btt: #c9c9c9; // Icon Papelera Border
@@ -296,7 +298,7 @@ main {
     display: flex;
     align-items: center;
     gap: 15px;
-    background-color: var(--light-grey);
+    background-color: var(--bg-btn-ajustes);
     border: 1px solid var(--border-btn-ajustes);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -1195,7 +1197,7 @@ button .icon {
   }
 
   .form-group {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
 
   input[type="text"],
@@ -1294,7 +1296,7 @@ button .icon {
   }
 
   .tab-content-container {
-    margin-top: 110px;
+    margin-top: 130px;
   }
 
   input[type="text"],
@@ -1318,7 +1320,7 @@ button .icon {
   }
 
   .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
 
   .toast {
