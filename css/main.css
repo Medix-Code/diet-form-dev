@@ -179,22 +179,15 @@ main {
   align-items: center;
   z-index: 1000;
 }
-.top-bar__left {
-  display: flex;
-  align-items: center;
-}
-.top-bar__left .logo {
-  display: flex;
-  align-items: center;
-  padding-left: 20px;
-  text-decoration: none;
-}
-.top-bar__left .logo .logo-dibuix {
-  margin-right: 0px;
-}
-.top-bar__left .logo img {
+
+.logo img {
   height: 50px;
   width: auto;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 19px;
 }
 
 .button-group {
@@ -1082,7 +1075,7 @@ button .icon {
     padding: 0px 0px;
   }
   .logo img {
-    height: 40px;
+    height: 50px;
   }
   .button-group {
     flex-direction: row;

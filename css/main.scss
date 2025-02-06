@@ -214,28 +214,16 @@ main {
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
+}
 
-  &__left {
-    display: flex;
-    align-items: center;
-
-    .logo {
-      display: flex;
-      align-items: center;
-      padding-left: 20px;
-      text-decoration: none; // Elimina el subratllat del link, si escau
-
-      // Per posar un espai entre els dos logos, afegim marge dret al primer
-      .logo-dibuix {
-        margin-right: 0px;
-      }
-
-      img {
-        height: 50px;
-        width: auto;
-      }
-    }
-  }
+.logo img {
+  height: 50px;
+  width: auto;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 19px;
 }
 
 // ===========================================================================
@@ -1259,7 +1247,7 @@ button .icon {
   }
 
   .logo img {
-    height: 40px;
+    height: 50px;
   }
 
   .button-group {
