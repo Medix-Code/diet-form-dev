@@ -16,7 +16,7 @@
   --subtext-color: #444444; // Text subtext
 
   /* TopBar */
-  --border-bottom-topbar: #; //  Borde sota TopBar
+  --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
 
   /*TAB*/
 
@@ -24,7 +24,7 @@
   --bg-tab: #f3f3f3; /*pestanyes no actives*/
   --txtcolor-tab: #4a4a4a; //TextColor pestanyes descativada
   --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
-  --line-tab: #2ead9e; /*Línia sota pestanya activa */
+  --line-tab: #004aad; /*Línia sota pestanya activa */
 
   /* TEXTFIELD*/
   --textfield: #fefeff; // TextField Fons
@@ -237,7 +237,7 @@ main {
   font-style: normal;
   padding-left: 19px;
   letter-spacing: 0px;
-  color: #0a0a0a;
+  color: #434343;
   /* Opcional: si vols que el text es mantingui centrat dins del seu contenidor */
   text-align: center;
 }
