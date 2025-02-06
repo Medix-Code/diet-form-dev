@@ -316,8 +316,8 @@ button .fa {
   background: var(--bg-tab);
   border: none;
   display: flex;
-  font-size: 1rem;
-  font-weight: 400;
+  font-size: 1.01rem;
+  font-weight: 0;
   color: var(--txtcolor-tab);
   transition: all var(--transition-speed) ease;
 }
@@ -1020,7 +1020,10 @@ button .icon {
   }
   .tab {
     padding: 14px 12px;
-    font-size: 1.125rem; /* Equival a 18px */
+    font-size: 0.9rem;
+  }
+  .tab.active {
+    font-size: 1.125rem;
   }
   main {
     padding-top: 110px;
@@ -1101,6 +1104,9 @@ button .icon {
   .tab {
     min-height: 8px;
     padding: 14px 16px;
+    font-size: 0.85rem;
+  }
+  .tab.active {
     font-size: 1rem;
   }
   .tabs-container {
