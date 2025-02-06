@@ -1149,7 +1149,7 @@ button .icon {
     top: calc(var(--tab-height) + 10px);
   }
   .tab-content-container {
-    margin-top: 125px;
+    margin-top: 130px;
   }
   input[type=text],
   input[type=date],
