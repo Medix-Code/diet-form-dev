@@ -1323,12 +1323,11 @@ button .icon {
   }
 
   .ajustes-panel .big-btn {
-    border-top: 1px solid rgba(0, 0, 0, 0.02); /* Línia superior suau */
     border-bottom: 1px solid rgba(0, 0, 0, 0.02); /* Línia inferior suau */
   }
 
   .ajustes-panel .big-btn:first-child {
-    border-bottom: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.02); /* Línia inferior suau */
   }
 
   .ajustes-panel .big-btn:last-child {
