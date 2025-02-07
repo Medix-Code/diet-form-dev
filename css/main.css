@@ -94,12 +94,12 @@
   --border-bottom-topbar: #343a40;
   --title-color: #ffffff;
   /*TAB*/
-  --bg-tab-active: #a8a8a8; /* Fons de pestanya activa */
+  --bg-tab-active: #343a40; /* Fons de pestanya activa */
   --bg-tab-noactive: #c2c2c2; /*Fons pestanya no activa*/
-  --txtcolor-tab-active: #000000;
+  --txtcolor-tab-active: #ffffff;
   --txtcolor-tab-noactive: #000000;
   --bg-tab-hover: #dee2e6d2;
-  --line-tab: #343a40; /*Línia sota pestanya activa */
+  --line-tab: #ffffff; /*Línia sota pestanya activa */
   /* TEXTFIELD*/
   --textfield: #f0f0f0;
   --textfield-error: #ec1710;
