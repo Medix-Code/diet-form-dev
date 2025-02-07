@@ -397,9 +397,6 @@ main {
     }
   }
 }
-.ajustes-panel .big-btn:first-child {
-  padding-top: 30px;
-}
 
 // ===========================================================================
 // PESTAÑAS (TABS)
@@ -1239,13 +1236,13 @@ button .icon {
 
   .ajustes-panel {
     // Pots ajustar el top si cal
-    top: calc(var(--top-bar-height) + 10px);
-    padding: 4px 0;
+    top: calc(var(--top-bar-height) - 4px);
+    padding: 20px 0 0 0;
 
     .big-btn {
-      padding: 12px 16px;
-      font-size: 14px;
-      gap: 20px;
+      padding: 18px 20px; // Redueix el padding
+      font-size: 15px; // Font més petita
+      gap: 25px; // Redueix l'espai entre elements
 
       i {
         font-size: 18px;
@@ -1356,7 +1353,6 @@ select {
 
   .button-group {
     flex-direction: row;
-    gap: 15px;
     margin-left: auto;
     padding-right: 10px;
   }
@@ -1375,7 +1371,7 @@ select {
 
   .ajustes-panel {
     // Pots ajustar el top si cal
-    top: calc(var(--top-bar-height) + 0px);
+    top: calc(var(--top-bar-height));
 
     padding: 20px 0 0 0;
 
