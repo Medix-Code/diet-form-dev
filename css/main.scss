@@ -1335,7 +1335,7 @@ button .icon {
       left: 0;
       width: 100%;
       height: 1px; /* Línia subtil de 1px d'alçada */
-      background-color: var(--secondary-color); /* Color subtil */
+      background-color: rgba(0, 0, 0, 0.1); /* Color subtil */
     }
 
     &:not(.hidden) {
