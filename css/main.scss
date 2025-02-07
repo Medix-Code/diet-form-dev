@@ -343,21 +343,17 @@ main {
   top: calc(var(--top-bar-height)); // Just a sota de la top-bar
   left: 0;
   right: 0;
-  padding: 6px 0; // Ajusta segons el teu disseny
-  background-color: #f9f9f9; // Blanc trencat (o el color que prefereixis)
+  background-color: var(--primary-color);
   z-index: 1000;
+  overflow: hidden;
+  box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.2);
+  max-height: 0; // Amagat quan està tancat
+  opacity: 0; // També el pot fer més suau amb opacitat
+  transition: max-height 0.2s ease, opacity 0.2s ease;
 
-  // Inicialment ocult
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(100%);
-  transition: transform 0.2s ease, opacity 0.2s ease;
-
-  // Quan s'afegeix la classe "visible", el panell apareix
   &.visible {
+    max-height: 300px; // Valor suficient per mostrar tot el contingut
     opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
   }
 
   .big-btn {
@@ -373,6 +369,7 @@ main {
     background-color: var(--bg-btn-ajustes);
     border: none;
     cursor: pointer;
+
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     color: var(--text-color-btn-ajustes);
     box-sizing: border-box;
@@ -790,6 +787,85 @@ button .fa {
   &:hover {
     background-color: var(--secondary-color-hover);
   }
+}
+
+// ===========================================================================
+// MODAL DE GESTIÓN DE DIETAS NOU!
+// ===========================================================================
+.diet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.diet-item {
+  border: 1px solid var(--grey-border);
+  border-radius: 8px;
+  padding: 10px 15px;
+  background-color: var(--light-grey);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  // El resum es mostra sempre i serà clicable perquè tot el .diet-item ho sigui
+  .diet-summary {
+    display: flex;
+    align-items: center; // Centrat verticalment
+    justify-content: flex-start; // Alineat a l'esquerra
+    font-size: 15px;
+    color: var(--text-color);
+    text-align: left; // Assegura't que el text estigui alineat a l'esquerra
+  }
+
+  // Contenidor d'accions (desplegable)
+  .diet-actions {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.2s ease, opacity 0.2s ease;
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+  }
+
+  // Quan l'element està expandit, es mostren les accions
+  &.expanded {
+    .diet-actions {
+      max-height: 50px; // Ajusta aquest valor segons el contingut
+      opacity: 1;
+    }
+  }
+
+  &:hover {
+    background-color: var(--bgcolor-hover);
+  }
+}
+
+/* Estils per als botons dins del contenidor d'accions */
+.diet-actions button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.diet-load {
+  background-color: var(--bg-btn-ajustes);
+  color: var(--text-color);
+}
+
+.diet-delete {
+  background-color: var(--bg-confirm-no);
+  color: var(--txt-btn-confirm);
+}
+
+.diet-actions button:hover {
+  transform: scale(1.02);
 }
 
 // ===========================================================================

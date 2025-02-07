@@ -521,6 +521,7 @@
       <!-- FI PESTANYA SERVEIS -->
 
       <!-- MODAL PER GESTIONAR DIETES -->
+      <!-- MODAL PER GESTIONAR DIETAS -->
       <div
         id="diet-modal"
         class="modal"
@@ -529,11 +530,33 @@
         aria-labelledby="diet-modal-title"
       >
         <div class="modal-content diet-modal-content">
-          <h3 id="diet-modal-title">Gestor de dietas</h3>
+          <h3 id="diet-modal-title">Gestor de dietes</h3>
           <p id="no-diets-text" class="no-diets-text hidden">
-            Aún no tienes ninguna dieta guardada.
+            Aún tienes ninguna dieta guardada.
           </p>
-          <ul id="diet-options" aria-label="Opcions de dietes"></ul>
+          <!-- Aquí es crearà dinàmicament la llista de dietes amb la nova estructura -->
+          <div
+            id="diet-options"
+            class="diet-list"
+            aria-label="Opcions de dietes"
+          ></div>
+        </div>
+      </div>
+
+      <div class="diet-item">
+        <!-- Resum de la dieta: data i franja horària -->
+        <div class="diet-summary">
+          <span class="diet-date">12/03/25</span>
+          <span class="diet-slot">Comida</span>
+        </div>
+        <!-- Contenidor ocult que es mostrarà en clicar, amb les accions -->
+        <div class="diet-actions">
+          <button type="button" class="diet-load">
+            <i class="icon-load"></i> Carregar
+          </button>
+          <button type="button" class="diet-delete">
+            <i class="icon-delete"></i> Eliminar
+          </button>
         </div>
       </div>
 
