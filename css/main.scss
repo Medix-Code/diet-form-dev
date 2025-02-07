@@ -53,7 +53,7 @@
   --bgcolor-active: #d5d5d5; // Btn ajustes active, click
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
   --border-btn-ajustes: rgba(204, 204, 204, 0.3); // Borde Btn ajustes
-  --bg-btn-ajustes: #fefeff; // Fons boto ajustes
+  --bg-btn-ajustes: #fefefe; // Fons boto ajustes
 
   /* Modal MisDietas*/
   --border-btt: #c9c9c9; // Icon Papelera Border
@@ -340,7 +340,7 @@ main {
 
 .ajustes-panel {
   position: fixed;
-  top: calc(var(--top-bar-height)); // Just a sota de la top-bar
+  top: calc(var(--top-bar-height));
   left: 0;
   right: 0;
   background-color: var(--primary-color);
@@ -355,12 +355,13 @@ main {
   &.visible {
     max-height: 300px;
     opacity: 1;
+    pointer-events: auto;
   }
 
   .big-btn {
     width: 100%;
     justify-content: flex-start;
-    padding: 26px 20px;
+    padding: 20px 20px;
     font-size: 16px;
     font-weight: 300;
     font-family: inherit;
@@ -392,6 +393,9 @@ main {
       transition: color 0.3s ease;
     }
   }
+}
+.ajustes-panel .big-btn:first-child {
+  padding-top: 30px; /* Ajusta aquest valor segons el que necessitis */
 }
 
 // ===========================================================================
@@ -1246,6 +1250,10 @@ button .icon {
     }
   }
 
+  .ajustes-panel .big-btn:first-child {
+    padding-top: 20px;
+  }
+
   .tabs-container {
     top: calc(var(--tab-height) - 4px);
   }
@@ -1364,7 +1372,7 @@ select {
 
   .ajustes-panel {
     // Pots ajustar el top si cal
-    top: calc(var(--top-bar-height) + 10px);
+    top: calc(var(--top-bar-height) + 0px);
     padding-top: 20px;
     padding: 10px 0 4px 0;
 

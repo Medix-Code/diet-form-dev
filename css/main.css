@@ -41,7 +41,7 @@
   --bgcolor-active: #d5d5d5;
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --border-btn-ajustes: rgba(204, 204, 204, 0.3);
-  --bg-btn-ajustes: #fefeff;
+  --bg-btn-ajustes: #fefefe;
   /* Modal MisDietas*/
   --border-btt: #c9c9c9;
   /* Modal. General / Btn confirmació*/
@@ -300,11 +300,12 @@ main {
 .ajustes-panel.visible {
   max-height: 300px;
   opacity: 1;
+  pointer-events: auto;
 }
 .ajustes-panel .big-btn {
   width: 100%;
   justify-content: flex-start;
-  padding: 26px 20px;
+  padding: 20px 20px;
   font-size: 16px;
   font-weight: 300;
   font-family: inherit;
@@ -333,6 +334,10 @@ main {
   color: var(--primary-color);
   pointer-events: none;
   transition: color 0.3s ease;
+}
+
+.ajustes-panel .big-btn:first-child {
+  padding-top: 30px; /* Ajusta aquest valor segons el que necessitis */
 }
 
 .tabs-container {
@@ -1084,6 +1089,9 @@ button .icon {
   .ajustes-panel .big-btn i {
     font-size: 18px;
   }
+  .ajustes-panel .big-btn:first-child {
+    padding-top: 20px;
+  }
   .tabs-container {
     top: calc(var(--tab-height) - 4px);
   }
@@ -1188,7 +1196,7 @@ select {
     height: 2px;
   }
   .ajustes-panel {
-    top: calc(var(--top-bar-height) + 10px);
+    top: calc(var(--top-bar-height) + 0px);
     padding-top: 20px;
     padding: 10px 0 4px 0;
   }
