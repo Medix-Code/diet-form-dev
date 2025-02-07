@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 
   // Colors per als dos modes
-  const lightThemeColor = "#004aad"; // Color de fons del tema clar
-  const darkThemeColor = "#343a40"; // Color de fons del tema fosc
+  const lightThemeColor = "#004aad"; // Fons per al tema clar
+  const darkThemeColor = "#343a40"; // Fons per al tema fosc
 
   // Funció per establir el tema i actualitzar la imatge de l'icona
   function setTheme(theme) {
@@ -31,6 +31,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme) {
     setTheme(savedTheme);
+  } else {
+    // Si no hi ha tema guardat, detectem la preferència del sistema
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(prefersDark ? "dark" : "light");
   }
 
   // Afegir event listener per canviar el tema quan es clica el botó

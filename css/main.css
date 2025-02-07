@@ -290,7 +290,7 @@ main {
   right: 0;
   padding: 0;
   background-color: var(--primary-color);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
@@ -1044,6 +1044,18 @@ button .icon {
   .hamburger span {
     height: 2.5px;
   }
+  .ajustes-panel {
+    top: calc(var(--top-bar-height) + 10px);
+    padding: 4px 0;
+  }
+  .ajustes-panel .big-btn {
+    padding: 12px 16px;
+    font-size: 14px;
+    gap: 20px;
+  }
+  .ajustes-panel .big-btn i {
+    font-size: 18px;
+  }
   .tabs-container {
     top: calc(var(--tab-height) - 4px);
   }
@@ -1131,19 +1143,6 @@ button .icon {
   }
   .ajustes-panel .big-btn i {
     font-size: 18px;
-  }
-  .ajustes-panel .big-btn {
-    border-bottom: none;
-  }
-  .ajustes-panel .big-btn:first-child {
-    border-bottom: none;
-  }
-  .ajustes-panel .big-btn:last-child {
-    border-bottom: none;
-  }
-  /* Quan passi el cursor per sobre (hover), també mantenim les cantonades rectes */
-  .ajustes-panel .big-btn:hover {
-    border-radius: 0 !important; /* Evita que es vegin les cantonades arrodonides en hover */
   }
   .tab {
     min-height: 8px;
