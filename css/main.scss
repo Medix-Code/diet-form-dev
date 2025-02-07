@@ -789,9 +789,29 @@ button .fa {
   }
 }
 
-// ===========================================================================
-// MODAL DE GESTIÓN DE DIETAS NOU!
-// ===========================================================================
+.btn-modal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  gap: 20px;
+  border: none;
+  border-radius: 5px;
+  padding: 20px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+  text-decoration: none;
+
+  &:hover {
+    background-color: var(--secondary-color-hover);
+  }
+}
+
+/* =========================================================================== */
+/* MODAL DE GESTIÓN DE DIETAS (Nova interfície)                                */
+/* =========================================================================== */
+
 .diet-list {
   display: flex;
   flex-direction: column;
@@ -799,6 +819,10 @@ button .fa {
 }
 
 .diet-item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; // fa que els elements ocupin tota l'amplada
+  justify-content: flex-start; // el resum es manté a la part superior
   border: 1px solid var(--grey-border);
   border-radius: 8px;
   padding: 10px 15px;
@@ -806,31 +830,36 @@ button .fa {
   cursor: pointer;
   transition: background-color 0.3s ease;
 
-  // El resum es mostra sempre i serà clicable perquè tot el .diet-item ho sigui
+  /* El resum de la dieta: data i franja horària */
   .diet-summary {
-    display: flex;
-    align-items: center; // Centrat verticalment
-    justify-content: flex-start; // Alineat a l'esquerra
+    width: 100%;
+    text-align: left; // text a l'esquerra
     font-size: 15px;
     color: var(--text-color);
-    text-align: left; // Assegura't que el text estigui alineat a l'esquerra
+    min-height: 40px; // alçada mínima per al resum
+    display: flex;
+    align-items: center; // centra verticalment el text dins del resum
+    /* Si vols afegir un marge a l'esquerra, pots fer-ho:
+       padding-left: 10px; */
   }
 
-  // Contenidor d'accions (desplegable)
+  /* Contenidor d'accions (botons) que apareixerà sota el resum */
   .diet-actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px; // espai reduït entre botons
+    margin-top: 8px;
     overflow: hidden;
-    max-height: 0;
+    max-height: 0; // inicialment amagat
     opacity: 0;
     transition: max-height 0.2s ease, opacity 0.2s ease;
-    display: flex;
-    gap: 20px;
-    margin-top: 10px;
   }
 
-  // Quan l'element està expandit, es mostren les accions
+  /* Quan s'expandeix, només es mostra la secció d'accions sense moure el resum */
   &.expanded {
     .diet-actions {
-      max-height: 50px; // Ajusta aquest valor segons el contingut
+      max-height: 40px; // ajusta aquest valor segons la mida dels botons
       opacity: 1;
     }
   }
@@ -840,14 +869,11 @@ button .fa {
   }
 }
 
-/* Estils per als botons dins del contenidor d'accions */
+/* Estils per als botons dins de .diet-actions */
 .diet-actions button {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  font-size: 14px;
+  padding: 8px; // padding reduït per no fer-los tan grans
+  font-size: 13px; // font més petita
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -866,91 +892,6 @@ button .fa {
 
 .diet-actions button:hover {
   transform: scale(1.02);
-}
-
-// ===========================================================================
-// MODAL DE GESTIÓN DE DIETAS
-// ===========================================================================
-.diet-modal-content {
-  background-color: var(--bg-color);
-  border: 0px solid var(--input-border);
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-#diet-modal-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 20px;
-  text-align: center;
-}
-.no-diets-text {
-  font-style: italic;
-  text-align: center;
-}
-
-#diet-options {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 20px 0;
-  text-align: left;
-}
-
-#diet-options li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: var(--light-grey);
-  border: 1px solid var(--grey-border);
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-bottom: 15px;
-  cursor: pointer;
-
-  span {
-    font-size: 15px;
-    color: var(--text-color);
-  }
-
-  button.delete-diet {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--border-btt);
-    border-radius: 8px;
-    background-color: var(--bg-color);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-left: 15px;
-  }
-
-  button.delete-diet:hover {
-    background-color: var(--grey-border);
-  }
-
-  button.delete-diet i {
-    color: var(--black);
-    pointer-events: none;
-  }
-}
-
-.btn-modal {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  gap: 20px;
-  border: none;
-  border-radius: 5px;
-  padding: 20px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 10px;
-  text-decoration: none;
-
-  &:hover {
-    background-color: var(--secondary-color-hover);
-  }
 }
 
 // ===========================================================================
@@ -1242,10 +1183,6 @@ button .icon {
   pointer-events: none;
   width: 1.3em;
   height: 1.3em;
-}
-
-#diet-options li:active {
-  background-color: var(--border-btt);
 }
 
 // ===========================================================================

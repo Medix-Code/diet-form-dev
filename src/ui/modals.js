@@ -78,11 +78,11 @@ export async function displayDietOptions() {
   savedDiets.forEach((diet) => {
     const { ddmmaa, franjaText } = getDietDisplayInfo(diet.date, diet.dietType);
 
-    // Creem l'element contenedor per la dieta
+    // Creem l'element contenedor per la dieta amb la nova estructura
     const dietItem = document.createElement("div");
     dietItem.classList.add("diet-item");
 
-    // Creem la part del resum (visible sempre)
+    // Creem la part del resum, que mostrarà la data i la franja horària
     const summary = document.createElement("div");
     summary.classList.add("diet-summary");
     summary.innerHTML = `
@@ -104,19 +104,19 @@ export async function displayDietOptions() {
       </button>
     `;
 
-    // Insertem el resum i les accions dins l'element de dieta
+    // Insertem el resum i el contenidor d'accions dins de dietItem
     dietItem.appendChild(summary);
     dietItem.appendChild(actions);
 
-    // Al clicar el resum, alternem la classe "expanded" per mostrar/ocultar les accions
+    // Fes que tot l'element diet-item sigui clicable per desplegar/contraure el menú
     summary.addEventListener("click", () => {
       dietItem.classList.toggle("expanded");
     });
 
-    // Botó "Carregar": demana confirmació i carrega la dieta
+    // Botó "Carregar": sol·licita confirmació i carrega la dieta
     const loadButton = actions.querySelector(".diet-load");
     loadButton.addEventListener("click", (evt) => {
-      evt.stopPropagation(); // evitar que es desplegui o tanca l'element
+      evt.stopPropagation();
       const confirmTitle = "Cargar dieta";
       const confirmMessage = `¿Quieres cargar la dieta de la ${franjaText} del ${ddmmaa}?`;
       showConfirmModal(confirmMessage, confirmTitle).then((yes) => {
@@ -124,14 +124,13 @@ export async function displayDietOptions() {
       });
     });
 
-    // Botó "Eliminar": crida la funció corresponent
+    // Botó "Eliminar": crida la funció per eliminar la dieta
     const deleteButton = actions.querySelector(".diet-delete");
     deleteButton.addEventListener("click", (evt) => {
       evt.stopPropagation();
       deleteDietHandler(diet.id, diet.date, diet.dietType);
     });
 
-    // Afegim l'element de dieta a la llista
     dietOptionsList.appendChild(dietItem);
   });
 }
