@@ -295,29 +295,64 @@ main {
   padding-right: 20px;
 }
 
+// Estils per a PC (per defecte)
 .ajustes-btn {
-  position: relative;
-  background-color: transparent; // Fons transparent
-  color: var(--text-color);
-  border: none; // Treu la borda
-  outline: none; // Treu l'outline en focus
-  border-radius: 8px;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  //box-shadow: 0 2px 5px var(--bg-transp-ajustes); // Opcional: treu l'ombra si no la vols
+  transition: all 0.2s ease; // transició més ràpida
 
-  .icon {
-    fill: currentColor;
-    width: 36px;
-    height: 36px;
-    transition: transform 0.3s ease;
+  &.open {
+    .hamburger {
+      span {
+        &:nth-child(1) {
+          top: 50%;
+          transform: translateY(-50%) rotate(45deg);
+        }
+        &:nth-child(2) {
+          opacity: 0;
+        }
+        &:nth-child(3) {
+          bottom: 50%;
+          transform: translateY(50%) rotate(-45deg);
+        }
+      }
+    }
+  }
+}
+
+.hamburger {
+  width: 30px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  pointer-events: none; // assegura que no intercepta els clics
+
+  span {
+    background: var(--text-color); // o el color que prefereixis
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    left: 0;
+    transition: 0.2s ease; // transició més ràpida
+    pointer-events: none; // perquè el clic passi al botó pare
   }
 
-  // Rotació de la icona quan el botó està obert
-  &.open .icon {
-    transform: rotate(90deg);
+  // Posició inicial de les 3 barres
+  span:nth-child(1) {
+    top: 0;
+  }
+  span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  span:nth-child(3) {
+    bottom: 0;
   }
 }
 
@@ -1192,12 +1227,14 @@ button .icon {
   }
 
   .ajustes-btn {
-    width: 42px;
-    height: 42px;
-    .icon {
-      width: 32px;
-      height: 32px;
-      transition: transform 0.3s ease;
+    width: 40px;
+    height: 40px;
+  }
+  .hamburger {
+    width: 28px;
+    height: 18px;
+    span {
+      height: 2.5px;
     }
   }
 
@@ -1280,54 +1317,14 @@ button .icon {
   }
 
   .ajustes-btn {
-    width: 42px;
-    height: 42px;
-
-    // Quan el botó té la classe "open", s'apliquen les transformacions a la icona
-    &.open {
-      .hamburger {
-        span {
-          &:nth-child(1) {
-            top: 50%;
-            transform: translateY(-50%) rotate(45deg);
-          }
-          &:nth-child(2) {
-            opacity: 0;
-          }
-          &:nth-child(3) {
-            bottom: 50%;
-            transform: translateY(50%) rotate(-45deg);
-          }
-        }
-      }
-    }
+    width: 36px;
+    height: 36px;
   }
-
   .hamburger {
-    width: 30px;
-    height: 20px;
-    position: relative;
-    cursor: pointer;
-
+    width: 26px;
+    height: 16px;
     span {
-      background: var(--text-color); // o el color que vulguis
-      position: absolute;
-      height: 3px;
-      width: 100%;
-      left: 0;
-      transition: 0.3s ease;
-
-      // Posició de les 3 barres
-      &:nth-child(1) {
-        top: 0;
-      }
-      &:nth-child(2) {
-        top: 50%;
-        transform: translateY(-50%);
-      }
-      &:nth-child(3) {
-        bottom: 0;
-      }
+      height: 2px;
     }
   }
 

@@ -250,25 +250,53 @@ main {
 }
 
 .ajustes-btn {
-  position: relative;
-  background-color: transparent;
-  color: var(--text-color);
+  background: transparent;
   border: none;
   outline: none;
-  border-radius: 8px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
+}
+.ajustes-btn.open .hamburger span:nth-child(1) {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+.ajustes-btn.open .hamburger span:nth-child(2) {
+  opacity: 0;
+}
+.ajustes-btn.open .hamburger span:nth-child(3) {
+  bottom: 50%;
+  transform: translateY(50%) rotate(-45deg);
+}
+
+.hamburger {
+  width: 30px;
+  height: 20px;
+  position: relative;
   cursor: pointer;
+  pointer-events: none;
 }
-.ajustes-btn .icon {
-  fill: currentColor;
-  width: 36px;
-  height: 36px;
-  transition: transform 0.3s ease;
+.hamburger span {
+  background: var(--text-color);
+  position: absolute;
+  height: 3px;
+  width: 100%;
+  left: 0;
+  transition: 0.2s ease;
+  pointer-events: none;
 }
-.ajustes-btn.open .icon {
-  transform: rotate(90deg);
+.hamburger span:nth-child(1) {
+  top: 0;
+}
+.hamburger span:nth-child(2) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.hamburger span:nth-child(3) {
+  bottom: 0;
 }
 
 .ajustes-panel {
@@ -1038,13 +1066,15 @@ button .icon {
     font-size: 28px;
   }
   .ajustes-btn {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
   }
-  .ajustes-btn .icon {
-    width: 32px;
-    height: 32px;
-    transition: transform 0.3s ease;
+  .hamburger {
+    width: 28px;
+    height: 18px;
+  }
+  .hamburger span {
+    height: 2.5px;
   }
   .tabs-container {
     top: calc(var(--tab-height) - 4px);
@@ -1112,43 +1142,15 @@ button .icon {
     padding-right: 10px;
   }
   .ajustes-btn {
-    width: 42px;
-    height: 42px;
-  }
-  .ajustes-btn.open .hamburger span:nth-child(1) {
-    top: 50%;
-    transform: translateY(-50%) rotate(45deg);
-  }
-  .ajustes-btn.open .hamburger span:nth-child(2) {
-    opacity: 0;
-  }
-  .ajustes-btn.open .hamburger span:nth-child(3) {
-    bottom: 50%;
-    transform: translateY(50%) rotate(-45deg);
+    width: 36px;
+    height: 36px;
   }
   .hamburger {
-    width: 30px;
-    height: 20px;
-    position: relative;
-    cursor: pointer;
+    width: 26px;
+    height: 16px;
   }
   .hamburger span {
-    background: var(--text-color);
-    position: absolute;
-    height: 3px;
-    width: 100%;
-    left: 0;
-    transition: 0.3s ease;
-  }
-  .hamburger span:nth-child(1) {
-    top: 0;
-  }
-  .hamburger span:nth-child(2) {
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  .hamburger span:nth-child(3) {
-    bottom: 0;
+    height: 2px;
   }
   .ajustes-panel {
     position: fixed;
