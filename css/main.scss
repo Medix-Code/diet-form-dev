@@ -351,12 +351,13 @@ main {
 
   transform: translateY(-10%);
   opacity: 0;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  transition: transform 0.4s ease, opacity 0.2s ease;
 
   &.visible {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
+    max-height: 300px;
   }
 
   .big-btn {
