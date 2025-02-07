@@ -712,6 +712,8 @@ button .fa {
   animation: fadeIn var(--transition-speed) ease-in-out;
 
   .modal-title {
+    font-weight: 500;
+    font-size: 1.1rem;
     text-align: center;
     justify-content: center;
     align-items: center;
@@ -862,7 +864,7 @@ button .fa {
   color: var(--text-color);
   text-align: center;
   font-size: 1.1rem;
-  font-weight: 300;
+  font-weight: 500;
 }
 
 .signature-modal-content {
@@ -1418,13 +1420,13 @@ button .icon {
   #about-title {
     text-align: center;
     font-size: 1.1rem;
-    font-weight: 300;
+    font-weight: 500;
     margin: 0;
-    font-weight: bold;
   }
 
   h3#diet-modal-title {
-    font-size: 18px;
+    font-size: 1.1rem;
+    font-weight: 500;
     margin-bottom: 20px;
   }
 
@@ -1441,7 +1443,8 @@ button .icon {
     margin-bottom: 10px;
 
     span {
-      font-size: 15px;
+      font-size: 1rem;
+      font-weight: 200;
       margin-right: 5px;
     }
     button.delete-diet {
