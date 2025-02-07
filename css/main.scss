@@ -60,13 +60,13 @@
 
   /* Modal. General / Btn confirmació*/
   --bg-transp-modal: rgba(0, 0, 0, 0.6); // Transperencia modals
-  --btt-confirm: #28a745; // Confirmacio btt entre altres
-  --bg-confirm: #218838; // Bg confirmacio buttons entre altres
+  --btt-confirm: #004aad; // Confirmacio btt entre altres
+  --bg-confirm: #2d71bb; // Bg confirmacio buttons entre altres
   --bg-confirm-no: #dc3545; // Btt No
-  --bg-confirm-no-hover: #c82333; // Btt No hover
+  --bg-confirm-no-hover: #e24a5a; // Btt No hover
   --txt-btn-confirm: #ffffff; //
 
-  --bg-btn-confirm-about: #28a745; // Fondo btn Acceptar Mes info
+  --bg-btn-confirm-about: #004aad; // Fondo btn Acceptar Mes info
 
   --black: #000000; // Negro
   --light-grey: #f5f5f5; // Gris muy claro
@@ -781,9 +781,10 @@ button .fa {
   display: block;
   background-color: var(--bg-btn-confirm-about);
   color: var(--text-color-footer);
-  margin: 20px auto 0;
+
+  margin: 30px auto 0;
   font-size: 16px;
-  padding: 12px 40px;
+  padding: 12px 60px;
   width: auto;
   height: auto;
   border: none;
@@ -804,6 +805,7 @@ button .fa {
   font-size: 22px;
   gap: 20px;
   border: none;
+
   border-radius: 5px;
   padding: 20px 20px;
   cursor: pointer;
@@ -903,8 +905,8 @@ button .fa {
 }
 
 .diet-load {
-  background-color: var(--bg-btn-ajustes);
-  color: var(--text-color);
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 .diet-delete {
@@ -921,6 +923,7 @@ button .fa {
 // ===========================================================================
 #signature-modal {
   z-index: 9999;
+  display: none;
 }
 
 #signature-title {
