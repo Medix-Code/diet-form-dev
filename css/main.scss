@@ -56,7 +56,8 @@
   --bg-btn-ajustes: #fefeff; // Fons boto ajustes
 
   /* Modal MisDietas*/
-  --border-btt: #c9c9c9; // Icon Papelera Border
+  --border-btt: #f50f0f; // Icon Papelera Border esborar crec
+  --bg-dietas: #f7f7f7; // Envoltori dietes guardades
 
   /* Modal. General / Btn confirmació*/
   --bg-transp-modal: rgba(0, 0, 0, 0.6); // Transperencia modals
@@ -850,7 +851,7 @@ button .fa {
   border: 1px solid var(--grey-border);
   border-radius: 8px;
   padding: 10px 15px;
-  background-color: var(--light-grey);
+  background-color: var(--bg-dietas);
   cursor: pointer;
   transition: background-color 0.3s ease;
 

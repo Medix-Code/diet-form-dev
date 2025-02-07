@@ -43,7 +43,8 @@
   --border-btn-ajustes: rgba(204, 204, 204, 0.3);
   --bg-btn-ajustes: #fefeff;
   /* Modal MisDietas*/
-  --border-btt: #c9c9c9;
+  --border-btt: #f50f0f;
+  --bg-dietas: #f7f7f7;
   /* Modal. General / Btn confirmació*/
   --bg-transp-modal: rgba(0, 0, 0, 0.6);
   --btt-confirm: #004aad;
@@ -738,7 +739,7 @@ button .fa {
   border: 1px solid var(--grey-border);
   border-radius: 8px;
   padding: 10px 15px;
-  background-color: var(--light-grey);
+  background-color: var(--bg-dietas);
   cursor: pointer;
   transition: background-color 0.3s ease;
   /* El resum de la dieta: data i franja horària */
