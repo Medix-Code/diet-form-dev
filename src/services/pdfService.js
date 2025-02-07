@@ -134,7 +134,7 @@ export async function fillPdf(data, servicesData) {
  * Funció principal per generar i descarregar el PDF
  */
 export async function generateAndDownloadPdf() {
-  // Esborrem els errors previs
+  // Esborrem qualsevol classe d'error prèvia de les pestanyes
   document.getElementById("tab-dades").classList.remove("error-tab");
   document.getElementById("tab-serveis").classList.remove("error-tab");
 
@@ -142,37 +142,32 @@ export async function generateAndDownloadPdf() {
   const serveisOK = validateServeisTab();
   const currentTab = getCurrentTab();
 
+  // Si algun dels dos grups no és vàlid...
   if (!dadesOK || !serveisOK) {
+    // Si l'usuari està a la pestanya "Dades"
     if (currentTab === "dades") {
+      // Mostrem el toast només si "Dades" està completa però "Serveis" té errors
       if (dadesOK && !serveisOK) {
         document.getElementById("tab-serveis").classList.add("error-tab");
         showToast("Completa los campos en la pestaña Servicios.", "error");
       }
-    } else if (currentTab === "serveis") {
+    }
+    // Si l'usuari està a la pestanya "Serveis"
+    else if (currentTab === "serveis") {
+      // Mostrem el toast només si "Serveis" està completa però "Dades" té errors
       if (serveisOK && !dadesOK) {
         document.getElementById("tab-dades").classList.add("error-tab");
         showToast("Completa los campos en la pestaña Datos.", "error");
       }
     }
+
     return;
   }
 
-  // Validació addicional per al número de servei:
-  const service1NumberEl = document.getElementById("service-number-1");
-  const service1Value = service1NumberEl.value.trim();
-  if (!/^\d{9}$/.test(service1Value)) {
-    service1NumberEl.classList.add("input-error");
-    showToast(
-      "El número de servei és incorrecte. Ha de contenir 9 dígits.",
-      "error"
-    );
-    return;
-  }
-
-  // Si tot està correcte, procedeix a generar el PDF...
   try {
     const { generalData, servicesData } = gatherAllData();
     const pdfBytes = await fillPdf(generalData, servicesData);
+
     const fileName = buildPdfFileName(generalData.date, generalData.dietType);
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
@@ -180,10 +175,12 @@ export async function generateAndDownloadPdf() {
     a.href = url;
     a.download = fileName;
     a.click();
+
     setTimeout(() => URL.revokeObjectURL(url), 100);
 
-    // Guardem la dieta si cal
+    // Després de generar el PDF, guardem la dieta
     await handleSaveDietWithPossibleOverwrite();
+
     incrementPdfDownloadCountAndMaybeShowPrompt();
     console.log("Generando y descargando el PDF...");
   } catch (err) {
