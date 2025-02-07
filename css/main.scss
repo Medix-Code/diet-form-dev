@@ -863,7 +863,7 @@ button .fa {
     display: flex;
     justify-content: space-around;
     gap: 30px; // espai reduït entre botons
-    margin-top: 0px;
+    margin-top: 10px;
     overflow: hidden;
     max-height: 0; // inicialment amagat
     opacity: 0;
@@ -1409,12 +1409,13 @@ select {
   }
 
   .diet-item {
-    padding: 6px 10px;
+    padding: 10px 10px;
   }
 
   .diet-item .diet-summary {
-    font-size: 13px;
+    font-size: 14px;
     min-height: 30px;
+    padding: 0px;
   }
 
   .diet-actions {
@@ -1422,8 +1423,8 @@ select {
   }
 
   .diet-actions button {
-    padding: 7px;
-    font-size: 11px;
+    padding: 10px;
+    font-size: 12px;
   }
 
   input[type="text"],
