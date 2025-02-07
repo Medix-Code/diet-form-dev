@@ -5,7 +5,7 @@
 */
 :root {
   /* Colores principales */
-  --primary-color: #fefeff;
+  --primary-color: #f8f8f8;
   --secondary-color: #004aad;
   --secondary-color-hover: #0056b3;
   --text-color: #333333;
@@ -300,25 +300,19 @@ main {
 }
 
 .ajustes-panel {
-  position: absolute;
-  top: 90%;
-  right: 53%;
-  background-color: var(--bg-color);
-  border: 0px solid var(--input-border);
-  border-radius: 8px;
-  box-shadow: 0 8px 16px var(--bg-transp-ajustes);
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  z-index: 1100;
-  min-width: 200px;
+  position: fixed;
+  top: calc(var(--top-bar-height) + 10px);
+  left: 0;
+  right: 0;
+  padding: 6px 0;
+  background-color: #f9f9f9;
+  z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-10px);
-  transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease, visibility var(--transition-speed);
+  transform: translateY(-100%);
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
-.ajustes-panel:not(.hidden) {
+.ajustes-panel.visible {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -326,16 +320,17 @@ main {
 .ajustes-panel .big-btn {
   width: 100%;
   justify-content: flex-start;
-  padding: 12px 20px;
-  font-size: 15px;
-  font-weight: 200;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 300;
+  font-family: inherit;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
   background-color: var(--bg-btn-ajustes);
-  border: 1px solid var(--border-btn-ajustes);
+  border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
   color: var(--text-color-btn-ajustes);
   box-sizing: border-box;
   text-align: left;
@@ -343,27 +338,15 @@ main {
 }
 .ajustes-panel .big-btn:hover {
   background-color: var(--bgcolor-hover);
+  transform: scale(1.02);
 }
 .ajustes-panel .big-btn:active {
   background-color: var(--bgcolor-active);
+  transform: scale(0.98);
 }
 .ajustes-panel .big-btn i {
-  font-size: 18px;
+  font-size: 20px;
   color: var(--primary-color);
-  pointer-events: none;
-  transition: color 0.3s ease;
-}
-.ajustes-panel .big-btn:first-child {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-.ajustes-panel .big-btn:last-child {
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-.ajustes-panel i {
-  color: var(--secondary-color);
-  font-size: 18px;
   pointer-events: none;
   transition: color 0.3s ease;
 }
@@ -1153,72 +1136,16 @@ button .icon {
     height: 2px;
   }
   .ajustes-panel {
-    position: fixed;
     top: calc(var(--top-bar-height) + 10px);
-    left: 0;
-    right: 0;
-    width: 100vw;
-    background-color: var(--bg-color);
-    border: none;
-    border-radius: 0;
-    box-shadow: 0px 10px 10px -5px rgba(0, 0, 0, 0.2);
-    padding-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease, visibility var(--transition-speed);
-    /* Pseudo-element per la línia superior */
-  }
-  .ajustes-panel::before {
-    content: "";
-    position: absolute;
-    top: 0; /* Col·loca la línia a la vora superior, ignoran el padding */
-    left: 0;
-    width: 100%;
-    height: 1px; /* Línia subtil de 1px d'alçada */
-    background-color: rgba(0, 0, 0, 0.1); /* Color subtil */
-  }
-  .ajustes-panel:not(.hidden) {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    padding: 4px 0;
   }
   .ajustes-panel .big-btn {
-    width: 100%;
-    justify-content: flex-start;
-    padding: 16px 20px;
-    font-size: 16px;
-    font-weight: 300;
-    font-family: inherit;
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    background-color: var(--bg-btn-ajustes);
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-    color: var(--text-color-btn-ajustes);
-    box-sizing: border-box;
-    text-align: left;
-    border-radius: 0;
-  }
-  .ajustes-panel .big-btn:hover {
-    background-color: var(--bgcolor-hover);
-    transform: scale(1.02);
-  }
-  .ajustes-panel .big-btn:active {
-    background-color: var(--bgcolor-active);
-    transform: scale(0.98);
+    padding: 12px 16px;
+    font-size: 14px;
+    gap: 20px;
   }
   .ajustes-panel .big-btn i {
-    font-size: 20px;
-    color: var(--primary-color);
-    pointer-events: none;
-    transition: color 0.3s ease;
+    font-size: 18px;
   }
   .ajustes-panel .big-btn {
     border-bottom: none;
