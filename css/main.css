@@ -51,7 +51,7 @@
   --bg-confirm-no: #dc3545;
   --bg-confirm-no-hover: #c82333;
   --txt-btn-confirm: #ffffff;
-  --bg-btn-confirm-about: #004aad;
+  --bg-btn-confirm-about: #28a745;
   --black: #000000;
   --light-grey: #f5f5f5;
   /* PROMPT */
@@ -1222,28 +1222,24 @@ select {
     margin-top: 130px;
   }
   #diet-modal-title {
-    font-size: 1rem;
+    font-size: 1.05rem;
   }
   #no-diets-text {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
   .diet-list {
     padding: 5px 0;
   }
   .diet-item {
-    padding: 10px 10px;
+    padding: 8px 12px;
   }
   .diet-item .diet-summary {
     font-size: 14px;
-    min-height: 30px;
-  }
-  .diet-actions {
-    gap: 20px;
-    padding: 10px;
+    min-height: 35px;
   }
   .diet-actions button {
-    padding: 10px;
-    font-size: 12px;
+    padding: 8px;
+    font-size: 13px;
   }
   input[type=text],
   input[type=date],
@@ -1278,7 +1274,7 @@ select {
     max-height: 90vh;
     margin: 18% auto;
     overflow: auto;
-    padding: 15px 20px;
+    padding: 20px 30px 30px 30px;
   }
   .modal-content h2,
   .modal-content h3 {
