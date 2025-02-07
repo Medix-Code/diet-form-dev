@@ -28,7 +28,7 @@
   --border-textfield-focus: rgb(80, 80, 80);
   /* SIGNATURE*/
   --btt-signature: #f3f3f3;
-  --bg-signature-hover: #2c2727;
+  --bg-signature-hover: #c9c9c9;
   /* FOOTER*/
   --border-top-footer: #f1f1f1;
   --text-color-footer: #ffffff;
@@ -291,6 +291,7 @@ main {
   background-color: var(--primary-color);
   z-index: 1000;
   overflow: hidden;
+  pointer-events: none;
   box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.2);
   max-height: 0;
   opacity: 0;
@@ -595,8 +596,8 @@ button .fa {
   border: 0px solid var(--input-border);
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .signature-group .input-with-icon .signature-btn i {
   color: var(--btn-signature-i);
@@ -1228,10 +1229,10 @@ select {
   .diet-item .diet-summary {
     font-size: 14px;
     min-height: 30px;
-    padding: 0px;
   }
   .diet-actions {
     gap: 20px;
+    padding: 10px;
   }
   .diet-actions button {
     padding: 10px;
