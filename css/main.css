@@ -1192,10 +1192,10 @@ button .icon {
     transition: color 0.3s ease;
   }
   .ajustes-panel .big-btn {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.03); /* Línia inferior suau */
+    border-bottom: none;
   }
   .ajustes-panel .big-btn:first-child {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.03); /* Línia inferior suau */
+    border-bottom: none;
   }
   .ajustes-panel .big-btn:last-child {
     border-bottom: none;
