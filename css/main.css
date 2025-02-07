@@ -930,7 +930,7 @@ button .fa {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px;
+  gap: 50px;
   margin-bottom: 30px;
 }
 .footer .footer__text p {
@@ -1152,6 +1152,16 @@ button .icon {
     visibility: hidden;
     transform: translateY(-10px);
     transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease, visibility var(--transition-speed);
+    /* Pseudo-element per la línia superior */
+  }
+  .ajustes-panel::before {
+    content: "";
+    position: absolute;
+    top: 0; /* Col·loca la línia a la vora superior, ignoran el padding */
+    left: 0;
+    width: 100%;
+    height: 2px; /* Línia subtil de 1px d'alçada */
+    background-color: var(--secondary-color); /* Color subtil */
   }
   .ajustes-panel:not(.hidden) {
     opacity: 1;
