@@ -53,7 +53,7 @@
   --bgcolor-active: #d5d5d5; // Btn ajustes active, click
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
   --border-btn-ajustes: rgba(204, 204, 204, 0.3); // Borde Btn ajustes
-  --bg-btn-ajustes: #fefefe; // Fons boto ajustes
+  --bg-btn-ajustes: #fefeff; // Fons boto ajustes
 
   /* Modal MisDietas*/
   --border-btt: #c9c9c9; // Icon Papelera Border
@@ -114,57 +114,57 @@
   --subtext-color: #000000; // Text subtext
 
   /* TopBar */
-  --border-bottom-topbar: #343a40; //  Borde sota TopBar
-  --title-color: #ffffff; //  Color title
+  --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
+  --title-color: #f1f1f1; //  Color Titul
 
   /*TAB*/
 
-  --bg-tab-active: #343a40; /* Fons de pestanya activa */
-  --bg-tab-noactive: #c2c2c2; /*Fons pestanya no activa*/
-  --txtcolor-tab-active: #ffffff; //TextColor pestanyes active
-  --txtcolor-tab-noactive: #000000; //TextColor pestanyes descativada
-  --bg-tab-hover: #dee2e6d2; //Backgrond pasa ratoli pesetanya
-  --line-tab: #ffffff; /*Línia sota pestanya activa */
+  --bg-tab-active: #fefeff; /* Fons de pestanya activa */
+  --bg-tab-noactive: #f3f3f3; /* Fons pestanyes no activa*/
+  --txtcolor-tab-active: #333333; //TextColor pestanyes active
+  --txtcolor-tab-noactive: #4a4a4a; //TextColor pestanyes descativada
+  --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
+  --line-tab: #343a40; /*Línia sota pestanya activa */
 
   /* TEXTFIELD*/
-  --textfield: #f0f0f0; // TextField Fons
+  --textfield: #fefeff; // TextField Fons
   --textfield-error: #ec1710; // Borde camp
   --textfield-error-bg: #f5e9e9; // Fons camp error
-  --input-border: #a7a7a7; // Color de borde camps
+  --input-border: #ced4da; // Color de borde camps
   --border-textfield-focus: rgb(80, 80, 80); // Borde camps focus, Personal
 
   /* SIGNATURE*/
-  --btt-signature: #a8a8a8; // Signature btt
-  --bg-signature-hover: #2c2727; // Signature bg hover
+  --btt-signature: #f3f3f3; // Signature btt
+  --bg-signature-hover: #c9c9c9; // Signature bg hover
 
   /* FOOTER*/
-  --border-top-footer: #fafafa; //  Borde top Footer
+  --border-top-footer: #f1f1f1; //  Borde top Footer
   --text-color-footer: #ffffff; // Text color Footer
   --bg-footer: #343a40; // Fondo footer
 
   /* GENERAL*/
-  --bg-color: #e7e7e7; //  Fons
-  --grey-border: #c2c2c2; // Gris para bordes y sombras ligeras
+  --bg-color: #fefeff; //  Fons
+  --grey-border: #ddddddea; // Gris para bordes y sombras ligeras
 
   /* Btn Ajustes*/
-  --text-color-btn-ajustes: #000000; // Color text ajustes
-  --bgcolor-hover: #c2c2c2; // Btn ajustes hover
-  --bgcolor-active: #a8a8a8; // Btn ajustes active, click
+  --bgcolor-hover: #e0e0e0; // Btn ajustes hover
+  --bgcolor-active: #d5d5d5; // Btn ajustes active, click
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
   --border-btn-ajustes: rgba(204, 204, 204, 0.3); // Borde Btn ajustes
-  --bg-btn-ajustes: #e7e7e7; // Fons boto ajustes
+  --bg-btn-ajustes: #fefefe; // Fons boto ajustes
 
   /* Modal MisDietas*/
   --border-btt: #c9c9c9; // Icon Papelera Border
 
   /* Modal. General / Btn confirmació*/
-  --bg-transp-modal: rgba(2, 1, 1, 0.6); // Transperencia modals
+  --bg-transp-modal: rgba(0, 0, 0, 0.6); // Transperencia modals
   --btt-confirm: #28a745; // Confirmacio btt entre altres
   --bg-confirm: #218838; // Bg confirmacio buttons entre altres
   --bg-confirm-no: #dc3545; // Btt No
   --bg-confirm-no-hover: #c82333; // Btt No hover
   --txt-btn-confirm: #ffffff; //
-  --bg-btn-confirm-about: #343a40; // Fondo btn Acceptar Mes info
+
+  --bg-btn-confirm-about: #004aad; // Fondo btn Acceptar Mes info
 
   --black: #000000; // Negro
   --light-grey: #f5f5f5; // Gris muy claro
@@ -287,11 +287,12 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease; // transició més ràpida
+  transition: all 0.2s ease;
 
   &.open {
     .hamburger {
       span {
+        background: var(--title-color);
         &:nth-child(1) {
           top: 50%;
           transform: translateY(-50%) rotate(45deg);
@@ -316,7 +317,7 @@ main {
   pointer-events: none; // assegura que no intercepta els clics
 
   span {
-    background: var(--text-color); // o el color que prefereixis
+    background: var(--title-color);
     position: absolute;
     height: 3px;
     width: 100%;
@@ -1373,9 +1374,7 @@ select {
 
   .ajustes-panel {
     // Pots ajustar el top si cal
-    top: calc(var(--top-bar-height));
-
-    padding: 20px 0 0 0;
+    top: calc(var(--top-bar-height) + 10px);
 
     .big-btn {
       padding: 18px 20px; // Redueix el padding

@@ -41,7 +41,7 @@
   --bgcolor-active: #d5d5d5;
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --border-btn-ajustes: rgba(204, 204, 204, 0.3);
-  --bg-btn-ajustes: #fefefe;
+  --bg-btn-ajustes: #fefeff;
   /* Modal MisDietas*/
   --border-btt: #c9c9c9;
   /* Modal. General / Btn confirmació*/
@@ -91,48 +91,47 @@
   --text-color: #000000;
   --subtext-color: #000000;
   /* TopBar */
-  --border-bottom-topbar: #343a40;
-  --title-color: #ffffff;
+  --border-bottom-topbar: #f1f1f1;
+  --title-color: #f1f1f1;
   /*TAB*/
-  --bg-tab-active: #343a40; /* Fons de pestanya activa */
-  --bg-tab-noactive: #c2c2c2; /*Fons pestanya no activa*/
-  --txtcolor-tab-active: #ffffff;
-  --txtcolor-tab-noactive: #000000;
-  --bg-tab-hover: #dee2e6d2;
-  --line-tab: #ffffff; /*Línia sota pestanya activa */
+  --bg-tab-active: #fefeff; /* Fons de pestanya activa */
+  --bg-tab-noactive: #f3f3f3; /* Fons pestanyes no activa*/
+  --txtcolor-tab-active: #333333;
+  --txtcolor-tab-noactive: #4a4a4a;
+  --bg-tab-hover: #dee2e6;
+  --line-tab: #343a40; /*Línia sota pestanya activa */
   /* TEXTFIELD*/
-  --textfield: #f0f0f0;
+  --textfield: #fefeff;
   --textfield-error: #ec1710;
   --textfield-error-bg: #f5e9e9;
-  --input-border: #a7a7a7;
+  --input-border: #ced4da;
   --border-textfield-focus: rgb(80, 80, 80);
   /* SIGNATURE*/
-  --btt-signature: #a8a8a8;
-  --bg-signature-hover: #2c2727;
+  --btt-signature: #f3f3f3;
+  --bg-signature-hover: #c9c9c9;
   /* FOOTER*/
-  --border-top-footer: #fafafa;
+  --border-top-footer: #f1f1f1;
   --text-color-footer: #ffffff;
   --bg-footer: #343a40;
   /* GENERAL*/
-  --bg-color: #e7e7e7;
-  --grey-border: #c2c2c2;
+  --bg-color: #fefeff;
+  --grey-border: #ddddddea;
   /* Btn Ajustes*/
-  --text-color-btn-ajustes: #000000;
-  --bgcolor-hover: #c2c2c2;
-  --bgcolor-active: #a8a8a8;
+  --bgcolor-hover: #e0e0e0;
+  --bgcolor-active: #d5d5d5;
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --border-btn-ajustes: rgba(204, 204, 204, 0.3);
-  --bg-btn-ajustes: #e7e7e7;
+  --bg-btn-ajustes: #fefefe;
   /* Modal MisDietas*/
   --border-btt: #c9c9c9;
   /* Modal. General / Btn confirmació*/
-  --bg-transp-modal: rgba(2, 1, 1, 0.6);
+  --bg-transp-modal: rgba(0, 0, 0, 0.6);
   --btt-confirm: #28a745;
   --bg-confirm: #218838;
   --bg-confirm-no: #dc3545;
   --bg-confirm-no-hover: #c82333;
   --txt-btn-confirm: #ffffff;
-  --bg-btn-confirm-about: #343a40;
+  --bg-btn-confirm-about: #004aad;
   --black: #000000;
   --light-grey: #f5f5f5;
   /* PROMPT */
@@ -244,6 +243,9 @@ main {
   justify-content: center;
   transition: all 0.2s ease;
 }
+.ajustes-btn.open .hamburger span {
+  background: var(--title-color);
+}
 .ajustes-btn.open .hamburger span:nth-child(1) {
   top: 50%;
   transform: translateY(-50%) rotate(45deg);
@@ -264,7 +266,7 @@ main {
   pointer-events: none;
 }
 .hamburger span {
-  background: var(--text-color);
+  background: var(--title-color);
   position: absolute;
   height: 3px;
   width: 100%;
@@ -1195,8 +1197,7 @@ select {
     height: 2px;
   }
   .ajustes-panel {
-    top: calc(var(--top-bar-height));
-    padding: 20px 0 0 0;
+    top: calc(var(--top-bar-height) + 10px);
   }
   .ajustes-panel .big-btn {
     padding: 18px 20px;
