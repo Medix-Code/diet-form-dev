@@ -812,10 +812,24 @@ button .fa {
 /* MODAL DE GESTIÓN DE DIETAS (Nova interfície)                                */
 /* =========================================================================== */
 
+#diet-modal-title {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+#no-diets-text {
+  font-size: 1rem;
+  font-weight: 200;
+  text-align: center;
+  font-style: italic;
+}
+
 .diet-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  padding: 20px 0px;
 }
 
 .diet-item {
@@ -848,8 +862,8 @@ button .fa {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    gap: 10px; // espai reduït entre botons
-    margin-top: 8px;
+    gap: 30px; // espai reduït entre botons
+    margin-top: 0px;
     overflow: hidden;
     max-height: 0; // inicialment amagat
     opacity: 0;
@@ -872,7 +886,7 @@ button .fa {
 /* Estils per als botons dins de .diet-actions */
 .diet-actions button {
   flex: 1;
-  padding: 8px; // padding reduït per no fer-los tan grans
+  padding: 9px; // padding reduït per no fer-los tan grans
   font-size: 13px; // font més petita
   border: none;
   border-radius: 8px;

@@ -96,11 +96,11 @@ export async function displayDietOptions() {
     const actions = document.createElement("div");
     actions.classList.add("diet-actions");
     actions.innerHTML = `
-      <button type="button" class="diet-load">
-        <i class="icon-load"></i> Carregar
-      </button>
       <button type="button" class="diet-delete">
         <i class="icon-delete"></i> Eliminar
+      </button>
+           <button type="button" class="diet-load">
+        <i class="icon-load"></i> Carregar
       </button>
     `;
 
