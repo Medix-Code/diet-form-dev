@@ -15,8 +15,9 @@
   --title-color: #000000;
   /*TAB*/
   --bg-tab-active: #fefeff; /* Fons de pestanya activa */
-  --bg-tab: #f3f3f3; /*pestanyes no actives*/
-  --txtcolor-tab: #4a4a4a;
+  --bg-tab-noactive: #f3f3f3; /* Fons pestanyes no activa*/
+  --txtcolor-tab-active: #333333;
+  --txtcolor-tab-noactive: #4a4a4a;
   --bg-tab-hover: #dee2e6;
   --line-tab: #004aad; /*Línia sota pestanya activa */
   /* TEXTFIELD*/
@@ -50,6 +51,7 @@
   --bg-confirm-no: #dc3545;
   --bg-confirm-no-hover: #c82333;
   --txt-btn-confirm: #ffffff;
+  --bg-btn-confirm-about: #004aad;
   --black: #000000;
   --light-grey: #f5f5f5;
   /* PROMPT */
@@ -82,69 +84,55 @@
   se sobreescribirán las variables CSS usadas en los estilos.
 */
 .theme-dark {
-  --primary-color: #343a40; /* Color principal, per exemple per a la capçalera    */
-  --secondary-color: #1470c2; /* Color secundari, pots mantenir-lo o ajustar-lo */
+  /* Colores principales */
+  --primary-color: #343a40;
+  --secondary-color: #1470c2;
   --secondary-color-hover: #0056b3;
-  /*TAB*/
-  --bg-tab-active: #1e1e1e; /* Fons de pestanya activa */
-  --bg-tab: #2c2c2c; /* Fons de les pestanyes NO ACTIVES */
-  --txtcolor-tab: #aaaaaa; /* Text pesetanya NO ACTIU */
-  --bg-tab-hover: #3a3a3a; /* Fons de pestanya en estat hover */
-  --line-tab: #4aa3ff; /*Línia sota pestanya activa */
-  /* Colors del tema fosc */
-  --bg-color: #1e1e1e; /* Fons fosc */
+  --text-color: #000000;
+  --subtext-color: #000000;
   /* TopBar */
-  --border-bottom-topbar: #444;
-  /* FOOTER */
-  --border-top-footer: #333333;
-  --text-color-footer: #b0b0b0;
-  --bg-footer: #202020;
-  /* Colors complementaris */ /* Colores principales */
-  --primary-color: #fefeff;
-  --secondary-color: #004aad;
-  --secondary-color-hover: #0056b3;
-  --text-color: #333333;
-  --subtext-color: #444444;
-  /* TopBar */
-  --border-bottom-topbar: #f1f1f1;
-  --title-color: #000000;
+  --border-bottom-topbar: #343a40;
+  --title-color: #ffffff;
   /*TAB*/
-  --bg-tab-active: #fefeff; /* Fons de pestanya activa */
-  --bg-tab: #f3f3f3; /*pestanyes no actives*/
-  --txtcolor-tab: #4a4a4a;
-  --bg-tab-hover: #dee2e6;
-  --line-tab: #004aad; /*Línia sota pestanya activa */
+  --bg-tab-active: #a8a8a8; /* Fons de pestanya activa */
+  --bg-tab-noactive: #c2c2c2; /*Fons pestanya no activa*/
+  --txtcolor-tab-active: #000000;
+  --txtcolor-tab-noactive: #000000;
+  --bg-tab-hover: #dee2e6d2;
+  --line-tab: #343a40; /*Línia sota pestanya activa */
   /* TEXTFIELD*/
-  --textfield: #fefeff;
+  --textfield: #f0f0f0;
   --textfield-error: #ec1710;
   --textfield-error-bg: #f5e9e9;
-  --input-border: #ced4da;
+  --input-border: #a7a7a7;
   --border-textfield-focus: rgb(80, 80, 80);
   /* SIGNATURE*/
-  --btt-signature: #f3f3f3;
+  --btt-signature: #a8a8a8;
   --bg-signature-hover: #2c2727;
   /* FOOTER*/
   --border-top-footer: #f1f1f1;
   --text-color-footer: #ffffff;
-  --bg-footer: #004aad;
+  --bg-footer: #343a40;
   /* GENERAL*/
-  --bg-color: #fefeff;
-  --grey-border: #ddddddea;
+  --bg-color: #e7e7e7;
+  --grey-border: #c2c2c2;
   /* Btn Ajustes*/
-  --bgcolor-hover: #e0e0e0;
-  --bgcolor-active: #d5d5d5;
+  --text-color-btn-ajustes: #000000;
+  --bgcolor-hover: #c2c2c2;
+  --bgcolor-active: #a8a8a8;
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --border-btn-ajustes: rgba(204, 204, 204, 0.3);
-  --bg-btn-ajustes: #fefeff;
+  --bg-btn-ajustes: #e7e7e7;
   /* Modal MisDietas*/
   --border-btt: #c9c9c9;
   /* Modal. General / Btn confirmació*/
-  --bg-transp-modal: rgba(0, 0, 0, 0.6);
+  --bg-transp-modal: rgba(2, 1, 1, 0.6);
   --btt-confirm: #28a745;
   --bg-confirm: #218838;
   --bg-confirm-no: #dc3545;
   --bg-confirm-no-hover: #c82333;
   --txt-btn-confirm: #ffffff;
+  --bg-btn-confirm-about: #343a40;
   --black: #000000;
   --light-grey: #f5f5f5;
   /* PROMPT */
@@ -320,7 +308,7 @@ main {
   border: 1px solid var(--border-btn-ajustes);
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
-  color: var(--text-color);
+  color: var(--text-color-btn-ajustes);
   box-sizing: border-box;
   text-align: left;
   border-radius: 0;
@@ -379,12 +367,12 @@ button .fa {
   justify-content: center;
   padding: 15px 10px;
   cursor: pointer;
-  background: var(--bg-tab);
+  background: var(--bg-tab-noactive);
   border: none;
   display: flex;
   font-size: 1.01rem;
   font-family: inherit;
-  color: var(--txtcolor-tab);
+  color: var(--txtcolor-tab-noactive);
   transition: all var(--transition-speed) ease;
 }
 .tab:hover {
@@ -394,7 +382,7 @@ button .fa {
   font-size: 1.125rem;
   font-weight: 600;
   background-color: var(--bg-tab-active);
-  color: var(--text-color);
+  color: var(--txtcolor-tab-active);
   box-shadow: inset 0 -3px 0 var(--line-tab);
 }
 
@@ -420,8 +408,8 @@ button .fa {
     color: var(--textfield-error);
   }
   100% {
-    background-color: var(--bg-tab);
-    color: var(--txtcolor-tab);
+    background-color: var(--bg-tab-noactive);
+    color: var(--txtcolor-tab-noactive);
   }
 }
 .form-group {
@@ -682,7 +670,7 @@ button .fa {
 }
 .close-modal-btn {
   display: block;
-  background-color: var(--secondary-color);
+  background-color: var(--bg-btn-confirm-about);
   color: var(--text-color-footer);
   margin: 20px auto 0;
   font-size: 16px;
@@ -924,7 +912,6 @@ button .fa {
 .footer .footer__content {
   display: flex;
   flex-direction: column;
-  /* Eliminem 'gap' perquè utilitzem marges específics */
 }
 .footer .footer__icons {
   display: flex;
@@ -1182,7 +1169,7 @@ button .icon {
     border: none;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-    color: var(--text-color);
+    color: var(--text-color-btn-ajustes);
     box-sizing: border-box;
     text-align: left;
     border-radius: 0;
