@@ -321,6 +321,9 @@ main {
   text-align: left;
   border-radius: 0;
 }
+.ajustes-panel .big-btn:last-child {
+  margin-bottom: 0;
+}
 .ajustes-panel .big-btn:hover {
   background-color: var(--bgcolor-hover);
   transform: scale(1.02);
@@ -337,7 +340,7 @@ main {
 }
 
 .ajustes-panel .big-btn:first-child {
-  padding-top: 30px; /* Ajusta aquest valor segons el que necessitis */
+  padding-top: 30px;
 }
 
 .tabs-container {
@@ -1197,11 +1200,10 @@ select {
   }
   .ajustes-panel {
     top: calc(var(--top-bar-height) + 0px);
-    padding-top: 20px;
-    padding: 10px 0 4px 0;
+    padding: 20px 0 0 0;
   }
   .ajustes-panel .big-btn {
-    padding: 14px 20px;
+    padding: 18px 20px;
     font-size: 15px;
     gap: 25px;
   }
