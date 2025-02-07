@@ -1,6 +1,6 @@
 /**
  * Restriccions per N. Servei
- * Abans era part de "restrictions.js"
+ *
  */
 
 export function setupServiceNumberRestrictions() {

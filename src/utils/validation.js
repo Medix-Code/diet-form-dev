@@ -1,5 +1,5 @@
 /**
- * Funcions de validació (abans era "validation.js")
+ * Funcions de validació
  */
 
 import { validateServiceNumber } from "../services/servicesPanelManager.js";

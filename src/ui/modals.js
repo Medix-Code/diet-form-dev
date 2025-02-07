@@ -108,8 +108,15 @@ export async function displayDietOptions() {
     dietItem.appendChild(summary);
     dietItem.appendChild(actions);
 
-    // Fes que tot l'element diet-item sigui clicable per desplegar/contraure el menú
+    // Quan es fa clic en el resum d'una dieta:
     summary.addEventListener("click", () => {
+      // Tanca tots els altres elements oberts
+      document.querySelectorAll(".diet-item.expanded").forEach((item) => {
+        if (item !== dietItem) {
+          item.classList.remove("expanded");
+        }
+      });
+      // Alterna l'estat de l'element clicat
       dietItem.classList.toggle("expanded");
     });
 

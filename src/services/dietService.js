@@ -56,52 +56,65 @@ export function buildDietObject(generalData, servicesData, customId) {
  * Quan l'usuari clica el botó "Guardar Dieta"
  */
 export async function onClickSaveDiet() {
-  // Esborrem qualsevol classe d'error prèvia de les pestanyes
+  // Esborrem els errors previs
   document.getElementById("tab-dades").classList.remove("error-tab");
   document.getElementById("tab-serveis").classList.remove("error-tab");
 
-  // Validem cada pestanya de manera independent
+  // Validem les pestanyes "Datos" i "Servicios"
   const dadesOK = validateDadesTab();
   const serveisOK = validateServeisTab();
   const currentTab = getCurrentTab();
 
-  // Si alguna pestanya no és vàlida...
   if (!dadesOK || !serveisOK) {
     if (currentTab === "dades") {
-      // Si els camps de "Dades" estan complets però "Serveis" té errors:
       if (dadesOK && !serveisOK) {
         document.getElementById("tab-serveis").classList.add("error-tab");
         showToast("Completa los campos en la pestaña Servicios.", "error");
-        return;
       }
     } else if (currentTab === "serveis") {
-      // Si els camps de "Serveis" estan complets però "Dades" té errors:
       if (serveisOK && !dadesOK) {
         document.getElementById("tab-dades").classList.add("error-tab");
         showToast("Completa los campos en la pestaña Datos.", "error");
-        return;
       }
     }
     return;
   }
 
-  // Si hem arribat aquí, vol dir que ambdues pestanyes són vàlides.
-  // Continuem amb la lògica per guardar la dieta.
-  const result = await handleSaveDietWithPossibleOverwrite();
-  switch (result) {
-    case "overwritten":
-    case "saved":
-      showToast("Dieta guardada", "success");
-      // Reajustem l'estat inicial = l'actual
-      setInitialFormDataStr(getAllFormDataAsString());
-      disableSaveButton();
-      break;
-    case "unchanged":
-      showToast("No hay cambios que guardar.", "success");
-      break;
-    default:
-      // L'usuari pot haver cancel·lat
-      break;
+  // Ara, les dues pestanyes són vàlides.
+  // Fem una validació addicional per al número de servei:
+  const service1NumberEl = document.getElementById("service-number-1");
+  const service1Value = service1NumberEl.value.trim();
+  // Comprovem que sigui exactament 9 dígits
+  if (!/^\d{9}$/.test(service1Value)) {
+    service1NumberEl.classList.add("input-error");
+    // Mostrar el toast específic per a l'error del número de servei
+    showToast(
+      "El número de servei és incorrecte. Ha de contenir 9 dígits.",
+      "error"
+    );
+    return;
+  }
+
+  // Continuem amb la resta de la lògica per guardar la dieta
+  try {
+    const { generalData, servicesData } = gatherAllData();
+    const pdfBytes = await fillPdf(generalData, servicesData);
+
+    const fileName = buildPdfFileName(generalData.date, generalData.dietType);
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    a.click();
+
+    setTimeout(() => URL.revokeObjectURL(url), 100);
+
+    await handleSaveDietWithPossibleOverwrite();
+    incrementPdfDownloadCountAndMaybeShowPrompt();
+    console.log("Generando y descargando el PDF...");
+  } catch (err) {
+    console.error("[app] Error generando el PDF:", err);
   }
 }
 
