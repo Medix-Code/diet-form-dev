@@ -125,46 +125,87 @@
   --text-color-footer: #b0b0b0; // Text color Footer
   --bg-footer: #202020; // Fondo footer
 
-  /* Colors complementaris */
-  --light-grey: #2e2e2e; /* Grau fosc per elements secundaris */
-  --grey-border: #444444; /* Bordos i ombres en to més fosc */
-  --input-border: #555555; /* Bord dels inputs */
-  --bgcolor-hover: #292929; /* Fons en estat hover */
-  --bgcolor-active: #444444; /* Fons en estat actiu */
+  /* Colors complementaris */ /* Colores principales */
+  --primary-color: #fefeff; // Color principal (ej. cabecera)        m'agrada: 2ead9e
+  --secondary-color: #004aad; // Color secundario  )             (165b98)
+  --secondary-color-hover: #0056b3;
+  --text-color: #333333; // Text Title
+  --subtext-color: #444444; // Text subtext
 
-  --border-btt: #555555; /* Bord per botons en estat normal */
+  /* TopBar */
+  --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
+  --title-color: #000000; //  Color Titul
+
+  /*TAB*/
+
+  --bg-tab-active: #fefeff; /* Fons de pestanya activa */
+  --bg-tab: #f3f3f3; /*pestanyes no actives*/
+  --txtcolor-tab: #4a4a4a; //TextColor pestanyes descativada
+  --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
+  --line-tab: #004aad; /*Línia sota pestanya activa */
 
   /* TEXTFIELD*/
-  --textfield: #2a2a2a; // TextFieds
-  --textfield-error: #dc3545;
-  --textfield-error-bg: #5a0000; /* Fons d'error més fosc */
-  --text-field-color: #ffffff; /* Text camps */
-
-  /* BTT*/
-  --btt-confirm: #28a745;
-  --bg-confirm: #218838;
-  --bg-confirm-no: #dc3545;
-  --bg-confirm-no-hover: #c82333;
-
-  --bg-transp-modal: rgba(0, 0, 0, 0.6); /* Transp. per a modals */
-  --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
-  --prompt_box_shadow: rgba(0, 0, 0, 0.5); /* Ombra una mica més marcada */
+  --textfield: #fefeff; // TextField Fons
+  --textfield-error: #ec1710; // Borde camp
+  --textfield-error-bg: #f5e9e9; // Fons camp error
+  --input-border: #ced4da; // Color de borde camps
+  --border-textfield-focus: rgb(80, 80, 80); // Borde camps focus, Personal
 
   /* SIGNATURE*/
-  --btt-signature: rgba(255, 255, 255, 0.15); // Signature btt
-  --bg-signature-hover: #8f8f8f; // Signature bg hover
-  --border-signature-focus: #4aa3ff;
+  --btt-signature: #f3f3f3; // Signature btt
+  --bg-signature-hover: #2c2727; // Signature bg hover
 
-  /* SERVICES */
-  --service-1-bg: #1e2a1e;
+  /* FOOTER*/
+  --border-top-footer: #f1f1f1; //  Borde top Footer
+  --text-color-footer: #ffffff; // Text color Footer
+  --bg-footer: #004aad; // Fondo footer
+
+  /* GENERAL*/
+  --bg-color: #fefeff; //  Fons
+  --grey-border: #ddddddea; // Gris para bordes y sombras ligeras
+
+  /* Btn Ajustes*/
+  --bgcolor-hover: #e0e0e0; // Btn ajustes hover
+  --bgcolor-active: #d5d5d5; // Btn ajustes active, click
+  --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
+  --border-btn-ajustes: rgba(204, 204, 204, 0.3); // Borde Btn ajustes
+  --bg-btn-ajustes: #fefeff; // Fons boto ajustes
+
+  /* Modal MisDietas*/
+  --border-btt: #c9c9c9; // Icon Papelera Border
+
+  /* Modal. General / Btn confirmació*/
+  --bg-transp-modal: rgba(0, 0, 0, 0.6); // Transperencia modals
+  --btt-confirm: #28a745; // Confirmacio btt entre altres
+  --bg-confirm: #218838; // Bg confirmacio buttons entre altres
+  --bg-confirm-no: #dc3545; // Btt No
+  --bg-confirm-no-hover: #c82333; // Btt No hover
+  --txt-btn-confirm: #ffffff; //
+
+  --black: #000000; // Negro
+  --light-grey: #f5f5f5; // Gris muy claro
+
+  /* PROMPT */
+  --prompt_box_shadow: rgba(0, 0, 0, 0.3); // Prompt
+
+  /*TOAST*/
+  // Toast colors
+  --toast-success-bg: #28a745; // Verd vibrant per a èxit
+  --toast-error-bg: #dc3545; // Vermell intens per a errors
+  --toast-text-color: #ffffff; // Text blanc per un bon contrast
+  // Opcional: millora la ombra amb una mica de transparència
+  --toast-box-shadow: rgba(0, 0, 0, 0.15);
+
+  /*Servicios*/
+  --service-1-bg: #e9f7ef;
   --service-1-border: #8ddfd0;
-  --service-2-bg: #1e2a2e;
+  --service-2-bg: #e8f4fd;
   --service-2-border: #bad7f9;
-  --service-3-bg: #2a1e1e;
+  --service-3-bg: #fdf0e6;
   --service-3-border: #f0cdaa;
-  --service-4-bg: #2a1e2a;
+  --service-4-bg: #f9e6ff;
   --service-4-border: #e1b6f4;
-  --border-btn-service: #ffffff;
+  --border-btn-service: #747474;
 }
 
 html {

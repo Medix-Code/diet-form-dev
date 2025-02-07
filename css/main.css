@@ -99,40 +99,71 @@
   --border-top-footer: #333333;
   --text-color-footer: #b0b0b0;
   --bg-footer: #202020;
-  /* Colors complementaris */
-  --light-grey: #2e2e2e; /* Grau fosc per elements secundaris */
-  --grey-border: #444444; /* Bordos i ombres en to més fosc */
-  --input-border: #555555; /* Bord dels inputs */
-  --bgcolor-hover: #292929; /* Fons en estat hover */
-  --bgcolor-active: #444444; /* Fons en estat actiu */
-  --border-btt: #555555; /* Bord per botons en estat normal */
+  /* Colors complementaris */ /* Colores principales */
+  --primary-color: #fefeff;
+  --secondary-color: #004aad;
+  --secondary-color-hover: #0056b3;
+  --text-color: #333333;
+  --subtext-color: #444444;
+  /* TopBar */
+  --border-bottom-topbar: #f1f1f1;
+  --title-color: #000000;
+  /*TAB*/
+  --bg-tab-active: #fefeff; /* Fons de pestanya activa */
+  --bg-tab: #f3f3f3; /*pestanyes no actives*/
+  --txtcolor-tab: #4a4a4a;
+  --bg-tab-hover: #dee2e6;
+  --line-tab: #004aad; /*Línia sota pestanya activa */
   /* TEXTFIELD*/
-  --textfield: #2a2a2a;
-  --textfield-error: #dc3545;
-  --textfield-error-bg: #5a0000; /* Fons d'error més fosc */
-  --text-field-color: #ffffff; /* Text camps */
-  /* BTT*/
+  --textfield: #fefeff;
+  --textfield-error: #ec1710;
+  --textfield-error-bg: #f5e9e9;
+  --input-border: #ced4da;
+  --border-textfield-focus: rgb(80, 80, 80);
+  /* SIGNATURE*/
+  --btt-signature: #f3f3f3;
+  --bg-signature-hover: #2c2727;
+  /* FOOTER*/
+  --border-top-footer: #f1f1f1;
+  --text-color-footer: #ffffff;
+  --bg-footer: #004aad;
+  /* GENERAL*/
+  --bg-color: #fefeff;
+  --grey-border: #ddddddea;
+  /* Btn Ajustes*/
+  --bgcolor-hover: #e0e0e0;
+  --bgcolor-active: #d5d5d5;
+  --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
+  --border-btn-ajustes: rgba(204, 204, 204, 0.3);
+  --bg-btn-ajustes: #fefeff;
+  /* Modal MisDietas*/
+  --border-btt: #c9c9c9;
+  /* Modal. General / Btn confirmació*/
+  --bg-transp-modal: rgba(0, 0, 0, 0.6);
   --btt-confirm: #28a745;
   --bg-confirm: #218838;
   --bg-confirm-no: #dc3545;
   --bg-confirm-no-hover: #c82333;
-  --bg-transp-modal: rgba(0, 0, 0, 0.6); /* Transp. per a modals */
-  --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
-  --prompt_box_shadow: rgba(0, 0, 0, 0.5); /* Ombra una mica més marcada */
-  /* SIGNATURE*/
-  --btt-signature: rgba(255, 255, 255, 0.15);
-  --bg-signature-hover: #8f8f8f;
-  --border-signature-focus: #4aa3ff;
-  /* SERVICES */
-  --service-1-bg: #1e2a1e;
+  --txt-btn-confirm: #ffffff;
+  --black: #000000;
+  --light-grey: #f5f5f5;
+  /* PROMPT */
+  --prompt_box_shadow: rgba(0, 0, 0, 0.3);
+  /*TOAST*/
+  --toast-success-bg: #28a745;
+  --toast-error-bg: #dc3545;
+  --toast-text-color: #ffffff;
+  --toast-box-shadow: rgba(0, 0, 0, 0.15);
+  /*Servicios*/
+  --service-1-bg: #e9f7ef;
   --service-1-border: #8ddfd0;
-  --service-2-bg: #1e2a2e;
+  --service-2-bg: #e8f4fd;
   --service-2-border: #bad7f9;
-  --service-3-bg: #2a1e1e;
+  --service-3-bg: #fdf0e6;
   --service-3-border: #f0cdaa;
-  --service-4-bg: #2a1e2a;
+  --service-4-bg: #f9e6ff;
   --service-4-border: #e1b6f4;
-  --border-btn-service: #ffffff;
+  --border-btn-service: #747474;
 }
 
 html {
