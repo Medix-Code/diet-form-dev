@@ -1282,10 +1282,52 @@ button .icon {
   .ajustes-btn {
     width: 42px;
     height: 42px;
-    .icon {
-      width: 30px;
-      height: 30px;
-      transition: transform 0.3s ease;
+
+    // Quan el botó té la classe "open", s'apliquen les transformacions a la icona
+    &.open {
+      .hamburger {
+        span {
+          &:nth-child(1) {
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+          }
+          &:nth-child(2) {
+            opacity: 0;
+          }
+          &:nth-child(3) {
+            bottom: 50%;
+            transform: translateY(50%) rotate(-45deg);
+          }
+        }
+      }
+    }
+  }
+
+  .hamburger {
+    width: 30px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+
+    span {
+      background: var(--text-color); // o el color que vulguis
+      position: absolute;
+      height: 3px;
+      width: 100%;
+      left: 0;
+      transition: 0.3s ease;
+
+      // Posició de les 3 barres
+      &:nth-child(1) {
+        top: 0;
+      }
+      &:nth-child(2) {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      &:nth-child(3) {
+        bottom: 0;
+      }
     }
   }
 

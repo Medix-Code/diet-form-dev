@@ -1115,10 +1115,40 @@ button .icon {
     width: 42px;
     height: 42px;
   }
-  .ajustes-btn .icon {
+  .ajustes-btn.open .hamburger span:nth-child(1) {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .ajustes-btn.open .hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+  .ajustes-btn.open .hamburger span:nth-child(3) {
+    bottom: 50%;
+    transform: translateY(50%) rotate(-45deg);
+  }
+  .hamburger {
     width: 30px;
-    height: 30px;
-    transition: transform 0.3s ease;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+  }
+  .hamburger span {
+    background: var(--text-color);
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    left: 0;
+    transition: 0.3s ease;
+  }
+  .hamburger span:nth-child(1) {
+    top: 0;
+  }
+  .hamburger span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .hamburger span:nth-child(3) {
+    bottom: 0;
   }
   .ajustes-panel {
     position: fixed;

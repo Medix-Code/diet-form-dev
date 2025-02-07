@@ -5,9 +5,11 @@ export function initSettingsPanel() {
   if (!settingsBtn || !settingsPanel) return;
 
   function togglePanel() {
+    console.log("Clic detectat!");
     settingsPanel.classList.toggle("hidden");
     settingsBtn.classList.toggle("open");
   }
+
   function closePanelOutside(evt) {
     if (!settingsPanel.contains(evt.target) && evt.target !== settingsBtn) {
       settingsPanel.classList.add("hidden");
