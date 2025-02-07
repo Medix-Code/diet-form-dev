@@ -5,7 +5,7 @@
 */
 :root {
   /* Colores principales */
-  --primary-color: #f8f8f8;
+  --primary-color: #fefefe;
   --secondary-color: #004aad;
   --secondary-color-hover: #0056b3;
   --text-color: #333333;
@@ -226,22 +226,6 @@ main {
   text-align: center;
 }
 
-/*
-.top-bar__title {
-  margin: 0;
-  font-family: "Roboto Serif", serif;
-  font-optical-sizing: auto;
-  font-size: 28px;
-
-  font-style: normal;
-  font-variation-settings: "wdth" 100, "GRAD" 0;
-  padding-left: 19px;
-  letter-spacing: 0px;
-  color: #f3f3f3;
-
-  text-align: center;
-}
-*/
 .button-group {
   position: relative;
   display: flex;
@@ -301,11 +285,12 @@ main {
 
 .ajustes-panel {
   position: fixed;
-  top: calc(var(--top-bar-height) + 10px);
+  top: calc(var(--top-bar-height));
   left: 0;
   right: 0;
-  padding: 6px 0;
-  background-color: #f9f9f9;
+  padding: 0;
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
@@ -320,7 +305,7 @@ main {
 .ajustes-panel .big-btn {
   width: 100%;
   justify-content: flex-start;
-  padding: 16px 20px;
+  padding: 26px 20px;
   font-size: 16px;
   font-weight: 300;
   font-family: inherit;
