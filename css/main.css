@@ -751,6 +751,8 @@ button .fa {
 #signature-title {
   color: var(--text-color);
   text-align: center;
+  font-size: 1.1rem;
+  font-weight: 300;
 }
 
 .signature-modal-content {
@@ -760,7 +762,8 @@ button .fa {
 }
 .signature-modal-content p.signature-instruction {
   text-align: left;
-  font-weight: 300;
+  font-size: 1rem;
+  font-weight: 200;
 }
 
 .signature-canvas-container {
@@ -1222,11 +1225,14 @@ button .icon {
     font-size: 18px;
   }
   .modal-content p {
-    font-size: 16px;
+    font-size: 1rem;
+    font-weight: normal;
+    font-weight: 200;
   }
   #about-title {
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 300;
     margin: 0;
     font-weight: bold;
   }
