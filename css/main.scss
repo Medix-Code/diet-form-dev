@@ -809,7 +809,7 @@ button .fa {
 }
 
 /* =========================================================================== */
-/* MODAL DE GESTIÓN DE DIETAS (Nova interfície)                                */
+/* MODAL DE GESTIÓN DE DIETAS                               */
 /* =========================================================================== */
 
 #diet-modal-title {
@@ -1261,45 +1261,71 @@ button .icon {
     padding-top: 110px;
   }
 
-  .form-group {
-    margin-bottom: 25px;
+  #diet-modal-title {
+    font-size: 1.05rem;
   }
 
-  input[type="text"],
-  input[type="date"],
-  input[type="datetime-local"],
-  input[type="time"],
-  select {
-    height: 38px;
-    font-size: 15px;
-    padding: 10px 14px;
+  #no-diets-text {
+    font-size: 0.95rem;
   }
 
-  .toast {
-    width: 40vw;
-    font-size: 15px;
-    padding: 11px 22px;
+  .diet-list {
+    padding: 15px 0;
   }
 
-  .modal-content {
-    padding: 18px 25px;
+  .diet-item {
+    padding: 8px 12px;
   }
 
-  .btn-modal {
-    font-size: 17px;
-    padding: 18px 18px;
-    gap: 18px;
+  .diet-item .diet-summary {
+    font-size: 14px;
+    min-height: 35px;
   }
 
-  .signature-modal-content {
-    overflow-x: hidden;
-    width: 80%;
-    max-height: 50%;
+  .diet-actions button {
+    padding: 8px;
+    font-size: 12px;
   }
+}
 
-  .signature-canvas-container {
-    height: 230px;
-  }
+.form-group {
+  margin-bottom: 25px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+select {
+  height: 38px;
+  font-size: 15px;
+  padding: 10px 14px;
+}
+
+.toast {
+  width: 40vw;
+  font-size: 15px;
+  padding: 11px 22px;
+}
+
+.modal-content {
+  padding: 18px 25px;
+}
+
+.btn-modal {
+  font-size: 17px;
+  padding: 18px 18px;
+  gap: 18px;
+}
+
+.signature-modal-content {
+  overflow-x: hidden;
+  width: 80%;
+  max-height: 50%;
+}
+
+.signature-canvas-container {
+  height: 230px;
 }
 
 /* =======================================================
@@ -1369,6 +1395,36 @@ button .icon {
     margin-top: 130px;
   }
 
+  #diet-modal-title {
+    font-size: 1rem;
+  }
+
+  #no-diets-text {
+    font-size: 0.9rem;
+  }
+
+  .diet-list {
+    padding: 5px 0;
+  }
+
+  .diet-item {
+    padding: 6px 10px;
+  }
+
+  .diet-item .diet-summary {
+    font-size: 13px;
+    min-height: 30px;
+  }
+
+  .diet-actions {
+    gap: 20px;
+  }
+
+  .diet-actions button {
+    padding: 7px;
+    font-size: 11px;
+  }
+
   input[type="text"],
   input[type="date"],
   input[type="datetime-local"],
@@ -1431,7 +1487,7 @@ button .icon {
   h3#diet-modal-title {
     font-size: 1.1rem;
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .btn-modal {
