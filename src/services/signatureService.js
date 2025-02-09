@@ -24,7 +24,7 @@ let signatureAcceptBtn;
 let signPerson1Btn;
 let signPerson2Btn;
 
-/**z
+/**
  * Inicialitza tot el mòdul de signatures
  */
 export function initSignature() {
@@ -64,18 +64,10 @@ export function initSignature() {
 function resizeCanvas() {
   if (!signatureCanvas) return;
   const container = signatureCanvas.parentElement;
-  const dpr = window.devicePixelRatio || 1;
-
-  // Estableix la mida interna en píxels reals
-  signatureCanvas.width = container.offsetWidth * dpr;
-  signatureCanvas.height = container.offsetHeight * dpr;
-
-  // Manté la mida visual del canvas igual que la del contenidor
-  signatureCanvas.style.width = container.offsetWidth + "px";
-  signatureCanvas.style.height = container.offsetHeight + "px";
-
   ctx = signatureCanvas.getContext("2d", { willReadFrequently: true });
-  ctx.scale(dpr, dpr);
+
+  signatureCanvas.width = container.offsetWidth;
+  signatureCanvas.height = container.offsetHeight;
 
   ctx.lineWidth = 2;
   ctx.lineCap = "round";
@@ -199,15 +191,8 @@ function openSignatureModal(target) {
 
 function drawSignatureFromDataUrl(dataUrl) {
   const image = new Image();
-  image.crossOrigin = "anonymous";
   image.onload = () => {
-    console.log("Imatge carregada correctament", image);
-    // Obtenim la mida visual del contenidor:
-    const container = signatureCanvas.parentElement;
-    ctx.drawImage(image, 0, 0, container.offsetWidth, container.offsetHeight);
-  };
-  image.onerror = (e) => {
-    console.error("Error en carregar la imatge", e);
+    ctx.drawImage(image, 0, 0, signatureCanvas.width, signatureCanvas.height);
   };
   image.src = dataUrl;
 }
