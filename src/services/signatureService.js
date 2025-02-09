@@ -167,27 +167,33 @@ function openSignatureModal(target) {
 
   const modalTitleEl = document.getElementById("signature-title");
   if (modalTitleEl) {
-    modalTitleEl.textContent =
-      target === "person1" ? "Firma del conductor" : "Firma del ayudante";
+    if (target === "person1") {
+      modalTitleEl.textContent = "Firma del conductor";
+    } else {
+      modalTitleEl.textContent = "Firma del ayudante";
+    }
   }
 
-  // Mostrem el modal de firma
+  // Obrim el modal
   signatureModal.style.display = "block";
   document.body.classList.add("modal-open");
 
-  // Espera uns mil·lisegons perquè el navegador apliqui el display:block
+  // Esperem uns mil·lisegons perquè el navegador recalculi la mida del modal
   setTimeout(() => {
     resizeCanvas();
     clearCanvas();
 
     let oldSig = "";
-    if (target === "person1") oldSig = signatureConductor;
-    else if (target === "person2") oldSig = signatureAjudant;
+    if (target === "person1") {
+      oldSig = signatureConductor;
+    } else if (target === "person2") {
+      oldSig = signatureAjudant;
+    }
 
     if (oldSig) {
       drawSignatureFromDataUrl(oldSig);
     }
-  }, 50); // 50ms és suficient en la majoria de casos
+  }, 150); // Ajusta el temps (50, 100, 200...) segons et convingui
 }
 
 function drawSignatureFromDataUrl(dataUrl) {
