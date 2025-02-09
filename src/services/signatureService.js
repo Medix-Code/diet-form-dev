@@ -167,26 +167,27 @@ function openSignatureModal(target) {
 
   const modalTitleEl = document.getElementById("signature-title");
   if (modalTitleEl) {
-    if (target === "person1") {
-      modalTitleEl.textContent = "Firma del conductor";
-    } else {
-      modalTitleEl.textContent = "Firma del ayudante";
-    }
+    modalTitleEl.textContent =
+      target === "person1" ? "Firma del conductor" : "Firma del ayudante";
   }
 
+  // Mostrem el modal de firma
   signatureModal.style.display = "block";
   document.body.classList.add("modal-open");
 
-  resizeCanvas();
-  clearCanvas();
+  // Esperem al proper frame (o un petit timeout) abans de redimensionar:
+  requestAnimationFrame(() => {
+    resizeCanvas();
+    clearCanvas();
 
-  let oldSig = "";
-  if (target === "person1") oldSig = signatureConductor;
-  else if (target === "person2") oldSig = signatureAjudant;
+    let oldSig = "";
+    if (target === "person1") oldSig = signatureConductor;
+    else if (target === "person2") oldSig = signatureAjudant;
 
-  if (oldSig) {
-    drawSignatureFromDataUrl(oldSig);
-  }
+    if (oldSig) {
+      drawSignatureFromDataUrl(oldSig);
+    }
+  });
 }
 
 function drawSignatureFromDataUrl(dataUrl) {

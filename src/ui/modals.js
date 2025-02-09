@@ -101,17 +101,17 @@ export async function displayDietOptions() {
     const iconsContainer = document.createElement("div");
     iconsContainer.classList.add("diet-icons");
 
-    // Botó "Carregar"
-    const loadBtn = document.createElement("button");
-    loadBtn.classList.add("diet-load");
-    loadBtn.setAttribute("aria-label", "Cargar dieta");
-    loadBtn.innerHTML = `<img src="assets/icons/upload.svg" alt="Cargar" class="icon" />`;
-
     // Botó "Eliminar"
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("diet-delete");
     deleteBtn.setAttribute("aria-label", "Eliminar dieta");
     deleteBtn.innerHTML = `<img src="assets/icons/delete.svg" alt="Eliminar" class="icon" />`;
+
+    // Botó "Carregar"
+    const loadBtn = document.createElement("button");
+    loadBtn.classList.add("diet-load");
+    loadBtn.setAttribute("aria-label", "Cargar dieta");
+    loadBtn.innerHTML = `<img src="assets/icons/upload.svg" alt="Cargar" class="icon" />`;
 
     // Event: Carregar la dieta
     loadBtn.addEventListener("click", (evt) => {
@@ -130,8 +130,8 @@ export async function displayDietOptions() {
     });
 
     // Muntem
-    iconsContainer.appendChild(loadBtn);
     iconsContainer.appendChild(deleteBtn);
+    iconsContainer.appendChild(loadBtn);
 
     dietItem.appendChild(dateSpan);
     dietItem.appendChild(iconsContainer);
