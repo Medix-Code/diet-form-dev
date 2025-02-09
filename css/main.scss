@@ -725,6 +725,7 @@ button .fa {
   top: 0;
   left: 0;
   width: 100%;
+
   height: 100%;
   z-index: 1200;
   background-color: var(--bg-transp-modal);
@@ -1432,7 +1433,7 @@ select {
   }
 
   .modal-content {
-    max-width: 80%;
+    max-width: 90%;
     max-height: 90vh;
     margin: 18% auto;
     overflow: auto;
@@ -1502,7 +1503,7 @@ select {
   }
 
   .signature-modal-content {
-    width: 80%;
+    width: 90%;
     max-height: 80vh;
     max-width: 90%;
   }
@@ -1510,4 +1511,10 @@ select {
   .signature-canvas-container {
     height: 200px;
   }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }

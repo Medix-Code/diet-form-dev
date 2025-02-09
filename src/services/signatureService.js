@@ -58,7 +58,7 @@ export function initSignature() {
     }
   });
 
-  //window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("resize", resizeCanvas);
 }
 
 function resizeCanvas() {
@@ -165,21 +165,25 @@ function getXY(e) {
 function openSignatureModal(target) {
   currentSignatureTarget = target;
 
+  const modalTitleEl = document.getElementById("signature-title");
+  if (modalTitleEl) {
+    if (target === "person1") {
+      modalTitleEl.textContent = "Firma del conductor";
+    } else {
+      modalTitleEl.textContent = "Firma del ayudante";
+    }
+  }
+
   signatureModal.style.display = "block";
   document.body.classList.add("modal-open");
 
-  resizeCanvas(); // Ajusta la mida
+  resizeCanvas();
+  clearCanvas();
 
   let oldSig = "";
   if (target === "person1") oldSig = signatureConductor;
   else if (target === "person2") oldSig = signatureAjudant;
 
-  // Només si NO tens una signatura guardada, esborres el canvas
-  if (!oldSig) {
-    clearCanvas();
-  }
-
-  // Si tens una signatura, la dibuixes
   if (oldSig) {
     drawSignatureFromDataUrl(oldSig);
   }

@@ -1,4 +1,4 @@
-/* modalDiet.js o similar */
+/* modalDiet.js */
 
 import { loadDietById, deleteDietHandler } from "../services/dietService.js";
 import { getDietDisplayInfo, capitalizeFirstLetter } from "../utils/utils.js";

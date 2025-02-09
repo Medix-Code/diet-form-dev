@@ -1243,7 +1243,7 @@ select {
     padding: 10px 20px;
   }
   .modal-content {
-    max-width: 80%;
+    max-width: 90%;
     max-height: 90vh;
     margin: 18% auto;
     overflow: auto;
@@ -1304,11 +1304,16 @@ select {
     margin-top: 20px;
   }
   .signature-modal-content {
-    width: 80%;
+    width: 90%;
     max-height: 80vh;
     max-width: 90%;
   }
   .signature-canvas-container {
     height: 200px;
   }
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
