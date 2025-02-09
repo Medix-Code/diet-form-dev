@@ -58,7 +58,7 @@ export function initSignature() {
     }
   });
 
-  window.addEventListener("resize", resizeCanvas);
+  //window.addEventListener("resize", resizeCanvas);
 }
 
 function resizeCanvas() {
