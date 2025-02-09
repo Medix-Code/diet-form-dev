@@ -1,5 +1,5 @@
 // Definim el nom del caché i els fitxers a "cachejar"
-const CACHE_NAME = "dieta-cache-v20250209185723"";
+const CACHE_NAME = "dieta-cache-v20250209185826"";
 const urlsToCache = [
   "./",
   "./index.html",
