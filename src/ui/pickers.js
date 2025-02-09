@@ -72,6 +72,7 @@ export function setupDatePickers() {
             "Desembre",
           ],
         },
+        allowInput: true,
       },
 
       // Altres opcions que podries voler:
