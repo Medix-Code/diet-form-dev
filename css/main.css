@@ -809,7 +809,7 @@ button .fa {
   position: relative;
 }
 .signature-canvas-container canvas {
-  background-color: #eee;
+  background-color: #d3d3d3;
   display: block;
 }
 
@@ -1292,14 +1292,6 @@ select {
     flex-direction: row;
     gap: 20px;
     margin-top: 20px;
-  }
-  .signature-modal-content {
-    width: 90%;
-    max-height: 80vh;
-    max-width: 90%;
-  }
-  .signature-canvas-container {
-    height: 200px;
   }
 }
 *,
