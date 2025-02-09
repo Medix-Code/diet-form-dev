@@ -24,7 +24,7 @@ let signatureAcceptBtn;
 let signPerson1Btn;
 let signPerson2Btn;
 
-/**
+/**z
  * Inicialitza tot el mòdul de signatures
  */
 export function initSignature() {
@@ -64,10 +64,18 @@ export function initSignature() {
 function resizeCanvas() {
   if (!signatureCanvas) return;
   const container = signatureCanvas.parentElement;
-  ctx = signatureCanvas.getContext("2d", { willReadFrequently: true });
+  const dpr = window.devicePixelRatio || 1;
 
-  signatureCanvas.width = container.offsetWidth;
-  signatureCanvas.height = container.offsetHeight;
+  // Estableix la mida interna en píxels reals
+  signatureCanvas.width = container.offsetWidth * dpr;
+  signatureCanvas.height = container.offsetHeight * dpr;
+
+  // Manté la mida visual del canvas igual que la del contenidor
+  signatureCanvas.style.width = container.offsetWidth + "px";
+  signatureCanvas.style.height = container.offsetHeight + "px";
+
+  ctx = signatureCanvas.getContext("2d", { willReadFrequently: true });
+  ctx.scale(dpr, dpr);
 
   ctx.lineWidth = 2;
   ctx.lineCap = "round";

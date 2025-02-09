@@ -1127,15 +1127,6 @@ select {
   gap: 18px;
 }
 
-.signature-modal-content {
-  width: 80%;
-  max-height: 50%;
-}
-
-.signature-canvas-container {
-  height: 230px;
-}
-
 /* =======================================================
    Media Query para MÓVILES (hasta 768px)
    ======================================================= */
