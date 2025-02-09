@@ -63,33 +63,15 @@ export function initSignature() {
 
 function resizeCanvas() {
   if (!signatureCanvas) return;
-
-  // 1) Guarda la imatge actual en un dataURL
-  const oldDataUrl = signatureCanvas.toDataURL("image/png");
-
-  // 2) Ajusta la mida
   const container = signatureCanvas.parentElement;
+  ctx = signatureCanvas.getContext("2d", { willReadFrequently: true });
+
   signatureCanvas.width = container.offsetWidth;
   signatureCanvas.height = container.offsetHeight;
 
-  // 3) Configura el context
-  ctx = signatureCanvas.getContext("2d", { willReadFrequently: true });
   ctx.lineWidth = 2;
   ctx.lineCap = "round";
   ctx.strokeStyle = "#000";
-
-  // 4) Redibuixa la imatge que tenies
-  const tempImage = new Image();
-  tempImage.onload = () => {
-    ctx.drawImage(
-      tempImage,
-      0,
-      0,
-      signatureCanvas.width,
-      signatureCanvas.height
-    );
-  };
-  tempImage.src = oldDataUrl;
 }
 
 function initCanvasEvents() {
@@ -183,31 +165,24 @@ function getXY(e) {
 function openSignatureModal(target) {
   currentSignatureTarget = target;
 
-  const modalTitleEl = document.getElementById("signature-title");
-  if (modalTitleEl) {
-    modalTitleEl.textContent =
-      target === "person1" ? "Firma del conductor" : "Firma del ayudante";
-  }
-
-  // Obrim el modal
   signatureModal.style.display = "block";
   document.body.classList.add("modal-open");
 
-  // Esperem uns 100-200ms perquè el navegador recalculi la mida del modal.
-  // Llavors fem el resizeCanvas(), clearCanvas() i, si hi ha signatura, la dibuixem.
-  setTimeout(() => {
-    resizeCanvas(); // Ajusta la mida del canvas (ara ja no perdrà la signatura,
-    // perquè a resizeCanvas() la copiem i la tornem a dibuixar).
+  resizeCanvas(); // Ajusta la mida
+
+  let oldSig = "";
+  if (target === "person1") oldSig = signatureConductor;
+  else if (target === "person2") oldSig = signatureAjudant;
+
+  // Només si NO tens una signatura guardada, esborres el canvas
+  if (!oldSig) {
     clearCanvas();
+  }
 
-    let oldSig = "";
-    if (target === "person1") oldSig = signatureConductor;
-    else if (target === "person2") oldSig = signatureAjudant;
-
-    if (oldSig) {
-      drawSignatureFromDataUrl(oldSig);
-    }
-  }, 150);
+  // Si tens una signatura, la dibuixes
+  if (oldSig) {
+    drawSignatureFromDataUrl(oldSig);
+  }
 }
 
 function drawSignatureFromDataUrl(dataUrl) {
