@@ -148,9 +148,8 @@ export function showConfirmModal(message, title = "Confirmar acció") {
     const modal = document.getElementById("confirm-modal");
     const msgEl = document.getElementById("confirm-message");
     const titleEl = modal.querySelector(".modal-title");
-    const yesBtn = document.getElementById("confirm-yes");
     const noBtn = document.getElementById("confirm-no");
-
+    const yesBtn = document.getElementById("confirm-yes");
     titleEl.textContent = title;
     msgEl.textContent = message;
 
@@ -161,8 +160,9 @@ export function showConfirmModal(message, title = "Confirmar acció") {
     function closeModal() {
       modal.style.display = "none";
       document.body.classList.remove("modal-open");
-      yesBtn.removeEventListener("click", onYes);
       noBtn.removeEventListener("click", onNo);
+      yesBtn.removeEventListener("click", onYes);
+
       window.removeEventListener("click", outsideClick);
       document.removeEventListener("keydown", trapFocus);
     }
@@ -184,8 +184,8 @@ export function showConfirmModal(message, title = "Confirmar acció") {
       }
     }
 
-    yesBtn.addEventListener("click", onYes);
     noBtn.addEventListener("click", onNo);
+    yesBtn.addEventListener("click", onYes);
     window.addEventListener("click", outsideClick);
 
     function trapFocus(evt) {

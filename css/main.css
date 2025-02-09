@@ -737,22 +737,19 @@ button .fa {
   justify-content: space-between;
   border: 1px solid var(--grey-border);
   border-radius: 8px;
-  padding: 10px 15px;
+  padding: 20px 15px;
   background-color: var(--bg-dietas);
   cursor: default;
 }
-.diet-item:hover {
-  background-color: var(--bgcolor-hover);
-}
 
 .diet-date {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-color);
 }
 
 .diet-icons {
   display: flex;
-  gap: 20px;
+  gap: 40px;
 }
 
 /* Botons d'icona */
@@ -774,8 +771,8 @@ button .fa {
 }
 
 .diet-icons img {
-  width: 24px;
-  height: 24px;
+  width: 22px !important;
+  height: 22px !important;
   pointer-events: none;
 }
 
@@ -1203,7 +1200,20 @@ select {
     padding: 5px 0;
   }
   .diet-item {
-    padding: 8px 12px;
+    padding: 14px 12px;
+  }
+  .diet-icons {
+    display: flex;
+    gap: 30px;
+  }
+  .diet-date {
+    font-size: 15px;
+    color: var(--text-color);
+  }
+  .diet-icons img {
+    width: 20px !important;
+    height: 20px !important;
+    pointer-events: none;
   }
   input[type=text],
   input[type=date],
