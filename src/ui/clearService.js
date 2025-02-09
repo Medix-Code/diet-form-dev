@@ -18,9 +18,6 @@ export function setupClearSelectedService() {
 
   // Actualitza el botó directament, per exemple:
   const serviceColors = ["service-1", "service-2", "service-3", "service-4"];
-  clearBtn.className = `clear-selected-btn ${
-    serviceColors[getCurrentServiceIndex()]
-  }`;
 
   clearBtn.addEventListener("click", () => {
     const index = getCurrentServiceIndex();
