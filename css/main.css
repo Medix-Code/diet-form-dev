@@ -1137,6 +1137,51 @@ button .icon {
   color: #000000;
 }
 
+.flatpickr-time {
+  background-color: #ebebeb;
+  border: 1px solid #000000;
+  border-radius: 1px;
+  padding: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.flatpickr-time input {
+  background: transparent;
+  border: none;
+  color: #000000;
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  width: 2rem;
+  padding: 0.25rem;
+}
+.flatpickr-time input:focus {
+  border-bottom: 2px solid #2ead9e;
+}
+.flatpickr-time .flatpickr-am-pm {
+  color: #2ead9e;
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+.flatpickr-time .flatpickr-timepicker-hour,
+.flatpickr-time .flatpickr-timepicker-minute {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 0.2rem 0.4rem;
+  color: #2ead9e;
+  cursor: pointer;
+}
+.flatpickr-time .flatpickr-timepicker-hour:hover,
+.flatpickr-time .flatpickr-timepicker-minute:hover {
+  background-color: #e6f7f1;
+}
+
+.flatpickr-time-separator {
+  color: #2ead9e;
+  font-size: 1rem;
+  margin: 0 0.25rem;
+}
+
 input[type=text],
 input[type=date],
 input[type=datetime-local],
