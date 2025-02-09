@@ -1,4 +1,4 @@
-// Definim el nom del caché i els fitxers a “cachejar”
+// Definim el nom del caché i els fitxers a "cachejar"
 const CACHE_NAME = "dieta-cache-v1";
 const urlsToCache = [
   "./",
@@ -48,7 +48,7 @@ self.addEventListener("install", (event) => {
     caches
       .open(CACHE_NAME)
       .then(async (cache) => {
-        console.log("[ServiceWorker] Guardar ficheros al cache");
+        console.log("[ServiceWorker] Guardar fitxers al caché");
         for (const url of urlsToCache) {
           try {
             const response = await fetch(url, { cache: "no-cache" });
@@ -58,30 +58,28 @@ self.addEventListener("install", (event) => {
               );
             }
             await cache.put(url, response);
-            console.log(`[ServiceWorker] Ficheros en cache: ${url}`);
+            console.log(`[ServiceWorker] Fitxer en caché: ${url}`);
           } catch (error) {
             console.error(`[ServiceWorker] Error cachejant ${url}:`, error);
           }
         }
       })
       .catch((error) => {
-        console.error("[ServiceWorker] Error durante la instalación:", error);
+        console.error("[ServiceWorker] Error durant la instal·lació:", error);
       })
   );
 });
 
-// Event 'fetch': interceptem peticions de xarxa i mirem si està en cache
+// Event 'fetch': interceptem peticions de xarxa i mirem si estan en caché
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        console.log("[ServiceWorker] Servint des de cache:", event.request.url);
+        console.log("[ServiceWorker] Servint des de caché:", event.request.url);
         return cachedResponse;
       }
       return fetch(event.request)
-        .then((networkResponse) => {
-          return networkResponse;
-        })
+        .then((networkResponse) => networkResponse)
         .catch((error) => {
           console.error("[ServiceWorker] Error durant el fetch:", error);
           throw error;
@@ -90,15 +88,16 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// Event 'activate': esborrem caches antics que no concordin amb la versió actual
+// Event 'activate': esborrem les caches antics que no concordin amb la versió actual
 self.addEventListener("activate", (event) => {
   console.log("[ServiceWorker] Activant...");
+  const cacheWhitelist = [CACHE_NAME]; // Només volem conservar aquesta versió
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log("[ServiceWorker] Eliminant cache antic:", cacheName);
+          if (!cacheWhitelist.includes(cacheName)) {
+            console.log("[ServiceWorker] Eliminant caché antic:", cacheName);
             return caches.delete(cacheName);
           }
         })

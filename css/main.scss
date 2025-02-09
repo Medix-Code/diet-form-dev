@@ -259,7 +259,7 @@ main {
 .top-bar__title {
   margin: 0;
   font-family: "Yeseva One", sans-serif;
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 300;
   font-style: normal;
   padding-left: 20px;
@@ -900,7 +900,7 @@ button .fa {
   color: var(--text-color);
   text-align: center;
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .signature-modal-content {
@@ -910,7 +910,8 @@ button .fa {
 
   p.signature-instruction {
     text-align: left;
-    font-size: 1rem;
+    font-size: 15px;
+    font-weight: normal;
     font-weight: 200;
   }
 }
@@ -1248,7 +1249,8 @@ button .icon {
   }
 
   #diet-modal-title {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
+    font-weight: 600;
   }
 
   #no-diets-text {
@@ -1369,7 +1371,7 @@ select {
   }
 
   #diet-modal-title {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
   }
 
   #no-diets-text {
@@ -1385,7 +1387,7 @@ select {
   }
   .diet-icons {
     display: flex;
-    gap: 30px;
+    gap: 20px;
   }
 
   .diet-date {
@@ -1454,13 +1456,13 @@ select {
   #about-title {
     text-align: center;
     font-size: 1.1rem;
-    font-weight: 500;
+    font-weight: 600;
     margin: 0;
   }
 
   h3#diet-modal-title {
     font-size: 1.1rem;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 10px;
   }
 
