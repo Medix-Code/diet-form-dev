@@ -63,15 +63,33 @@ export function initSignature() {
 
 function resizeCanvas() {
   if (!signatureCanvas) return;
-  const container = signatureCanvas.parentElement;
-  ctx = signatureCanvas.getContext("2d", { willReadFrequently: true });
 
+  // 1) Guarda la imatge actual del canvas
+  const oldDataUrl = signatureCanvas.toDataURL("image/png");
+
+  // 2) Ajusta la mida del canvas segons el contenidor
+  const container = signatureCanvas.parentElement;
   signatureCanvas.width = container.offsetWidth;
   signatureCanvas.height = container.offsetHeight;
 
+  // 3) Reconfigura el context
+  ctx = signatureCanvas.getContext("2d", { willReadFrequently: true });
   ctx.lineWidth = 2;
   ctx.lineCap = "round";
   ctx.strokeStyle = "#000";
+
+  // 4) Redibuixa la imatge que havies guardat
+  const tempImage = new Image();
+  tempImage.onload = () => {
+    ctx.drawImage(
+      tempImage,
+      0,
+      0,
+      signatureCanvas.width,
+      signatureCanvas.height
+    );
+  };
+  tempImage.src = oldDataUrl;
 }
 
 function initCanvasEvents() {
