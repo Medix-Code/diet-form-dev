@@ -1109,18 +1109,27 @@ button .icon {
   background-color: #ffffff; /* si vols clar en lloc de fosc */
 }
 
+.flatpickr-day {
+  color: #000000; /* Per exemple, un gris fosc */
+}
+
+.flatpickr-weekday {
+  color: #ffffff; /* Per exemple, blanc */
+  background-color: #333333; /* També pots canviar el fons si ho vols */
+}
+
 /* Canvia el color de les dates seleccionades */
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
 .flatpickr-day.endRange {
   background-color: #2ead9e;
   border-color: #2ead9e;
-  color: #000000; /* text en blanc */
+  color: #070707; /* text en blanc */
 }
 
 /* Canvia el color de fons del mes i any (encapçalat) */
 .flatpickr-months {
-  background-color: #444; /* per exemple, gris fosc */
+  background-color: #e71111; /* per exemple, gris fosc */
 }
 
 /* títol del mes/any en color blanc */
