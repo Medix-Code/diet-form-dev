@@ -1270,6 +1270,18 @@ button .icon {
   margin-bottom: 25px;
 }
 
+/* Exemple per canviar el color de fons del calendari */
+.flatpickr-calendar {
+  background-color: #f0f0f0; /* El teu color personalitzat */
+}
+/* Canvia també els colors de botons, textos, etc. segons les teves necessitats */
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background-color: #2ead9e; /* El teu color per les dates seleccionades */
+  border-color: #2ead9e;
+}
+
 input[type="text"],
 input[type="date"],
 input[type="datetime-local"],
