@@ -1,21 +1,85 @@
 /**
  * Configuració de date/time pickers natius
- * Abans era "pickers.js"
+ *
  */
 
 export function setupDatePickers() {
-  // Seleccionem tots els inputs de tipus date i datetime-local
   const dateInps = document.querySelectorAll(
     'input[type="date"], input[type="datetime-local"]'
   );
 
   dateInps.forEach((inp) => {
-    // Configura opcions bàsiques
+    // Determinem si hem d'activar el temps (si és datetime-local)
+    const isDateTime = inp.type === "datetime-local";
+
+    // Exemple d'opcions avançades
     const options = {
-      dateFormat: "d-m-Y", // Exemple: 2023-12-31
-      // Si l'input és de tipus datetime-local, activem també l'hora
-      enableTime: inp.type === "datetime-local",
-      // Per personalitzar colors, pots modificar el CSS (vegeu més endavant)
+      // Format de data: d => dia, m => mes, Y => any de 4 dígits
+      // Si utilitzes temps, la part "H:i" es mostrarà automàticament.
+      dateFormat: isDateTime ? "d-m-Y H:i" : "d-m-Y",
+
+      // Habilita temps si és datetime
+      enableTime: isDateTime,
+      // 24h en lloc de AM/PM
+      time_24hr: true,
+
+      // minDate i maxDate: exemplificació de com limitar el rang
+      // minDate: "today", // Permet només dates a partir d'avui
+      // maxDate: "31.12.2025", // Fins a finals de 2025 (format d-m-Y o Y-m-d, segons la configuració)
+
+      // Per posar l'idioma català, pots fer:
+      locale: {
+        firstDayOfWeek: 1, // Inicia la setmana en dilluns
+        weekdays: {
+          shorthand: ["Dl", "Dm", "Dc", "Dj", "Dv", "Ds", "Dg"],
+          longhand: [
+            "Dilluns",
+            "Dimarts",
+            "Dimecres",
+            "Dijous",
+            "Divendres",
+            "Dissabte",
+            "Diumenge",
+          ],
+        },
+        months: {
+          shorthand: [
+            "Gen",
+            "Feb",
+            "Mar",
+            "Abr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Ago",
+            "Set",
+            "Oct",
+            "Nov",
+            "Des",
+          ],
+          longhand: [
+            "Gener",
+            "Febrer",
+            "Març",
+            "Abril",
+            "Maig",
+            "Juny",
+            "Juliol",
+            "Agost",
+            "Setembre",
+            "Octubre",
+            "Novembre",
+            "Desembre",
+          ],
+        },
+      },
+
+      // Altres opcions que podries voler:
+      // altInput: true, // Fa servir un input alternatiu per mostrar el text formatat
+      // altFormat: "j F, Y (H:i)", // Ex: "31 Desembre, 2025 (23:59)"
+      // defaultDate: "today", // Per defecte selecciona el dia d'avui
+      // allowInput: true, // Permet escriure manualment (compte amb la validació)
+      // etc.
     };
 
     // Inicialitza flatpickr per aquest input
@@ -29,9 +93,12 @@ export function setupTimePickers() {
   timeInps.forEach((inp) => {
     const options = {
       enableTime: true,
-      noCalendar: true,
+      noCalendar: true, // Només temps, sense calendari
       dateFormat: "H:i",
-      // Altres opcions per configurar l'hora
+      time_24hr: true, // Format 24h
+      // Podem afegir minTime i maxTime, per exemple:
+      // minTime: "09:00",
+      // maxTime: "17:00",
     };
 
     flatpickr(inp, options);

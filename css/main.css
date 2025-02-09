@@ -1104,17 +1104,28 @@ button .icon {
   margin-bottom: 25px;
 }
 
-/* Exemple per canviar el color de fons del calendari */
+/* Canvia color de fons del calendari */
 .flatpickr-calendar {
-  background-color: #f0f0f0; /* El teu color personalitzat */
+  background-color: #ffffff; /* si vols clar en lloc de fosc */
 }
 
-/* Canvia també els colors de botons, textos, etc. segons les teves necessitats */
+/* Canvia el color de les dates seleccionades */
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
 .flatpickr-day.endRange {
-  background-color: #2ead9e; /* El teu color per les dates seleccionades */
+  background-color: #2ead9e;
   border-color: #2ead9e;
+  color: #000000; /* text en blanc */
+}
+
+/* Canvia el color de fons del mes i any (encapçalat) */
+.flatpickr-months {
+  background-color: #444; /* per exemple, gris fosc */
+}
+
+/* títol del mes/any en color blanc */
+.flatpickr-month .cur-month {
+  color: #000000;
 }
 
 input[type=text],
