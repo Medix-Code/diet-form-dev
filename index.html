@@ -12,18 +12,13 @@
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Yeseva+One&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#004aad" />
@@ -245,7 +240,7 @@
 
         <!-- Contenidor dels 4 serveis -->
         <div id="services-container">
-          <!-- SERVEI 1 (camp obligatori per guardar -> Nº Servei >=7 dígits) -->
+          <!-- SERVEI 1 -->
           <div class="service service-1" aria-labelledby="servei-1">
             <div class="form-group">
               <label for="service-number-1">N.º de servicio</label>
@@ -534,7 +529,7 @@
           <p id="no-diets-text" class="no-diets-text hidden">
             No hay dietas guardadas.
           </p>
-          <!-- Aquí es crearà dinàmicament la llista de dietes amb la nova estructura -->
+          <!-- Aquí es crearà dinàmicament la llista de dietes en una sola línia -->
           <div
             id="diet-options"
             class="diet-list"
@@ -557,13 +552,9 @@
             Firma dentro del recuadro. Para eliminarla, haz doble clic en el
             área.
           </p>
-
-          <!-- Canvas on dibuixem la firma -->
           <div class="signature-canvas-container">
             <canvas id="signature-canvas"></canvas>
           </div>
-
-          <!-- Botons del modal de firma -->
           <div class="modal-buttons">
             <button id="signature-cancel" class="modal-button cancel">
               Cancelar
@@ -581,7 +572,6 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-      <!-- Contingut del footer -->
       <div class="footer__content">
         <!-- 1a fila: icones -->
         <div class="footer__icons">
@@ -598,7 +588,6 @@
               class="icon"
             />
           </button>
-
           <a
             href="#about-modal"
             class="footer-btn"
@@ -607,7 +596,6 @@
           >
             <img src="assets/icons/info.svg" alt="" class="icon" />
           </a>
-
           <!-- Botó de donacions amb icona -->
           <a
             href="https://www.paypal.com/donate/?hosted_button_id=XPFGNJ33CECHJ"
@@ -622,7 +610,6 @@
             />
           </a>
         </div>
-
         <!-- 2a fila: text del footer -->
         <div class="footer__text">
           <p>©2025 TesHub</p>
@@ -653,7 +640,6 @@
           Ten en cuenta que, si se eliminan los datos del navegador, también se
           perderán los registros guardados.
         </p>
-
         <button class="close-modal-btn">Aceptar</button>
       </div>
     </div>
@@ -669,7 +655,6 @@
       <div class="modal-content">
         <h3 class="modal-title"></h3>
         <p id="confirm-message"></p>
-
         <div class="modal-buttons">
           <button id="confirm-yes" class="modal-button yes">Sí</button>
           <button id="confirm-no" class="modal-button no">No</button>
@@ -693,8 +678,7 @@
       }
     </script>
 
-    <!-- Import del codi principal, ara al directori 'src/' -->
-
+    <!-- Codi principal de la teva app -->
     <script type="module" src="./src/app.js"></script>
     <script src="./src/ui/theme.js"></script>
   </body>
