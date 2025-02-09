@@ -199,8 +199,15 @@ function openSignatureModal(target) {
 
 function drawSignatureFromDataUrl(dataUrl) {
   const image = new Image();
+  image.crossOrigin = "anonymous";
   image.onload = () => {
-    ctx.drawImage(image, 0, 0, signatureCanvas.width, signatureCanvas.height);
+    console.log("Imatge carregada correctament", image);
+    // Obtenim la mida visual del contenidor:
+    const container = signatureCanvas.parentElement;
+    ctx.drawImage(image, 0, 0, container.offsetWidth, container.offsetHeight);
+  };
+  image.onerror = (e) => {
+    console.error("Error en carregar la imatge", e);
   };
   image.src = dataUrl;
 }
