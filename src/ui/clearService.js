@@ -16,8 +16,11 @@ export function setupClearSelectedService() {
   const allServices = document.querySelectorAll(".service");
   if (!clearBtn || !allServices.length) return;
 
-  // Actualitza el botó directament, per exemple:
+  // Actualitza el botó directament
   const serviceColors = ["service-1", "service-2", "service-3", "service-4"];
+  clearBtn.className = `clear-selected-btn ${
+    serviceColors[getCurrentServiceIndex()]
+  }`;
 
   clearBtn.addEventListener("click", () => {
     const index = getCurrentServiceIndex();
