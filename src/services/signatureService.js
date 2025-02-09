@@ -175,8 +175,8 @@ function openSignatureModal(target) {
   signatureModal.style.display = "block";
   document.body.classList.add("modal-open");
 
-  // Esperem al proper frame (o un petit timeout) abans de redimensionar:
-  requestAnimationFrame(() => {
+  // Espera uns mil·lisegons perquè el navegador apliqui el display:block
+  setTimeout(() => {
     resizeCanvas();
     clearCanvas();
 
@@ -187,7 +187,7 @@ function openSignatureModal(target) {
     if (oldSig) {
       drawSignatureFromDataUrl(oldSig);
     }
-  });
+  }, 50); // 50ms és suficient en la majoria de casos
 }
 
 function drawSignatureFromDataUrl(dataUrl) {
