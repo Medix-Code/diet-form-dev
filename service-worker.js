@@ -1,5 +1,5 @@
 // Definim el nom del caché i els fitxers a "cachejar"
-const CACHE_NAME = "dieta-cache-v20250215123253";
+const CACHE_NAME = "dieta-cache-v20250215124236";
 
 // NOTA: NO incloem index.html ni 404.html en el pre-cache
 // per evitar que es quedin 'encallats' en cache-first.
@@ -83,20 +83,37 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(event.request)
         .then((networkResponse) => {
-          // Després de rebre'l de la xarxa, l'emmagatzemem a la caché
-          // (perquè funcioni offline si ens calgués)
+          // Un cop rebuda la resposta, l'emmagatzemem a la caché
           return caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
           });
         })
         .catch(() => {
-          // Si no hi ha xarxa, tornem el que tinguem a la caché (si hi és)
+          // Si no hi ha xarxa, tornem el que hi hagi en la caché (si hi és)
           return caches.match(event.request);
         })
     );
-  } else {
-    // Per la resta de fitxers (JS, CSS, imatges...), fem cache-first
+  }
+  // Si és un fitxer CSS (o altres fitxers que vulguis actualitzar sempre)
+  else if (event.request.destination === "style") {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          // Si la resposta és correcta, la guardem a la caché i la retornem
+          return caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        })
+        .catch(() => {
+          // Si falla la xarxa, tornem la versió en caché (si existeix)
+          return caches.match(event.request);
+        })
+    );
+  }
+  // Per la resta de fitxers (JS, imatges, etc.), fem cache-first
+  else {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         if (cachedResponse) {
