@@ -44,6 +44,7 @@ const urlsToCache = [
 // Event 'install': fem "pre-cache" dels fitxers
 self.addEventListener("install", (event) => {
   console.log("[ServiceWorker] Instal·lant...");
+
   event.waitUntil(
     caches
       .open(CACHE_NAME)
@@ -68,6 +69,10 @@ self.addEventListener("install", (event) => {
         console.error("[ServiceWorker] Error durant la instal·lació:", error);
       })
   );
+
+  // skipWaiting() fa que, tan bon punt acabi la instal·lació,
+  // el SW nou passi de 'waiting' a 'activate' immediatament.
+  self.skipWaiting();
 });
 
 // Event 'fetch': interceptem peticions de xarxa i mirem si estan en caché
@@ -92,6 +97,7 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("activate", (event) => {
   console.log("[ServiceWorker] Activant...");
   const cacheWhitelist = [CACHE_NAME]; // Només volem conservar aquesta versió
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -104,6 +110,9 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
+
+  // clients.claim() fa que el nou SW "reclami" totes les pestanyes controlades immediatament.
+  self.clients.claim();
 });
 
 // Captura i registra errors globals al Service Worker
