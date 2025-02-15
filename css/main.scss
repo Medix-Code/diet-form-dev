@@ -1289,6 +1289,10 @@ select {
   font-size: 15px;
   padding: 10px 14px;
 }
+select option {
+  font-family: "Roboto Serif", serif;
+  font-weight: 100;
+}
 
 .toast {
   width: 40vw;
@@ -1427,6 +1431,7 @@ select {
     line-height: normal;
   }
   select option {
+    font-family: "Roboto Serif", serif;
     font-size: 12px;
     font-weight: 100;
   }
