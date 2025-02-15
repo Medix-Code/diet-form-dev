@@ -42,26 +42,34 @@ export function easterEgg() {
   let singleTapCount = 0;
   let tapTimeout;
   const topBar = document.querySelector(".top-bar");
-  if (!topBar) return;
+  if (!topBar) return console.warn("No s'ha trobat l'element .top-bar");
 
   topBar.addEventListener("touchend", (event) => {
-    const touchCount = event.changedTouches.length; // número de dits en aquest touchend
+    const touchCount = event.changedTouches.length;
+    console.log("touchend, changedTouches.length =", touchCount);
+
     if (touchCount === 1) {
-      // Un dit: incrementem el comptador de taps d'un dit
       singleTapCount++;
+      console.log("Single tap count:", singleTapCount);
       clearTimeout(tapTimeout);
       tapTimeout = setTimeout(() => {
-        singleTapCount = 0; // si hi ha més d'1 segon d'inactivitat, reiniciem
+        console.log("Reset singleTapCount per inactivitat");
+        singleTapCount = 0;
       }, 1000);
     } else if (touchCount === 2) {
-      // Dos dits: només activem si hem tingut 5 taps previs d'un dit
+      console.log(
+        "Detected 2 touches. Current singleTapCount:",
+        singleTapCount
+      );
       if (singleTapCount === 5) {
         showEasterEggIcon();
+      } else {
+        console.log("No s'han acumulat 5 tocs d'un dit abans del doble toc.");
       }
       singleTapCount = 0;
       clearTimeout(tapTimeout);
     } else {
-      // Si és una combinació diferent, reiniciem el comptador
+      console.log("Tocs no esperats, reiniciant contador");
       singleTapCount = 0;
       clearTimeout(tapTimeout);
     }
