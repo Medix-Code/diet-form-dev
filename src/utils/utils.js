@@ -46,7 +46,7 @@ export function easterEgg() {
 
   topBar.addEventListener("touchend", () => {
     tapCount++;
-    if (tapCount === 5) {
+    if (tapCount === 6) {
       showEasterEggIcon();
       tapCount = 0;
       clearTimeout(tapTimeout);
