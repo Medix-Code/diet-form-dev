@@ -1193,6 +1193,45 @@ button .icon {
 }
 
 // ===========================================================================
+// EASTER EGG
+// ===========================================================================
+
+.easter-egg-icon {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  /* Opcional: afegeix una transició o animació */
+  opacity: 0;
+  animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+}
+
+.easter-egg-icon img {
+  width: 100px; /* Ajusta la mida segons necessiti */
+  height: auto;
+}
+
+// ===========================================================================
 // MEDIA QUERIES RESPONSIVES
 // ===========================================================================
 
