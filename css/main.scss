@@ -362,6 +362,9 @@ main {
     pointer-events: auto;
     max-height: 300px;
   }
+  &:active {
+    background-color: var(--bg-btn-ajustes);
+  }
 
   .big-btn {
     width: 100%;

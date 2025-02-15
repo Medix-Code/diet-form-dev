@@ -306,6 +306,9 @@ main {
   pointer-events: auto;
   max-height: 300px;
 }
+.ajustes-panel:active {
+  background-color: var(--bg-btn-ajustes);
+}
 .ajustes-panel .big-btn {
   width: 100%;
   justify-content: flex-start;
