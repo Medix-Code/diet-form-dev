@@ -1046,13 +1046,24 @@ button .icon {
   height: 1.3em;
 }
 
+/* Overlay per bloquejar els clics als elements subjacents */
+.easter-egg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1999; /* Ha de ser inferior al de l'icona (2000) */
+  background-color: rgba(0, 0, 0, 0.5); /* Fons negre amb 50% d'opacitat */
+}
+
+/* Estils per a l'easter egg */
 .easter-egg-icon {
   position: fixed;
-  top: 20%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2000;
-  /* Opcional: afegeix una transició o animació */
   opacity: 0;
   animation: fadeInOut 3s forwards;
 }
@@ -1060,26 +1071,41 @@ button .icon {
 @keyframes fadeInOut {
   0% {
     opacity: 0;
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, -60%) scale(0.5);
   }
   20% {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
   }
   80% {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -40%);
+    transform: translate(-50%, -40%) scale(1);
   }
 }
 .easter-egg-icon img {
-  width: 100px; /* Ajusta la mida segons necessiti */
+  width: 200px; /* Ajusta segons la mida desitjada */
   height: auto;
 }
 
+/* Animació quan es cliqui l'icona */
+.easter-egg-icon.clicked {
+  animation: spinFadeOut 1s forwards;
+}
+
+@keyframes spinFadeOut {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1);
+    opacity: 0;
+  }
+}
 /* =======================================================
    Media Query para TABLETS (entre 768px y 1024px)
    ======================================================= */
@@ -1314,7 +1340,6 @@ select option {
     font-size: 15px;
     font-weight: normal;
     font-weight: 200;
-    text-align: justify;
   }
   #about-title {
     text-align: center;
