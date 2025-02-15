@@ -9,7 +9,7 @@
 // Variables generales de colores y tipografía
 :root {
   /* Colores principales */
-  --primary-color: #fefefe; // Color principal (ej. cabecera)        m'agrada: 2ead9e
+  --primary-color: #004aad; // Color principal (ej. cabecera)        m'agrada: 2ead9e
   --secondary-color: #004aad; // Color secundario  )             (165b98)
   --secondary-color-hover: #0056b3;
   --text-color: #333333; // Text Title
@@ -17,7 +17,7 @@
 
   /* TopBar */
   --border-bottom-topbar: #f1f1f1; //  Borde sota TopBar
-  --title-color: #000000; //  Color Titul
+  --title-color: #f1f1f1; //  Color Titul
 
   /*TAB*/
 
@@ -743,7 +743,7 @@ button .fa {
   animation: fadeIn var(--transition-speed) ease-in-out;
 
   .modal-title {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1.1rem;
     text-align: center;
     justify-content: center;
