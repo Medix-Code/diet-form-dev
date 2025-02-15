@@ -1075,16 +1075,6 @@ button .icon {
   text-align: center;
 }
 
-.easter-egg-icon img {
-  width: 200px; /* Ajusta segons la mida desitjada */
-  height: auto;
-}
-
-/* Animació quan es cliqui l'icona */
-.easter-egg-icon.clicked {
-  animation: spinFadeOut 1s forwards;
-}
-
 @keyframes fadeInStatic {
   0% {
     opacity: 0;
@@ -1106,17 +1096,23 @@ button .icon {
     transform: translate(-50%, -50%) scale(1);
   }
 }
-@keyframes vanish {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
+.easter-egg-icon img {
+  width: 200px; /* Ajusta segons la mida desitjada */
+  height: auto;
+}
+
+/* Animació quan es cliqui l'icona */
+.easter-egg-icon.clicked {
+  animation: spinFadeOut 1s forwards;
+}
+
+@keyframes spinFadeOut {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
     opacity: 1;
   }
-  50% {
-    transform: translate(-50%, -50%) scale(2);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(0);
+  to {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1);
     opacity: 0;
   }
 }
