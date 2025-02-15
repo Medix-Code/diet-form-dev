@@ -61,6 +61,8 @@ export async function fillPdf(data, servicesData) {
   try {
     const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
 
+    let pdfTemplateUrl = "./dieta_tsc.pdf";
+
     if (data.empresa === "empresa1") {
       pdfTemplateUrl = "./dieta_tsc.pdf";
     } else if (data.empresa === "empresa2") {
