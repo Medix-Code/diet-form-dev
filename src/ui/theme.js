@@ -7,46 +7,42 @@ document.addEventListener("DOMContentLoaded", function () {
   const lightThemeColor = "#004aad"; // Color de fons del tema clar
   const darkThemeColor = "#343a40"; // Color de fons del tema fosc
 
-  // Funció per actualitzar el meta tag theme-color recreant-lo
+  // Funció per actualitzar (eliminar i recrear) el meta tag theme-color
   function updateThemeColorMeta(color) {
-    // Elimina el meta tag existent (si n'hi ha)
     let meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
       meta.remove();
     }
-    // Crea un nou meta tag amb el color desitjat
     meta = document.createElement("meta");
     meta.setAttribute("name", "theme-color");
     meta.setAttribute("content", color);
     document.head.appendChild(meta);
   }
 
-  // Funció per establir el tema i actualitzar l'icona i el meta theme-color
+  // Funció per establir el tema, actualitzar l'icona, el meta tag i desar la preferència
   function setTheme(theme) {
     if (theme === "dark") {
       body.classList.add("theme-dark");
-      localStorage.setItem("theme", "dark");
-      // Canvia la icona al sol per indicar mode fosc
+      localStorage.setItem("theme", theme);
+      // Canvia la icona al sol per indicar que el tema actual és fosc (i es pot canviar a clar)
       themeIcon.src = "assets/icons/sun.svg";
       updateThemeColorMeta(darkThemeColor);
     } else {
       body.classList.remove("theme-dark");
-      localStorage.setItem("theme", "light");
-      // Canvia la icona a la lluna per indicar mode clar
+      localStorage.setItem("theme", theme);
+      // Canvia la icona a la lluna per indicar que el tema actual és clar (i es pot canviar a fosc)
       themeIcon.src = "assets/icons/moon.svg";
       updateThemeColorMeta(lightThemeColor);
     }
   }
 
-  // Comprova si hi ha una preferència guardada a localStorage
+  // Detecta la preferència guardada a localStorage o, si no n'hi ha, la preferència del sistema
   let savedTheme = localStorage.getItem("theme");
   if (!savedTheme) {
-    // Si no hi ha preferència guardada, detecta la preferència del sistema
     savedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
       : "light";
   }
-  // Estableix el tema segons la preferència trobada
   setTheme(savedTheme);
 
   // Canvia el tema quan es clica el botó
@@ -54,7 +50,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentTheme = body.classList.contains("theme-dark")
       ? "dark"
       : "light";
-    // Canvia al tema contrari
+    // Al canviar, s'afegeix la preferència manual a localStorage (i per tant s'atura la detecció automàtica)
     setTheme(currentTheme === "dark" ? "light" : "dark");
+  });
+
+  // Detecta canvis en la preferència del sistema si l'usuari no ha triat manualment
+  const systemDarkMedia = window.matchMedia("(prefers-color-scheme: dark)");
+  systemDarkMedia.addEventListener("change", (e) => {
+    if (!localStorage.getItem("theme")) {
+      // Si l'usuari no ha triat res manualment, s'aplica la preferència del sistema
+      setTheme(e.matches ? "dark" : "light");
+    }
   });
 });
