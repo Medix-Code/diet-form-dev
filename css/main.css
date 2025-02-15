@@ -289,7 +289,7 @@ main {
   top: calc(var(--top-bar-height));
   left: 0;
   right: 0;
-  background-color: var(--primary-color);
+  background-color: var(--bg-btn-ajustes);
   z-index: 1000;
   overflow: hidden;
   pointer-events: none;
@@ -305,6 +305,9 @@ main {
   opacity: 1;
   pointer-events: auto;
   max-height: 300px;
+}
+.ajustes-panel:hover {
+  background-color: var(--bg-btn-ajustes);
 }
 .ajustes-panel:active {
   background-color: var(--bg-btn-ajustes);
