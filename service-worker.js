@@ -98,16 +98,14 @@ self.addEventListener("fetch", (event) => {
   // Si és un fitxer CSS (o altres fitxers que vulguis actualitzar sempre)
   else if (event.request.destination === "style") {
     event.respondWith(
-      fetch(event.request)
+      fetch(event.request, { cache: "reload" })
         .then((networkResponse) => {
-          // Si la resposta és correcta, la guardem a la caché i la retornem
           return caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
           });
         })
         .catch(() => {
-          // Si falla la xarxa, tornem la versió en caché (si existeix)
           return caches.match(event.request);
         })
     );
