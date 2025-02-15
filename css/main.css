@@ -447,6 +447,10 @@ button .fa {
   box-sizing: border-box;
   text-align: left;
 }
+.form-group select option {
+  font-family: "Roboto Serif", serif;
+  font-size: 15px;
+}
 .form-group input[type=date]:focus,
 .form-group input[type=datetime-local]:focus,
 .form-group input[type=time]:focus,
@@ -1229,13 +1233,17 @@ select {
   input[type=time],
   select {
     height: 36px;
-    font-size: 14px;
+    font-size: 11px;
     padding: 8px 12px;
     border-radius: 4px;
   }
   select {
     text-align: center;
     line-height: normal;
+  }
+  select option {
+    font-size: 12px;
+    font-weight: 100;
   }
   label {
     margin-bottom: 8px;

@@ -35,7 +35,7 @@ const urlsToCache = [
   "./assets/images/icons-512.png",
   "./assets/images/icons-192-maskable.png",
   "./assets/images/icons-512-maskable.png",
-  "./template.pdf",
+  "./dieta_tsc.pdf",
 
   // ► Dependència externa (CDN)
   "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
