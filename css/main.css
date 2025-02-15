@@ -164,8 +164,6 @@ html {
   se actualizarán automáticamente.
 */
 body {
-  /*font-family: "Open Sans", sans-serif;*/
-  /*font-family: "Yeseva One", sans-serif;*/
   font-family: "Roboto Serif", serif;
   font-size: var(--font-size-base);
   background-color: var(--bg-color);
@@ -296,7 +294,9 @@ main {
   overflow: hidden;
   pointer-events: none;
   box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.2);
-  transform: translateY(-5%);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  transform: translateY(0%);
   opacity: 0;
   transition: transform 0.4s ease, opacity 0.2s ease;
 }
