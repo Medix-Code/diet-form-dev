@@ -1068,6 +1068,13 @@ button .icon {
   animation: fadeInOut 3s forwards;
 }
 
+.easter-egg-text {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #ffffff; /* O qualsevol color que li vagi bé al fons de l'overlay */
+  text-align: center;
+}
+
 @keyframes fadeInOut {
   0% {
     opacity: 0;
