@@ -54,7 +54,7 @@ export function easterEgg() {
       clearTimeout(tapTimeout);
       tapTimeout = setTimeout(() => {
         tapCount = 0;
-      }, 2000);
+      }, 1000);
     }
   });
 }
