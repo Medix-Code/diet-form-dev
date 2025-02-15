@@ -39,40 +39,32 @@ export function getDietDisplayInfo(dietDate, dietType) {
 }
 
 export function easterEgg() {
-  let singleTapCount = 0;
+  let tapCount = 0;
   let tapTimeout;
   const topBar = document.querySelector(".top-bar");
-  if (!topBar) return console.warn("No s'ha trobat l'element .top-bar");
-
+  if (!topBar) return;
   topBar.addEventListener("touchend", (event) => {
-    const touchCount = event.changedTouches.length;
-    console.log("touchend, changedTouches.length =", touchCount);
+    if (event.touches.length > 0) return; // Ignorem si encara hi ha dits a la pantalla
 
-    if (touchCount === 1) {
-      singleTapCount++;
-      console.log("Single tap count:", singleTapCount);
+    if (tapCount < 3 && event.changedTouches.length === 1) {
+      // Primeres 3 pulsacions amb un sol dit
+      tapCount++;
+    } else if (tapCount === 3 && event.changedTouches.length === 2) {
+      // Quart toc amb dos dits
+      showEasterEggIcon();
+      tapCount = 0;
       clearTimeout(tapTimeout);
-      tapTimeout = setTimeout(() => {
-        console.log("Reset singleTapCount per inactivitat");
-        singleTapCount = 0;
-      }, 1000);
-    } else if (touchCount === 2) {
-      console.log(
-        "Detected 2 touches. Current singleTapCount:",
-        singleTapCount
-      );
-      if (singleTapCount === 5) {
-        showEasterEggIcon();
-      } else {
-        console.log("No s'han acumulat 5 tocs d'un dit abans del doble toc.");
-      }
-      singleTapCount = 0;
-      clearTimeout(tapTimeout);
+      return;
     } else {
-      console.log("Tocs no esperats, reiniciant contador");
-      singleTapCount = 0;
-      clearTimeout(tapTimeout);
+      // Si no compleix la seqüència, reiniciem el comptador
+      tapCount = 0;
     }
+
+    // Reset del comptador si es triga més d'1 segon entre tocs
+    clearTimeout(tapTimeout);
+    tapTimeout = setTimeout(() => {
+      tapCount = 0;
+    }, 1000);
   });
 }
 
