@@ -82,12 +82,12 @@ function showEasterEggIcon() {
     // overlay.remove();
   });
 
-  // Quan es cliqui a l'icona, aplica l'animació i elimina tot l'overlay
+  // Quan es cliqui a l'icona, s'aplica l'animació de desaparició (vanish) i s'elimina l'overlay
   iconContainer.addEventListener("click", (e) => {
     e.stopPropagation();
-    iconContainer.classList.add("clicked");
+    iconContainer.classList.add("vanish");
     setTimeout(() => {
       overlay.remove();
-    }, 1000); // 1 segon per a l'animació
+    }, 1000); // 1 segon per a l'animació vanish
   });
 }

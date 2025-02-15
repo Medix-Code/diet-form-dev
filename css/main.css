@@ -1064,8 +1064,8 @@ button .icon {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2000;
-  opacity: 0;
-  animation: fadeInOut 3s forwards;
+  opacity: 1;
+  animation: fadeInStatic 0.5s forwards, pulse 1.5s ease-in-out infinite 0.5s;
 }
 
 .easter-egg-text {
@@ -1075,24 +1075,6 @@ button .icon {
   text-align: center;
 }
 
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -60%) scale(0.5);
-  }
-  20% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  80% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -40%) scale(1);
-  }
-}
 .easter-egg-icon img {
   width: 200px; /* Ajusta segons la mida desitjada */
   height: auto;
@@ -1103,13 +1085,38 @@ button .icon {
   animation: spinFadeOut 1s forwards;
 }
 
-@keyframes spinFadeOut {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+@keyframes fadeInStatic {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes vanish {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg) scale(1);
+  50% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
     opacity: 0;
   }
 }
