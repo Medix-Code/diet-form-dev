@@ -61,9 +61,14 @@ export async function fillPdf(data, servicesData) {
   try {
     const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
 
-    const pdfBytes = await fetch("./template.pdf").then((r) => r.arrayBuffer());
-    const pdfDoc = await PDFDocument.load(pdfBytes);
+    if (data.empresa === "empresa1") {
+      pdfTemplateUrl = "./dieta_tsc.pdf";
+    } else if (data.empresa === "empresa2") {
+      pdfTemplateUrl = "./dieta_tsc.pdf";
+    }
 
+    const pdfBytes = await fetch(pdfTemplateUrl).then((r) => r.arrayBuffer());
+    const pdfDoc = await PDFDocument.load(pdfBytes);
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const page = pdfDoc.getPages()[0];
 
@@ -195,6 +200,7 @@ export function buildPdfFileName(dateValue, dietType) {
   const [yyyy, mm, dd] = (dateValue || "").split("-");
   if (!yyyy || !mm || !dd) return "dieta.pdf";
   const formatted = `${dd}_${mm}_${yyyy}`;
+
   if (dietType === "lunch") return `dieta_comida_${formatted}.pdf`;
   if (dietType === "dinner") return `dieta_cena_${formatted}.pdf`;
   return `dieta_${formatted}.pdf`;

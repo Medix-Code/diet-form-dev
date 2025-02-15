@@ -100,7 +100,7 @@
   --txtcolor-tab-active: #333333;
   --txtcolor-tab-noactive: #4a4a4a;
   --bg-tab-hover: #dee2e6;
-  --line-tab: #004aad; /*Línia sota pestanya activa */
+  --line-tab: #343a40; /*Línia sota pestanya activa */
   /* TEXTFIELD*/
   --textfield: #fefeff;
   --textfield-error: #ec1710;
@@ -113,7 +113,7 @@
   /* FOOTER*/
   --border-top-footer: #f1f1f1;
   --text-color-footer: #ffffff;
-  --bg-footer: #004aad;
+  --bg-footer: #343a40;
   /* GENERAL*/
   --bg-color: #fefeff;
   --grey-border: #ddddddea;

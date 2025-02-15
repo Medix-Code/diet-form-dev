@@ -13,6 +13,7 @@ export class Diet {
     signatureConductor = "",
     signatureAjudant = "",
     services = [],
+    empresa = "",
     timeStampDiet = new Date().toISOString(),
   }) {
     this.id = id;
@@ -24,6 +25,7 @@ export class Diet {
     this.signatureConductor = signatureConductor;
     this.signatureAjudant = signatureAjudant;
     this.services = services;
+    this.empresa = empresa;
     this.timeStampDiet = timeStampDiet;
   }
 }
