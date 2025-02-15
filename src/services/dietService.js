@@ -45,6 +45,7 @@ export function buildDietObject(generalData, servicesData, customId) {
     vehicleNumber: generalData.vehicleNumber,
     person1: generalData.person1,
     person2: generalData.person2,
+    empresa: generalData.empresa,
     signatureConductor: generalData.signatureConductor || "",
     signatureAjudant: generalData.signatureAjudant || "",
     services: servicesData,
@@ -159,6 +160,7 @@ export async function loadDietById(dietId) {
   document.getElementById("vehicle-number").value = diet.vehicleNumber || "";
   document.getElementById("person1").value = diet.person1 || "";
   document.getElementById("person2").value = diet.person2 || "";
+  document.getElementById("empresa").value = diet.empresa || "";
 
   setSignatureConductor(diet.signatureConductor || "");
   setSignatureAjudant(diet.signatureAjudant || "");

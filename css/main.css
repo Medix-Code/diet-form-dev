@@ -1266,6 +1266,7 @@ select {
     font-size: 15px;
     font-weight: normal;
     font-weight: 200;
+    text-align: justify;
   }
   #about-title {
     text-align: center;
