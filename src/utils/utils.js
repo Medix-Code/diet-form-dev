@@ -39,34 +39,51 @@ export function getDietDisplayInfo(dietDate, dietType) {
 }
 
 export function easterEgg() {
-  let tapCount = 0;
+  let topBarTaps = 0;
+  let footerTaps = 0;
   let tapTimeout;
+
   const topBar = document.querySelector(".top-bar");
-  if (!topBar) return;
+  const footer = document.querySelector("footer");
+
+  if (!topBar || !footer) return;
 
   topBar.addEventListener("touchend", (event) => {
-    const fingers = event.changedTouches.length; // Nombre de dits que acaben de tocar la pantalla
+    if (event.changedTouches.length === 1) {
+      topBarTaps++;
 
-    if (tapCount < 3 && fingers === 1) {
-      // Primeres 3 pulsacions amb un sol dit
-      tapCount++;
-    } else if (tapCount === 3 && fingers === 2) {
-      // Quart toc amb dos dits
-      showEasterEggIcon();
-      tapCount = 0;
-      clearTimeout(tapTimeout);
-      return;
+      // Si es fan 3 tocs correctes a la top-bar, esperem la següent fase
+      if (topBarTaps === 3) {
+        clearTimeout(tapTimeout);
+        tapTimeout = setTimeout(() => {
+          topBarTaps = 0;
+          footerTaps = 0;
+        }, 1000);
+      }
     } else {
-      // Si no compleix la seqüència, reiniciem el comptador
-      tapCount = 0;
+      resetTaps();
     }
-
-    // Reset del comptador si es triga més d'1 segon entre tocs
-    clearTimeout(tapTimeout);
-    tapTimeout = setTimeout(() => {
-      tapCount = 0;
-    }, 1000);
   });
+
+  footer.addEventListener("touchend", (event) => {
+    if (event.changedTouches.length === 1 && topBarTaps === 3) {
+      footerTaps++;
+
+      // Si es fan 2 tocs correctes al footer després de 3 a la top-bar, activem l'easter egg
+      if (footerTaps === 2) {
+        showEasterEggIcon();
+        resetTaps();
+      }
+    } else {
+      resetTaps();
+    }
+  });
+
+  function resetTaps() {
+    topBarTaps = 0;
+    footerTaps = 0;
+    clearTimeout(tapTimeout);
+  }
 }
 
 function showEasterEggIcon() {
