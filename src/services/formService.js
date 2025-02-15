@@ -115,7 +115,11 @@ export function gatherAllData() {
   const p1 = document.getElementById("person1").value.trim();
   const p2 = document.getElementById("person2").value.trim();
 
-  // recollim dades de cada servei
+  // Recollim el valor del camp "Empresa" (selecció única)
+  const empresaEl = document.getElementById("empresa");
+  const empresaVal = empresaEl ? empresaEl.value.trim() : "";
+
+  // Recollim dades de cada servei
   const servicesEls = document.querySelectorAll(".service");
   const servicesData = Array.from(servicesEls).map((s) => ({
     serviceNumber: s.querySelector(".service-number")?.value.trim() || "",
@@ -126,7 +130,6 @@ export function gatherAllData() {
     endTime: s.querySelector(".end-time")?.value.trim() || "",
   }));
 
-  // 🔴 ARA incloem les firmes reals de signatureService.js
   return {
     generalData: {
       date: dateVal,
@@ -134,6 +137,7 @@ export function gatherAllData() {
       vehicleNumber: vehicleVal,
       person1: p1,
       person2: p2,
+      empresa: empresaVal, // Afegim el nou camp aquí
       signatureConductor: getSignatureConductor(),
       signatureAjudant: getSignatureAjudant(),
     },
