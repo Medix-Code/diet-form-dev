@@ -37,3 +37,41 @@ export function getDietDisplayInfo(dietDate, dietType) {
 
   return { ddmmaa, franjaText };
 }
+
+export function easterEgg() {
+  let tapCount = 0;
+  let tapTimeout;
+
+  const topBar = document.querySelector(".top-bar");
+  if (!topBar) return;
+
+  topBar.addEventListener("touchend", () => {
+    tapCount++;
+    if (tapCount === 5) {
+      // Quan s'arriba a 5 tocs, crea un element per mostrar l'icona
+      showEasterEggIcon();
+      tapCount = 0;
+      clearTimeout(tapTimeout);
+    } else {
+      clearTimeout(tapTimeout);
+      tapTimeout = setTimeout(() => {
+        tapCount = 0;
+      }, 2000);
+    }
+  });
+}
+
+function showEasterEggIcon() {
+  // Crea un contenidor per a l'icona de l'easter egg
+  const iconContainer = document.createElement("div");
+  iconContainer.className = "easter-egg-icon";
+  iconContainer.innerHTML = `<img src="assets/icons/egg.png" alt="Easter Egg Icon">`;
+
+  // Afegeix l'element al cos del document
+  document.body.appendChild(iconContainer);
+
+  // Després de 3 segons, elimina'l
+  setTimeout(() => {
+    iconContainer.remove();
+  }, 3000);
+}
