@@ -100,7 +100,7 @@
   --txtcolor-tab-active: #333333;
   --txtcolor-tab-noactive: #4a4a4a;
   --bg-tab-hover: #dee2e6;
-  --line-tab: #343a40; /*Línia sota pestanya activa */
+  --line-tab: #004aad; /*Línia sota pestanya activa */
   /* TEXTFIELD*/
   --textfield: #fefeff;
   --textfield-error: #ec1710;
@@ -113,7 +113,7 @@
   /* FOOTER*/
   --border-top-footer: #f1f1f1;
   --text-color-footer: #ffffff;
-  --bg-footer: #343a40;
+  --bg-footer: #004aad;
   /* GENERAL*/
   --bg-color: #fefeff;
   --grey-border: #ddddddea;
@@ -122,15 +122,16 @@
   --bgcolor-active: #d5d5d5;
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15);
   --border-btn-ajustes: rgba(204, 204, 204, 0.3);
-  --bg-btn-ajustes: #fefefe;
+  --bg-btn-ajustes: #fefeff;
   /* Modal MisDietas*/
-  --border-btt: #c9c9c9;
+  --border-btt: #f50f0f;
+  --bg-dietas: #f7f7f7;
   /* Modal. General / Btn confirmació*/
   --bg-transp-modal: rgba(0, 0, 0, 0.6);
-  --btt-confirm: #28a745;
-  --bg-confirm: #218838;
+  --btt-confirm: #004aad;
+  --bg-confirm: #2d71bb;
   --bg-confirm-no: #dc3545;
-  --bg-confirm-no-hover: #c82333;
+  --bg-confirm-no-hover: #e24a5a;
   --txt-btn-confirm: #ffffff;
   --bg-btn-confirm-about: #004aad;
   --black: #000000;
