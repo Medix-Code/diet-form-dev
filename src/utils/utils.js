@@ -73,7 +73,7 @@ function showEasterEggIcon() {
   // Inclou la imatge i un text a sota
   iconContainer.innerHTML = `
     <img src="assets/icons/egg.svg" alt="Easter Egg Icon">
-    <p class="easter-egg-text">Surprise!</p>
+    <p class="easter-egg-text">Carrot Easter!</p>
   `;
 
   // Afegeix el contenidor de l'icona a l'overlay
