@@ -20,7 +20,6 @@
   --title-color: #f1f1f1; //  Color Titul
 
   /*TAB*/
-
   --bg-tab-active: #fefeff; /* Fons de pestanya activa */
   --bg-tab-noactive: #f3f3f3; /* Fons pestanyes no activa*/
   --txtcolor-tab-active: #333333; //TextColor pestanyes active
@@ -119,13 +118,12 @@
   --title-color: #f1f1f1; //  Color Titul
 
   /*TAB*/
-
   --bg-tab-active: #fefeff; /* Fons de pestanya activa */
   --bg-tab-noactive: #f3f3f3; /* Fons pestanyes no activa*/
   --txtcolor-tab-active: #333333; //TextColor pestanyes active
   --txtcolor-tab-noactive: #4a4a4a; //TextColor pestanyes descativada
   --bg-tab-hover: #dee2e6; //Backgrond pasa ratoli pesetanya
-  --line-tab: #343a40; /*Línia sota pestanya activa */
+  --line-tab: #004aad; /*Línia sota pestanya activa */
 
   /* TEXTFIELD*/
   --textfield: #fefeff; // TextField Fons
@@ -141,7 +139,7 @@
   /* FOOTER*/
   --border-top-footer: #f1f1f1; //  Borde top Footer
   --text-color-footer: #ffffff; // Text color Footer
-  --bg-footer: #343a40; // Fondo footer
+  --bg-footer: #004aad; // Fondo footer
 
   /* GENERAL*/
   --bg-color: #fefeff; //  Fons
@@ -152,17 +150,18 @@
   --bgcolor-active: #d5d5d5; // Btn ajustes active, click
   --bg-transp-ajustes: rgba(0, 0, 0, 0.15); // Sombra btt ajustes
   --border-btn-ajustes: rgba(204, 204, 204, 0.3); // Borde Btn ajustes
-  --bg-btn-ajustes: #fefefe; // Fons boto ajustes
+  --bg-btn-ajustes: #fefeff; // Fons boto ajustes
 
   /* Modal MisDietas*/
-  --border-btt: #c9c9c9; // Icon Papelera Border
+  --border-btt: #f50f0f; // Icon Papelera Border esborar crec
+  --bg-dietas: #f7f7f7; // Envoltori dietes guardades
 
   /* Modal. General / Btn confirmació*/
   --bg-transp-modal: rgba(0, 0, 0, 0.6); // Transperencia modals
-  --btt-confirm: #28a745; // Confirmacio btt entre altres
-  --bg-confirm: #218838; // Bg confirmacio buttons entre altres
+  --btt-confirm: #004aad; // Confirmacio btt entre altres
+  --bg-confirm: #2d71bb; // Bg confirmacio buttons entre altres
   --bg-confirm-no: #dc3545; // Btt No
-  --bg-confirm-no-hover: #c82333; // Btt No hover
+  --bg-confirm-no-hover: #e24a5a; // Btt No hover
   --txt-btn-confirm: #ffffff; //
 
   --bg-btn-confirm-about: #004aad; // Fondo btn Acceptar Mes info
