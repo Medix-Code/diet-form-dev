@@ -39,22 +39,31 @@ export function getDietDisplayInfo(dietDate, dietType) {
 }
 
 export function easterEgg() {
-  let tapCount = 0;
+  let singleTapCount = 0;
   let tapTimeout;
   const topBar = document.querySelector(".top-bar");
   if (!topBar) return;
 
-  topBar.addEventListener("touchend", () => {
-    tapCount++;
-    if (tapCount === 6) {
-      showEasterEggIcon();
-      tapCount = 0;
-      clearTimeout(tapTimeout);
-    } else {
+  topBar.addEventListener("touchend", (event) => {
+    const touchCount = event.changedTouches.length; // número de dits en aquest touchend
+    if (touchCount === 1) {
+      // Un dit: incrementem el comptador de taps d'un dit
+      singleTapCount++;
       clearTimeout(tapTimeout);
       tapTimeout = setTimeout(() => {
-        tapCount = 0;
+        singleTapCount = 0; // si hi ha més d'1 segon d'inactivitat, reiniciem
       }, 1000);
+    } else if (touchCount === 2) {
+      // Dos dits: només activem si hem tingut 5 taps previs d'un dit
+      if (singleTapCount === 5) {
+        showEasterEggIcon();
+      }
+      singleTapCount = 0;
+      clearTimeout(tapTimeout);
+    } else {
+      // Si és una combinació diferent, reiniciem el comptador
+      singleTapCount = 0;
+      clearTimeout(tapTimeout);
     }
   });
 }
