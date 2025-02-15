@@ -17,7 +17,7 @@ jobs:
       # 2. Actualizar la versión del Service Worker
       - name: Actualizar versión del Service Worker
         run: |
-          # Generamos una versión basada en la fecha y hora actual (por ejemplo: 20250209123045)
+
           VERSION=$(date +'%Y%m%d%H%M%S')
           echo "Nueva versión: $VERSION"
           # Suponemos que el Service Worker se encuentra en la raíz del proyecto con el nombre "service-worker.js".
