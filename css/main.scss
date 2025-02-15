@@ -517,6 +517,11 @@ button .fa {
     text-align: left;
   }
 
+  select option {
+    font-family: "Roboto Serif", serif;
+    font-size: 15px;
+  }
+
   input[type="date"],
   input[type="datetime-local"],
   input[type="time"],
@@ -1412,7 +1417,7 @@ select {
   input[type="time"],
   select {
     height: 36px;
-    font-size: 14px;
+    font-size: 11px;
     padding: 8px 12px;
     border-radius: 4px;
   }
@@ -1420,6 +1425,10 @@ select {
   select {
     text-align: center;
     line-height: normal;
+  }
+  select option {
+    font-size: 12px;
+    font-weight: 100;
   }
 
   label {

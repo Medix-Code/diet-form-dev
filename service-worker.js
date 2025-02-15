@@ -1,5 +1,5 @@
 // Definim el nom del caché i els fitxers a "cachejar"
-const CACHE_NAME = "dieta-cache-v20250215155110";
+const CACHE_NAME = "dieta-cache-v20250215160116";
 
 // NOTA: NO incloem index.html ni 404.html en el pre-cache
 // per evitar que es quedin 'encallats' en cache-first.
@@ -35,7 +35,7 @@ const urlsToCache = [
   "./assets/images/icons-512.png",
   "./assets/images/icons-192-maskable.png",
   "./assets/images/icons-512-maskable.png",
-  "./template.pdf",
+  "./dieta_tsc.pdf",
 
   // ► Dependència externa (CDN)
   "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
