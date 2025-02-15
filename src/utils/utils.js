@@ -43,13 +43,14 @@ export function easterEgg() {
   let tapTimeout;
   const topBar = document.querySelector(".top-bar");
   if (!topBar) return;
-  topBar.addEventListener("touchend", (event) => {
-    if (event.touches.length > 0) return; // Ignorem si encara hi ha dits a la pantalla
 
-    if (tapCount < 3 && event.changedTouches.length === 1) {
+  topBar.addEventListener("touchend", (event) => {
+    const fingers = event.changedTouches.length; // Nombre de dits que acaben de tocar la pantalla
+
+    if (tapCount < 3 && fingers === 1) {
       // Primeres 3 pulsacions amb un sol dit
       tapCount++;
-    } else if (tapCount === 3 && event.changedTouches.length === 2) {
+    } else if (tapCount === 3 && fingers === 2) {
       // Quart toc amb dos dits
       showEasterEggIcon();
       tapCount = 0;
