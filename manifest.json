@@ -48,9 +48,9 @@
   "handle_links": "preferred",
   "shortcuts": [
     {
-      "name": "Obrir Formulari",
-      "short_name": "Formulari",
-      "description": "Obre el formulari de dieta",
+      "name": "Abrir formulario",
+      "short_name": "Formulario",
+      "description": "Abrir el formulario de la dieta",
       "url": "./index.html",
       "icons": [
         {
