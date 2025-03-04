@@ -1,6 +1,6 @@
 {
-  "name": "Mis Dietas",
-  "short_name": "Mis Dietas",
+  "name": "MisDietas",
+  "short_name": "MisDietas",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
