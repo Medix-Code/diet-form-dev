@@ -1,11 +1,11 @@
 {
-  "name": "Formulari de dieta",
-  "short_name": "Dieta",
+  "name": "Mis Dietas",
+  "short_name": "Mis Dietas",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0a96e7",
-  "description": "Formulari de dieta en mode PWA",
+  "description": "Mis Dietas PWA",
   "icons": [
     {
       "src": "assets/images/icons-192.png",
