@@ -1,6 +1,5 @@
 /**
  * Lògica relacionada amb els panells de Serveis.
- *
  */
 
 // Array amb les classes de servei
@@ -14,50 +13,71 @@ export const serviceColors = [
 // Índex de servei actual
 let currentServiceIndex = 0;
 
-export function getCurrentServiceIndex() {
-  return currentServiceIndex;
-}
+/**
+ * Retorna l'índex del servei actual
+ */
+export const getCurrentServiceIndex = () => currentServiceIndex;
 
-function setCurrentServiceIndex(index) {
+/**
+ * Estableix l'índex del servei actual
+ * @param {number} index - Nou índex de servei
+ */
+const setCurrentServiceIndex = (index) => {
   currentServiceIndex = index;
-}
+};
 
+// Obtenim referències als elements del DOM
 const servicesContainer = document.getElementById("services-container");
 
+/**
+ * Inicialitza la lògica dels serveis:
+ *  - Crea els botons per canviar de servei
+ *  - Mostra el servei amb índex 0
+ */
 export function initServices() {
   createServiceButtons();
   showService(currentServiceIndex);
 }
 
-//Creació dels botons de selecció de serveis
-function createServiceButtons() {
+/**
+ * Crea els botons de selecció de serveis dinàmicament
+ */
+const createServiceButtons = () => {
   const container = document.getElementById("service-buttons-container");
   const allServices = servicesContainer.querySelectorAll(".service");
+
+  // Neteja qualsevol contingut anterior
   container.innerHTML = "";
 
+  // Crea un botó per a cada servei
   allServices.forEach((_, i) => {
     const btn = document.createElement("button");
-    // Afegim la classe "service-button" i la classe específica segons l'índex (service-1, service-2, etc.)
     btn.className = `service-button ${serviceColors[i]}`;
     btn.textContent = `S${i + 1}`;
 
+    // En fer clic, mostrem el servei corresponent
     btn.addEventListener("click", () => {
       showService(i);
     });
 
     container.appendChild(btn);
   });
-}
+};
 
-// Mostrar un servei concret
-function showService(index) {
+/**
+ * Mostra i activa visualment el servei amb l'índex proporcionat
+ * @param {number} index - Índex del servei a mostrar
+ */
+const showService = (index) => {
   const allServices = servicesContainer.querySelectorAll(".service");
   setCurrentServiceIndex(index);
 
+  // Mostra només el servei seleccionat, amaga els altres
   allServices.forEach((serviceEl, i) => {
     serviceEl.style.display = i === index ? "block" : "none";
   });
 
+  // Actualitza l'estat de tots els botons
   const buttons = document.querySelectorAll(".service-button");
   buttons.forEach((btn, i) => {
     if (i === index) {
@@ -69,14 +89,17 @@ function showService(index) {
     }
   });
 
+  // Actualitza el botó d'"esborrar" si existeix
   const clearButton = document.getElementById("clear-selected-service");
   if (clearButton) {
-    // El botó ja té la classe de servei, només cal actualitzar si és necessari
     clearButton.className = `clear-selected-btn ${serviceColors[index]}`;
   }
-}
+};
 
-//Netejar els camps d’un servei
+/**
+ * Neteja tots els camps de text i select d'un servei donat
+ * @param {HTMLElement} serviceEl - L'element del DOM que conté el servei
+ */
 export function clearServiceFields(serviceEl) {
   serviceEl
     .querySelectorAll('input[type="text"], input[type="time"]')
@@ -91,7 +114,11 @@ export function clearServiceFields(serviceEl) {
   });
 }
 
-//Validació d’un número de servei
+/**
+ * Valida un número de servei (ha de tenir exactament 9 dígits)
+ * @param {string} value - El número a validar
+ * @returns {boolean} Cert si és vàlid, fals altrament
+ */
 export function validateServiceNumber(value) {
   const regex = /^\d{9}$/;
   return regex.test(value);
