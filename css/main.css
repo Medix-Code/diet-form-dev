@@ -40,7 +40,7 @@
   --bg-btn-ajustes: #fefeff;
   /* Modal MisDietes */
   --border-btt: #f50f0f;
-  --bg-dietas: #f7f7f7;
+  --bg-dietas: #f8f9fa;
   /* Modal general / Botó confirmació */
   --bg-transp-modal: rgba(0, 0, 0, 0.6);
   --btt-confirm: #004aad;
@@ -749,6 +749,7 @@ button .fa {
 .diet-icons {
   display: flex;
   gap: 40px;
+  align-items: stretch;
 }
 
 .diet-icons button {
@@ -756,10 +757,20 @@ button .fa {
   border: none;
   cursor: pointer;
   transition: transform 0.2s ease, filter 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Establim mides fixes sense afectar al pare */
+  width: 40px; /* Més amplada */
+  height: 100%; /* Respectem l'altura existent */
+  border-radius: 8px; /* Arrodonit per millor estètica */
+  padding: 5px; /* Espai intern, sense augmentar l'altura total */
+  box-sizing: border-box; /* Inclou padding dins l'alçada definida */
 }
 
 .diet-icons button:hover {
   transform: scale(1.1);
+  filter: brightness(0.95);
 }
 
 .diet-icons button:active {
@@ -771,6 +782,7 @@ button .fa {
   width: 22px !important;
   height: 22px !important;
   pointer-events: none;
+  flex-shrink: 0;
 }
 
 #signature-modal {
