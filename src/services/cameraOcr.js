@@ -82,6 +82,8 @@ export function initCameraOcr() {
       showToast("OCR complet!", "success");
     } catch (err) {
       console.error("[cameraOcr] Error OCR:", err);
+      console.error("Missatge:", err.message);
+      console.error("Traça d'errors:", err.stack);
       showToast("Error al processar la imatge: " + err.message, "error");
     } finally {
       // Netejar l'input per permetre una nova foto
