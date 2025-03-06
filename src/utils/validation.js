@@ -3,6 +3,7 @@
  * Lógica de validación
  */
 
+import { showToast } from "../ui/toast.js";
 import { validateServiceNumber } from "../services/servicesPanelManager.js";
 
 /**
@@ -40,50 +41,111 @@ export function validateDadesTab() {
 export function validateServeisTab() {
   let valid = true;
 
-  // -------------------------------------------------
-  // 1) Validación para service-number-1 (obligatorio)
-  // -------------------------------------------------
-  const service1Number = document.getElementById("service-number-1");
-  service1Number.classList.remove("input-error");
+  // Mapa de llistes d'errors: quins serveis tenen l'error "digitShort", etc.
+  const errorMap = {
+    digitShort: [], // Serveis amb menys de 9 dígits
+    nonNumeric: [], // Serveis que no són només dígits
+    emptyRequiredS1: false, // Per indicar si S1 és buit
+  };
 
-  function markError(el) {
-    el.classList.add("input-error");
-    valid = false;
-  }
+  /**
+   * Valida un sol <input> de servei.
+   * @param {HTMLElement} el  - Element <input>
+   * @param {number} index    - Número de servei (1,2,3,4)
+   * @param {boolean} required - Si és obligatori o no
+   */
+  function validateOneServiceNumber(el, index, required) {
+    el.classList.remove("input-error");
+    const val = el.value.trim();
 
-  const s1val = service1Number.value.trim();
-  if (!s1val) {
-    // Campo obligatorio vacío
-    markError(service1Number);
-  } else if (s1val.length < 9) {
-    // Debe tener 9 dígitos
-    markError(service1Number);
-  } else if (!validateServiceNumber(s1val)) {
-    // Formato no válido (debe ser exactamente 9 dígitos)
-    markError(service1Number);
-  }
+    // S1 buit (obligatori): marquem error però NO afegim text
+    if (!val && required) {
+      el.classList.add("input-error");
+      valid = false;
+      errorMap.emptyRequiredS1 = true;
+      return;
+    }
 
-  // -------------------------------------------
-  // 2) Validación para service-number-2,3,4 (opcionales)
-  //    Solo se valida el formato si el usuario ha introducido algo.
-  // -------------------------------------------
-  for (let i = 2; i <= 4; i++) {
-    const serviceNumInput = document.getElementById(`service-number-${i}`);
-    if (!serviceNumInput) continue; // Por si acaso no existe en el DOM
-    serviceNumInput.classList.remove("input-error");
+    // Si està buit i NO és obligatori, no fem res
+    if (!val && !required) return;
 
-    const val = serviceNumInput.value.trim();
-    if (val) {
-      // Si el usuario ha introducido algo, validamos que tenga 9 dígitos
-      if (val.length < 9 || !validateServiceNumber(val)) {
-        markError(serviceNumInput);
-      }
+    // Si hi ha valor, cal que sigui de 9 dígits
+    if (val.length < 9) {
+      el.classList.add("input-error");
+      valid = false;
+      errorMap.digitShort.push(index);
+    } else if (!validateServiceNumber(val)) {
+      el.classList.add("input-error");
+      valid = false;
+      errorMap.nonNumeric.push(index);
     }
   }
 
-  return valid; // true si todo OK, false si hay errores en cualquiera
+  // =============== 1) S1 obligatori
+  const service1El = document.getElementById("service-number-1");
+  validateOneServiceNumber(service1El, 1, true);
+
+  // =============== 2) S2-S4 opcionals
+  for (let i = 2; i <= 4; i++) {
+    const el = document.getElementById(`service-number-${i}`);
+    if (!el) continue;
+    validateOneServiceNumber(el, i, false);
+  }
+
+  // Si tot està OK, sortim
+  if (valid) return true;
+
+  // Construïm un sol missatge per a cada tipus d’error
+  const messages = [];
+
+  // 1) S1 està buit però és obligatori
+  //    (això és el cas on NO volem un missatge concret,
+  //     ja que el "onClickSaveDiet()" mostrarà "Completa los campos..." de forma global)
+  //    Si encara així vols un missatge, pots fer:
+  /*
+  if (errorMap.emptyRequiredS1) {
+    messages.push("El servicio S1 es obligatorio.");
+  }
+  */
+
+  // 2) Serveis amb "digitShort" (menys de 9 dígits)
+  if (errorMap.digitShort.length > 0) {
+    const serviciosStr = formatServiceList(errorMap.digitShort);
+    messages.push(`El servicio ${serviciosStr} debe tener 9 dígitos.`);
+  }
+
+  // 3) Serveis amb "nonNumeric"
+  if (errorMap.nonNumeric.length > 0) {
+    const serviciosStr = formatServiceList(errorMap.nonNumeric);
+    messages.push(
+      `El servicio ${serviciosStr} solo puede contener 9 dígitos numéricos.`
+    );
+  }
+
+  // Si tenim algun missatge, el llancem en UN sol toast
+  if (messages.length > 0) {
+    const finalMessage = messages.join("\n");
+    showToast(finalMessage, "error");
+  }
+
+  return false;
 }
 
+/**
+ * Rep una llista d'índex (p. ex. [2,3]) i retorna un string "S2 y S3",
+ * o "S2, S3 y S4" per a 3+ elements.
+ */
+function formatServiceList(indexes) {
+  // indexes ex: [2, 3, 4]
+  // Volem: "S2, S3 y S4"
+  // 1) Transformar cada element a "S2", "S3", ...
+  const sList = indexes.map((i) => `S${i}`);
+  if (sList.length === 1) return sList[0]; // "S2"
+  if (sList.length === 2) return sList.join(" y "); // "S2 y S3"
+
+  // Més de 2 elements: "S2, S3 y S4"
+  return sList.slice(0, -1).join(", ") + " y " + sList[sList.length - 1];
+}
 /**
  * Validación mínima para guardar (ejemplo).
  * Comprueba "Datos" y al menos el primer servicio correcto.

@@ -95,7 +95,7 @@ export async function onClickSaveDiet() {
       showToast("Dieta guardada", "success");
       // Reajustem l'estat inicial = l'actual
       setInitialFormDataStr(getAllFormDataAsString());
-      disableSaveButton();
+
       break;
     case "unchanged":
       showToast("No hay cambios que guardar.", "success");
