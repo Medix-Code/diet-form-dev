@@ -17,6 +17,7 @@ const urlsToCache = [
   "./src/services/formService.js",
   "./src/services/signatureService.js",
   "./src/services/pdfService.js",
+  "./src/services/cameraOcr.js",
   "./src/services/pwaService.js",
   "./src/services/servicesPanelManager.js",
   "./src/ui/clearService.js",
