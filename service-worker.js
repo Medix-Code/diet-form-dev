@@ -1,5 +1,5 @@
 // Definim el nom del caché i els fitxers a "cachejar"
-const CACHE_NAME = "dieta-cache-v20250306144823";
+const CACHE_NAME = "dieta-cache-v20250306145302";
 
 // NOTA: NO incloem index.html ni 404.html en el pre-cache
 // per evitar que es quedin 'encallats' en cache-first.
