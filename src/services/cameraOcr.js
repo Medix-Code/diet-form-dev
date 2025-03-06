@@ -76,7 +76,7 @@ export function initCameraOcr() {
 
       const ocrText = result.data.text;
       console.log("[cameraOcr] Text OCR detectat:", ocrText);
-
+      showToast("OCR complet? o no", "success");
       // Emplenar camps del formulari
       fillFormFieldsFromOcr(ocrText);
       showToast("OCR complet!", "success");
