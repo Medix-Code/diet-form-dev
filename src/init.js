@@ -12,6 +12,7 @@ import { setupServiceNumberRestrictions } from "./utils/restrictions.js";
 import { initSettingsPanel } from "./ui/settingsPanel.js";
 import * as formService from "./services/formService.js";
 import { isAppInstalled } from "./services/pwaService.js";
+import { initCameraOcr } from "./services/cameraOcr.js";
 
 export async function initializeApp() {
   setTodayDate();
@@ -37,4 +38,7 @@ export async function initializeApp() {
   } else {
     localStorage.removeItem("isAppInstalled");
   }
+
+  // Inicialitza l'OCR de la càmera, però no mostra el botó de càmera encara.
+  initCameraOcr();
 }
