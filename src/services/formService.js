@@ -146,17 +146,6 @@ export function gatherAllData() {
 }
 
 /**
- * Desactiva el botó "Guardar"
- */
-export function disableSaveButton() {
-  const saveBtn = document.getElementById("save-diet");
-  if (saveBtn) {
-    saveBtn.disabled = true;
-    saveBtn.classList.add("disabled-button");
-  }
-}
-
-/**
  * Elimina classes d'error dels camps d'un servei
  */
 export function removeErrorClasses(serviceElement) {

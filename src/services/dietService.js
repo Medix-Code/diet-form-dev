@@ -19,7 +19,6 @@ import {
 import {
   getAllFormDataAsString,
   gatherAllData,
-  disableSaveButton,
   setInitialFormDataStr,
   getInitialFormDataStr,
 } from "./formService.js";
@@ -185,7 +184,6 @@ export async function loadDietById(dietId) {
 
   // Redefinim estat inicial
   setInitialFormDataStr(getAllFormDataAsString());
-  disableSaveButton();
 
   showToast("Dieta cargada!", "success");
   closeDietModal();
