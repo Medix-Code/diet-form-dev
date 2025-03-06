@@ -39,6 +39,13 @@ const signatureCoordinates = {
   ajudant: { x: 380, y: 295, width: 100, height: 50 },
 };
 
+/**
+ * Coordenades marca agua
+ */
+const fixedTextCoordinates = {
+  website: { x: 250, y: 20, size: 6, color: "#EEEEEE" }, // Ajusta x, y i size segons el PDF
+};
+
 function hexToRgb(hex) {
   hex = hex.replace("#", "");
   if (hex.length !== 6) return null;
@@ -129,6 +136,28 @@ export async function fillPdf(data, servicesData) {
         height: coords.height,
       });
     }
+
+    // Afegir marca d'aigua
+    const rgbWebsite = hexToRgb(fixedTextCoordinates.website.color) || {
+      r: 0,
+      g: 0,
+      b: 0,
+    };
+    const text = "misdietas.com";
+    const textWidth = helveticaFont.widthOfTextAtSize(
+      text,
+      fixedTextCoordinates.website.size
+    );
+    const pageWidth = page.getWidth();
+    const xCentered = (pageWidth - textWidth) / 2;
+
+    page.drawText(text, {
+      x: xCentered,
+      y: fixedTextCoordinates.website.y,
+      size: fixedTextCoordinates.website.size,
+      font: helveticaFont,
+      color: rgb(rgbWebsite.r / 255, rgbWebsite.g / 255, rgbWebsite.b / 255),
+    });
 
     return await pdfDoc.save();
   } catch (error) {

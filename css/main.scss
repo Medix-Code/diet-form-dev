@@ -873,9 +873,6 @@ button .fa {
 
   height: 100%; /* Respectem l'altura existent */
   border-radius: 8px; /* Arrodonit per millor estètica */
-
-  padding: 5px; /* Espai intern, sense augmentar l'altura total */
-  box-sizing: border-box; /* Inclou padding dins l'alçada definida */
 }
 
 .diet-icons button:hover {
