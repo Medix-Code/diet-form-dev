@@ -14,16 +14,38 @@ export function initCameraOcr() {
     return;
   }
 
-  // 📷 **Comprovem permisos de la càmera abans d'inicialitzar l'OCR**
+  // 📷 Comprovem permisos i disponibilitat de la càmera abans d'inicialitzar l'OCR
   navigator.mediaDevices
     .getUserMedia({ video: true })
     .then((stream) => {
-      console.log("[cameraOcr] Permisos concedits per la càmera.");
-      stream.getTracks().forEach((track) => track.stop()); // Tanca la càmera després de la prova
+      console.log("[cameraOcr] ✅ Permisos concedits per la càmera.");
+      stream.getTracks().forEach((track) => track.stop()); // Aturem la càmera després de la prova
     })
     .catch((err) => {
       console.error("[cameraOcr] Error d'accés a la càmera:", err);
-      showToast("No es pot accedir a la càmera. Revisa els permisos.", "error");
+
+      // 📢 Gestionem errors específics
+      if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+        showToast("⚠️ No s'ha trobat cap càmera al dispositiu", "error");
+      } else if (
+        err.name === "NotAllowedError" ||
+        err.name === "PermissionDeniedError"
+      ) {
+        showToast(
+          "Accés a la càmera denegat. Revisa els permisos del navegador.",
+          "error"
+        );
+      } else if (
+        err.name === "NotReadableError" ||
+        err.name === "TrackStartError"
+      ) {
+        showToast(
+          "⚠️ La càmera està sent utilitzada per una altra aplicació",
+          "error"
+        );
+      } else {
+        showToast("Error desconegut en accedir a la càmera", "error");
+      }
     });
 
   // 🟢 Quan es clica el botó de càmera, obrim l'input per capturar una imatge
