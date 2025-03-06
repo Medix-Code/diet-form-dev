@@ -1,3 +1,4 @@
+//pdfService.js
 /**
  * Lógica para generar y descargar PDFs.
  */

@@ -1,3 +1,4 @@
+//dietService.js
 /**
  * Lògica principal per a guardar/cargar/actualitzar Dietes.
  *

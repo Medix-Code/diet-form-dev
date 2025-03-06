@@ -1,3 +1,4 @@
+//validation.js
 /**
  * Lógica de validación
  */
