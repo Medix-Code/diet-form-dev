@@ -31,12 +31,29 @@ export function initCameraOcr() {
       showToast("Scanejant...", "info");
       console.log("[cameraOcr] Processant OCR...");
 
+      // Verifiquem que el fitxer és vàlid
+      if (!file) {
+        console.warn("[cameraOcr] No s'ha seleccionat cap fitxer.");
+        showToast("No s'ha seleccionat cap imatge", "error");
+        return;
+      }
+      // Executem OCR
       const result = await window.Tesseract.recognize(file, "spa");
+
+      // Verifiquem si ha retornat algun text
+      if (!result || !result.data || !result.data.text) {
+        console.warn("[cameraOcr] No s'ha detectat cap text.");
+        showToast("No s'ha detectat text a la imatge", "error");
+        return;
+      }
+
       const ocrText = result.data.text;
       console.log("Text OCR detectat:", ocrText);
 
       // Emplenar camps del formulari amb les dades extretes
       fillFormFieldsFromOcr(ocrText);
+      // Mostrem missatge de finalització
+      showToast("OCR complet!", "success");
     } catch (err) {
       console.error("[cameraOcr] Error OCR:", err);
       console.error("Missatge:", err.message);
