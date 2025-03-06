@@ -522,6 +522,27 @@ button .fa {
     font-size: 15px;
   }
 
+  select option {
+    font-family: "Roboto Serif", serif;
+    font-size: 15px;
+  }
+
+  /* Inputs DATE, TIME i DATETIME */
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    min-height: 40px;
+    width: 100%;
+    font-size: 16px; /* Mida més gran per a una millor visualització */
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  /* Focus estil per inputs DATE, TIME i DATETIME */
   input[type="date"],
   input[type="datetime-local"],
   input[type="time"],
@@ -529,6 +550,16 @@ button .fa {
     &:focus {
       outline: none;
       border: 2px solid var(--border-textfield-focus);
+    }
+  }
+
+  /* Estils específics per a iOS (iPhone/iPad) */
+  @supports (-webkit-touch-callout: none) {
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"] {
+      height: 40px !important;
+      font-size: 16px !important;
     }
   }
 
@@ -569,6 +600,10 @@ button .fa {
 .service-button {
   width: clamp(40px, 5vw, 50px);
   height: clamp(40px, 5vw, 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;

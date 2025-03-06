@@ -423,6 +423,9 @@ button .fa {
 }
 .form-group {
   margin-bottom: 25px;
+  /* Inputs DATE, TIME i DATETIME */
+  /* Focus estil per inputs DATE, TIME i DATETIME */
+  /* Estils específics per a iOS (iPhone/iPad) */
 }
 .form-group label {
   display: block;
@@ -451,12 +454,36 @@ button .fa {
   font-family: "Roboto Serif", serif;
   font-size: 15px;
 }
+.form-group select option {
+  font-family: "Roboto Serif", serif;
+  font-size: 15px;
+}
+.form-group input[type=date],
+.form-group input[type=time],
+.form-group input[type=datetime-local] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-height: 40px;
+  width: 100%;
+  font-size: 16px; /* Mida més gran per a una millor visualització */
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .form-group input[type=date]:focus,
 .form-group input[type=datetime-local]:focus,
 .form-group input[type=time]:focus,
 .form-group select:focus {
   outline: none;
   border: 2px solid var(--border-textfield-focus);
+}
+@supports (-webkit-touch-callout: none) {
+  .form-group input[type=date],
+  .form-group input[type=time],
+  .form-group input[type=datetime-local] {
+    height: 40px !important;
+    font-size: 16px !important;
+  }
 }
 .form-group input[type=text]:not(.txt-person1):not(.txt-person2):focus {
   outline: none;
@@ -487,6 +514,10 @@ button .fa {
 .service-button {
   width: clamp(40px, 5vw, 50px);
   height: clamp(40px, 5vw, 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
