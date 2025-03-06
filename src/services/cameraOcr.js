@@ -26,25 +26,19 @@ export function initCameraOcr() {
 
       // 📢 Gestionem errors específics
       if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
-        showToast("⚠️ No s'ha trobat cap càmera al dispositiu", "error");
+        // showToast("⚠️ No s'ha trobat cap càmera al dispositiu", "error");
       } else if (
         err.name === "NotAllowedError" ||
         err.name === "PermissionDeniedError"
       ) {
-        showToast(
-          "🚫 Accés a la càmera denegat. Revisa els permisos del navegador.",
-          "error"
-        );
+        //  showToast(        "🚫 Accés a la càmera denegat. Revisa els permisos del navegador.","error"  );
       } else if (
         err.name === "NotReadableError" ||
         err.name === "TrackStartError"
       ) {
-        showToast(
-          "⚠️ La càmera està sent utilitzada per una altra aplicació",
-          "error"
-        );
+        // showToast( "⚠️ La càmera està sent utilitzada per una altra aplicació",    "error" );
       } else {
-        showToast("❌ Error desconegut en accedir a la càmera", "error");
+        // showToast("❌ Error desconegut en accedir a la càmera", "error");
       }
     });
 
