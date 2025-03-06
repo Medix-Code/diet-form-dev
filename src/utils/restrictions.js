@@ -1,4 +1,4 @@
-import { showToast } from "./toast.js"; // Assegura't de tenir la ruta correcta
+import { showToast } from "./ui/toast.js"; // Assegura't de tenir la ruta correcta
 
 /**
  * Restriccions per N. Servei
