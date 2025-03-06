@@ -1261,6 +1261,17 @@ button .icon {
   }
 }
 
+/* Oculta el botó de càmera en pantalles grans (PC) */
+@media (min-width: 1025px) {
+  #camera-btn {
+    display: none;
+  }
+}
+
+#camera-btn {
+  display: none; /* Amagat per defecte */
+}
+
 // ===========================================================================
 // MEDIA QUERIES RESPONSIVES
 // ===========================================================================

@@ -86,35 +86,37 @@ export function easterEgg() {
   }
 }
 
-function showEasterEggIcon() {
+export function showEasterEggIcon() {
   // Crea un overlay que cobreixi tota la pantalla
   const overlay = document.createElement("div");
   overlay.className = "easter-egg-overlay";
 
-  // Afegeix l'overlay al body
-  document.body.appendChild(overlay);
-
-  // Crea el contenidor de l'icona
+  // Crea el contenidor de l'icona d'easter egg
   const iconContainer = document.createElement("div");
   iconContainer.className = "easter-egg-icon";
   iconContainer.innerHTML = `<img src="assets/icons/egg.svg" alt="Easter Egg Icon">`;
 
-  // Afegeix el contenidor de l'icona a l'overlay
+  // Afegeix l'icona a l'overlay i l'overlay al body
   overlay.appendChild(iconContainer);
+  document.body.appendChild(overlay);
 
-  // Evita que els clics en l'overlay passin als elements subjacents
-  overlay.addEventListener("click", (e) => {
-    e.stopPropagation();
-    // Opcional: si es fa clic a l'overlay (fora l'icona), pots fer que l'easter egg desaparegui
-    // overlay.remove();
-  });
+  // Impedeix que els clics en l'overlay afectin altres elements
+  overlay.addEventListener("click", (e) => e.stopPropagation());
 
-  // Quan es cliqui a l'icona, aplica l'animació i elimina tot l'overlay
+  // Quan es cliqui a l'icona, afegeix l'animació, elimina l'overlay i mostra la càmera
   iconContainer.addEventListener("click", (e) => {
     e.stopPropagation();
     iconContainer.classList.add("clicked");
     setTimeout(() => {
       overlay.remove();
-    }, 1000); // 1 segon per a l'animació
+      showCameraIcon();
+    }, 1000); // Espera 1 segon per a l'animació
   });
+}
+
+function showCameraIcon() {
+  const cameraBtn = document.getElementById("camera-btn");
+  if (cameraBtn) {
+    cameraBtn.style.display = "flex"; // Mostra el botó (o "block", segons el teu disseny)
+  }
 }

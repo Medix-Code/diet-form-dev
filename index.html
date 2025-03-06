@@ -258,6 +258,24 @@
 
         <!-- Contenidor dels 4 serveis -->
         <div id="services-container">
+          <!-- Botó de càmera (inicialment ocult) -->
+          <button
+            id="camera-btn"
+            class="footer-btn"
+            aria-label="Escanear datos (OCR)"
+            style="display: none"
+          >
+            <img src="assets/icons/camera.svg" alt="Cámara" class="icon" />
+          </button>
+
+          <!-- Input per la càmera -->
+          <input
+            type="file"
+            accept="image/*"
+            capture="camera"
+            id="camera-input"
+            style="display: none"
+          />
           <!-- SERVEI 1 -->
           <div class="service service-1" aria-labelledby="servei-1">
             <div class="form-group">
@@ -696,6 +714,8 @@
     </script>
 
     <!-- Codi principal de la teva app -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@6.0.0/dist/tesseract.min.js"></script>
+
     <script type="module" src="./src/app.js"></script>
     <script src="./src/ui/theme.js"></script>
   </body>
