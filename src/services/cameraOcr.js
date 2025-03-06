@@ -10,37 +10,42 @@ export function initCameraOcr() {
   const cameraInput = document.getElementById("camera-input");
 
   if (!cameraBtn || !cameraInput) {
-    console.warn(
-      "[cameraOcr] Botó o input no trobat, potser estàs en un PC o no tens aquests elements."
-    );
+    console.warn("[cameraOcr] Botó o input no trobat.");
     return;
   }
 
-  // Quan es clica el botó de càmera, simulem el clic a l'input
+  // 📷 **Comprovem permisos de la càmera abans d'inicialitzar l'OCR**
+  navigator.mediaDevices
+    .getUserMedia({ video: true })
+    .then((stream) => {
+      console.log("[cameraOcr] Permisos concedits per la càmera.");
+      stream.getTracks().forEach((track) => track.stop()); // Tanca la càmera després de la prova
+    })
+    .catch((err) => {
+      console.error("[cameraOcr] Error d'accés a la càmera:", err);
+      showToast("No es pot accedir a la càmera. Revisa els permisos.", "error");
+    });
+
+  // 🟢 Quan es clica el botó de càmera, obrim l'input per capturar una imatge
   cameraBtn.addEventListener("click", () => {
     cameraInput.click();
   });
 
-  // Quan l'usuari fa la foto i l'escull
+  // 🟡 Quan l'usuari captura la imatge i la selecciona
   cameraInput.addEventListener("change", async (event) => {
     const file = event.target.files[0];
-    if (!file) return;
+    if (!file) {
+      console.warn("[cameraOcr] No s'ha seleccionat cap fitxer.");
+      showToast("No s'ha seleccionat cap imatge", "error");
+      return;
+    }
 
     try {
-      // Mostrem un toast indicant que s'està escanejant
-      showToast("Scanejant...", "info");
+      showToast("Escanejant...", "info");
       console.log("[cameraOcr] Processant OCR...");
 
-      // Verifiquem que el fitxer és vàlid
-      if (!file) {
-        console.warn("[cameraOcr] No s'ha seleccionat cap fitxer.");
-        showToast("No s'ha seleccionat cap imatge", "error");
-        return;
-      }
-      // Executem OCR
       const result = await window.Tesseract.recognize(file, "spa");
 
-      // Verifiquem si ha retornat algun text
       if (!result || !result.data || !result.data.text) {
         console.warn("[cameraOcr] No s'ha detectat cap text.");
         showToast("No s'ha detectat text a la imatge", "error");
@@ -48,16 +53,13 @@ export function initCameraOcr() {
       }
 
       const ocrText = result.data.text;
-      console.log("Text OCR detectat:", ocrText);
+      console.log("[cameraOcr] Text OCR detectat:", ocrText);
 
-      // Emplenar camps del formulari amb les dades extretes
+      // Emplenar camps del formulari
       fillFormFieldsFromOcr(ocrText);
-      // Mostrem missatge de finalització
       showToast("OCR complet!", "success");
     } catch (err) {
       console.error("[cameraOcr] Error OCR:", err);
-      console.error("Missatge:", err.message);
-      console.error("Traça d'errors:", err.stack);
       showToast("Error al processar la imatge: " + err.message, "error");
     } finally {
       // Netejar l'input per permetre una nova foto
