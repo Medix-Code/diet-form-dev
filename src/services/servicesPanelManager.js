@@ -113,13 +113,3 @@ export function clearServiceFields(serviceEl) {
     select.classList.remove("input-error");
   });
 }
-
-/**
- * Valida un número de servei (ha de tenir exactament 9 dígits)
- * @param {string} value - El número a validar
- * @returns {boolean} Cert si és vàlid, fals altrament
- */
-export function validateServiceNumber(value) {
-  const regex = /^\d{9}$/;
-  return regex.test(value);
-}

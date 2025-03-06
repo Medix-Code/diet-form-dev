@@ -4,7 +4,6 @@
  */
 
 import { showToast } from "../ui/toast.js";
-import { validateServiceNumber } from "../services/servicesPanelManager.js";
 
 /**
  * Valida la pestaña "Datos".
