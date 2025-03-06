@@ -185,7 +185,7 @@ export async function loadDietById(dietId) {
   // Redefinim estat inicial
   setInitialFormDataStr(getAllFormDataAsString());
 
-  showToast("Dieta cargada!", "success");
+  showToast("Dieta cargada correctamente.", "success");
   closeDietModal();
 }
 
@@ -200,7 +200,7 @@ export async function deleteDietHandler(id, dietDate, dietType) {
   showConfirmModal(confirmMessage, confirmTitle).then((confirmed) => {
     if (confirmed) {
       deleteDietById(id).then(async () => {
-        showToast("¡Dieta eliminada!", "success");
+        showToast("Dieta eliminada correctamente.", "warning");
         displayDietOptions();
 
         // Després d’haver esborrat la dieta, recarreguem la llista de BD:
