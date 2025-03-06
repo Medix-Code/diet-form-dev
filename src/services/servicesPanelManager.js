@@ -29,6 +29,7 @@ export function initServices() {
   showService(currentServiceIndex);
 }
 
+//Creació dels botons de selecció de serveis
 function createServiceButtons() {
   const container = document.getElementById("service-buttons-container");
   const allServices = servicesContainer.querySelectorAll(".service");
@@ -48,6 +49,7 @@ function createServiceButtons() {
   });
 }
 
+// Mostrar un servei concret
 function showService(index) {
   const allServices = servicesContainer.querySelectorAll(".service");
   setCurrentServiceIndex(index);
@@ -74,6 +76,7 @@ function showService(index) {
   }
 }
 
+//Netejar els camps d’un servei
 export function clearServiceFields(serviceEl) {
   serviceEl
     .querySelectorAll('input[type="text"], input[type="time"]')
@@ -88,6 +91,7 @@ export function clearServiceFields(serviceEl) {
   });
 }
 
+//Validació d’un número de servei
 export function validateServiceNumber(value) {
   const regex = /^\d{9}$/;
   return regex.test(value);
