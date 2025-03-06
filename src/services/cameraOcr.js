@@ -22,7 +22,7 @@ export function initCameraOcr() {
       stream.getTracks().forEach((track) => track.stop()); // Aturem la càmera després de la prova
     })
     .catch((err) => {
-      console.error("[cameraOcr] Error d'accés a la càmera:", err);
+      console.error("[cameraOcr] ❌ Error d'accés a la càmera:", err);
 
       // 📢 Gestionem errors específics
       if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
@@ -32,7 +32,7 @@ export function initCameraOcr() {
         err.name === "PermissionDeniedError"
       ) {
         showToast(
-          "Accés a la càmera denegat. Revisa els permisos del navegador.",
+          "🚫 Accés a la càmera denegat. Revisa els permisos del navegador.",
           "error"
         );
       } else if (
@@ -44,7 +44,7 @@ export function initCameraOcr() {
           "error"
         );
       } else {
-        showToast("Error desconegut en accedir a la càmera", "error");
+        showToast("❌ Error desconegut en accedir a la càmera", "error");
       }
     });
 
