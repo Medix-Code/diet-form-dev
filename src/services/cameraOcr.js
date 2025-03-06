@@ -26,15 +26,12 @@ export function initCameraOcr() {
 
       // 📢 Gestionem errors específics
       if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
-        showToast("⚠️ No s'ha trobat cap càmera al dispositiu", "error");
+        //   showToast("⚠️ No s'ha trobat cap càmera al dispositiu", "error");
       } else if (
         err.name === "NotAllowedError" ||
         err.name === "PermissionDeniedError"
       ) {
-        showToast(
-          "🚫 Accés a la càmera denegat. Revisa els permisos del navegador.",
-          "error"
-        );
+        //showToast("🚫 Accés a la càmera denegat. Revisa els permisos del navegador.", "error" );
       } else if (
         err.name === "NotReadableError" ||
         err.name === "TrackStartError"
@@ -76,7 +73,7 @@ export function initCameraOcr() {
 
       const ocrText = result.data.text;
       console.log("[cameraOcr] Text OCR detectat:", ocrText);
-      showToast("OCR complet? o no", "success");
+      showToast("OCR complet?", "success");
       // Emplenar camps del formulari
       fillFormFieldsFromOcr(ocrText);
       showToast("OCR complet!", "success");
