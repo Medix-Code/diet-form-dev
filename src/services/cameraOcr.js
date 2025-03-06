@@ -41,7 +41,7 @@ export function initCameraOcr() {
           "error"
         );
       } else {
-        showToast("❌ Error desconegut en accedir a la càmera", "error");
+        //   showToast("❌ Error desconegut en accedir a la càmera", "error");
       }
     });
 
