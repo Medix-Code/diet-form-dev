@@ -3,6 +3,7 @@
    Ajusta-ho segons les teves necessitats.
 */
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
+import { showToast } from "../ui/toast.js"; // Assegura't d'importar la funció de toast
 
 export function initCameraOcr() {
   const cameraBtn = document.getElementById("camera-btn");
@@ -26,17 +27,19 @@ export function initCameraOcr() {
     if (!file) return;
 
     try {
+      // Mostrem un toast indicant que s'està escanejant
+      showToast("Scanejant...", "info");
       console.log("[cameraOcr] Processant OCR...");
+
       const result = await window.Tesseract.recognize(file, "spa");
       const ocrText = result.data.text;
       console.log("Text OCR detectat:", ocrText);
 
-      // Emplenar camps del formulari
+      // Emplenar camps del formulari amb les dades extretes
       fillFormFieldsFromOcr(ocrText);
-      console.log("Text OCR detectat:", ocrText);
     } catch (err) {
       console.error("[cameraOcr] Error OCR:", err);
-      // Pots mostrar un toast si ho desitges
+      showToast("Error al processar la imatge", "error");
     } finally {
       // Netejar l'input per permetre una nova foto
       cameraInput.value = "";
@@ -48,7 +51,7 @@ export function initCameraOcr() {
  * Extreu les hores (HH:MM) dels estats:
  *   - "STATUS: MOBILITZAT ..."  → assigna a "origin-time-{n}"
  *   - "STATUS: ARRIBADA HOSPITAL ..." → assigna a "destination-time-{n}"
- *   - Línia "altech v.X" i a la següent data/hora → assigna a "end-time-{n}"
+ *   - Línia "altech v.X" i la següent data/hora → assigna a "end-time-{n}"
  *
  * Es permeten tant ":" com "-" com a separadors. Es converteixen a ":".
  */
@@ -94,7 +97,7 @@ export function fillFormFieldsFromOcr(ocrText) {
   }
 
   // ---------------------------------------
-  // 3) HORA FINAL → S'extrau de la línia amb "altech v.X" i la següent data/hora
+  // 3) HORA FINAL → Extreu de la línia amb "altech v.X" i la següent data/hora
   // Exemple:
   //   altech v.08.0
   //   23/07/23 07:17:49
