@@ -7,30 +7,22 @@ import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
 import { showToast } from "../ui/toast.js"; // Assegura't d'importar la funció de toast
 
 export function initCameraOcr() {
-  const cameraBtn = document.getElementById("camera-btn");
+  // Utilitzem el botó de la càmera dins del menú d'opcions
+  const cameraBtn = document.getElementById("camera-in-dropdown");
   const cameraInput = document.getElementById("camera-input");
-  // Assumim que aquests elements existeixen al HTML per mostrar el progrés de l'OCR:
-  // Exemple: <div id="ocr-progress-container" class="hidden">
-  //            <p id="ocr-progress-text">Escanejant...</p>
-  //            <progress id="ocr-progress" value="0" max="100"></progress>
-  //          </div>
-  const progressContainer = document.getElementById("ocr-progress-container");
-  const progressBar = document.getElementById("ocr-progress");
-  const progressText = document.getElementById("ocr-progress-text");
 
   if (!cameraBtn || !cameraInput) {
     console.warn("[cameraOcr] Botó o input no trobat.");
     return;
   }
 
-  // Eliminar la comprovació inicial de permisos ja que ara es demanen al moment del clic
-  // 🟢 Quan es clica el botó de càmera, sol·licitem els permisos de càmera i obrim l'input
+  // Quan es clica el botó de càmera, demanem permisos i obrim l'input per capturar la imatge
   cameraBtn.addEventListener("click", async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      // Aturem els tracks perquè només es vulgui comprovar els permisos
+      // Aturem els tracks perquè només volem comprovar els permisos
       stream.getTracks().forEach((track) => track.stop());
-      // Obre l'input per seleccionar/capturar la imatge
+      // Obrim l'input per seleccionar/capturar la imatge
       cameraInput.click();
     } catch (err) {
       console.error("[cameraOcr] Error en accedir a la càmera:", err);
@@ -38,7 +30,7 @@ export function initCameraOcr() {
     }
   });
 
-  // 🟡 Quan l'usuari captura la imatge i la selecciona
+  // Quan l'usuari selecciona la imatge...
   cameraInput.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -47,7 +39,10 @@ export function initCameraOcr() {
       return;
     }
 
-    // Mostrem la barra de progrés i el missatge (si els elements estan definits)
+    // Mostrem la barra de progrés i el missatge
+    const progressContainer = document.getElementById("ocr-progress-container");
+    const progressBar = document.getElementById("ocr-progress");
+    const progressText = document.getElementById("ocr-progress-text");
     if (progressContainer && progressBar && progressText) {
       progressContainer.classList.remove("hidden");
       progressBar.value = 0;
@@ -60,7 +55,6 @@ export function initCameraOcr() {
 
       const result = await window.Tesseract.recognize(file, "spa", {
         logger: (m) => {
-          // Actualitzem la barra de progrés quan estem reconeixent el text
           if (m.status === "recognizing text") {
             const progressPercent = Math.floor(m.progress * 100);
             if (progressBar) progressBar.value = progressPercent;
@@ -78,16 +72,12 @@ export function initCameraOcr() {
 
       const ocrText = result.data.text;
       console.log("[cameraOcr] Text OCR detectat:", ocrText);
-      // Omplim els camps del formulari a partir del text OCR
       fillFormFieldsFromOcr(ocrText);
       showToast("OCR complet!", "success");
     } catch (err) {
       console.error("[cameraOcr] Error OCR:", err);
-      console.error("Missatge:", err.message);
-      console.error("Traça d'errors:", err.stack);
       showToast("Error al processar la imatge: " + err.message, "error");
     } finally {
-      // Neteja l'input per permetre una nova foto
       cameraInput.value = "";
       if (progressContainer && progressBar) {
         progressBar.value = 100;

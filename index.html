@@ -241,19 +241,42 @@
         aria-labelledby="tab-serveis"
       >
         <div class="service-controls">
-          <div
-            id="service-buttons-container"
-            role="group"
-            aria-label="Selecció de serveis"
-          ></div>
-          <button
-            type="button"
-            id="clear-selected-service"
-            class="clear-selected-btn"
-            aria-label="Esborrar dades del servei seleccionat"
-          >
-            <img src="assets/icons/eraser.svg" alt="" class="icon" />
-          </button>
+          <!-- Contenidor amb els botons de servei (S1, S2, S3, S4) a l'esquerra -->
+          <div id="service-buttons-container">
+            <!-- Aquí es generen els botons S1, S2, ... -->
+          </div>
+
+          <!-- Contenidor per al botó d'opcions (tres punts) a la dreta -->
+          <div class="options-container">
+            <button
+              class="options-btn"
+              id="options-toggle"
+              aria-label="Más opciones"
+            >
+              <img src="assets/icons/submenu.svg" alt="Opciones" class="icon" />
+            </button>
+            <!-- Menú desplegable -->
+            <div class="options-dropdown hidden" id="options-menu">
+              <button
+                type="button"
+                class="option-btn clear-selected-btn"
+                id="clear-selected-service"
+                aria-label="Borrar datos"
+              >
+                <img src="assets/icons/eraser.svg" alt="Borrar" class="icon" />
+              </button>
+
+              <button
+                type="button"
+                class="option-btn camera-btn"
+                id="camera-in-dropdown"
+                aria-label="Escanear datos (OCR)"
+                disabled
+              >
+                <img src="assets/icons/camera.svg" alt="Cámara" class="icon" />
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Afegeix aquest element a la teva pàgina, per exemple dins del main -->
@@ -264,26 +287,6 @@
 
         <!-- Contenidor dels 4 serveis -->
         <div id="services-container">
-          <!-- Botó de càmera (inicialment ocult) -->
-          <button
-            id="camera-btn"
-            class="footer-btn"
-            aria-label="Escanear datos (OCR)"
-            style="display: none"
-          >
-            <img src="assets/icons/camera.svg" alt="Cámara" class="icon" />
-          </button>
-
-          <!-- Input per la càmera -->
-
-          <input
-            type="file"
-            accept="image/*"
-            capture="environment"
-            id="camera-input"
-            style="display: none"
-          />
-
           <!-- SERVEI 1 -->
           <div class="service service-1" aria-labelledby="servei-1">
             <div class="form-group">
@@ -721,9 +724,36 @@
       }
     </script>
 
+    <script>
+      const optionsToggleBtn = document.getElementById("options-toggle");
+      const optionsMenu = document.getElementById("options-menu");
+
+      // Alterna la classe "hidden" en fer clic
+      optionsToggleBtn.addEventListener("click", () => {
+        optionsMenu.classList.toggle("hidden");
+      });
+
+      // Opcionalment, si vols tancar-lo quan l'usuari fa clic fora
+      document.addEventListener("click", (event) => {
+        if (
+          !optionsToggleBtn.contains(event.target) &&
+          !optionsMenu.contains(event.target)
+        ) {
+          optionsMenu.classList.add("hidden");
+        }
+      });
+    </script>
+
     <!-- Codi principal de la teva app -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@6.0.0/dist/tesseract.min.js"></script>
     <script type="module" src="./src/app.js"></script>
     <script src="./src/ui/theme.js"></script>
+    <input
+      type="file"
+      accept="image/*"
+      capture="user"
+      id="camera-input"
+      style="display: none"
+    />
   </body>
 </html>
