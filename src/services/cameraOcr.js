@@ -21,7 +21,7 @@ export function initCameraOcr() {
   cameraBtn.addEventListener("click", async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
+        video: { facingMode: "user" },
       });
 
       stream.getTracks().forEach((track) => track.stop());
