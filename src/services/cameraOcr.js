@@ -187,17 +187,22 @@ function fillTimes(processedText, suffix) {
    Funció per omplir camps de Servei (Nº, Origen, Destinació)
 ----------------------------------------- */
 function fillServiceData(processedText, suffix) {
-  const serviceNumberMatch = processedText.match(/\b(\d{9,10})\b/);
+  // 1 CERQUEM EL NÚMERO DE SERVEI SOTA "AFECTATS"
+  const serviceNumberMatch = processedText.match(
+    /afectats\s*(?:\r?\n)+\s*(\d{9,10})/i
+  );
   if (serviceNumberMatch?.[1]) {
     document.getElementById(`service-number-${suffix}`).value =
       serviceNumberMatch[1];
   }
 
+  // 2 ORIGEN: Cerquem "municipi" i la línia següent
   const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
   if (originMatch?.[1]) {
     document.getElementById(`origin-${suffix}`).value = originMatch[1].trim();
   }
 
+  // 3 DESTINACIÓ: Cerquem "hospital destí" i la línia següent
   const destinationMatch = processedText.match(
     /hospital\s*desti\s*(?:\r?\n)+\s*(.*)/i
   );
