@@ -1,5 +1,5 @@
 // Definim el nom del caché i els fitxers a "cachejar"
-const CACHE_NAME = "dieta-cache-v20250307095147";
+const CACHE_NAME = "dieta-cache-v20250307095959";
 
 // NOTA: NO incloem index.html ni 404.html en el pre-cache
 // per evitar que es quedin 'encallats' en cache-first.
@@ -80,7 +80,7 @@ self.addEventListener("install", (event) => {
 
 // --- FETCH ---
 self.addEventListener("fetch", (event) => {
-  // Si la petició és per Cloudflare Insights, no la cachegem
+  // Bypass per a Cloudflare Insights
   if (
     event.request.url.indexOf("https://static.cloudflareinsights.com/") === 0
   ) {
@@ -90,7 +90,7 @@ self.addEventListener("fetch", (event) => {
           "[ServiceWorker] Error carregant Cloudflare Insights:",
           error
         );
-        // Retorna una resposta buida en cas d'error, per no trencar la càrrega de la resta
+        // Retorna una resposta buida per evitar que tot es trencui
         return new Response("", {
           status: 404,
           statusText: "Not Found",
@@ -100,7 +100,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Resta de la lògica del fetch
+  // Resta de la lògica de fetch
   if (event.request.mode === "navigate") {
     event.respondWith(
       fetch(event.request)
@@ -138,9 +138,7 @@ self.addEventListener("fetch", (event) => {
           return cachedResponse;
         }
         return fetch(event.request)
-          .then((networkResponse) => {
-            return networkResponse;
-          })
+          .then((networkResponse) => networkResponse)
           .catch((error) => {
             console.error("[ServiceWorker] Error durant el fetch:", error);
             return new Response("", {
