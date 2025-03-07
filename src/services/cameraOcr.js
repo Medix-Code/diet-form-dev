@@ -1,6 +1,7 @@
 /* cameraOcr.js
    Lògica per capturar una foto (en dispositius mòbils) i passar-la per OCR amb Tesseract.
-   Ajusta-ho segons les teves necessitats.
+   S'ha afegit una barra de progrés i un missatge per informar l'usuari mentre s'escaneja,
+   i es demanen els permisos de la càmera només quan es clica la icona de càmera.
 */
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
 import { showToast } from "../ui/toast.js"; // Assegura't d'importar la funció de toast
@@ -8,47 +9,33 @@ import { showToast } from "../ui/toast.js"; // Assegura't d'importar la funció 
 export function initCameraOcr() {
   const cameraBtn = document.getElementById("camera-btn");
   const cameraInput = document.getElementById("camera-input");
+  // Assumim que aquests elements existeixen al HTML per mostrar el progrés de l'OCR:
+  // Exemple: <div id="ocr-progress-container" class="hidden">
+  //            <p id="ocr-progress-text">Escanejant...</p>
+  //            <progress id="ocr-progress" value="0" max="100"></progress>
+  //          </div>
+  const progressContainer = document.getElementById("ocr-progress-container");
+  const progressBar = document.getElementById("ocr-progress");
+  const progressText = document.getElementById("ocr-progress-text");
 
   if (!cameraBtn || !cameraInput) {
     console.warn("[cameraOcr] Botó o input no trobat.");
     return;
   }
 
-  // 📷 Comprovem permisos i disponibilitat de la càmera abans d'inicialitzar l'OCR
-  navigator.mediaDevices
-    .getUserMedia({ video: true })
-    .then((stream) => {
-      console.log("[cameraOcr] ✅ Permisos concedits per la càmera.");
-      stream.getTracks().forEach((track) => track.stop()); // Aturem la càmera després de la prova
-    })
-    .catch((err) => {
-      console.error("[cameraOcr] ❌ Error d'accés a la càmera:", err);
-
-      // 📢 Gestionem errors específics
-      if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
-        //   showToast("⚠️ No s'ha trobat cap càmera al dispositiu", "error");
-      } else if (
-        err.name === "NotAllowedError" ||
-        err.name === "PermissionDeniedError"
-      ) {
-        showToast("🚫", "error");
-        //showToast("🚫 Accés a la càmera denegat. Revisa els permisos del navegador.", "error" );
-      } else if (
-        err.name === "NotReadableError" ||
-        err.name === "TrackStartError"
-      ) {
-        showToast(
-          "⚠️ La càmera està sent utilitzada per una altra aplicació",
-          "error"
-        );
-      } else {
-        //   showToast("❌ Error desconegut en accedir a la càmera", "error");
-      }
-    });
-
-  // 🟢 Quan es clica el botó de càmera, obrim l'input per capturar una imatge
-  cameraBtn.addEventListener("click", () => {
-    cameraInput.click();
+  // Eliminar la comprovació inicial de permisos ja que ara es demanen al moment del clic
+  // 🟢 Quan es clica el botó de càmera, sol·licitem els permisos de càmera i obrim l'input
+  cameraBtn.addEventListener("click", async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      // Aturem els tracks perquè només es vulgui comprovar els permisos
+      stream.getTracks().forEach((track) => track.stop());
+      // Obre l'input per seleccionar/capturar la imatge
+      cameraInput.click();
+    } catch (err) {
+      console.error("[cameraOcr] Error en accedir a la càmera:", err);
+      showToast("Error en accedir a la càmera: " + err.message, "error");
+    }
   });
 
   // 🟡 Quan l'usuari captura la imatge i la selecciona
@@ -60,11 +47,28 @@ export function initCameraOcr() {
       return;
     }
 
+    // Mostrem la barra de progrés i el missatge (si els elements estan definits)
+    if (progressContainer && progressBar && progressText) {
+      progressContainer.classList.remove("hidden");
+      progressBar.value = 0;
+      progressText.textContent = "Escanejant...";
+    }
+
     try {
       showToast("Escanejant...", "info");
       console.log("[cameraOcr] Processant OCR...");
 
-      const result = await window.Tesseract.recognize(file, "spa");
+      const result = await window.Tesseract.recognize(file, "spa", {
+        logger: (m) => {
+          // Actualitzem la barra de progrés quan estem reconeixent el text
+          if (m.status === "recognizing text") {
+            const progressPercent = Math.floor(m.progress * 100);
+            if (progressBar) progressBar.value = progressPercent;
+            if (progressText)
+              progressText.textContent = `Escanejant... ${progressPercent}%`;
+          }
+        },
+      });
 
       if (!result || !result.data || !result.data.text) {
         console.warn("[cameraOcr] No s'ha detectat cap text.");
@@ -74,8 +78,7 @@ export function initCameraOcr() {
 
       const ocrText = result.data.text;
       console.log("[cameraOcr] Text OCR detectat:", ocrText);
-      showToast("OCR complet?", "success");
-      // Emplenar camps del formulari
+      // Omplim els camps del formulari a partir del text OCR
       fillFormFieldsFromOcr(ocrText);
       showToast("OCR complet!", "success");
     } catch (err) {
@@ -84,8 +87,14 @@ export function initCameraOcr() {
       console.error("Traça d'errors:", err.stack);
       showToast("Error al processar la imatge: " + err.message, "error");
     } finally {
-      // Netejar l'input per permetre una nova foto
+      // Neteja l'input per permetre una nova foto
       cameraInput.value = "";
+      if (progressContainer && progressBar) {
+        progressBar.value = 100;
+        setTimeout(() => {
+          progressContainer.classList.add("hidden");
+        }, 1500);
+      }
     }
   });
 }
