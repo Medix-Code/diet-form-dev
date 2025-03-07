@@ -183,24 +183,24 @@ function fillTimes(processedText, suffix) {
    Funció per omplir camps de Servei (Nº, Origen, Destinació)
 ----------------------------------------- */
 function fillServiceData(processedText, suffix) {
-  // 1 CERQUEM EL NÚMERO DE SERVEI SOTA "AFECTATS"
+  // 1) Cercar el número de servei sota "afectats" (9-10 dígits)
   const serviceNumberMatch = processedText.match(
-    /afectats\s*(?:\r?\n)+\s*(\d{9,10})/i
+    /afectats\s*(?:\r?\n|\s)+(\d{9,10})/i
   );
-  const serviceNumber = serviceNumberMatch?.[1] || "000000000"; // Si no es troba, assignem "000000000"
+  const serviceNumber = serviceNumberMatch?.[1] || "000000000"; // Si no es troba, assigna "000000000"
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
-  // 2 ORIGEN: Cerquem "municipi" i la línia següent
-  const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
+  // 2) Origen: cerca "municipi" i agafa la línia següent o tot el que segueix
+  const originMatch = processedText.match(/municipi\s*(?:\r?\n|\s)+(.*)/i);
   if (originMatch?.[1]) {
     document.getElementById(`origin-${suffix}`).value = originMatch[1].trim();
   } else {
     console.warn(`[OCR] No s'ha trobat l'origen`);
   }
 
-  // 3 DESTINACIÓ: Cerquem "hospital destí" i la línia següent
+  // 3) Destinació: cerca "hospital desti" i agafa la línia següent o tot el que segueix
   const destinationMatch = processedText.match(
-    /hospital\s*desti\s*(?:\r?\n)+\s*(.*)/i
+    /hospital\s*desti\s*(?:\r?\n|\s)+(.*)/i
   );
   if (destinationMatch?.[1]) {
     document.getElementById(`destination-${suffix}`).value =
