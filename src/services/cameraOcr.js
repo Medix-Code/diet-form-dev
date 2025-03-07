@@ -135,8 +135,9 @@ function fillTimes(processedText, suffix) {
 
   // 1) Hora d'origen: utilitzem "status: mobilitzat" (la que marca la mobilització)
   const mobilitzatMatch = processedText.match(
-    /status:\s*mobilitzat\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[:\-]\d{2})[:\-]\d{2}/i
+    /status:\s*mobilitzat.*?(\d{2}[:\-]\d{2})/i
   );
+
   if (mobilitzatMatch?.[1]) {
     const timeValue = normalizeTime(mobilitzatMatch[1]);
     document.getElementById(`origin-time-${suffix}`).value = timeValue;
