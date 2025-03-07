@@ -17,26 +17,19 @@ export function initCameraOcr() {
     console.warn("[cameraOcr] Botó o input no trobat.");
     return;
   }
-  // Quan es clica el botó de càmera, intentem obtenir la càmera posterior
+
+  // Quan es clica el botó de càmera
   cameraBtn.addEventListener("click", async () => {
     try {
-      const stream = await getRearCameraStream();
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } },
+      });
+
       stream.getTracks().forEach((track) => track.stop());
       cameraInput.click();
     } catch (err) {
       console.error("[cameraOcr] Error en accedir a la càmera:", err);
-      if (err.name === "OverconstrainedError") {
-        showToast("No s'ha pogut accedir a la càmera posterior.", "error");
-      } else if (err.name === "NotAllowedError") {
-        showToast(
-          "Permís de càmera denegat. Activa'l a la configuració del navegador.",
-          "error"
-        );
-      } else if (err.name === "NotFoundError") {
-        showToast("No s'ha trobat cap càmera disponible.", "error");
-      } else {
-        showToast("Error en accedir a la càmera: " + err.message, "error");
-      }
+      showToast("Error en accedir a la càmera: " + err.message, "error");
     }
   });
 
@@ -129,38 +122,6 @@ export function initCameraOcr() {
       showToast("Error en carregar la imatge", "error");
     };
   });
-}
-
-async function getRearCameraStream() {
-  try {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    const videoDevices = devices.filter(
-      (device) => device.kind === "videoinput"
-    );
-
-    // Cerca un dispositiu que tingui indicis de ser la càmera posterior
-    const rearCamera = videoDevices.find((device) => {
-      const label = device.label.toLowerCase();
-      return (
-        label.includes("back") ||
-        label.includes("rear") ||
-        label.includes("environment")
-      );
-    });
-
-    if (rearCamera) {
-      return await navigator.mediaDevices.getUserMedia({
-        video: { deviceId: { exact: rearCamera.deviceId } },
-      });
-    } else {
-      // Si no trobem, podem provar amb el paràmetre facingMode com a fallback
-      return await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-      });
-    }
-  } catch (err) {
-    throw err;
-  }
 }
 
 /**
