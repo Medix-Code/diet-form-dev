@@ -96,26 +96,51 @@ export function initCameraOcr() {
  * Analitza el text OCR i omple:
  *   - Camps d'hores (origin-time, destination-time, end-time)
  *   - Camps de servei (service-number, origin, destination)
+ *
+ * Cada foto ha de contenir només un tipus de dades.
  */
 function fillFormFieldsFromOcr(ocrText) {
+  const textLower = ocrText.toLowerCase();
   const currentServiceIndex = getCurrentServiceIndex();
   const suffix = currentServiceIndex + 1;
 
-  // Convertim tot a minúscules per facilitar recerques
-  const textLower = ocrText.toLowerCase();
+  // Comprovem si hi ha dades de servei:
+  const hasServiceData =
+    /\b\d{7,9}\b/.test(textLower) ||
+    /municipi/.test(textLower) ||
+    /hospital/.test(textLower);
 
-  // 1) Omplir HORES (si trobem coincidències)
-  fillTimes(textLower, suffix);
+  // Comprovem si hi ha dades d'hores:
+  const hasTimeData =
+    /status:\s*mobilitzat/.test(textLower) ||
+    /status:\s*arribada\s+hospital/.test(textLower) ||
+    /altech\s+v\./.test(textLower);
 
-  // 2) Omplir dades de SERVEI (si trobem coincidències)
-  fillServiceData(textLower, suffix);
+  // Si només hi ha dades de servei, omplim els camps de servei.
+  if (hasServiceData && !hasTimeData) {
+    fillServiceData(textLower, suffix);
+    showToast("Dades de servei omplertes!", "success");
+  }
+  // Si només hi ha dades d'hores, omplim els camps d'hores.
+  else if (hasTimeData && !hasServiceData) {
+    fillTimes(textLower, suffix);
+    showToast("Dades d'hores omplertes!", "success");
+  }
+  // Si hi ha dades mixtes o cap, informem a l'usuari.
+  else if (hasServiceData && hasTimeData) {
+    showToast(
+      "La foto conté dades mixtes. Utilitza una foto només per dades de servei o per hores.",
+      "error"
+    );
+  } else {
+    showToast("No s'ha detectat informació per omplir.", "error");
+  }
 }
 
 /* -----------------------------------------
-   Omplir camps d'Hores
+   Funció per omplir camps d'Hores
 ----------------------------------------- */
 function fillTimes(processedText, suffix) {
-  // Busquem "status: mobilitzat", "status: arribada hospital", "altech v..."
   const normalizeTime = (timeStr) => timeStr.replace(/-/g, ":");
 
   // 1) Hora d'origen
@@ -149,7 +174,7 @@ function fillTimes(processedText, suffix) {
     const timeValue = normalizeTime(endMatch[1]);
     document.getElementById(`end-time-${suffix}`).value = timeValue;
   } else {
-    // Fallback: si no trobem hora final, usem l'hora actual
+    // Fallback: si no es troba hora final, usem l'hora actual
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
@@ -158,25 +183,24 @@ function fillTimes(processedText, suffix) {
 }
 
 /* -----------------------------------------
-   Omplir camps de Servei (Nº, Origen, Destino)
+   Funció per omplir camps de Servei (Nº, Origen, Destino)
 ----------------------------------------- */
 function fillServiceData(processedText, suffix) {
-  // Ex. busquem un bloc de 7-9 dígits per Nº de servei
+  // 1) Nº de servei: un bloc de 7-9 dígits
   const serviceNumberMatch = processedText.match(/\b(\d{7,9})\b/);
   if (serviceNumberMatch?.[1]) {
     document.getElementById(`service-number-${suffix}`).value =
       serviceNumberMatch[1];
   }
 
-  // Busquem "municipi" per omplir Origen
-  // Ajusta-ho segons el text real que aparegui a la pantalla
+  // 2) Origen: cerquem "municipi" i prenem la primera línia
   const originMatch = processedText.match(/municipi\s*[:\-]?\s*(.*)/i);
   if (originMatch?.[1]) {
     const originClean = originMatch[1].split(/\r?\n/)[0].trim();
     document.getElementById(`origin-${suffix}`).value = originClean;
   }
 
-  // Busquem "hospital" o "destino" per omplir Destino
+  // 3) Destino: cerquem "hospital" i prenem la primera línia
   const destinationMatch = processedText.match(/hospital\s*(.*)/i);
   if (destinationMatch?.[1]) {
     const destClean = destinationMatch[1].split(/\r?\n/)[0].trim();
