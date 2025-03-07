@@ -133,38 +133,42 @@ function fillFormFieldsFromOcr(ocrText) {
 function fillTimes(processedText, suffix) {
   const normalizeTime = (timeStr) => timeStr.replace(/-/g, ":");
 
-  // 1) Hora d'origen: utilitzem "status: mobilitzat" (la que marca la mobilització)
+  // 1) Hora d'origen: utilitzem "status: mobilitzat"
   const mobilitzatMatch = processedText.match(
-    /s?t?a?t?u?s?:?\s*mobil\w*\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2})[-:](\d{2})/i
+    /s?t?a?t?u?s?:?\s*mobil\w*\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
-  if (mobilitzatMatch) {
-    const timeValue = `${mobilitzatMatch[1]}:${mobilitzatMatch[2]}`;
-    document.getElementById(`origin-time-${suffix}`).value = timeValue;
+  if (mobilitzatMatch?.[1]) {
+    document.getElementById(`origin-time-${suffix}`).value = normalizeTime(
+      mobilitzatMatch[1]
+    );
   }
 
-  // 2) Hora de destinació
+  // 2) Hora de destinació: "status: arribada hospital"
   const arribadaMatch = processedText.match(
-    /status:\s*arribada\s+hospital\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[:\-]\d{2})[:\-]\d{2}/i
+    /s?t?a?t?u?s?:?\s*a?r?r?i?b?a?d?a?\s+h?o?s?p?i?t?a?l?\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
   if (arribadaMatch?.[1]) {
-    const timeValue = normalizeTime(arribadaMatch[1]);
-    document.getElementById(`destination-time-${suffix}`).value = timeValue;
+    document.getElementById(`destination-time-${suffix}`).value = normalizeTime(
+      arribadaMatch[1]
+    );
   }
 
-  // 3) Hora final
+  // 3) Hora final: "altech v."
   let endMatch = processedText.match(
-    /altech\s+v\.[^\n]*\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[:\-]\d{2})[:\-]\d{2}/i
+    /altech\s*v\.\s*[^\n]*\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
   if (!endMatch) {
     endMatch = processedText.match(
-      /altech\s+v\.[^\n]*\n\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[:\-]\d{2})[:\-]\d{2}/i
+      /altech\s*v\.\s*[^\n]*\n\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
     );
   }
+
   if (endMatch?.[1]) {
-    const timeValue = normalizeTime(endMatch[1]);
-    document.getElementById(`end-time-${suffix}`).value = timeValue;
+    document.getElementById(`end-time-${suffix}`).value = normalizeTime(
+      endMatch[1]
+    );
   } else {
-    // Fallback: si no es troba hora final, usem l'hora actual
+    // Fallback: si no es troba l'hora final, usem l'hora actual
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
