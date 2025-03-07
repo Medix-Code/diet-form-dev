@@ -60,6 +60,13 @@ export function addInputListeners() {
       debouncedCheck();
     });
   });
+  // 🔹 Afegim la solució pel problema de Firefox amb el selector de data
+  const dateInput = document.getElementById("date");
+  if (dateInput) {
+    dateInput.addEventListener("change", function () {
+      this.blur(); // Treu el focus perquè Firefox accepti el valor immediatament
+    });
+  }
 }
 
 /**
@@ -144,9 +151,7 @@ export function gatherAllData() {
     servicesData,
   };
 }
-document.getElementById("date").addEventListener("change", function () {
-  this.blur(); // Treu el focus perquè Firefox accepti el valor immediatament
-});
+
 /**
  * Elimina classes d'error dels camps d'un servei
  */
