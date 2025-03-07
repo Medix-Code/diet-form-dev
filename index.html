@@ -724,6 +724,26 @@
       }
     </script>
 
+    <script>
+      const optionsToggleBtn = document.getElementById("options-toggle");
+      const optionsMenu = document.getElementById("options-menu");
+
+      // Alterna la classe "hidden" en fer clic
+      optionsToggleBtn.addEventListener("click", () => {
+        optionsMenu.classList.toggle("hidden");
+      });
+
+      // Opcionalment, si vols tancar-lo quan l'usuari fa clic fora
+      document.addEventListener("click", (event) => {
+        if (
+          !optionsToggleBtn.contains(event.target) &&
+          !optionsMenu.contains(event.target)
+        ) {
+          optionsMenu.classList.add("hidden");
+        }
+      });
+    </script>
+
     <!-- Codi principal de la teva app -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@6.0.0/dist/tesseract.min.js"></script>
     <script type="module" src="./src/app.js"></script>
