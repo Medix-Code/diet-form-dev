@@ -31,6 +31,7 @@ export function initCameraOcr() {
         err.name === "NotAllowedError" ||
         err.name === "PermissionDeniedError"
       ) {
+        showToast("🚫", "error");
         //showToast("🚫 Accés a la càmera denegat. Revisa els permisos del navegador.", "error" );
       } else if (
         err.name === "NotReadableError" ||
