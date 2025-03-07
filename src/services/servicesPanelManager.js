@@ -132,30 +132,40 @@ export function clearServiceFields(serviceEl) {
  */
 function attachOptionsMenuListeners() {
   const optionsMenu = document.getElementById("options-menu");
+  const optionsToggleBtn = document.getElementById("options-toggle");
   const clearButton = document.getElementById("clear-selected-service");
   const cameraButton = document.getElementById("camera-in-dropdown");
-  const optionsToggleBtn = document.getElementById("options-toggle");
 
+  // 1) Obrir/tancar el menú en fer clic al botó d'opcions
+  if (optionsToggleBtn && optionsMenu) {
+    optionsToggleBtn.addEventListener("click", () => {
+      optionsMenu.classList.toggle("hidden");
+    });
+
+    // 2) Tancar el menú si es fa clic fora
+    document.addEventListener("click", (event) => {
+      if (
+        !optionsToggleBtn.contains(event.target) &&
+        !optionsMenu.contains(event.target)
+      ) {
+        optionsMenu.classList.add("hidden");
+      }
+    });
+  }
+
+  // 3) Quan es fa clic en el botó "esborrar" (clear), tancar el menú
   if (clearButton) {
     clearButton.addEventListener("click", () => {
-      // Aquí pots executar la lògica per esborrar, si escau.
-      optionsMenu.classList.add("hidden");
-    });
-  }
-  if (cameraButton) {
-    cameraButton.addEventListener("click", () => {
-      // Aquí s'hauria de disparar la lògica d'OCR.
+      // Aquí pots executar la lògica d'esborrar si cal
       optionsMenu.classList.add("hidden");
     });
   }
 
-  // Tanca el menú si es fa clic fora del botó d'opcions o del menú mateix
-  document.addEventListener("click", (event) => {
-    if (
-      !optionsToggleBtn.contains(event.target) &&
-      !optionsMenu.contains(event.target)
-    ) {
+  // 4) Quan es fa clic en el botó "càmera", tancar el menú
+  if (cameraButton) {
+    cameraButton.addEventListener("click", () => {
+      // Aquí s'executarà la lògica d'OCR (initCameraOcr, etc.)
       optionsMenu.classList.add("hidden");
-    }
-  });
+    });
+  }
 }
