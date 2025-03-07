@@ -621,8 +621,8 @@ button .fa {
 }
 /* Estil comú per als botons del menú */
 .option-btn {
-  width: clamp(30px, 4vw, 40px);
-  height: clamp(30px, 4vw, 40px);
+  width: clamp(40px, 5vw, 50px);
+  width: clamp(40px, 5vw, 50px);
   border-radius: 8px;
   border: none;
   font-size: 20px;
@@ -654,6 +654,21 @@ button .fa {
   background-color: var(--bg-tab-active);
   transition: background-color 0.3s ease, filter 0.3s ease;
 }
+.clear-selected-btn.service-1 {
+  background-color: var(--service-1-border);
+}
+.clear-selected-btn.service-2 {
+  background-color: var(--service-2-border);
+}
+.clear-selected-btn.service-3 {
+  background-color: var(--service-3-border);
+}
+.clear-selected-btn.service-4 {
+  background-color: var(--service-4-border);
+}
+.clear-selected-btn:active {
+  filter: brightness(0.9);
+}
 
 .camera-btn {
   margin-left: auto;
@@ -670,6 +685,21 @@ button .fa {
   cursor: pointer;
   background-color: var(--bg-tab-active);
   transition: background-color 0.3s ease, filter 0.3s ease;
+}
+.camera-btn.service-1 {
+  background-color: var(--service-1-border);
+}
+.camera-btn.service-2 {
+  background-color: var(--service-2-border);
+}
+.camera-btn.service-3 {
+  background-color: var(--service-3-border);
+}
+.camera-btn.service-4 {
+  background-color: var(--service-4-border);
+}
+.camera-btn:active {
+  filter: brightness(0.9);
 }
 
 button:disabled {
