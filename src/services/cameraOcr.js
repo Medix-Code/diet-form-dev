@@ -153,13 +153,13 @@ function fillTimes(processedText, suffix) {
     );
   }
 
-  // 3) Hora final: "altech v."
+  // 3) Hora final: "altech"
   let endMatch = processedText.match(
-    /altech\s*v\.\s*[^\n]*\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
+    /altech\s*[^\n]*\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
   if (!endMatch) {
     endMatch = processedText.match(
-      /altech\s*v\.\s*[^\n]*\n\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
+      /altech\s*[^\n]*\n\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
     );
   }
 
