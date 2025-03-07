@@ -115,8 +115,9 @@ export function showEasterEggIcon() {
 }
 
 function showCameraIcon() {
-  const cameraBtn = document.getElementById("camera-btn");
+  const cameraBtn = document.getElementById("camera-in-dropdown");
   if (cameraBtn) {
-    cameraBtn.style.display = "flex"; // Mostra el botó (o "block", segons el teu disseny)
+    cameraBtn.style.display = "flex"; // Mostra el botó (o "block", segons el disseny)
+    cameraBtn.disabled = false; // Activa el botó
   }
 }

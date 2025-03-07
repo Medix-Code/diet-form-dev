@@ -472,6 +472,7 @@ button .fa {
   display: flex;
   align-items: center;
   gap: 30px;
+  justify-content: space-between;
   margin-bottom: 25px;
 }
 
@@ -517,41 +518,6 @@ button .fa {
   border: 1px solid var(--border-btn-service);
 }
 
-.clear-selected-btn {
-  margin-left: auto;
-  width: clamp(40px, 5vw, 50px);
-  height: clamp(40px, 5vw, 50px);
-  border-radius: 8px;
-  border: none;
-  font-size: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  color: var(--text-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background-color: var(--bg-tab-active);
-  transition: background-color 0.3s ease, filter 0.3s ease;
-}
-.clear-selected-btn.service-1 {
-  background-color: var(--service-1-border);
-}
-.clear-selected-btn.service-2 {
-  background-color: var(--service-2-border);
-}
-.clear-selected-btn.service-3 {
-  background-color: var(--service-3-border);
-}
-.clear-selected-btn.service-4 {
-  background-color: var(--service-4-border);
-}
-.clear-selected-btn:hover {
-  filter: brightness(0.95);
-}
-.clear-selected-btn:active {
-  filter: brightness(0.9);
-}
-
 .service {
   padding: clamp(15px, 3vw, 30px) clamp(10px, 2vw, 20px);
   background-color: var(--bg-color);
@@ -571,6 +537,144 @@ button .fa {
 }
 .service.service-4 {
   background-color: var(--service-4-bg);
+}
+
+/* Contenidor general d'opcions */
+.options-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Alineació a la dreta */
+}
+
+/* Botó principal d'opcions (tres punts, etc.) */
+.options-btn {
+  width: clamp(40px, 5vw, 50px);
+  height: clamp(40px, 5vw, 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px var(--bg-transp-ajustes);
+  border: none;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.options-btn.service-1 {
+  background-color: var(--service-1-border);
+}
+.options-btn.service-2 {
+  background-color: var(--service-2-border);
+}
+.options-btn.service-3 {
+  background-color: var(--service-3-border);
+}
+.options-btn.service-4 {
+  background-color: var(--service-4-border);
+}
+.options-btn:active {
+  filter: brightness(0.9);
+}
+
+.options-btn:hover {
+  filter: brightness(0.95);
+}
+
+.options-btn:active {
+  filter: brightness(0.9);
+}
+
+/* Menú desplegable: disposició en columna per mostrar els botons un sota l'altre */
+.options-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espai entre els botons */
+  /* Eliminem el padding, fons, ombra i border-radius */
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: dropdownAnimation 0.3s ease-out forwards;
+}
+
+/* Amagat per defecte (via classe hidden) */
+.options-dropdown.hidden {
+  display: none;
+}
+
+/* Animació per al desplegable */
+@keyframes dropdownAnimation {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Estil comú per als botons del menú */
+.option-btn {
+  width: clamp(30px, 4vw, 40px);
+  height: clamp(30px, 4vw, 40px);
+  border-radius: 8px;
+  border: none;
+  font-size: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: var(--bg-tab-active);
+  transition: background-color 0.3s ease, filter 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.clear-selected-btn {
+  margin-left: auto;
+  width: clamp(40px, 5vw, 50px);
+  height: clamp(40px, 5vw, 50px);
+  border-radius: 8px;
+  border: none;
+  font-size: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: var(--bg-tab-active);
+  transition: background-color 0.3s ease, filter 0.3s ease;
+}
+
+.camera-btn {
+  margin-left: auto;
+  width: clamp(40px, 5vw, 50px);
+  height: clamp(40px, 5vw, 50px);
+  border-radius: 8px;
+  border: none;
+  font-size: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: var(--bg-tab-active);
+  transition: background-color 0.3s ease, filter 0.3s ease;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .signature-group .input-with-icon {
@@ -1107,16 +1211,6 @@ button .icon {
     opacity: 0;
   }
 }
-/* Oculta el botó de càmera en pantalles grans (PC) */
-@media (min-width: 1025px) {
-  #camera-btn {
-    display: none;
-  }
-}
-#camera-btn {
-  display: none; /* Amagat per defecte */
-}
-
 @media (max-width: 1024px) and (min-width: 769px) {
   .top-bar {
     height: calc(var(--top-bar-height) - 4px);

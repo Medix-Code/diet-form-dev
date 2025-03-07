@@ -94,6 +94,16 @@ const showService = (index) => {
   if (clearButton) {
     clearButton.className = `clear-selected-btn ${serviceColors[index]}`;
   }
+  // Actualitza el botó de la càmera si existeix
+  const cameraButton = document.getElementById("camera-in-dropdown");
+  if (cameraButton) {
+    cameraButton.className = `camera-btn ${serviceColors[index]}`;
+  }
+  // Actualitza el botó del menú d'opcions si existeix
+  const optionButton = document.getElementById("options-toggle");
+  if (optionButton) {
+    optionButton.className = `options-btn ${serviceColors[index]}`;
+  }
 };
 
 /**
