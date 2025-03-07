@@ -144,7 +144,9 @@ export function gatherAllData() {
     servicesData,
   };
 }
-
+document.getElementById("date").addEventListener("change", function () {
+  this.blur(); // Treu el focus perquè Firefox accepti el valor immediatament
+});
 /**
  * Elimina classes d'error dels camps d'un servei
  */
