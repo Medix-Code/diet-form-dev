@@ -104,34 +104,25 @@ function fillFormFieldsFromOcr(ocrText) {
   const currentServiceIndex = getCurrentServiceIndex();
   const suffix = currentServiceIndex + 1;
 
-  // Comprovem si hi ha dades de servei:
-  const hasServiceData =
-    /\b\d{7,9}\b/.test(textLower) ||
-    /municipi/.test(textLower) ||
-    /hospital/.test(textLower);
-
-  // Comprovem si hi ha dades d'hores:
+  // Comprovem si hi ha dades d'hores
   const hasTimeData =
     /status:\s*mobilitzat/.test(textLower) ||
     /status:\s*arribada\s+hospital/.test(textLower) ||
     /altech\s+v\./.test(textLower);
 
-  // Si només hi ha dades de servei, omplim els camps de servei.
-  if (hasServiceData && !hasTimeData) {
-    fillServiceData(textLower, suffix);
-    showToast("Dades de servei omplertes!", "success");
-  }
-  // Si només hi ha dades d'hores, omplim els camps d'hores.
-  else if (hasTimeData && !hasServiceData) {
+  // Comprovem si hi ha dades de servei (només si no es detecta informació d'hores)
+  const hasServiceData =
+    !hasTimeData &&
+    (/\b\d{7,9}\b/.test(textLower) ||
+      /municipi/.test(textLower) ||
+      /hospital/.test(textLower));
+
+  if (hasTimeData) {
     fillTimes(textLower, suffix);
     showToast("Dades d'hores omplertes!", "success");
-  }
-  // Si hi ha dades mixtes o cap, informem a l'usuari.
-  else if (hasServiceData && hasTimeData) {
-    showToast(
-      "La foto conté dades mixtes. Utilitza una foto només per dades de servei o per hores.",
-      "error"
-    );
+  } else if (hasServiceData) {
+    fillServiceData(textLower, suffix);
+    showToast("Dades de servei omplertes!", "success");
   } else {
     showToast("No s'ha detectat informació per omplir.", "error");
   }
