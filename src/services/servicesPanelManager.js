@@ -33,10 +33,12 @@ const servicesContainer = document.getElementById("services-container");
  * Inicialitza la lògica dels serveis:
  *  - Crea els botons per canviar de servei
  *  - Mostra el servei amb índex 0
+ *  - Assigna els event listeners als botons del menú d'opcions
  */
 export function initServices() {
   createServiceButtons();
   showService(currentServiceIndex);
+  attachOptionsMenuListeners();
 }
 
 /**
@@ -77,7 +79,7 @@ const showService = (index) => {
     serviceEl.style.display = i === index ? "block" : "none";
   });
 
-  // Actualitza l'estat de tots els botons
+  // Actualitza l'estat de tots els botons de servei
   const buttons = document.querySelectorAll(".service-button");
   buttons.forEach((btn, i) => {
     if (i === index) {
@@ -121,5 +123,39 @@ export function clearServiceFields(serviceEl) {
   serviceEl.querySelectorAll("select").forEach((select) => {
     select.selectedIndex = 0;
     select.classList.remove("input-error");
+  });
+}
+
+/**
+ * Assigna els event listeners als botons del menú d'opcions (esborrar i càmera)
+ * per tancar el menú quan es cliqui en algun d'ells o fora.
+ */
+function attachOptionsMenuListeners() {
+  const optionsMenu = document.getElementById("options-menu");
+  const clearButton = document.getElementById("clear-selected-service");
+  const cameraButton = document.getElementById("camera-in-dropdown");
+  const optionsToggleBtn = document.getElementById("options-toggle");
+
+  if (clearButton) {
+    clearButton.addEventListener("click", () => {
+      // Aquí pots executar la lògica per esborrar, si escau.
+      optionsMenu.classList.add("hidden");
+    });
+  }
+  if (cameraButton) {
+    cameraButton.addEventListener("click", () => {
+      // Aquí s'hauria de disparar la lògica d'OCR.
+      optionsMenu.classList.add("hidden");
+    });
+  }
+
+  // Tanca el menú si es fa clic fora del botó d'opcions o del menú mateix
+  document.addEventListener("click", (event) => {
+    if (
+      !optionsToggleBtn.contains(event.target) &&
+      !optionsMenu.contains(event.target)
+    ) {
+      optionsMenu.classList.add("hidden");
+    }
   });
 }

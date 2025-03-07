@@ -241,7 +241,7 @@
         aria-labelledby="tab-serveis"
       >
         <div class="service-controls">
-          <!-- Contenidor amb els bootons de servei (S1, S2, S3, S4) a l'esquerra -->
+          <!-- Contenidor amb els botons de servei (S1, S2, S3, S4) a l'esquerra -->
           <div id="service-buttons-container">
             <!-- Aquí es generen els botons S1, S2, ... -->
           </div>
@@ -722,26 +722,6 @@
           .then(() => console.log("Service Worker registrat correctament!"))
           .catch((err) => console.warn("Error en registrar SW:", err));
       }
-    </script>
-
-    <script>
-      const optionsToggleBtn = document.getElementById("options-toggle");
-      const optionsMenu = document.getElementById("options-menu");
-
-      // Alterna la classe "hidden" en fer clic
-      optionsToggleBtn.addEventListener("click", () => {
-        optionsMenu.classList.toggle("hidden");
-      });
-
-      // Opcionalment, si vols tancar-lo quan l'usuari fa clic fora
-      document.addEventListener("click", (event) => {
-        if (
-          !optionsToggleBtn.contains(event.target) &&
-          !optionsMenu.contains(event.target)
-        ) {
-          optionsMenu.classList.add("hidden");
-        }
-      });
     </script>
 
     <!-- Codi principal de la teva app -->
