@@ -1,5 +1,5 @@
 // Definim el nom del caché i els fitxers a "cachejar"
-const CACHE_NAME = "dieta-cache-v20250307081217";
+const CACHE_NAME = "dieta-cache-v20250307093817";
 
 // NOTA: NO incloem index.html ni 404.html en el pre-cache
 // per evitar que es quedin 'encallats' en cache-first.
@@ -64,6 +64,7 @@ self.addEventListener("install", (event) => {
             console.log(`[ServiceWorker] Fitxer en caché: ${url}`);
           } catch (error) {
             console.error(`[ServiceWorker] Error cachejant ${url}:`, error);
+            // Aquí podries decidir ignorar certs errors si el recurs no és crític
           }
         }
       })
@@ -129,7 +130,11 @@ self.addEventListener("fetch", (event) => {
           })
           .catch((error) => {
             console.error("[ServiceWorker] Error durant el fetch:", error);
-            throw error;
+            // En comptes de llençar l'error, retornem una resposta per defecte
+            return new Response("", {
+              status: 404,
+              statusText: "Not Found",
+            });
           });
       })
     );
