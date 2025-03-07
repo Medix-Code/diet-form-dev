@@ -30,7 +30,7 @@
   --text-color-footer: #ffffff;
   --bg-footer: #004aad;
   /* General */
-  --bg-color: #fffffe;
+  --bg-color: #fefeff;
   --grey-border: #ddddddea;
   /* Botons d'ajustaments */
   --bgcolor-hover: #e0e0e0;
@@ -760,12 +760,8 @@ button .fa {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Establim mides fixes sense afectar al pare */
-  width: 40px; /* Més amplada */
   height: 100%; /* Respectem l'altura existent */
   border-radius: 8px; /* Arrodonit per millor estètica */
-  padding: 5px; /* Espai intern, sense augmentar l'altura total */
-  box-sizing: border-box; /* Inclou padding dins l'alçada definida */
 }
 
 .diet-icons button:hover {
@@ -1111,6 +1107,16 @@ button .icon {
     opacity: 0;
   }
 }
+/* Oculta el botó de càmera en pantalles grans (PC) */
+@media (min-width: 1025px) {
+  #camera-btn {
+    display: none;
+  }
+}
+#camera-btn {
+  display: none; /* Amagat per defecte */
+}
+
 @media (max-width: 1024px) and (min-width: 769px) {
   .top-bar {
     height: calc(var(--top-bar-height) - 4px);
@@ -1255,6 +1261,10 @@ button .icon {
     font-family: "Roboto Serif", serif;
     font-size: 12px;
     font-weight: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
   }
   label {
     margin-bottom: 8px;
