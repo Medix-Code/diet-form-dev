@@ -182,23 +182,20 @@ function fillTimes(processedText, suffix) {
 /* -----------------------------------------
    Funció per omplir camps de Servei (Nº, Origen, Destinació)
 ----------------------------------------- */
-/* -----------------------------------------
-   Funció per omplir camps de Servei (Nº, Origen, Destinació)
------------------------------------------ */
 function fillServiceData(processedText, suffix) {
   // 1 CERQUEM EL NÚMERO DE SERVEI SOTA "AFECTATS"
   const serviceNumberMatch = processedText.match(
     /afectats\s*(?:\r?\n)+\s*(\d{9,10})/i
   );
-  if (serviceNumberMatch?.[1]) {
-    document.getElementById(`service-number-${suffix}`).value =
-      serviceNumberMatch[1];
-  }
+  const serviceNumber = serviceNumberMatch?.[1] || "000000000"; // Si no es troba, assignem "000000000"
+  document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
   // 2 ORIGEN: Cerquem "municipi" i la línia següent
   const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
   if (originMatch?.[1]) {
     document.getElementById(`origin-${suffix}`).value = originMatch[1].trim();
+  } else {
+    console.warn(`[OCR] No s'ha trobat l'origen`);
   }
 
   // 3 DESTINACIÓ: Cerquem "hospital destí" i la línia següent
@@ -208,5 +205,7 @@ function fillServiceData(processedText, suffix) {
   if (destinationMatch?.[1]) {
     document.getElementById(`destination-${suffix}`).value =
       destinationMatch[1].trim();
+  } else {
+    console.warn(`[OCR] No s'ha trobat la destinació`);
   }
 }
