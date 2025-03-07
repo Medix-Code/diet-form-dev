@@ -1,13 +1,14 @@
 /* cameraOcr.js
-   Lògica per capturar una foto (en dispositius mòbils) i passar-la per OCR amb Tesseract.
-   S'ha afegit una barra de progrés i un missatge per informar l'usuari mentre s'escaneja,
-   i es demanen els permisos de la càmera només quan es clica la icona de càmera.
+   Exemple amb un sol botó de càmera i un sol input de fitxer.
+   En funció del text OCR, omple:
+     - Camps d'hores (origin-time, destination-time, end-time)
+     - Camps de servei (service-number, origin, destination)
 */
+import { showToast } from "../ui/toast.js";
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
-import { showToast } from "../ui/toast.js"; // Assegura't d'importar la funció de toast
 
+/** Inicialitza la lògica d'OCR amb un sol botó i input. */
 export function initCameraOcr() {
-  // Utilitzem el botó de la càmera dins del menú d'opcions
   const cameraBtn = document.getElementById("camera-in-dropdown");
   const cameraInput = document.getElementById("camera-input");
 
@@ -16,13 +17,11 @@ export function initCameraOcr() {
     return;
   }
 
-  // Quan es clica el botó de càmera, demanem permisos i obrim l'input per capturar la imatge
+  // Quan es clica el botó de càmera
   cameraBtn.addEventListener("click", async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      // Aturem els tracks perquè només volem comprovar els permisos
       stream.getTracks().forEach((track) => track.stop());
-      // Obrim l'input per seleccionar/capturar la imatge
       cameraInput.click();
     } catch (err) {
       console.error("[cameraOcr] Error en accedir a la càmera:", err);
@@ -30,7 +29,7 @@ export function initCameraOcr() {
     }
   });
 
-  // Quan l'usuari selecciona la imatge...
+  // Quan l'usuari selecciona la imatge
   cameraInput.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -53,6 +52,7 @@ export function initCameraOcr() {
       showToast("Escanejant...", "info");
       console.log("[cameraOcr] Processant OCR...");
 
+      // Processar l'imatge amb Tesseract
       const result = await window.Tesseract.recognize(file, "spa", {
         logger: (m) => {
           if (m.status === "recognizing text") {
@@ -64,7 +64,7 @@ export function initCameraOcr() {
         },
       });
 
-      if (!result || !result.data || !result.data.text) {
+      if (!result?.data?.text) {
         console.warn("[cameraOcr] No s'ha detectat cap text.");
         showToast("No s'ha detectat text a la imatge", "error");
         return;
@@ -72,7 +72,10 @@ export function initCameraOcr() {
 
       const ocrText = result.data.text;
       console.log("[cameraOcr] Text OCR detectat:", ocrText);
+
+      // Omplim els camps que pertoquin
       fillFormFieldsFromOcr(ocrText);
+
       showToast("OCR complet!", "success");
     } catch (err) {
       console.error("[cameraOcr] Error OCR:", err);
@@ -90,59 +93,50 @@ export function initCameraOcr() {
 }
 
 /**
- * Extreu les hores (HH:MM) dels estats:
- *   - "STATUS: MOBILITZAT ..."  → assigna a "origin-time-{n}"
- *   - "STATUS: ARRIBADA HOSPITAL ..." → assigna a "destination-time-{n}"
- *   - Línia "altech v.X" i la següent data/hora → assigna a "end-time-{n}"
- *
- * Es permeten tant ":" com "-" com a separadors. Es converteixen a ":".
+ * Analitza el text OCR i omple:
+ *   - Camps d'hores (origin-time, destination-time, end-time)
+ *   - Camps de servei (service-number, origin, destination)
  */
-export function fillFormFieldsFromOcr(ocrText) {
-  // 1. Separa el text en línies
-  const lines = ocrText.split(/\r?\n/);
-
-  // 2. Filtra només les línies rellevants ("status:" o "altech")
-  const filteredLines = lines.filter(
-    (line) =>
-      line.toLowerCase().includes("status:") ||
-      line.toLowerCase().includes("altech")
-  );
-
-  // 3. Uneix les línies filtrades i converteix-les a minúscules
-  const processedText = filteredLines.join("\n").toLowerCase();
-
-  // Obtenim l'índex del servei actual i definim el sufix (1-based)
+function fillFormFieldsFromOcr(ocrText) {
   const currentServiceIndex = getCurrentServiceIndex();
   const suffix = currentServiceIndex + 1;
 
-  // Funció auxiliar per normalitzar el temps (substitueix guions per dos punts)
+  // Convertim tot a minúscules per facilitar recerques
+  const textLower = ocrText.toLowerCase();
+
+  // 1) Omplir HORES (si trobem coincidències)
+  fillTimes(textLower, suffix);
+
+  // 2) Omplir dades de SERVEI (si trobem coincidències)
+  fillServiceData(textLower, suffix);
+}
+
+/* -----------------------------------------
+   Omplir camps d'Hores
+----------------------------------------- */
+function fillTimes(processedText, suffix) {
+  // Busquem "status: mobilitzat", "status: arribada hospital", "altech v..."
   const normalizeTime = (timeStr) => timeStr.replace(/-/g, ":");
 
-  // ---------------------------------------
-  // 1) MOBILITZACIÓ → Hora d'origen (origin-time-{suffix})
+  // 1) Hora d'origen
   const mobilitzatMatch = processedText.match(
     /status:\s*mobilitzat\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[:\-]\d{2})[:\-]\d{2}/i
   );
-  if (mobilitzatMatch && mobilitzatMatch[1]) {
+  if (mobilitzatMatch?.[1]) {
     const timeValue = normalizeTime(mobilitzatMatch[1]);
     document.getElementById(`origin-time-${suffix}`).value = timeValue;
   }
 
-  // ---------------------------------------
-  // 2) ARRIBADA HOSPITAL → Hora de destinació (destination-time-{suffix})
+  // 2) Hora de destinació
   const arribadaMatch = processedText.match(
     /status:\s*arribada\s+hospital\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[:\-]\d{2})[:\-]\d{2}/i
   );
-  if (arribadaMatch && arribadaMatch[1]) {
+  if (arribadaMatch?.[1]) {
     const timeValue = normalizeTime(arribadaMatch[1]);
     document.getElementById(`destination-time-${suffix}`).value = timeValue;
   }
 
-  // ---------------------------------------
-  // 3) HORA FINAL → Extreu de la línia amb "altech v.X" i la següent data/hora
-  // Exemple:
-  //   altech v.08.0
-  //   23/07/23 07:17:49
+  // 3) Hora final
   let endMatch = processedText.match(
     /altech\s+v\.[^\n]*\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[:\-]\d{2})[:\-]\d{2}/i
   );
@@ -151,22 +145,41 @@ export function fillFormFieldsFromOcr(ocrText) {
       /altech\s+v\.[^\n]*\n\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[:\-]\d{2})[:\-]\d{2}/i
     );
   }
-  if (endMatch && endMatch[1]) {
+  if (endMatch?.[1]) {
     const timeValue = normalizeTime(endMatch[1]);
     document.getElementById(`end-time-${suffix}`).value = timeValue;
   } else {
-    // Fallback: si no s'ha extret la hora final, s'utilitza la hora actual
+    // Fallback: si no trobem hora final, usem l'hora actual
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
-    const currentTime = `${hh}:${mm}`;
-    document.getElementById(`end-time-${suffix}`).value = currentTime;
-    console.log(
-      `[cameraOcr] No s'ha detectat la hora final; s'ha assignat la hora actual: ${currentTime}`
-    );
+    document.getElementById(`end-time-${suffix}`).value = `${hh}:${mm}`;
+  }
+}
+
+/* -----------------------------------------
+   Omplir camps de Servei (Nº, Origen, Destino)
+----------------------------------------- */
+function fillServiceData(processedText, suffix) {
+  // Ex. busquem un bloc de 7-9 dígits per Nº de servei
+  const serviceNumberMatch = processedText.match(/\b(\d{7,9})\b/);
+  if (serviceNumberMatch?.[1]) {
+    document.getElementById(`service-number-${suffix}`).value =
+      serviceNumberMatch[1];
   }
 
-  console.log(
-    `[cameraOcr] Camps actualitzats per al servei S${suffix} a partir d'OCR.`
-  );
+  // Busquem "municipi" per omplir Origen
+  // Ajusta-ho segons el text real que aparegui a la pantalla
+  const originMatch = processedText.match(/municipi\s*[:\-]?\s*(.*)/i);
+  if (originMatch?.[1]) {
+    const originClean = originMatch[1].split(/\r?\n/)[0].trim();
+    document.getElementById(`origin-${suffix}`).value = originClean;
+  }
+
+  // Busquem "hospital" o "destino" per omplir Destino
+  const destinationMatch = processedText.match(/hospital\s*(.*)/i);
+  if (destinationMatch?.[1]) {
+    const destClean = destinationMatch[1].split(/\r?\n/)[0].trim();
+    document.getElementById(`destination-${suffix}`).value = destClean;
+  }
 }
