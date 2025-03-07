@@ -1257,6 +1257,11 @@ button .icon {
     text-align: center;
     line-height: normal;
   }
+  select {
+    appearance: none; /* Evita estils per defecte del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
   select option {
     font-family: "Roboto Serif", serif;
     font-size: 12px;
