@@ -1,5 +1,5 @@
 // Definim el nom del caché i els fitxers a "cachejar"
-const CACHE_NAME = "dieta-cache-v20250307094947";
+const CACHE_NAME = "dieta-cache-v20250307095147";
 
 // NOTA: NO incloem index.html ni 404.html en el pre-cache
 // per evitar que es quedin 'encallats' en cache-first.
@@ -80,25 +80,41 @@ self.addEventListener("install", (event) => {
 
 // --- FETCH ---
 self.addEventListener("fetch", (event) => {
-  // Si és una petició HTML (navegació), fem network-first:
+  // Si la petició és per Cloudflare Insights, no la cachegem
+  if (
+    event.request.url.indexOf("https://static.cloudflareinsights.com/") === 0
+  ) {
+    event.respondWith(
+      fetch(event.request).catch((error) => {
+        console.error(
+          "[ServiceWorker] Error carregant Cloudflare Insights:",
+          error
+        );
+        // Retorna una resposta buida en cas d'error, per no trencar la càrrega de la resta
+        return new Response("", {
+          status: 404,
+          statusText: "Not Found",
+        });
+      })
+    );
+    return;
+  }
+
+  // Resta de la lògica del fetch
   if (event.request.mode === "navigate") {
     event.respondWith(
       fetch(event.request)
         .then((networkResponse) => {
-          // Un cop rebuda la resposta, l'emmagatzemem a la caché
           return caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
           });
         })
         .catch(() => {
-          // Si no hi ha xarxa, tornem el que hi hagi en la caché (si hi és)
           return caches.match(event.request);
         })
     );
-  }
-  // Si és un fitxer CSS (o altres fitxers que vulguis actualitzar sempre)
-  else if (event.request.destination === "style") {
+  } else if (event.request.destination === "style") {
     event.respondWith(
       fetch(event.request, { cache: "reload" })
         .then((networkResponse) => {
@@ -111,9 +127,7 @@ self.addEventListener("fetch", (event) => {
           return caches.match(event.request);
         })
     );
-  }
-  // Per la resta de fitxers (JS, imatges, etc.), fem cache-first
-  else {
+  } else {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         if (cachedResponse) {
@@ -123,14 +137,12 @@ self.addEventListener("fetch", (event) => {
           );
           return cachedResponse;
         }
-        // Si no el trobem en caché, el descarreguem de la xarxa
         return fetch(event.request)
           .then((networkResponse) => {
             return networkResponse;
           })
           .catch((error) => {
             console.error("[ServiceWorker] Error durant el fetch:", error);
-            // En comptes de llençar l'error, retornem una resposta per defecte
             return new Response("", {
               status: 404,
               statusText: "Not Found",
