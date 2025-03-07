@@ -110,7 +110,6 @@ export function showEasterEggIcon() {
     setTimeout(() => {
       overlay.remove();
       showCameraIcon();
-      showCameraContainer();
     }, 1000); // Espera 1 segon per a l'animació
   });
 }
@@ -120,12 +119,5 @@ function showCameraIcon() {
   if (cameraBtn) {
     cameraBtn.style.display = "flex"; // Mostra el botó (o "block", segons el disseny)
     cameraBtn.disabled = false; // Activa el botó
-  }
-}
-
-function showCameraContainer() {
-  const cameraContainer = document.getElementById("camera-container");
-  if (cameraContainer) {
-    cameraContainer.classList.remove("hidden"); // Mostra el contenidor de la càmera
   }
 }

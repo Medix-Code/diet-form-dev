@@ -256,9 +256,7 @@
               <img src="assets/icons/submenu.svg" alt="Opciones" class="icon" />
             </button>
             <!-- Menú desplegable -->
-            <!-- Menú desplegable -->
             <div class="options-dropdown hidden" id="options-menu">
-              <!-- Botó per esborrar dades -->
               <button
                 type="button"
                 class="option-btn clear-selected-btn"
@@ -268,7 +266,6 @@
                 <img src="assets/icons/eraser.svg" alt="Borrar" class="icon" />
               </button>
 
-              <!-- Botó per activar la càmera (inicialment desactivat però visible) -->
               <button
                 type="button"
                 class="option-btn camera-btn"
@@ -278,15 +275,6 @@
               >
                 <img src="assets/icons/camera.svg" alt="Cámara" class="icon" />
               </button>
-
-              <!-- Contenidor per la càmera personalitzada -->
-              <div id="camera-container" class="hidden">
-                <video id="camera-stream" autoplay playsinline></video>
-                <button id="capture-btn">Capturar imatge</button>
-              </div>
-
-              <!-- Canvas per capturar la imatge (amagat) -->
-              <canvas id="captured-canvas" style="display: none"></canvas>
             </div>
           </div>
         </div>
