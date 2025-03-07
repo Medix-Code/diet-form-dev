@@ -190,12 +190,19 @@ function fillServiceData(processedText, suffix) {
   const serviceNumber = serviceNumberMatch?.[1] || "000000000";
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
-  // 2) Origen sota "Municipi"
-  const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
+  // 2) Origen: Captura TOT el text entre "Municipi" i "SubMunicipi 2"
+  //    S'utilitza un lookahead (?=\s*submunicipi\s*2) per aturar la captura just abans d'"SubMunicipi 2"
+  const originMatch = processedText.match(
+    /municipi\s*(?:\r?\n|\s)+([\s\S]*?)(?=\s*submunicipi\s*2)/i
+  );
   if (originMatch?.[1]) {
-    document.getElementById(`origin-${suffix}`).value = originMatch[1].trim();
+    // Substituïm salts de línia per espais, si vols que quedi més net
+    const originClean = originMatch[1].replace(/\r?\n+/g, " ").trim();
+    document.getElementById(`origin-${suffix}`).value = originClean;
   } else {
-    console.warn(`[OCR] No s'ha trobat l'origen`);
+    console.warn(
+      `[OCR] No s'ha trobat l'origen entre "Municipi" i "SubMunicipi 2"`
+    );
   }
 
   // 3) Destinació sota "Hospital Desti"
