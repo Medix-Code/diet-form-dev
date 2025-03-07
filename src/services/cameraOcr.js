@@ -20,7 +20,10 @@ export function initCameraOcr() {
   // Quan es clica el botó de càmera
   cameraBtn.addEventListener("click", async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
+
       stream.getTracks().forEach((track) => track.stop());
       cameraInput.click();
     } catch (err) {
