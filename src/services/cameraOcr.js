@@ -3,7 +3,6 @@
    En funció del text OCR, omple:
      - Camps d'hores (origin-time, destination-time, end-time)
      - Camps de servei (service-number, origin, destination)
-   Cada foto ha de contenir només un tipus de dades.
 */
 import { showToast } from "../ui/toast.js";
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
@@ -22,7 +21,7 @@ export function initCameraOcr() {
   cameraBtn.addEventListener("click", async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } },
+        video: { facingMode: "environment" },
       });
 
       stream.getTracks().forEach((track) => track.stop());
@@ -42,85 +41,55 @@ export function initCameraOcr() {
       return;
     }
 
-    // Creem una imatge per carregar el fitxer
-    const img = new Image();
-    img.src = URL.createObjectURL(file);
+    // Mostrem la barra de progrés i el missatge
+    const progressContainer = document.getElementById("ocr-progress-container");
+    const progressBar = document.getElementById("ocr-progress");
+    const progressText = document.getElementById("ocr-progress-text");
+    if (progressContainer && progressBar && progressText) {
+      progressContainer.classList.remove("hidden");
+      progressBar.value = 0;
+      progressText.textContent = "Escanejant...";
+    }
 
-    img.onload = async () => {
-      // Reduïm la mida de la imatge per accelerar l'OCR
-      const maxWidth = 800; // Amplada màxima
-      const scale = img.width > maxWidth ? maxWidth / img.width : 1;
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    try {
+      showToast("Escanejant...", "info");
+      console.log("[cameraOcr] Processant OCR...");
 
-      // Convertim el canvas a blob
-      canvas.toBlob(async (blob) => {
-        if (!blob) {
-          showToast("Error en processar la imatge redimensionada", "error");
-          return;
-        }
-
-        // Mostrem la barra de progrés i el missatge
-        const progressContainer = document.getElementById(
-          "ocr-progress-container"
-        );
-        const progressBar = document.getElementById("ocr-progress");
-        const progressText = document.getElementById("ocr-progress-text");
-        if (progressContainer && progressBar && progressText) {
-          progressContainer.classList.remove("hidden");
-          progressBar.value = 0;
-          progressText.textContent = "Escanejant...";
-        }
-
-        try {
-          showToast("Escanejant...", "info");
-          console.log("[cameraOcr] Processant OCR (imatge redimensionada)...");
-
-          // Processar la imatge redimensionada amb Tesseract
-          const result = await window.Tesseract.recognize(blob, "spa", {
-            logger: (m) => {
-              if (m.status === "recognizing text") {
-                const progressPercent = Math.floor(m.progress * 100);
-                if (progressBar) progressBar.value = progressPercent;
-                if (progressText)
-                  progressText.textContent = `Escanejant... ${progressPercent}%`;
-              }
-            },
-          });
-
-          if (!result?.data?.text) {
-            console.warn("[cameraOcr] No s'ha detectat cap text.");
-            showToast("No s'ha detectat text a la imatge", "error");
-            return;
+      // Processar l'imatge amb Tesseract
+      const result = await window.Tesseract.recognize(file, "spa", {
+        logger: (m) => {
+          if (m.status === "recognizing text") {
+            const progressPercent = Math.floor(m.progress * 100);
+            if (progressBar) progressBar.value = progressPercent;
+            if (progressText)
+              progressText.textContent = `Escanejant... ${progressPercent}%`;
           }
+        },
+      });
 
-          const ocrText = result.data.text;
-          console.log("[cameraOcr] Text OCR detectat:", ocrText);
+      if (!result?.data?.text) {
+        console.warn("[cameraOcr] No s'ha detectat cap text.");
+        showToast("No s'ha detectat text a la imatge", "error");
+        return;
+      }
 
-          // Analitza el text OCR i omple els camps corresponents
-          fillFormFieldsFromOcr(ocrText);
-          showToast("OCR complet!", "success");
-        } catch (err) {
-          console.error("[cameraOcr] Error OCR:", err);
-          showToast("Error al processar la imatge: " + err.message, "error");
-        } finally {
-          cameraInput.value = "";
-          if (progressContainer && progressBar) {
-            progressBar.value = 100;
-            setTimeout(() => {
-              progressContainer.classList.add("hidden");
-            }, 1500);
-          }
-        }
-      }, file.type);
-    };
+      const ocrText = result.data.text;
+      console.log("[cameraOcr] Text OCR detectat:", ocrText);
 
-    img.onerror = () => {
-      showToast("Error en carregar la imatge", "error");
-    };
+      // Omplim els camps que pertoquin
+      fillFormFieldsFromOcr(ocrText);
+    } catch (err) {
+      console.error("[cameraOcr] Error OCR:", err);
+      showToast("Error al processar la imatge: " + err.message, "error");
+    } finally {
+      cameraInput.value = "";
+      if (progressContainer && progressBar) {
+        progressBar.value = 100;
+        setTimeout(() => {
+          progressContainer.classList.add("hidden");
+        }, 1500);
+      }
+    }
   });
 }
 
@@ -136,11 +105,14 @@ function fillFormFieldsFromOcr(ocrText) {
   const currentServiceIndex = getCurrentServiceIndex();
   const suffix = currentServiceIndex + 1;
 
+  // Comprovem si hi ha dades d'hores
   const hasTimeData =
     /status:\s*mobilitzat/.test(textLower) ||
     /status:\s*arribada\s+hospital/.test(textLower) ||
     /altech\s+v\./.test(textLower);
 
+  // Comprovem si hi ha dades de servei (només si no es detecta informació d'hores)
+  // Ara el número de servei és un bloc de 9-10 dígits, i es busca també "municipi" o "hospital desti"
   const hasServiceData =
     !hasTimeData &&
     (/\b\d{9,10}\b/.test(textLower) ||
@@ -164,8 +136,9 @@ function fillFormFieldsFromOcr(ocrText) {
 function fillTimes(processedText, suffix) {
   const normalizeTime = (timeStr) => timeStr.replace(/-/g, ":");
 
+  // 1) Hora d'origen: utilitzem "status: mobilitzat"
   const mobilitzatMatch = processedText.match(
-    /status:\s*mobilitzat\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
+    /s?t?a?t?u?s?:?\s*mobil\w*\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
   if (mobilitzatMatch?.[1]) {
     document.getElementById(`origin-time-${suffix}`).value = normalizeTime(
@@ -173,16 +146,42 @@ function fillTimes(processedText, suffix) {
     );
   }
 
+  // 2) Hora de destinació: "status: arribada hospital"
   const arribadaMatch = processedText.match(
-    /status:\s*arribada\s+hospital\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
+    /s?t?a?t?u?s?:?\s*a?r?r?i?b?a?d?a?\s+h?o?s?p?i?t?a?l?\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
   if (arribadaMatch?.[1]) {
     document.getElementById(`destination-time-${suffix}`).value = normalizeTime(
       arribadaMatch[1]
     );
   }
+
+  // 3) Hora final: "altech"
+  let endMatch = processedText.match(
+    /altech\s*[^\n]*\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
+  );
+  if (!endMatch) {
+    endMatch = processedText.match(
+      /altech\s*[^\n]*\n\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
+    );
+  }
+
+  if (endMatch?.[1]) {
+    document.getElementById(`end-time-${suffix}`).value = normalizeTime(
+      endMatch[1]
+    );
+  } else {
+    // Fallback: si no es troba l'hora final, usem l'hora actual
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    document.getElementById(`end-time-${suffix}`).value = `${hh}:${mm}`;
+  }
 }
 
+/* -----------------------------------------
+   Funció per omplir camps de Servei (Nº, Origen, Destinació)
+----------------------------------------- */
 /* -----------------------------------------
    Funció per omplir camps de Servei (Nº, Origen, Destinació)
 ----------------------------------------- */
