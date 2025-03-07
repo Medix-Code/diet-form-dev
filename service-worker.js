@@ -80,27 +80,6 @@ self.addEventListener("install", (event) => {
 
 // --- FETCH ---
 self.addEventListener("fetch", (event) => {
-  // Bypass per a Cloudflare Insights
-  if (
-    event.request.url.indexOf("https://static.cloudflareinsights.com/") === 0
-  ) {
-    event.respondWith(
-      fetch(event.request).catch((error) => {
-        console.error(
-          "[ServiceWorker] Error carregant Cloudflare Insights:",
-          error
-        );
-        // Retorna una resposta buida per evitar que tot es trencui
-        return new Response("", {
-          status: 404,
-          statusText: "Not Found",
-        });
-      })
-    );
-    return;
-  }
-
-  // Resta de la lògica de fetch
   if (event.request.mode === "navigate") {
     event.respondWith(
       fetch(event.request)
