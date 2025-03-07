@@ -175,7 +175,6 @@ html {
 }
 
 body {
-  text-transform: capitalize;
   font-family: "Roboto Serif", serif;
   font-size: var(--font-size-base);
   background-color: var(--bg-color);
@@ -195,6 +194,17 @@ body.modal-open {
 main {
   flex: 1;
   padding-top: 100px;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+div {
+  text-transform: capitalize;
 }
 
 // ===========================================================================
