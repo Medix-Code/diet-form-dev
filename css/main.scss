@@ -1445,20 +1445,14 @@ button .icon {
     text-align: center;
     line-height: normal;
   }
-  select {
-    appearance: none; /* Evita estils per defecte del navegador */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-  }
 
   select option {
     font-family: "Roboto Serif", serif;
     font-size: 12px;
     font-weight: 100;
-
-    justify-content: center;
-    align-items: center;
-    text-align: left;
+    padding: 8px 0; /* Ajusta els espais a dalt i a baix de les opcions */
+    height: 40px; /* Assegura que totes les opcions tenen la mateixa alçada */
+    line-height: 40px; /* Fa que el text quedi centrat verticalment */
   }
 
   label {
