@@ -185,13 +185,13 @@ function fillTimes(processedText, suffix) {
 function fillServiceData(processedText, suffix) {
   // 1) Número de servei sota "Afectats"
   const serviceNumberMatch = processedText.match(
-    /afectats\s*(?:\r?\n|\s)+(\d{9})/i
+    /afectats\s*(?:\r?\n)+\s*(\d{9})/i
   );
   const serviceNumber = serviceNumberMatch?.[1] || "000000000";
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
   // 2) Origen sota "Municipi"
-  const originMatch = processedText.match(/municipi\s*(?:\r?\n|\s)+(.*)/i);
+  const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
   if (originMatch?.[1]) {
     document.getElementById(`origin-${suffix}`).value = originMatch[1].trim();
   } else {
@@ -200,7 +200,7 @@ function fillServiceData(processedText, suffix) {
 
   // 3) Destinació sota "Hospital Desti"
   const destinationMatch = processedText.match(
-    /hospital\s*desti\s*(?:\r?\n|\s)+(.*)/i
+    /hospital\s*desti\s*(?:\r?\n)+\s*(.*)/i
   );
   if (destinationMatch?.[1]) {
     document.getElementById(`destination-${suffix}`).value =
