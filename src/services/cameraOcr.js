@@ -75,8 +75,6 @@ export function initCameraOcr() {
 
       // Omplim els camps que pertoquin
       fillFormFieldsFromOcr(ocrText);
-
-      showToast("OCR complet!", "success");
     } catch (err) {
       console.error("[cameraOcr] Error OCR:", err);
       showToast("Error al processar la imatge: " + err.message, "error");
@@ -111,11 +109,12 @@ function fillFormFieldsFromOcr(ocrText) {
     /altech\s+v\./.test(textLower);
 
   // Comprovem si hi ha dades de servei (només si no es detecta informació d'hores)
+  // Ara el número de servei és un bloc de 9-10 dígits, i es busca també "municipi" o "hospital desti"
   const hasServiceData =
     !hasTimeData &&
-    (/\b\d{7,9}\b/.test(textLower) ||
+    (/\b\d{9,10}\b/.test(textLower) ||
       /municipi/.test(textLower) ||
-      /hospital/.test(textLower));
+      /hospital\s*desti/.test(textLower));
 
   if (hasTimeData) {
     fillTimes(textLower, suffix);
@@ -134,7 +133,7 @@ function fillFormFieldsFromOcr(ocrText) {
 function fillTimes(processedText, suffix) {
   const normalizeTime = (timeStr) => timeStr.replace(/-/g, ":");
 
-  // 1) Hora d'origen
+  // 1) Hora d'origen: utilitzem "status: mobilitzat" (la que marca la mobilització)
   const mobilitzatMatch = processedText.match(
     /status:\s*mobilitzat\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[:\-]\d{2})[:\-]\d{2}/i
   );
@@ -174,25 +173,27 @@ function fillTimes(processedText, suffix) {
 }
 
 /* -----------------------------------------
-   Funció per omplir camps de Servei (Nº, Origen, Destino)
+   Funció per omplir camps de Servei (Nº, Origen, Destinació)
 ----------------------------------------- */
 function fillServiceData(processedText, suffix) {
-  // 1) Nº de servei: un bloc de 7-9 dígits
-  const serviceNumberMatch = processedText.match(/\b(\d{7,9})\b/);
+  // 1) Nº de servei: es busca un bloc de 9-10 dígits (el número de dalt a la dreta, sobre "Afectats")
+  const serviceNumberMatch = processedText.match(/\b(\d{9,10})\b/);
   if (serviceNumberMatch?.[1]) {
     document.getElementById(`service-number-${suffix}`).value =
       serviceNumberMatch[1];
   }
 
-  // 2) Origen: cerquem "municipi" i prenem la primera línia
-  const originMatch = processedText.match(/municipi\s*[:\-]?\s*(.*)/i);
+  // 2) Origen: es busca la paraula "municipi" i s'extreu la línia següent
+  const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
   if (originMatch?.[1]) {
     const originClean = originMatch[1].split(/\r?\n/)[0].trim();
     document.getElementById(`origin-${suffix}`).value = originClean;
   }
 
-  // 3) Destino: cerquem "hospital" i prenem la primera línia
-  const destinationMatch = processedText.match(/hospital\s*(.*)/i);
+  // 3) Destinació: es busca "hospital desti" i s'extreu la línia següent
+  const destinationMatch = processedText.match(
+    /hospital\s*desti\s*(?:\r?\n)+\s*(.*)/i
+  );
   if (destinationMatch?.[1]) {
     const destClean = destinationMatch[1].split(/\r?\n/)[0].trim();
     document.getElementById(`destination-${suffix}`).value = destClean;
