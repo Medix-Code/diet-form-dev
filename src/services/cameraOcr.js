@@ -1,114 +1,92 @@
 /* cameraOcr.js
-   Exemple amb un sol botó de càmera personalitzada.
+   Exemple amb un sol botó de càmera i un sol input de fitxer.
    En funció del text OCR, omple:
      - Camps d'hores (origin-time, destination-time, end-time)
      - Camps de servei (service-number, origin, destination)
-   Cada foto ha de contenir només un tipus de dades.
 */
 import { showToast } from "../ui/toast.js";
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
 
-/** Inicialitza la lògica d'OCR amb una càmera personalitzada. */
+/** Inicialitza la lògica d'OCR amb un sol botó i input. */
 export function initCameraOcr() {
   const cameraBtn = document.getElementById("camera-in-dropdown");
-  const cameraContainer = document.getElementById("camera-container");
-  const captureBtn = document.getElementById("capture-btn");
-  const capturedCanvas = document.getElementById("captured-canvas");
+  const cameraInput = document.getElementById("camera-input");
 
-  if (!cameraBtn || !cameraContainer || !captureBtn || !capturedCanvas) {
-    console.warn("[cameraOcr] Elements de càmera no trobats.");
+  if (!cameraBtn || !cameraInput) {
+    console.warn("[cameraOcr] Botó o input no trobat.");
     return;
   }
 
-  // Quan es clica el botó de càmera, inicialitzem el flux de vídeo i mostrem el contenidor
+  // Quan es clica el botó de càmera
   cameraBtn.addEventListener("click", async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      const video = document.getElementById("camera-stream");
-      video.srcObject = stream;
-      cameraContainer.classList.remove("hidden");
-      cameraBtn.disabled = true; // Evitem clics repetits
+      stream.getTracks().forEach((track) => track.stop());
+      cameraInput.click();
     } catch (err) {
       console.error("[cameraOcr] Error en accedir a la càmera:", err);
       showToast("Error en accedir a la càmera: " + err.message, "error");
     }
   });
 
-  // Quan es clica el botó de captura, prenem la imatge i executem l'OCR
-  captureBtn.addEventListener("click", () => {
-    const video = document.getElementById("camera-stream");
-    const canvas = capturedCanvas;
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    // Aturem el flux de la càmera
-    const stream = video.srcObject;
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
+  // Quan l'usuari selecciona la imatge
+  cameraInput.addEventListener("change", async (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      console.warn("[cameraOcr] No s'ha seleccionat cap fitxer.");
+      showToast("No s'ha seleccionat cap imatge", "error");
+      return;
     }
 
-    // Convertim el canvas a blob i processem amb Tesseract
-    canvas.toBlob(async (blob) => {
-      if (!blob) {
-        showToast("Error al capturar la imatge", "error");
+    // Mostrem la barra de progrés i el missatge
+    const progressContainer = document.getElementById("ocr-progress-container");
+    const progressBar = document.getElementById("ocr-progress");
+    const progressText = document.getElementById("ocr-progress-text");
+    if (progressContainer && progressBar && progressText) {
+      progressContainer.classList.remove("hidden");
+      progressBar.value = 0;
+      progressText.textContent = "Escanejant...";
+    }
+
+    try {
+      showToast("Escanejant...", "info");
+      console.log("[cameraOcr] Processant OCR...");
+
+      // Processar l'imatge amb Tesseract
+      const result = await window.Tesseract.recognize(file, "spa", {
+        logger: (m) => {
+          if (m.status === "recognizing text") {
+            const progressPercent = Math.floor(m.progress * 100);
+            if (progressBar) progressBar.value = progressPercent;
+            if (progressText)
+              progressText.textContent = `Escanejant... ${progressPercent}%`;
+          }
+        },
+      });
+
+      if (!result?.data?.text) {
+        console.warn("[cameraOcr] No s'ha detectat cap text.");
+        showToast("No s'ha detectat text a la imatge", "error");
         return;
       }
 
-      // Mostrem la barra de progrés i el missatge
-      const progressContainer = document.getElementById(
-        "ocr-progress-container"
-      );
-      const progressBar = document.getElementById("ocr-progress");
-      const progressText = document.getElementById("ocr-progress-text");
-      if (progressContainer && progressBar && progressText) {
-        progressContainer.classList.remove("hidden");
-        progressBar.value = 0;
-        progressText.textContent = "Escanejant...";
+      const ocrText = result.data.text;
+      console.log("[cameraOcr] Text OCR detectat:", ocrText);
+
+      // Omplim els camps que pertoquin
+      fillFormFieldsFromOcr(ocrText);
+    } catch (err) {
+      console.error("[cameraOcr] Error OCR:", err);
+      showToast("Error al processar la imatge: " + err.message, "error");
+    } finally {
+      cameraInput.value = "";
+      if (progressContainer && progressBar) {
+        progressBar.value = 100;
+        setTimeout(() => {
+          progressContainer.classList.add("hidden");
+        }, 1500);
       }
-
-      try {
-        showToast("Escanejant...", "info");
-        console.log("[cameraOcr] Processant OCR...");
-
-        const result = await window.Tesseract.recognize(blob, "spa", {
-          logger: (m) => {
-            if (m.status === "recognizing text") {
-              const progressPercent = Math.floor(m.progress * 100);
-              if (progressBar) progressBar.value = progressPercent;
-              if (progressText)
-                progressText.textContent = `Escanejant... ${progressPercent}%`;
-            }
-          },
-        });
-
-        if (!result?.data?.text) {
-          console.warn("[cameraOcr] No s'ha detectat cap text.");
-          showToast("No s'ha detectat text a la imatge", "error");
-          return;
-        }
-
-        const ocrText = result.data.text;
-        console.log("[cameraOcr] Text OCR detectat:", ocrText);
-        // Analitza el text OCR i omple els camps corresponents
-        fillFormFieldsFromOcr(ocrText);
-        showToast("OCR complet!", "success");
-      } catch (err) {
-        console.error("[cameraOcr] Error OCR:", err);
-        showToast("Error al processar la imatge: " + err.message, "error");
-      } finally {
-        if (progressContainer && progressBar) {
-          progressBar.value = 100;
-          setTimeout(() => {
-            progressContainer.classList.add("hidden");
-          }, 1500);
-        }
-        // Amaguem el contenidor de càmera i reactivem el botó
-        cameraContainer.classList.add("hidden");
-        cameraBtn.disabled = false;
-      }
-    }, "image/png");
+    }
   });
 }
 
@@ -131,6 +109,7 @@ function fillFormFieldsFromOcr(ocrText) {
     /altech\s+v\./.test(textLower);
 
   // Comprovem si hi ha dades de servei (només si no es detecta informació d'hores)
+  // Ara el número de servei és un bloc de 9-10 dígits, i es busca també "municipi" o "hospital desti"
   const hasServiceData =
     !hasTimeData &&
     (/\b\d{9,10}\b/.test(textLower) ||
@@ -152,10 +131,9 @@ function fillFormFieldsFromOcr(ocrText) {
    Funció per omplir camps d'Hores
 ----------------------------------------- */
 function fillTimes(processedText, suffix) {
-  // Funció per normalitzar l'hora: substitueix guions per dos punts
   const normalizeTime = (timeStr) => timeStr.replace(/-/g, ":");
 
-  // 1) Hora d'origen: "status: mobilitzat"
+  // 1) Hora d'origen: utilitzem "status: mobilitzat"
   const mobilitzatMatch = processedText.match(
     /s?t?a?t?u?s?:?\s*mobil\w*\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
@@ -175,7 +153,7 @@ function fillTimes(processedText, suffix) {
     );
   }
 
-  // 3) Hora final: cercar "altech" (sense "v.")
+  // 3) Hora final: "altech"
   let endMatch = processedText.match(
     /altech\s*[^\n]*\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
@@ -184,12 +162,13 @@ function fillTimes(processedText, suffix) {
       /altech\s*[^\n]*\n\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
     );
   }
+
   if (endMatch?.[1]) {
     document.getElementById(`end-time-${suffix}`).value = normalizeTime(
       endMatch[1]
     );
   } else {
-    // Fallback: si no es troba hora final, usem l'hora actual
+    // Fallback: si no es troba l'hora final, usem l'hora actual
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
@@ -201,21 +180,21 @@ function fillTimes(processedText, suffix) {
    Funció per omplir camps de Servei (Nº, Origen, Destinació)
 ----------------------------------------- */
 function fillServiceData(processedText, suffix) {
-  // 1) Nº de servei: cercar un bloc de 9-10 dígits
+  // 1) Nº de servei: es busca un bloc de 9-10 dígits (el número de dalt a la dreta, sobre "Afectats")
   const serviceNumberMatch = processedText.match(/\b(\d{9,10})\b/);
   if (serviceNumberMatch?.[1]) {
     document.getElementById(`service-number-${suffix}`).value =
       serviceNumberMatch[1];
   }
 
-  // 2) Origen: cercar "municipi" i extreure la línia següent
+  // 2) Origen: es busca la paraula "municipi" i s'extreu la línia següent
   const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
   if (originMatch?.[1]) {
     const originClean = originMatch[1].split(/\r?\n/)[0].trim();
     document.getElementById(`origin-${suffix}`).value = originClean;
   }
 
-  // 3) Destinació: cercar "hospital desti" i extreure la línia següent
+  // 3) Destinació: es busca "hospital desti" i s'extreu la línia següent
   const destinationMatch = processedText.match(
     /hospital\s*desti\s*(?:\r?\n)+\s*(.*)/i
   );
