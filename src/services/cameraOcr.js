@@ -191,7 +191,7 @@ function fillServiceData(processedText, suffix) {
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
   // 2) Origen: Captura TOT el text entre "Municipi" i "SubMunicipi 2"
-  //    S'utilitza un lookahead (?=\s*submunicipi\s*2) per aturar la captura just abans d'"SubMunicipi 2"
+
   const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
   if (originMatch?.[1]) {
     // Substituïm salts de línia per espais, si vols que quedi més net
