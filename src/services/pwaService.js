@@ -10,18 +10,19 @@ let deferredPrompt = null;
  */
 export function setupInstallPrompt() {
   console.log(
-    "✅ setupInstallPrompt() cargado! Esperando beforeinstallprompt..."
+    "✅ setupInstallPrompt() carregat! Esperant beforeinstallprompt..."
   );
 
   window.addEventListener("beforeinstallprompt", (evt) => {
-    console.log("📢 Evento beforeinstallprompt capturado correctamente!");
+    console.log("📢 Evento beforeinstallprompt capturat!");
     evt.preventDefault();
     deferredPrompt = evt;
-  });
 
-  document.addEventListener("DOMContentLoaded", () => {
-    console.log("📌 DOM cargado, enlazando botones de instalación...");
-    linkInstallButtons();
+    // FORCEM el prompt després de 3 segons (per exemple)
+    setTimeout(() => {
+      console.log("⏰ Mostrant el prompt d'instal·lació al cap de 3s...");
+      showInstallPrompt();
+    }, 3000);
   });
 }
 
@@ -64,18 +65,22 @@ function linkInstallButtons() {
   }
 }
 
+// Mantens el teu showInstallPrompt, però ara s'executa de seguida:
 export function showInstallPrompt() {
-  console.log("🔍 Intentando mostrar el prompt de instalación...");
+  console.log("🔍 Intentant mostrar el prompt de PWA...");
   if (!deferredPrompt) {
-    console.warn("⚠️ deferredPrompt es NULL! No se puede mostrar el prompt.");
+    console.warn(
+      "⚠️ deferredPrompt és NULL! El navegador no ha disparat l'event."
+    );
     return;
   }
+  // Aquí ensenyem el banner propi:
   const installPrompt = document.getElementById("install-prompt");
   if (installPrompt) {
     installPrompt.classList.add("visible");
-    console.log("✅ Banner de instalación mostrado.");
+    console.log("✅ Banner d'instal·lació mostrat.");
   } else {
-    console.warn("⚠️ No se encontró el elemento #install-prompt.");
+    console.warn("⚠️ No s'ha trobat l'element #install-prompt.");
   }
 }
 
