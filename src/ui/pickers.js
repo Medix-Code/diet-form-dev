@@ -4,9 +4,7 @@
  */
 
 export function setupDatePickers() {
-  const dateInps = document.querySelectorAll(
-    'input[type="date"], input[type="datetime-local"]'
-  );
+  const dateInps = document.querySelectorAll('input[type="date"]');
   dateInps.forEach((inp) => {
     if (typeof inp.showPicker === "function") {
       inp.addEventListener("click", () => {
