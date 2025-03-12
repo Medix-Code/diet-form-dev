@@ -454,11 +454,6 @@ button .fa {
     font-size: 16px !important;
   }
 }
-.form-group input[type=date]::-webkit-calendar-picker-indicator {
-  opacity: 1;
-  display: block;
-  cursor: pointer;
-}
 .form-group input[type=text]:not(.txt-person1):not(.txt-person2):focus {
   outline: none;
   border: 2px solid var(--border-textfield-focus);
@@ -471,6 +466,10 @@ button .fa {
 .input-error {
   border: 2px solid var(--textfield-error) !important;
   background-color: var(--textfield-error-bg) !important;
+}
+
+input[type=date] {
+  -moz-appearance: none;
 }
 
 .service-controls {
