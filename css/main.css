@@ -468,10 +468,6 @@ button .fa {
   background-color: var(--textfield-error-bg) !important;
 }
 
-input[type=date] {
-  -moz-appearance: none;
-}
-
 .service-controls {
   display: flex;
   align-items: center;
