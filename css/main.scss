@@ -525,6 +525,12 @@ button .fa {
     }
   }
 
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    display: block;
+    cursor: pointer;
+  }
+
   /* Focus per a inputs de text (excepte .txt-person1 i .txt-person2) */
   input[type="text"]:not(.txt-person1):not(.txt-person2) {
     &:focus {
