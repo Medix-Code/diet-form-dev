@@ -245,7 +245,7 @@ export async function generateAndDownloadPdf() {
     await handleSaveDietWithPossibleOverwrite();
 
     // Incrementamos el contador de descargas y comprobamos si mostrar prompt
-    //incrementPdfDownloadCountAndMaybeShowPrompt();
+    incrementPdfDownloadCountAndMaybeShowPrompt();
 
     console.log("Generando y descargando el PDF...");
   } catch (err) {
