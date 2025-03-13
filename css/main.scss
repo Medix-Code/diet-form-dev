@@ -549,31 +549,24 @@ button .fa {
 // ===========================================================================
 .group-header {
   display: flex;
-  align-items: center; // Centra verticalment els elements
-  justify-content: space-between; // Títol a l'esquerra, botó a la dreta
-  width: 100%; // Assegura que ocupi tota l’amplada del contenidor
-}
-
-.group-container {
-  border: 1px solid var(--input-border); // Vora suau
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 25px;
-  background-color: var(--cg-card-bg);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Ombra lleugera per destacar
+  align-items: center; /* Mantenim la disposició horitzontal actual */
+  justify-content: space-between;
+  width: 100%;
 }
 
 .group-title {
   font-size: 1rem;
   font-weight: 600;
-  margin: 0; // Elimina marges per defecte
-  flex-grow: 1; // Això fa que el títol ocupi l'espai disponible i empenyi el botó a la dreta
-  margin-bottom: 10px;
+  margin: 0;
+  flex-grow: 1;
+  margin-bottom: 20px;
 }
 
 .group-btns {
   display: flex;
-  gap: 10px; /* Espai entre els botons, ajustable segons la necessitat */
+  gap: 10px;
+  position: relative;
+  top: 10px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
 }
 
 .group-btn img {
