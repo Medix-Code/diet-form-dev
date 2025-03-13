@@ -622,6 +622,12 @@ button .fa {
     gap: 10px; /* Espai entre items */
   }
 
+  /* Text no hay dotaciones*/
+  #no-dotacio-text {
+    margin-top: 30px;
+    text-align: center;
+  }
+
   /* Cada ítem de la llista */
   .dotacio-item {
     background-color: #f9f9f9;
