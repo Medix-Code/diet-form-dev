@@ -733,21 +733,56 @@
     <div id="add-dotacio-modal" class="modal" role="dialog" aria-modal="true">
       <div class="modal-content dotacio-modal-content">
         <h3>Añadir dotación</h3>
+
         <form id="dotacio-form">
           <div class="form-group">
             <label for="dotacio-vehiculo">Vehículo</label>
             <input type="text" id="dotacio-vehiculo" required />
           </div>
+
+          <!-- Conductor + firma -->
           <div class="form-group">
             <label for="dotacio-conductor">Conductor</label>
-            <input type="text" id="dotacio-conductor" required />
+            <div class="input-with-icon">
+              <input type="text" id="dotacio-conductor" required />
+              <button
+                type="button"
+                class="signature-btn"
+                id="sign-dotacio-conductor"
+                aria-label="Firma del conductor"
+              >
+                <img
+                  src="assets/icons/signature.svg"
+                  alt="Firma"
+                  class="icon"
+                />
+              </button>
+            </div>
           </div>
+
+          <!-- Ayudante + firma -->
           <div class="form-group">
             <label for="dotacio-ayudante">Ayudante</label>
-            <input type="text" id="dotacio-ayudante" required />
+            <div class="input-with-icon">
+              <input type="text" id="dotacio-ayudante" required />
+              <button
+                type="button"
+                class="signature-btn"
+                id="sign-dotacio-ayudante"
+                aria-label="Firma del ayudante"
+              >
+                <img
+                  src="assets/icons/signature.svg"
+                  alt="Firma"
+                  class="icon"
+                />
+              </button>
+            </div>
           </div>
+
           <button type="submit" class="modal-button accept">Añadir</button>
         </form>
+
         <button id="close-add-dotacio-modal" class="modal-button cancel">
           Cancelar
         </button>
