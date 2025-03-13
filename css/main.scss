@@ -569,15 +569,12 @@ button .fa {
   top: 10px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
 }
 
-.group-btn img {
-  width: 24px;
-}
 .group-btn span {
   line-height: clamp(40px, 5vw, 50px);
 }
 .group-btn {
-  width: clamp(40px, 5vw, 50px);
-  height: clamp(40px, 5vw, 50px);
+  width: clamp(35px, 5vw, 45px);
+  height: clamp(35px, 5vw, 45px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -594,8 +591,8 @@ button .fa {
 
   // Centra tant icona com text
   img {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 
   span {
