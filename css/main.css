@@ -521,29 +521,11 @@ button .fa {
 
 /* Estils per al modal de dotació */
 .dotacio-modal-content {
-  text-align: center;
-  padding: 20px 30px;
-  max-width: 500px;
-  margin: 10% auto;
-  background-color: var(--bg-color);
-  border-radius: 12px;
-  box-shadow: 0 4px 8px var(--bg-transp-ajustes);
-  animation: fadeIn var(--transition-speed) ease-in-out;
+  /* Modal generic + info*/
   /* La llista de dotacions separada del títol */
   /* Cada ítem de la llista */
   /* Botons dins dels items (Cargar i Eliminar) */
   /* Botons inferiors del modal Gestor de dotacions (Cerrar i Añadir dotación) */
-}
-.dotacio-modal-content h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 auto 10px;
-}
-.dotacio-modal-content hr {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 0 auto 20px;
-  width: 80%;
 }
 .dotacio-modal-content .dotacio-list {
   margin-top: 20px;
@@ -644,11 +626,6 @@ button .fa {
     transform: scale(1);
   }
 }
-/*Marge superior 1r camp "Vehicle" */
-#add-dotacio-modal .dotacio-modal-content form#dotacio-form .form-group:first-of-type {
-  margin-top: 20px;
-}
-
 .service-controls {
   display: flex;
   align-items: center;
@@ -950,6 +927,9 @@ button:disabled {
 }
 
 .modal-content {
+  max-height: 80vh; /* Limita l'altura al 80% de l'alçada de la finestra */
+  text-align: center;
+  overflow-y: auto; /* Mostra una barra de desplaçament vertical si és necessari */
   position: relative;
   margin: 10% auto;
   background-color: var(--bg-color);
@@ -1137,7 +1117,7 @@ button:disabled {
 
 .modal-buttons {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 20px;
   margin: 10px auto;
@@ -1582,10 +1562,10 @@ button .icon {
   }
   .modal-content {
     max-width: 90%;
-    max-height: 90vh;
-    margin: 18% auto;
+    max-height: 70vh;
+    margin: 20% auto;
     overflow: auto;
-    padding: 20px 30px 30px 30px;
+    padding: 20px 20px 20px 20px;
   }
   .modal-content h2,
   .modal-content h3 {
