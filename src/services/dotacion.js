@@ -17,7 +17,7 @@ let dotacioForm; // Formulari per afegir una nova dotació
 /**
  * Obre el modal principal (dotacio-modal) i actualitza la llista de dotacions.
  */
-function openDotacioModal() {
+export function openDotacioModal() {
   if (!dotacioModal) return;
   dotacioModal.style.display = "block";
   document.body.classList.add("modal-open");
