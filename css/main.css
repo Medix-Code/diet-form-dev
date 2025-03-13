@@ -474,20 +474,12 @@ button .fa {
   width: 100%;
 }
 
-.group-container {
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 25px;
-  background-color: var(--cg-card-bg);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .group-title {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 200;
   margin: 0;
   flex-grow: 1;
+  margin-bottom: 10px;
 }
 
 .group-btns {
