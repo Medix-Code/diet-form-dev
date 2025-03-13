@@ -81,6 +81,13 @@ self.addEventListener("install", (event) => {
 
 // --- FETCH ---
 self.addEventListener("fetch", (event) => {
+  // Si la petició és a static.cloudflareinsights.com,
+  // la servim des de la xarxa sense emmagatzemar ni fer fallback a la caché.
+  if (requestUrl.hostname === "static.cloudflareinsights.com") {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   if (event.request.mode === "navigate") {
     event.respondWith(
       fetch(event.request)
