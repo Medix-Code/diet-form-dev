@@ -694,7 +694,6 @@
       </div>
     </template>
 
-    <!-- MODAL PER GESTIONAR DOTACIÓN -->
     <div
       id="dotacio-modal"
       class="modal"
@@ -708,32 +707,23 @@
         <!-- Missatge quan no hi ha dotacions -->
         <div id="no-dotacio-text" class="hidden">No hay dotaciones</div>
 
-        <!-- Aquí es crearà dinàmicament la llista de dotacions -->
+        <!-- Llistat scrollable -->
         <div
           id="dotacio-options"
           class="dotacio-list"
           aria-label="Opciones de dotaciones"
         >
-          <!-- Exemple d'item (normalment es crearà amb JavaScript clonant un template) -->
-          <!--
-      <div class="dotacio-item">
-        <span class="dotacio-info">ABC123 - Juan Pérez y María López</span>
-        <div class="button-container">
-          <button class="dotacio-load" data-index="0">Cargar</button>
-          <button class="dotacio-delete" data-index="0">Eliminar</button>
-        </div>
-      </div>
-      -->
+          <!-- Aquí es crearà dinàmicament cada item -->
         </div>
 
-        <!-- Zona de botons de la finestra modal -->
+        <!-- Zona de botons fixa (footer del modal) -->
         <div class="modal-buttons">
           <button id="close-dotacio-modal" class="modal-button cancel">
             Cerrar
           </button>
 
           <button id="open-add-dotacio-modal" class="modal-button accept">
-            <img src="assets/icons/add.svg" alt="Eliminar" class="icon" />
+            <img src="assets/icons/add.svg" alt="Afegir" class="icon" />
             <span class="btn-text">Nueva dotación</span>
           </button>
         </div>

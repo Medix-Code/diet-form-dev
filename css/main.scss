@@ -607,14 +607,19 @@ button .fa {
 
 /* Estils per al modal de dotació */
 .dotacio-modal-content {
-  /* Modal generic + info*/
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 
-  /* La llista de dotacions separada del títol */
+  /* Llistat de dotacions: única zona que farà scroll */
   .dotacio-list {
-    margin-top: 20px;
+    flex: 1; // Ocupa tot l'espai disponible
+    overflow-y: auto; // Fa scroll només aquí
+    margin-top: 20px; // Mantén el marge que ja tenies
+
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 10px; /* Espai entre items */
   }
 
   /* Cada ítem de la llista */
@@ -678,10 +683,12 @@ button .fa {
 
   /* Botons inferiors del modal Gestor de dotacions (Cerrar i Añadir dotación) */
   .modal-buttons {
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
+
+    width: 100%;
 
     button {
       display: flex;
@@ -690,7 +697,7 @@ button .fa {
       flex: 1;
       gap: 10px;
       width: 100%; /* Ocupa tot l'espai disponible */
-      max-width: 200px; /* Però no supera els 200px */
+
       padding: 5px;
       font-size: 1rem;
       border: none;
@@ -1056,6 +1063,7 @@ button:disabled {
   width: 100%;
   height: 100%;
   z-index: 1200;
+
   background-color: var(--bg-transp-modal);
   overflow: auto;
 }
@@ -1081,6 +1089,7 @@ button:disabled {
 
   h2,
   h3 {
+    text-align: center;
     margin: 0;
     font-size: 22px;
     font-weight: bold;
