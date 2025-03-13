@@ -204,16 +204,16 @@ function openSignatureModal(target) {
   if (modalTitleEl) {
     switch (target) {
       case "person1":
-        modalTitleEl.textContent = "Firma del conductor (principal)";
+        modalTitleEl.textContent = "Firma del conductor";
         break;
       case "person2":
-        modalTitleEl.textContent = "Firma del ayudante (principal)";
+        modalTitleEl.textContent = "Firma del ayudante";
         break;
       case "dotacioConductor":
-        modalTitleEl.textContent = "Firma del conductor (dotación)";
+        modalTitleEl.textContent = "Firma del conductor";
         break;
       case "dotacioAyudante":
-        modalTitleEl.textContent = "Firma del ayudante (dotación)";
+        modalTitleEl.textContent = "Firma del ayudante";
         break;
     }
   }
