@@ -81,13 +81,23 @@ self.addEventListener("install", (event) => {
 
 // --- FETCH ---
 self.addEventListener("fetch", (event) => {
-  // Si la petició és a static.cloudflareinsights.com,
-  // la servim des de la xarxa sense emmagatzemar ni fer fallback a la caché.
+  // ⏩ 1. Comprova primer si la petició prové de static.cloudflareinsights.com
   if (requestUrl.hostname === "static.cloudflareinsights.com") {
-    event.respondWith(fetch(event.request));
-    return;
+    // 1a opció: Permetre la petició directament (no caches, no fallback)
+    event.respondWith(
+      fetch(event.request).catch((error) => {
+        console.warn(
+          "[ServiceWorker] No s'ha pogut recuperar Cloudflare Insights:",
+          error
+        );
+        // Si vols retornar un 404 local per amagar l'error de la consola
+        return new Response("", { status: 404, statusText: "Not Found" });
+      })
+    );
+    return; // Atura aquí i no segueix la lògica de caching
   }
 
+  // ⏩ 2. Resta de la lògica
   if (event.request.mode === "navigate") {
     event.respondWith(
       fetch(event.request)
