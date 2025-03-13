@@ -158,9 +158,9 @@ function addDotacioFromForm(e) {
   const firmaConductor = getSignatureDotacioConductor();
   const firmaAyudante = getSignatureDotacioAyudante();
 
-  if (!vehiculo || !conductor || !ayudante) {
+  if (!vehiculo || (!conductor && !ayudante)) {
     alert(
-      "Por favor, completa todos los campos (Vehículo, Conductor, Ayudante)."
+      "Si us plau, completa el camp de Vehículo i com a mínim un dels camps (Conductor o Ajudant)."
     );
     return;
   }
