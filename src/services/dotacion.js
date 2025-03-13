@@ -34,6 +34,24 @@ function closeDotacioModal() {
 }
 
 /**
+ * Obre el modal secundari per afegir una nova dotació.
+ */
+function openAddDotacioModal() {
+  if (!addDotacioModal) return;
+  addDotacioModal.style.display = "block";
+  document.body.classList.add("modal-open");
+}
+
+/**
+ * Tanca el modal secundari d’afegir dotació.
+ */
+function closeAddDotacioModal() {
+  if (!addDotacioModal) return;
+  addDotacioModal.style.display = "none";
+  document.body.classList.remove("modal-open");
+}
+
+/**
  * Carrega les dotacions guardades a localStorage i les desarà a `dotacions`.
  */
 function loadDotacionsFromStorage() {
@@ -104,28 +122,6 @@ function deleteDotacio(index) {
  */
 function saveDotacions() {
   localStorage.setItem("dotacions", JSON.stringify(dotacions));
-}
-
-/* ────────────────────────────────────
-   2) Modal "Afegir Dotació"
-───────────────────────────────────────*/
-
-/**
- * Obre el modal secundari per afegir una nova dotació.
- */
-function openAddDotacioModal() {
-  if (!addDotacioModal) return;
-  addDotacioModal.style.display = "block";
-  document.body.classList.add("modal-open");
-}
-
-/**
- * Tanca el modal secundari d’afegir dotació.
- */
-function closeAddDotacioModal() {
-  if (!addDotacioModal) return;
-  addDotacioModal.style.display = "none";
-  document.body.classList.remove("modal-open");
 }
 
 /**
