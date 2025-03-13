@@ -486,7 +486,7 @@ button .fa {
   display: flex;
   gap: 10px;
   position: relative;
-  top: 5px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
+  top: 0px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
 }
 
 .group-btn span {
