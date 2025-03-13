@@ -516,51 +516,159 @@ button .fa {
   line-height: clamp(40px, 5vw, 50px);
 }
 
-.dotacio-list {
+/* Estils per al modal de dotació */
+.dotacio-modal-content {
+  text-align: center;
+  padding: 20px 30px;
+  max-width: 500px;
+  margin: 10% auto;
+  background-color: var(--bg-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px var(--bg-transp-ajustes);
+  animation: fadeIn var(--transition-speed) ease-in-out;
+  /* La llista de dotacions separada del títol */
+  /* Cada ítem de la llista */
+  /* Botons dins dels items (Cargar i Eliminar) */
+  /* Botons inferiors del modal (Cerrar i Añadir dotación) */
+}
+.dotacio-modal-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 auto 10px;
+}
+.dotacio-modal-content hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 0 auto 20px;
+  width: 80%;
+}
+.dotacio-modal-content .dotacio-list {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
-.dotacio-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.dotacio-modal-content .dotacio-item {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Contenidor dels botons dins de cada item */
 }
-
-.dotacio-info {
-  flex: 1;
+.dotacio-modal-content .dotacio-item .dotacio-info {
   font-size: 14px;
+  text-align: left;
 }
-
-.dotacio-load,
-.dotacio-delete {
-  margin-left: 8px;
+.dotacio-modal-content .dotacio-item .button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.dotacio-modal-content .dotacio-load,
+.dotacio-modal-content .dotacio-delete {
   padding: 6px 12px;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  font-size: 0.9rem;
 }
-
-.dotacio-load {
+.dotacio-modal-content .dotacio-load {
   background-color: #eceffc;
   color: #2844f0;
 }
-.dotacio-load:hover {
+.dotacio-modal-content .dotacio-load:hover {
   background-color: #dce0fa;
 }
-
-.dotacio-delete {
+.dotacio-modal-content .dotacio-delete {
   background-color: #fdeceb;
   color: #e03131;
 }
-.dotacio-delete:hover {
+.dotacio-modal-content .dotacio-delete:hover {
   background-color: #fccac9;
+}
+.dotacio-modal-content .modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+.dotacio-modal-content .modal-buttons button {
+  flex: 1;
+  max-width: 200px;
+  padding: 10px;
+  margin: 0 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.dotacio-modal-content .modal-buttons .accept {
+  background-color: #004aad;
+  color: #fff;
+}
+.dotacio-modal-content .modal-buttons .accept:hover {
+  background-color: #0056b3;
+}
+.dotacio-modal-content .modal-buttons .cancel {
+  background-color: #ccc;
+  color: #333;
+}
+.dotacio-modal-content .modal-buttons .cancel:hover {
+  background-color: #bbb;
+}
+
+/* Animació per al modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* Estils per als formularis */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+.form-group input[type=text] {
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  font-size: 15px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+}
+
+/* Estils per als formularis (adaptats si és necessari) */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+.form-group input[type=text] {
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  font-size: 15px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
 }
 
 .service-controls {

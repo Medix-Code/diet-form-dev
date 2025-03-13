@@ -693,41 +693,38 @@
     >
       <div class="modal-content dotacio-modal-content">
         <h3 id="dotacio-modal-title">Gestor de dotaciones</h3>
+        <hr />
 
         <!-- Missatge quan no hi ha dotacions -->
         <div id="no-dotacio-text" class="hidden">No hay dotaciones</div>
 
-        <!-- Contenidor on dinàmicament inserirem cada item de dotació -->
+        <!-- Aquí es crearà dinàmicament la llista de dotacions -->
         <div
           id="dotacio-options"
           class="dotacio-list"
           aria-label="Opciones de dotaciones"
         >
-          <!-- Exemple d'HTML que crearem/enumerarem per cada dotació:
-
-    <div class="dotacio-item">
-      <span class="dotacio-info">TEXTE (vehículo - conductor y ayudante)</span>
-
-      <button class="dotacio-load" data-index="X">
-        Cargar
-      </button>
-      <button class="dotacio-delete" data-index="X">
-        Eliminar
-      </button>
-    </div>
-
-    -->
+          <!-- Exemple d'item (normalment es crearà amb JavaScript clonant un template) -->
+          <!--
+      <div class="dotacio-item">
+        <span class="dotacio-info">ABC123 - Juan Pérez y María López</span>
+        <div class="button-container">
+          <button class="dotacio-load" data-index="0">Cargar</button>
+          <button class="dotacio-delete" data-index="0">Eliminar</button>
+        </div>
+      </div>
+      -->
         </div>
 
-        <!-- Botó per obrir el modal d'afegir dotació -->
-        <button id="open-add-dotacio-modal" class="modal-button accept">
-          Añadir dotación
-        </button>
-
-        <!-- Botó per tancar el modal -->
-        <button id="close-dotacio-modal" class="modal-button cancel">
-          Cerrar
-        </button>
+        <!-- Zona de botons de la finestra modal -->
+        <div class="modal-buttons">
+          <button id="close-dotacio-modal" class="modal-button cancel">
+            Cerrar
+          </button>
+          <button id="open-add-dotacio-modal" class="modal-button accept">
+            Nueva dotación
+          </button>
+        </div>
       </div>
     </div>
 
@@ -735,7 +732,6 @@
     <div id="add-dotacio-modal" class="modal" role="dialog" aria-modal="true">
       <div class="modal-content dotacio-modal-content">
         <h3>Añadir dotación</h3>
-
         <form id="dotacio-form">
           <div class="form-group">
             <label for="dotacio-vehiculo">Vehículo</label>
@@ -751,7 +747,6 @@
           </div>
           <button type="submit" class="modal-button accept">Añadir</button>
         </form>
-
         <button id="close-add-dotacio-modal" class="modal-button cancel">
           Cancelar
         </button>
