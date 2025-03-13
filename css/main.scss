@@ -705,7 +705,8 @@ button .fa {
 
     button {
       flex: 1;
-      max-width: 200px;
+      width: 100%; /* Ocupa tot l'espai disponible */
+      max-width: 200px; /* Però no supera els 200px */
       padding: 5px;
       font-size: 1rem;
       border: none;
