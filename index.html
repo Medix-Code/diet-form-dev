@@ -145,89 +145,96 @@
         role="tabpanel"
         aria-labelledby="tab-dades"
       >
-        <!-- Data -->
-        <div class="form-group">
-          <label for="date">Fecha</label>
-          <input type="date" id="date" name="date" />
-        </div>
+        <!-- GRUPO Datos de la jornada -->
+        <div class="group-container" id="informacio-general">
+          <h2 class="group-title">Datos de la jornada</h2>
+          <div class="form-group">
+            <label for="date">Fecha</label>
+            <input type="date" id="date" name="date" />
+          </div>
+          <div class="form-group">
+            <label for="diet-type">Franja horària</label>
+            <select id="diet-type" name="diet-type">
+              <option value="" disabled selected hidden>
+                Selecciona una opció
+              </option>
+              <option value="lunch">Comida</option>
+              <option value="dinner">Cena</option>
+            </select>
+          </div>
 
-        <!-- Empresa-->
-        <div class="form-group">
-          <label for="empresa">Empresa</label>
-          <select id="empresa" name="empresa">
-            <option value="" disabled selected hidden>
-              Selecciona una empresa
-            </option>
-            <option value="empresa1" selected>TSC</option>
-            <option value="empresa2" disabled>Falck</option>
-            <option value="empresa3" disabled>La Pau</option>
-            <option value="empresa4" disabled>Egara</option>
-            <option value="empresa5" disabled>Sanir</option>
-          </select>
-        </div>
-
-        <!-- Franja horària -->
-        <div class="form-group">
-          <label for="diet-type">Franja horaria</label>
-          <select id="diet-type" name="diet-type">
-            <option value="" disabled selected hidden>
-              Selecciona una opción
-            </option>
-            <option value="lunch">Comida</option>
-            <option value="dinner">Cena</option>
-          </select>
-        </div>
-
-        <!-- Vehicle (no obligatori) -->
-        <div class="form-group">
-          <label for="vehicle-number">Vehículo</label>
-          <input type="text" id="vehicle-number" name="vehicle-number" />
-        </div>
-
-        <!-- Conductor (no obligatori) -->
-        <div class="form-group signature-group">
-          <label for="person1">Conductor</label>
-          <div class="input-with-icon">
-            <input
-              type="text"
-              id="person1"
-              name="person1"
-              class="txt-person1"
-            />
-            <!-- Botó per obrir modal de firma del Conductor -->
-            <button
-              type="button"
-              class="signature-btn"
-              id="sign-person1"
-              aria-label="Firma del conductor"
-            >
-              <img src="assets/icons/signature.svg" alt="" class="icon" />
-            </button>
+          <div class="form-group">
+            <label for="empresa">Empresa</label>
+            <select id="empresa" name="empresa">
+              <option value="" disabled selected hidden>
+                Selecciona una empresa
+              </option>
+              <option value="empresa1" selected>TSC</option>
+              <option value="empresa2" disabled>Falck</option>
+              <option value="empresa3" disabled>La Pau</option>
+              <option value="empresa4" disabled>Egara</option>
+              <option value="empresa5" disabled>Sanir</option>
+            </select>
           </div>
         </div>
 
-        <!-- Ajudant (no obligatori) -->
-        <div class="form-group signature-group">
-          <label for="person2">Ayudante</label>
-          <div class="input-with-icon">
-            <input
-              type="text"
-              id="person2"
-              name="person2"
-              class="txt-person2"
-              enterkeyhint="done"
-              inputmode="text"
-              autocomplete="off"
-            />
-            <!-- Botó per obrir modal de firma de l'Ajudant -->
+        <!-- Grup Dotació -->
+        <div class="group-container" id="dotacio">
+          <div class="group-header">
+            <h2 class="group-title">Dotación</h2>
             <button
               type="button"
-              class="signature-btn"
-              id="sign-person2"
-              aria-label="Firma del ayudante"
+              class="group-btn"
+              id="open-dotacio-modal"
+              aria-label="Opcions"
             >
-              <img src="assets/icons/signature.svg" alt="" class="icon" />
+              <img src="assets/icons/id_card.svg" alt="" />
             </button>
+          </div>
+          <div class="form-group">
+            <label for="vehicle-number">Vehículo</label>
+            <input type="text" id="vehicle-number" name="vehicle-number" />
+          </div>
+          <div class="form-group signature-group">
+            <label for="person1">Conductor</label>
+            <div class="input-with-icon">
+              <input
+                type="text"
+                id="person1"
+                name="person1"
+                class="txt-person1"
+              />
+              <button
+                type="button"
+                class="signature-btn"
+                id="sign-person1"
+                aria-label="Firma del conductor"
+              >
+                <img src="assets/icons/signature.svg" alt="" class="icon" />
+              </button>
+            </div>
+          </div>
+          <div class="form-group signature-group">
+            <label for="person2">Ayudante</label>
+            <div class="input-with-icon">
+              <input
+                type="text"
+                id="person2"
+                name="person2"
+                class="txt-person2"
+                enterkeyhint="done"
+                inputmode="text"
+                autocomplete="off"
+              />
+              <button
+                type="button"
+                class="signature-btn"
+                id="sign-person2"
+                aria-label="Firma del ayudante"
+              >
+                <img src="assets/icons/signature.svg" alt="" class="icon" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -663,7 +670,7 @@
       </div>
     </footer>
 
-    <!-- MODAL PER GESTIONAR DOTACIÓ -->
+    <!-- MODAL PER GESTIONAR DOTACIÓN -->
     <div
       id="dotacio-modal"
       class="modal"

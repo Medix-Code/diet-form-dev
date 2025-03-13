@@ -13,12 +13,14 @@ import { initSettingsPanel } from "./ui/settingsPanel.js";
 import * as formService from "./services/formService.js";
 import { isAppInstalled } from "./services/pwaService.js";
 import { initCameraOcr } from "./services/cameraOcr.js";
+import { initDotacion } from "./services/dotacion.js";
 
 export async function initializeApp() {
   setTodayDate();
   await openDatabase();
   initServices();
   initSignature();
+  initDotacion();
   setupTabs();
   setupMainButtons();
   setupClearSelectedService();

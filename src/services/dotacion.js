@@ -9,6 +9,7 @@
 let dotacions = [];
 
 // Referències als elements del DOM
+let openDotacioBtn;
 let dotacioModal;
 let dotacioOptionsContainer;
 let closeDotacioBtn;
@@ -18,7 +19,8 @@ let dotacioForm; // El formulari per afegir dotació
  * Inicialitza el mòdul de dotacions.
  * Configura els elements del modal i carrega les dotacions des de localStorage.
  */
-export function initDotacio() {
+export function initDotacion() {
+  openDotacioBtn = document.getElementById("open-dotacio-modal");
   dotacioModal = document.getElementById("dotacio-modal");
   dotacioOptionsContainer = document.getElementById("dotacio-options");
   closeDotacioBtn = document.getElementById("close-dotacio-modal");
@@ -27,6 +29,11 @@ export function initDotacio() {
   if (!dotacioModal || !dotacioOptionsContainer) {
     console.warn("No s'han trobat els elements del modal de dotació.");
     return;
+  }
+
+  // Assignem l'esdeveniment per obrir el modal
+  if (openDotacioBtn) {
+    openDotacioBtn.addEventListener("click", openDotacioModal);
   }
 
   // Assignem event listener per tancar el modal

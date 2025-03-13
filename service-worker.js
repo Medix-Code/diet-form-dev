@@ -15,6 +15,7 @@ const urlsToCache = [
   "./src/db/indexedDbDietRepository.js",
   "./src/services/dietService.js",
   "./src/services/formService.js",
+  "./src/services/dotacion.js",
   "./src/services/signatureService.js",
   "./src/services/pdfService.js",
   "./src/services/cameraOcr.js",
