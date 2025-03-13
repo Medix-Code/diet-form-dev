@@ -681,6 +681,39 @@
       <div class="modal-content dotacio-modal-content">
         <h3 id="dotacio-modal-title">Gestor de dotaciones</h3>
 
+        <!-- Missatge quan no hi ha dotacions -->
+        <div id="no-dotacio-text" class="hidden">No hay dotaciones</div>
+
+        <!-- Aquí es crearà dinàmicament la llista de dotacions -->
+        <div
+          id="dotacio-options"
+          class="dotacio-list"
+          aria-label="Opciones de dotaciones"
+        ></div>
+
+        <!-- Botó per obrir el modal d'afegir dotació -->
+        <button id="open-add-dotacio-modal" class="modal-button accept">
+          Añadir dotación
+        </button>
+
+        <!-- Botó per tancar el modal -->
+        <button id="close-dotacio-modal" class="modal-button cancel">
+          Cerrar
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL PER AFEGIR DOTACIÓ -->
+    <div
+      id="add-dotacio-modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-dotacio-modal-title"
+    >
+      <div class="modal-content add-dotacio-modal-content">
+        <h3 id="add-dotacio-modal-title">Añadir nueva dotación</h3>
+
         <!-- Formulari per afegir una nova dotació -->
         <form id="dotacio-form">
           <div class="form-group">
@@ -703,19 +736,14 @@
           <button type="submit" class="modal-button accept">
             Añadir dotación
           </button>
+          <button
+            type="button"
+            id="close-add-dotacio-modal"
+            class="modal-button cancel"
+          >
+            Cancelar
+          </button>
         </form>
-
-        <!-- Aquí es crearà dinàmicament la llista de dotacions -->
-        <div
-          id="dotacio-options"
-          class="dotacio-list"
-          aria-label="Opciones de dotaciones"
-        ></div>
-
-        <!-- Botó per tancar el modal -->
-        <button id="close-dotacio-modal" class="modal-button cancel">
-          Cerrar
-        </button>
       </div>
     </div>
 

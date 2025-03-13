@@ -7,6 +7,9 @@
 
 // Array per emmagatzemar les dotacions
 let dotacions = [];
+let openAddDotacioBtn;
+let addDotacioModal;
+let closeAddDotacioBtn;
 
 // Referències als elements del DOM
 let openDotacioBtn;
@@ -24,6 +27,9 @@ export function initDotacion() {
   dotacioModal = document.getElementById("dotacio-modal");
   dotacioOptionsContainer = document.getElementById("dotacio-options");
   closeDotacioBtn = document.getElementById("close-dotacio-modal");
+  openAddDotacioBtn = document.getElementById("open-add-dotacio-modal");
+  addDotacioModal = document.getElementById("add-dotacio-modal");
+  closeAddDotacioBtn = document.getElementById("close-add-dotacio-modal");
   dotacioForm = document.getElementById("dotacio-form");
 
   if (!dotacioModal || !dotacioOptionsContainer) {
@@ -31,13 +37,21 @@ export function initDotacion() {
     return;
   }
 
-  // Assignem l'esdeveniment per obrir el modal
+  // Assignem l'esdeveniment per obrir el modal de gestió de dotacions
   if (openDotacioBtn) {
     openDotacioBtn.addEventListener("click", openDotacioModal);
   }
 
-  // Assignem event listener per tancar el modal
+  // Assignem event listener per tancar el modal de gestió de dotacions
   closeDotacioBtn?.addEventListener("click", closeDotacioModal);
+
+  // Assignem l'esdeveniment per obrir el modal d'afegir dotació
+  if (openAddDotacioBtn) {
+    openAddDotacioBtn.addEventListener("click", openAddDotacioModal);
+  }
+
+  // Assignem event listener per tancar el modal d'afegir dotació
+  closeAddDotacioBtn?.addEventListener("click", closeAddDotacioModal);
 
   // Assignem l'event submit del formulari per afegir una nova dotació
   if (dotacioForm) {
@@ -48,6 +62,9 @@ export function initDotacion() {
   window.addEventListener("click", (evt) => {
     if (evt.target === dotacioModal) {
       closeDotacioModal();
+    }
+    if (evt.target === addDotacioModal) {
+      closeAddDotacioModal();
     }
   });
 
@@ -64,11 +81,10 @@ export function initDotacion() {
 /**
  * Obre el modal de gestió de dotació.
  */
-export function openDotacioModal() {
-  if (!dotacioModal) return;
-  dotacioModal.style.display = "block";
+function openAddDotacioModal() {
+  if (!addDotacioModal) return;
+  addDotacioModal.style.display = "block";
   document.body.classList.add("modal-open");
-  displayDotacioOptions();
 }
 
 /**
@@ -149,6 +165,8 @@ function addDotacioFromForm(event) {
   saveDotacions();
   displayDotacioOptions();
   dotacioForm.reset(); // Neteja el formulari
+  closeAddDotacioModal(); // Tanca el modal d'afegir dotació
+  openDotacioModal(); // Torna a obrir el modal de gestió de dotacions
 }
 
 /**
