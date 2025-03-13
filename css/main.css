@@ -573,12 +573,16 @@ button .fa {
 }
 .dotacio-modal-content .dotacio-load,
 .dotacio-modal-content .dotacio-delete {
+  display: flex;
+  align-items: center; /* Centra verticalment */
+  justify-content: center; /* Centra horitzontalment */
+  gap: 8px; /* Espai entre la icona i el text, ajustable segons necessitat */
   padding: 6px 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 .dotacio-modal-content .dotacio-load {
   background-color: #eceffc;
