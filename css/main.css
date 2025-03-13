@@ -516,6 +516,53 @@ button .fa {
   line-height: clamp(40px, 5vw, 50px);
 }
 
+.dotacio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dotacio-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.dotacio-info {
+  flex: 1;
+  font-size: 14px;
+}
+
+.dotacio-load,
+.dotacio-delete {
+  margin-left: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dotacio-load {
+  background-color: #eceffc;
+  color: #2844f0;
+}
+.dotacio-load:hover {
+  background-color: #dce0fa;
+}
+
+.dotacio-delete {
+  background-color: #fdeceb;
+  color: #e03131;
+}
+.dotacio-delete:hover {
+  background-color: #fccac9;
+}
+
 .service-controls {
   display: flex;
   align-items: center;
