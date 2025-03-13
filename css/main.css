@@ -558,6 +558,7 @@ button .fa {
   gap: 10px;
   margin-bottom: 10px;
   /* Contenidor dels botons dins de cada item */
+  /* Els botons ocupen tot l'espai disponible igualment */
 }
 .dotacio-modal-content .dotacio-item .dotacio-info {
   font-size: 14px;
@@ -565,8 +566,10 @@ button .fa {
 }
 .dotacio-modal-content .dotacio-item .button-container {
   display: flex;
-  justify-content: center;
   gap: 10px;
+}
+.dotacio-modal-content .dotacio-item .button-container button {
+  flex: 1;
 }
 .dotacio-modal-content .dotacio-load,
 .dotacio-modal-content .dotacio-delete {

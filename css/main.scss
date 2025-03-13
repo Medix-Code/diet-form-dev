@@ -654,8 +654,11 @@ button .fa {
     /* Contenidor dels botons dins de cada item */
     .button-container {
       display: flex;
-      justify-content: center; // Centra els botons
       gap: 10px; // Espai entre ells
+    }
+    /* Els botons ocupen tot l'espai disponible igualment */
+    .button-container button {
+      flex: 1;
     }
   }
 
