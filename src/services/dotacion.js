@@ -1,129 +1,79 @@
 /**
- * Lògica per a la gestió de dotacions.
- * Una dotació es compon d'un número (aquí considerem "Vehículo") i dos noms (Conductor i Ayudante).
- * Aquest mòdul s'encarrega d'obrir/tancar el modal de dotació, mostrar la llista,
- * afegir noves dotacions i eliminar-les.
+ * Mòdul per a la gestió de dotacions:
+ * - Veure la llista de dotacions en el modal principal (dotacio-modal).
+ * - Afegir noves dotacions en un modal secundari (add-dotacio-modal).
+ * - Eliminar dotacions existents.
  */
 
-// Array per emmagatzemar les dotacions
-let dotacions = [];
-let openAddDotacioBtn;
-let addDotacioModal;
-let closeAddDotacioBtn;
+let dotacions = []; // Array de dotacions guardades
+let dotacioModal, dotacioOptionsContainer, closeDotacioBtn;
+let openAddDotacioBtn, addDotacioModal, closeAddDotacioBtn;
+let dotacioForm; // Formulari per afegir una nova dotació
 
-// Referències als elements del DOM
-let openDotacioBtn;
-let dotacioModal;
-let dotacioOptionsContainer;
-let closeDotacioBtn;
-let dotacioForm; // El formulari per afegir dotació
+/* ──────────────────────────────
+   1) Modal principal de gestió
+─────────────────────────────────*/
 
 /**
- * Inicialitza el mòdul de dotacions.
- * Configura els elements del modal i carrega les dotacions des de localStorage.
+ * Obre el modal principal (dotacio-modal) i actualitza la llista de dotacions.
  */
-export function initDotacion() {
-  openDotacioBtn = document.getElementById("open-dotacio-modal");
-  dotacioModal = document.getElementById("dotacio-modal");
-  dotacioOptionsContainer = document.getElementById("dotacio-options");
-  closeDotacioBtn = document.getElementById("close-dotacio-modal");
-  openAddDotacioBtn = document.getElementById("open-add-dotacio-modal");
-  addDotacioModal = document.getElementById("add-dotacio-modal");
-  closeAddDotacioBtn = document.getElementById("close-add-dotacio-modal");
-  dotacioForm = document.getElementById("dotacio-form");
-
-  if (!dotacioModal || !dotacioOptionsContainer) {
-    console.warn("No s'han trobat els elements del modal de dotació.");
-    return;
-  }
-
-  // Assignem l'esdeveniment per obrir el modal de gestió de dotacions
-  if (openDotacioBtn) {
-    openDotacioBtn.addEventListener("click", openDotacioModal);
-  }
-
-  // Assignem event listener per tancar el modal de gestió de dotacions
-  closeDotacioBtn?.addEventListener("click", closeDotacioModal);
-
-  // Assignem l'esdeveniment per obrir el modal d'afegir dotació
-  if (openAddDotacioBtn) {
-    openAddDotacioBtn.addEventListener("click", openAddDotacioModal);
-  }
-
-  // Assignem event listener per tancar el modal d'afegir dotació
-  closeAddDotacioBtn?.addEventListener("click", closeAddDotacioModal);
-
-  // Assignem l'event submit del formulari per afegir una nova dotació
-  if (dotacioForm) {
-    dotacioForm.addEventListener("submit", addDotacioFromForm);
-  }
-
-  // Tanca el modal si es fa clic fora del contingut
-  window.addEventListener("click", (evt) => {
-    if (evt.target === dotacioModal) {
-      closeDotacioModal();
-    }
-    if (evt.target === addDotacioModal) {
-      closeAddDotacioModal();
-    }
-  });
-
-  // Carrega les dotacions guardades
-  const savedDotacions = localStorage.getItem("dotacions");
-  if (savedDotacions) {
-    dotacions = JSON.parse(savedDotacions);
-  }
-
-  // Mostra les dotacions a l'obrir
+function openDotacioModal() {
+  if (!dotacioModal) return;
+  dotacioModal.style.display = "block";
+  document.body.classList.add("modal-open");
   displayDotacioOptions();
 }
 
 /**
- * Obre el modal de gestió de dotació.
+ * Tanca el modal principal (dotacio-modal).
  */
-function openAddDotacioModal() {
-  if (!addDotacioModal) return;
-  addDotacioModal.style.display = "block";
-  document.body.classList.add("modal-open");
-}
-
-/**
- * Tanca el modal de gestió de dotació.
- */
-export function closeDotacioModal() {
+function closeDotacioModal() {
   if (!dotacioModal) return;
   dotacioModal.style.display = "none";
   document.body.classList.remove("modal-open");
 }
 
 /**
- * Mostra la llista de dotacions guardades.
- * Si no n'hi ha, mostra un missatge indicant-ho.
+ * Carrega les dotacions guardades a localStorage i les desarà a `dotacions`.
+ */
+function loadDotacionsFromStorage() {
+  const saved = localStorage.getItem("dotacions");
+  if (saved) {
+    dotacions = JSON.parse(saved);
+  } else {
+    dotacions = [];
+  }
+}
+
+/**
+ * Mostra les dotacions al modal principal.
+ * Si no n’hi ha cap, mostra un missatge "No hay dotaciones".
  */
 export function displayDotacioOptions() {
   if (!dotacioOptionsContainer) return;
+
+  // Neteja la llista
   dotacioOptionsContainer.innerHTML = "";
 
-  // Mostra el missatge de "No hay dotaciones guardadas" si la llista està buida
+  // Comprovem si no hi ha dotacions
   const noDotacioText = document.getElementById("no-dotacio-text");
   if (dotacions.length === 0) {
     noDotacioText?.classList.remove("hidden");
     return;
-  } else {
-    noDotacioText?.classList.add("hidden");
   }
+  // Si n’hi ha, amaguem el missatge de "sense dotacions"
+  noDotacioText?.classList.add("hidden");
 
+  // Pintem cada dotació
   dotacions.forEach((dotacio, index) => {
-    // Crea l'element per a cada dotació
-    const dotacioItem = document.createElement("div");
-    dotacioItem.classList.add("dotacio-item");
+    const item = document.createElement("div");
+    item.classList.add("dotacio-item");
 
-    // Contingut de la dotació: "Vehículo - Conductor y Ayudante"
     const infoSpan = document.createElement("span");
     infoSpan.classList.add("dotacio-info");
     infoSpan.textContent = `${dotacio.numero} - ${dotacio.conductor} y ${dotacio.ayudante}`;
 
-    // Botó per eliminar la dotació
+    // Botó d’eliminar
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("dotacio-delete");
     deleteBtn.setAttribute("aria-label", "Eliminar dotación");
@@ -134,43 +84,14 @@ export function displayDotacioOptions() {
       deleteDotacio(index);
     });
 
-    dotacioItem.appendChild(infoSpan);
-    dotacioItem.appendChild(deleteBtn);
-    dotacioOptionsContainer.appendChild(dotacioItem);
+    item.appendChild(infoSpan);
+    item.appendChild(deleteBtn);
+    dotacioOptionsContainer.appendChild(item);
   });
 }
 
 /**
- * Afegeix una nova dotació a partir dels valors del formulari.
- */
-function addDotacioFromForm(event) {
-  event.preventDefault(); // Evita el comportament per defecte del formulari
-
-  const vehiculo = document.getElementById("dotacio-vehiculo").value;
-  const conductor = document.getElementById("dotacio-conductor").value;
-  const ayudante = document.getElementById("dotacio-ayudante").value;
-
-  if (!vehiculo || !conductor || !ayudante) {
-    alert("Por favor, completa tots els camps.");
-    return;
-  }
-
-  const novaDotacio = {
-    numero: vehiculo.trim(),
-    conductor: conductor.trim(),
-    ayudante: ayudante.trim(),
-  };
-
-  dotacions.push(novaDotacio);
-  saveDotacions();
-  displayDotacioOptions();
-  dotacioForm.reset(); // Neteja el formulari
-  closeAddDotacioModal(); // Tanca el modal d'afegir dotació
-  openDotacioModal(); // Torna a obrir el modal de gestió de dotacions
-}
-
-/**
- * Elimina la dotació a l'índex donat.
+ * Elimina la dotació a l'índex especificat, desa i actualitza la llista.
  */
 function deleteDotacio(index) {
   dotacions.splice(index, 1);
@@ -179,8 +100,116 @@ function deleteDotacio(index) {
 }
 
 /**
- * Desa les dotacions a localStorage.
+ * Desa les dotacions actuals a localStorage.
  */
 function saveDotacions() {
   localStorage.setItem("dotacions", JSON.stringify(dotacions));
+}
+
+/* ────────────────────────────────────
+   2) Modal "Afegir Dotació"
+───────────────────────────────────────*/
+
+/**
+ * Obre el modal secundari per afegir una nova dotació.
+ */
+function openAddDotacioModal() {
+  if (!addDotacioModal) return;
+  addDotacioModal.style.display = "block";
+  document.body.classList.add("modal-open");
+}
+
+/**
+ * Tanca el modal secundari d’afegir dotació.
+ */
+function closeAddDotacioModal() {
+  if (!addDotacioModal) return;
+  addDotacioModal.style.display = "none";
+  document.body.classList.remove("modal-open");
+}
+
+/**
+ * Processa el formulari d’afegir dotació (event "submit").
+ * Afegeix la dotació al llistat i actualitza la vista.
+ */
+function addDotacioFromForm(e) {
+  e.preventDefault(); // Evitem el comportament per defecte (submit de formulari)
+
+  const vehiculo = document.getElementById("dotacio-vehiculo")?.value.trim();
+  const conductor = document.getElementById("dotacio-conductor")?.value.trim();
+  const ayudante = document.getElementById("dotacio-ayudante")?.value.trim();
+
+  if (!vehiculo || !conductor || !ayudante) {
+    alert("Por favor, completa todos los campos.");
+    return;
+  }
+
+  // Creem la nova dotació
+  const novaDotacio = {
+    numero: vehiculo,
+    conductor: conductor,
+    ayudante: ayudante,
+  };
+
+  // L'afegim al nostre array, el desem i actualitzem
+  dotacions.push(novaDotacio);
+  saveDotacions();
+
+  // Neteja formulari
+  dotacioForm?.reset();
+
+  // Tanquem el modal d’afegir i tornem a obrir el modal principal
+  closeAddDotacioModal();
+  openDotacioModal();
+}
+
+/**
+ * Inicialitza la lògica de dotacions.
+ */
+export function initDotacion() {
+  // Referències als elements del DOM
+  const openDotacioBtn = document.getElementById("open-dotacio-modal"); // Botó per obrir el modal de gestió
+  dotacioModal = document.getElementById("dotacio-modal");
+  dotacioOptionsContainer = document.getElementById("dotacio-options");
+  closeDotacioBtn = document.getElementById("close-dotacio-modal");
+
+  openAddDotacioBtn = document.getElementById("open-add-dotacio-modal");
+  addDotacioModal = document.getElementById("add-dotacio-modal");
+  closeAddDotacioBtn = document.getElementById("close-add-dotacio-modal");
+  dotacioForm = document.getElementById("dotacio-form");
+
+  // Comprovem que els elements bàsics existeixin
+  if (!dotacioModal || !dotacioOptionsContainer) {
+    console.warn("Elements de dotació no trobats al DOM.");
+    return;
+  }
+
+  // Assignem events:
+  // 1) Obrir el modal principal
+  openDotacioBtn?.addEventListener("click", openDotacioModal);
+  // 2) Tancar el modal principal
+  closeDotacioBtn?.addEventListener("click", closeDotacioModal);
+
+  // 3) Obrir el modal "afegir dotació"
+  openAddDotacioBtn?.addEventListener("click", openAddDotacioModal);
+  // 4) Tancar el modal "afegir dotació"
+  closeAddDotacioBtn?.addEventListener("click", closeAddDotacioModal);
+
+  // 5) Submit del formulari per afegir dotació
+  dotacioForm?.addEventListener("submit", addDotacioFromForm);
+
+  // Si es fa clic fora dels modals, els tanquem (si cal)
+  window.addEventListener("click", (evt) => {
+    if (evt.target === dotacioModal) {
+      closeDotacioModal();
+    } else if (evt.target === addDotacioModal) {
+      closeAddDotacioModal();
+    }
+  });
+
+  // Carreguem les dotacions del localStorage (si n’hi ha)
+  loadDotacionsFromStorage();
+
+  // Actualitzem la llista en obrir l'aplicació
+  displayDotacioOptions();
 }
