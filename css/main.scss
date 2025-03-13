@@ -570,6 +570,17 @@ button .fa {
   flex-grow: 1; // Això fa que el títol ocupi l'espai disponible i empenyi el botó a la dreta
 }
 
+.group-btns {
+  display: flex;
+  gap: 10px; /* Espai entre els botons, ajustable segons la necessitat */
+}
+
+.group-btn img {
+  width: 24px;
+}
+.group-btn span {
+  line-height: clamp(40px, 5vw, 50px);
+}
 .group-btn {
   width: clamp(40px, 5vw, 50px);
   height: clamp(40px, 5vw, 50px);
@@ -586,7 +597,6 @@ button .fa {
   transition: all 0.2s ease;
   cursor: pointer;
   background-color: var(--btt-card-bg);
-  margin-left: auto; // assegura que estigui a la dreta
 
   // Centra tant icona com text
   img {
@@ -673,6 +683,7 @@ button .fa {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+
     transition: background-color 0.2s ease;
     font-size: 14px;
   }
@@ -737,48 +748,6 @@ button .fa {
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-/* Estils per als formularis */
-.form-group {
-  margin-bottom: 15px;
-  text-align: left;
-
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 400;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    height: 40px;
-    padding: 0 10px;
-    font-size: 15px;
-    border: 1px solid var(--input-border);
-    border-radius: 4px;
-  }
-}
-
-/* Estils per als formularis (adaptats si és necessari) */
-.form-group {
-  margin-bottom: 15px;
-  text-align: left;
-
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 400;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    height: 40px;
-    padding: 0 10px;
-    font-size: 15px;
-    border: 1px solid var(--input-border);
-    border-radius: 4px;
   }
 }
 

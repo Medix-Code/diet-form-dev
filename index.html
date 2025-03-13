@@ -147,7 +147,6 @@
       >
         <!-- GRUPO Datos de la jornada -->
         <div class="group-container" id="informacio-general">
-          <h2 class="group-title">Datos de la jornada</h2>
           <div class="form-group">
             <label for="date">Fecha</label>
             <input type="date" id="date" name="date" />
@@ -182,14 +181,24 @@
         <div class="group-container" id="dotacio">
           <div class="group-header">
             <h2 class="group-title">Dotación</h2>
-            <button
-              type="button"
-              class="group-btn"
-              id="open-dotacio-modal"
-              aria-label="Opcions"
-            >
-              <img src="assets/icons/id_card.svg" alt="" />
-            </button>
+            <div class="group-btns">
+              <button
+                type="button"
+                class="group-btn"
+                id="add-dotacio"
+                aria-label="Nova dotació"
+              >
+                <img src="assets/icons/camera.svg" alt="Nova dotació" />
+              </button>
+              <button
+                type="button"
+                class="group-btn"
+                id="open-dotacio-modal"
+                aria-label="Opcions"
+              >
+                <img src="assets/icons/id_card.svg" alt="Opcions" />
+              </button>
+            </div>
           </div>
           <div class="form-group">
             <label for="vehicle-number">Vehículo</label>
