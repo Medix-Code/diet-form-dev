@@ -487,7 +487,7 @@ button .fa {
   display: flex;
   gap: 10px;
   position: relative;
-  top: 20px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
+  top: 10px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
 }
 
 .group-btn span {
@@ -626,11 +626,11 @@ button .fa {
   background-color: #0056b3;
 }
 .dotacio-modal-content .modal-buttons .cancel {
-  background-color: #ccc;
-  color: #333;
+  background-color: #ad1400;
+  color: #fff;
 }
 .dotacio-modal-content .modal-buttons .cancel:hover {
-  background-color: #bbb;
+  background-color: #d6cdcd;
 }
 
 /* Animació per al modal */
