@@ -663,6 +663,55 @@
       </div>
     </footer>
 
+    <!-- MODAL PER GESTIONAR DOTACIÓ -->
+    <div
+      id="dotacio-modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dotacio-modal-title"
+    >
+      <div class="modal-content dotacio-modal-content">
+        <h3 id="dotacio-modal-title">Gestor de dotaciones</h3>
+
+        <!-- Formulari per afegir una nova dotació -->
+        <form id="dotacio-form">
+          <div class="form-group">
+            <label for="dotacio-vehiculo">Vehículo</label>
+            <input type="text" id="dotacio-vehiculo" name="vehiculo" required />
+          </div>
+          <div class="form-group">
+            <label for="dotacio-conductor">Conductor</label>
+            <input
+              type="text"
+              id="dotacio-conductor"
+              name="conductor"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="dotacio-ayudante">Ayudante</label>
+            <input type="text" id="dotacio-ayudante" name="ayudante" required />
+          </div>
+          <button type="submit" class="modal-button accept">
+            Añadir dotación
+          </button>
+        </form>
+
+        <!-- Aquí es crearà dinàmicament la llista de dotacions -->
+        <div
+          id="dotacio-options"
+          class="dotacio-list"
+          aria-label="Opciones de dotaciones"
+        ></div>
+
+        <!-- Botó per tancar el modal -->
+        <button id="close-dotacio-modal" class="modal-button cancel">
+          Cerrar
+        </button>
+      </div>
+    </div>
+
     <!-- MODAL INFO APP -->
     <div
       id="about-modal"
