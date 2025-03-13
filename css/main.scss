@@ -643,7 +643,8 @@ button .fa {
     padding: 10px;
     display: flex;
     flex-direction: column; // Primera línia: text; segona: botons
-    gap: 8px;
+    gap: 10px;
+    margin-bottom: 10px;
 
     .dotacio-info {
       font-size: 14px;
@@ -685,7 +686,7 @@ button .fa {
     }
   }
 
-  /* Botons inferiors del modal (Cerrar i Añadir dotación) */
+  /* Botons inferiors del modal Gestor de dotacions (Cerrar i Añadir dotación) */
   .modal-buttons {
     display: flex;
     justify-content: space-between;
@@ -774,6 +775,13 @@ button .fa {
   }
 }
 
+/*Marge superior 1r camp "Vehicle" */
+#add-dotacio-modal
+  .dotacio-modal-content
+  form#dotacio-form
+  .form-group:first-of-type {
+  margin-top: 20px;
+}
 // ===========================================================================
 // SERVICIOS y MENU
 // ===========================================================================

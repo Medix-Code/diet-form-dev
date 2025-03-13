@@ -674,12 +674,14 @@
     <template id="dotacio-template">
       <div class="dotacio-item">
         <span class="dotacio-info"></span>
-        <button class="dotacio-load" aria-label="Cargar dotación">
-          Cargar
-        </button>
-        <button class="dotacio-delete" aria-label="Eliminar dotación">
-          Eliminar
-        </button>
+        <div class="button-container">
+          <button class="dotacio-delete" aria-label="Eliminar dotació">
+            Eliminar
+          </button>
+          <button class="dotacio-load" aria-label="Cargar dotació">
+            Cargar
+          </button>
+        </div>
       </div>
     </template>
 
@@ -693,7 +695,6 @@
     >
       <div class="modal-content dotacio-modal-content">
         <h3 id="dotacio-modal-title">Gestor de dotaciones</h3>
-        <hr />
 
         <!-- Missatge quan no hi ha dotacions -->
         <div id="no-dotacio-text" class="hidden">No hay dotaciones</div>

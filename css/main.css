@@ -529,7 +529,7 @@ button .fa {
   /* La llista de dotacions separada del títol */
   /* Cada ítem de la llista */
   /* Botons dins dels items (Cargar i Eliminar) */
-  /* Botons inferiors del modal (Cerrar i Añadir dotación) */
+  /* Botons inferiors del modal Gestor de dotacions (Cerrar i Añadir dotación) */
 }
 .dotacio-modal-content h3 {
   font-size: 1.5rem;
@@ -555,7 +555,8 @@ button .fa {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  margin-bottom: 10px;
   /* Contenidor dels botons dins de cada item */
 }
 .dotacio-modal-content .dotacio-item .dotacio-info {
@@ -669,6 +670,11 @@ button .fa {
   font-size: 15px;
   border: 1px solid var(--input-border);
   border-radius: 4px;
+}
+
+/*Marge superior 1r camp "Vehicle" */
+#add-dotacio-modal .dotacio-modal-content form#dotacio-form .form-group:first-of-type {
+  margin-top: 20px;
 }
 
 .service-controls {
