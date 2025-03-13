@@ -681,10 +681,14 @@ button .fa {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 20px;
 
     button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex: 1;
+      gap: 10px;
       width: 100%; /* Ocupa tot l'espai disponible */
       max-width: 200px; /* Però no supera els 200px */
       padding: 5px;
@@ -708,6 +712,11 @@ button .fa {
         background-color: #d6cdcd;
       }
     }
+  }
+
+  .modal-buttons button img.icon {
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -1053,7 +1062,7 @@ button:disabled {
 
 .modal-content {
   max-height: 80vh; /* Limita l'altura al 80% de l'alçada de la finestra */
-  text-align: center;
+  text-align: left;
   overflow-y: auto; /* Mostra una barra de desplaçament vertical si és necessari */
   position: relative;
   margin: 10% auto;
