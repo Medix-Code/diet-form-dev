@@ -37,8 +37,6 @@ export function setDefaultDietSelect() {
   const dietSelect = document.getElementById("diet-type");
   if (dietSelect) {
     dietSelect.value = getCurrentDietType();
-    dietSelect.style.color = "black"; // Mostra el text quan ja té valor
-    dietSelect.style.textIndent = "0"; // Torna el text a la seva posició normal
   }
 }
 

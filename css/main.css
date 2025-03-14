@@ -461,15 +461,6 @@ button .fa {
   line-height: 1.4;
 }
 
-#diet-type {
-  color: transparent; /* Amaga el text del select */
-  text-indent: -9999px; /* Desplaça el text fora de la vista */
-}
-
-#diet-type option {
-  color: black; /* Manté el color de les opcions quan es desplega */
-}
-
 .input-error {
   border: 2px solid var(--textfield-error) !important;
   background-color: var(--textfield-error-bg) !important;
