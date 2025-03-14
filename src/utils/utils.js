@@ -12,6 +12,11 @@ export function setTodayDate() {
   dateInp.value = `${y}-${m}-${d}`;
 }
 
+export function capitalizeFirstLetter(text) {
+  if (!text) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 /**
  * Retorna "lunch" o "dinner" segons l'hora actual
  */
@@ -20,9 +25,11 @@ export function getCurrentDietType() {
   return hour >= 6 && hour < 18 ? "lunch" : "dinner";
 }
 
-export function capitalizeFirstLetter(text) {
-  if (!text) return "";
-  return text.charAt(0).toUpperCase() + text.slice(1);
+export function setDefaultDietSelect() {
+  const dietSelect = document.getElementById("diet-type");
+  if (dietSelect) {
+    dietSelect.value = getCurrentDietType();
+  }
 }
 
 /**

@@ -14,9 +14,11 @@ import * as formService from "./services/formService.js";
 import { isAppInstalled } from "./services/pwaService.js";
 import { initCameraOcr } from "./services/cameraOcr.js";
 import { initDotacion } from "./services/dotacion.js";
+import { setDefaultDietSelect } from "./utils/utils.js";
 
 export async function initializeApp() {
   setTodayDate();
+  setDefaultDietSelect();
   await openDatabase();
   initServices();
   initSignature();

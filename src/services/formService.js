@@ -7,6 +7,8 @@ import {
   getSignatureAjudant,
 } from "./signatureService.js";
 
+import { getCurrentDietType } from "../utils/utils.js";
+
 // ESTAT LOCAL del mòdul
 let initialFormDataStr = "";
 
@@ -113,17 +115,13 @@ export function getAllFormDataAsString() {
 }
 
 /**
- * Recull totes les dades del formulari en objectes
+ * Recull totes les dades del formulari en objectes "quan es guarda"
  */
 export function gatherAllData() {
   const dateVal = document.getElementById("date").value.trim();
 
-  let dietTypeVal = document.getElementById("diet-type").value.trim(); // Agafem el valor actual del select
-
-  // Si l'usuari no ha seleccionat cap franja horària, l'establim automàticament
-  if (!dietTypeVal) {
-    dietTypeVal = getCurrentDietType();
-  }
+  let dietTypeVal =
+    document.getElementById("diet-type").value.trim() || getCurrentDietType();
 
   const vehicleVal = document.getElementById("vehicle-number").value.trim();
   const p1 = document.getElementById("person1").value.trim();
