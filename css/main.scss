@@ -585,16 +585,30 @@ button .fa {
   color: var(--text-color);
   transition: all 0.2s ease;
   cursor: pointer;
-  background-color: var(--btt-card-bg);
 
-  // Centra tant icona com text
   img {
     width: 22px;
     height: 22px;
   }
 
   span {
-    line-height: clamp(40px, 5vw, 50px); // ajusta per centrar verticalment
+    line-height: clamp(40px, 5vw, 50px);
+  }
+}
+
+/* 🔹 Color de fons per al botó "Guardar" */
+.btn-save {
+  background-color: #28a745; // Verd
+  &:hover {
+    background-color: #218838; // Verd fosc quan passes el cursor
+  }
+}
+
+/* 🔹 Color de fons per al botó "Opcions" */
+.btn-options {
+  background-color: #007bff; // Blau
+  &:hover {
+    background-color: #0056b3; // Blau fosc quan passes el cursor
   }
 }
 

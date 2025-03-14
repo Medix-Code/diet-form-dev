@@ -505,7 +505,6 @@ button .fa {
   color: var(--text-color);
   transition: all 0.2s ease;
   cursor: pointer;
-  background-color: var(--btt-card-bg);
 }
 .group-btn img {
   width: 22px;
@@ -513,6 +512,22 @@ button .fa {
 }
 .group-btn span {
   line-height: clamp(40px, 5vw, 50px);
+}
+
+/* 🔹 Color de fons per al botó "Guardar" */
+.btn-save {
+  background-color: #28a745;
+}
+.btn-save:hover {
+  background-color: #218838;
+}
+
+/* 🔹 Color de fons per al botó "Opcions" */
+.btn-options {
+  background-color: #007bff;
+}
+.btn-options:hover {
+  background-color: #0056b3;
 }
 
 .dotacio-modal-content {
