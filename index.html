@@ -693,7 +693,6 @@
         </div>
       </div>
     </template>
-
     <div
       id="dotacio-modal"
       class="modal"
@@ -713,18 +712,14 @@
           class="dotacio-list"
           aria-label="Opciones de dotaciones"
         >
-          <!-- Aquí es crearà dinàmicament cada item -->
+          <!-- Aquí es crearà dinàmicament cada ítem -->
         </div>
 
-        <!-- Zona de botons fixa (footer del modal) -->
-        <div class="modal-buttons">
-          <button id="close-dotacio-modal" class="modal-button cancel">
-            Cerrar
-          </button>
-
-          <button id="open-add-dotacio-modal" class="modal-button accept">
+        <!-- Footer on posem el botó Afegir -->
+        <div class="modal-footer">
+          <button id="open-add-dotacio-modal" class="add-dotacio-button">
             <img src="assets/icons/add.svg" alt="Afegir" class="icon" />
-            <span class="btn-text">Nueva dotación</span>
+            <span class="btn-text"></span>
           </button>
         </div>
       </div>
@@ -738,14 +733,14 @@
         <form id="dotacio-form">
           <div class="form-group">
             <label for="dotacio-vehiculo">Vehículo</label>
-            <input type="text" id="dotacio-vehiculo" />
+            <input type="text" id="dotacio-vehiculo" required />
           </div>
 
           <!-- Conductor + firma -->
           <div class="form-group">
             <label for="dotacio-conductor">Conductor</label>
             <div class="input-with-icon">
-              <input type="text" id="dotacio-conductor" />
+              <input type="text" id="dotacio-conductor" required />
               <button
                 type="button"
                 class="signature-btn"
@@ -765,7 +760,7 @@
           <div class="form-group">
             <label for="dotacio-ayudante">Ayudante</label>
             <div class="input-with-icon">
-              <input type="text" id="dotacio-ayudante" />
+              <input type="text" id="dotacio-ayudante" required />
               <button
                 type="button"
                 class="signature-btn"
@@ -781,7 +776,7 @@
             </div>
           </div>
 
-          <button type="button" class="modal-button accept">Añadir</button>
+          <button type="submit" class="modal-button accept">Añadir</button>
         </form>
 
         <button id="close-add-dotacio-modal" class="modal-button cancel">

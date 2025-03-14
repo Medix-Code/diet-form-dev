@@ -605,135 +605,133 @@ button .fa {
 // DOTACIÓ
 // ===========================================================================
 
-/* Estils per al modal de dotació */
 .dotacio-modal-content {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden; /* Evita scroll global si s’excedeix l’alçada */
 
-  /* Llistat de dotacions: única zona que farà scroll */
-  .dotacio-list {
-    flex: 1; // Ocupa tot l'espai disponible
-    overflow-y: auto; // Fa scroll només aquí
-    margin-top: 20px; // Mantén el marge que ja tenies
-
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Espai entre items */
+  /* Títol */
+  h3 {
+    margin-bottom: 10px;
+    text-align: center; /* O left, segons et convingui */
   }
 
-  /* Text no hay dotaciones*/
+  /* Quan no hi ha dotacions */
   #no-dotacio-text {
-    margin-top: 30px;
+    margin-top: 20px;
     text-align: center;
   }
 
-  /* Cada ítem de la llista */
-  .dotacio-item {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 10px;
+  /* Llista de dotacions (fa scroll) */
+  .dotacio-list {
+    flex: 1; /* Ocupa tot l’espai disponible per fer scroll */
+    overflow-y: auto;
+    margin-top: 10px;
+
     display: flex;
-    flex-direction: column; // Primera línia: text; segona: botons
+    flex-direction: column;
     gap: 10px;
-    margin-bottom: 10px;
-
-    .dotacio-info {
-      font-size: 14px;
-      text-align: left;
-    }
-
-    /* Contenidor dels botons dins de cada item */
-    .button-container {
-      display: flex;
-      gap: 10px; // Espai entre ells
-    }
-    /* Els botons ocupen tot l'espai disponible igualment */
-    .button-container button {
-      flex: 1;
-    }
-  }
-
-  /* Botons dins dels items (Cargar i Eliminar) */
-  .dotacio-load,
-  .dotacio-delete {
-    display: flex;
-    align-items: center; /* Centra verticalment */
-    justify-content: center; /* Centra horitzontalment */
-    gap: 8px; /* Espai entre la icona i el text, ajustable segons necessitat */
-    padding: 6px 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-
-    transition: background-color 0.2s ease;
-    font-size: 14px;
-  }
-
-  .dotacio-load {
-    background-color: #eceffc;
-    color: #2844f0;
-    &:hover {
-      background-color: #dce0fa;
-    }
-  }
-
-  .dotacio-delete {
-    background-color: #fdeceb;
-    color: #e03131;
-    &:hover {
-      background-color: #fccac9;
-    }
-  }
-
-  /* Botons inferiors del modal Gestor de dotacions (Cerrar i Añadir dotación) */
-  .modal-buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    width: 100%;
-
-    button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      gap: 10px;
-      width: 100%; /* Ocupa tot l'espai disponible */
-
-      padding: 5px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .accept {
-      background-color: #004aad;
-      color: #fff;
-      &:hover {
-        background-color: #0056b3;
-      }
-    }
-    .cancel {
-      background-color: #ad1400;
-      color: #fff;
-      &:hover {
-        background-color: #d6cdcd;
-      }
-    }
-  }
-
-  .modal-buttons button img.icon {
-    width: 20px;
-    height: 20px;
   }
 }
 
-/* Animació per al modal */
+/* Cada ítem de la llista */
+.dotacio-item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column; /* Primera línia: text; segona: botons */
+  gap: 12px;
+  margin-bottom: 10px;
+
+  .dotacio-info {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  /* Contenidor dels botons dins de cada item (p.ex. Cargar i Eliminar) */
+  .button-container {
+    display: flex;
+    gap: 10px; /* Espai entre botons */
+    button {
+      flex: 1; /* Cada botó ocupa tot l'espai disponible */
+    }
+  }
+}
+
+/* Botnons dins la llista de*/
+.dotacio-load,
+.dotacio-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Espai entre icona i text */
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.dotacio-load {
+  background-color: #eceffc;
+  color: #004aad;
+}
+.dotacio-load:hover {
+  background-color: #dce0fa;
+}
+
+.dotacio-delete {
+  background-color: #fdeceb;
+  color: #e03131;
+}
+.dotacio-delete:hover {
+  background-color: #fccac9;
+}
+
+/* Footer del modal: botó "Afegir" a la dreta */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end; /* Botó a la dreta */
+  padding-top: 10px; /* Separació de la llista scrollable */
+}
+
+/* Evitem que aquest botó comparteixi estils amb modal-button */
+.add-dotacio-button {
+  width: clamp(40px, 5vw, 50px);
+  height: clamp(40px, 5vw, 50px);
+  background-color: var(--primary-color); /* Color destacat */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px var(--bg-transp-ajustes);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Efectes hover */
+.add-dotacio-button:hover {
+  background-color: #c78e00;
+}
+
+.add-dotacio-button:active {
+  transform: scale(0.95);
+}
+
+/* Ajust per la icona dins el botó */
+.add-dotacio-button .icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Animació per al modal (si cal) */
 @keyframes fadeIn {
   from {
     opacity: 0;
