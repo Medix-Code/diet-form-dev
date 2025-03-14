@@ -1624,7 +1624,7 @@ button .icon {
     top: calc(var(--tab-height) + 10px);
   }
   .tab-content-container {
-    margin-top: 120px;
+    margin-top: 125px;
   }
   #diet-modal-title {
     font-size: 1.1rem;
