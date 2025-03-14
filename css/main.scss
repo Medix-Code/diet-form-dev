@@ -744,6 +744,113 @@ button .fa {
 }
 
 // ===========================================================================
+// DOTACIÓN - AÑADIR DOTACIÓN
+// ===========================================================================
+.dotacio-modal-content {
+  /* Formulari */
+  #dotacio-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    /* Grup de formulari */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 10px;
+
+      label {
+        font-weight: bold;
+      }
+
+      /* Estil pels inputs, TEXt dins el camp*/
+      input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+    }
+
+    /* Camps de text amb botó de firma a dins */
+    .input-with-icon {
+      display: flex;
+      align-items: center;
+      position: relative;
+
+      input {
+        flex: 1;
+        padding-right: 40px; // Deixa espai per al botó dins l’input
+      }
+
+      .signature-btn {
+        position: absolute;
+        right: 5px; // Posiciona el botó dins del camp de text
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+      }
+
+      .signature-btn .icon {
+        width: 20px;
+        height: 20px;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+      }
+
+      .signature-btn:hover .icon {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* Botons de la part inferior */
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between; // Posa un a l’esquerra i l’altre a la dreta
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #eee; // Separació visual amb el formulari
+  }
+
+  /* Estil dels botons */
+  .modal-button {
+    min-width: 120px;
+    min-height: 44px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    &.accept {
+      background-color: var(--btt-confirm);
+      color: var(--txt-btn-confirm);
+
+      &:hover {
+        background-color: var(--bg-confirm);
+      }
+    }
+
+    &.cancel {
+      background-color: var(--bg-confirm-no);
+      color: var(--txt-btn-cancel);
+
+      &:hover {
+        background-color: var(--bg-confirm-no-hover);
+      }
+    }
+  }
+}
+
+// ===========================================================================
 // SERVICIOS y MENU
 // ===========================================================================
 
