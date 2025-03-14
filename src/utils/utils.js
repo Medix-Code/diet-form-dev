@@ -12,6 +12,14 @@ export function setTodayDate() {
   dateInp.value = `${y}-${m}-${d}`;
 }
 
+/**
+ * Retorna "lunch" o "dinner" segons l'hora actual
+ */
+export function getCurrentDietType() {
+  const hour = new Date().getHours();
+  return hour >= 6 && hour < 18 ? "lunch" : "dinner";
+}
+
 export function capitalizeFirstLetter(text) {
   if (!text) return "";
   return text.charAt(0).toUpperCase() + text.slice(1);

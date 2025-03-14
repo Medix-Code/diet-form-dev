@@ -117,7 +117,14 @@ export function getAllFormDataAsString() {
  */
 export function gatherAllData() {
   const dateVal = document.getElementById("date").value.trim();
-  const dietTypeVal = document.getElementById("diet-type").value.trim();
+
+  let dietTypeVal = document.getElementById("diet-type").value.trim(); // Agafem el valor actual del select
+
+  // Si l'usuari no ha seleccionat cap franja horària, l'establim automàticament
+  if (!dietTypeVal) {
+    dietTypeVal = getCurrentDietType();
+  }
+
   const vehicleVal = document.getElementById("vehicle-number").value.trim();
   const p1 = document.getElementById("person1").value.trim();
   const p2 = document.getElementById("person2").value.trim();
