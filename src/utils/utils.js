@@ -18,13 +18,21 @@ export function capitalizeFirstLetter(text) {
 }
 
 /**
- * Retorna "lunch" o "dinner" segons l'hora actual
+ * 📌 Retorna la franja horària segons l'hora actual.
+ * - Entre les 6:00 i les 17:59 → retorna "lunch" (Comida).
+ * - Entre les 18:00 i les 5:59 → retorna "dinner" (Cena).
+ * @returns {"lunch" | "dinner"} Franja horària corresponent.
  */
 export function getCurrentDietType() {
   const hour = new Date().getHours();
   return hour >= 6 && hour < 18 ? "lunch" : "dinner";
 }
 
+/**
+ * 📌 Estableix automàticament la franja horària al `<select>` del formulari.
+ * - S'assigna "lunch" o "dinner" segons l'hora actual.
+ * - Assegura que l'usuari veu la franja horària correcta en carregar la pàgina.
+ */
 export function setDefaultDietSelect() {
   const dietSelect = document.getElementById("diet-type");
   if (dietSelect) {
@@ -33,22 +41,27 @@ export function setDefaultDietSelect() {
 }
 
 /**
- * Retorna data en format dd/mm/aa i la franja
+ * 📌 Converteix una data en format ISO ("YYYY-MM-DD") a format "DD/MM/YY".
+ * - Si la data no és vàlida, retorna una cadena buida.
+ * @param {string} dietDate - Data en format "YYYY-MM-DD".
+ * @param {"lunch" | "dinner" | null} dietType - Franja horària (opcional).
+ * @returns {{ ddmmaa: string, franjaText: string }} Data formatada i franja textual.
  */
 export function getDietDisplayInfo(dietDate, dietType) {
   let ddmmaa = "";
+
+  // 🔹 Convertir la data de "YYYY-MM-DD" a "DD/MM/YY"
   if (dietDate) {
     const parts = dietDate.split("-");
     if (parts.length === 3) {
-      const yy = parts[0].slice(-2);
+      const yy = parts[0].slice(-2); // Últims dos dígits de l'any
       ddmmaa = `${parts[2]}/${parts[1]}/${yy}`;
     }
   }
 
-  let franjaText = "";
-  if (dietType === "lunch") franjaText = "comida";
-  else if (dietType === "dinner") franjaText = "cena";
-  else franjaText = "dieta";
+  // 🔹 Convertir "lunch" o "dinner" en text llegible per a l'usuari
+  const franjaText =
+    dietType === "lunch" ? "comida" : dietType === "dinner" ? "cena" : "dieta"; // Valor per defecte si no és "lunch" ni "dinner"
 
   return { ddmmaa, franjaText };
 }
