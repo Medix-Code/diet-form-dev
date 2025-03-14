@@ -753,15 +753,21 @@ button .fa {
     flex-direction: column;
     gap: 15px;
 
+    /* Només el primer `.form-group` té un marge superior */
+    .form-group:first-child {
+      margin-top: 20px; // Ajusta segons necessitis
+    }
+
     /* Grup de formulari */
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 0px;
+
       margin-bottom: 10px;
 
       label {
-        font-weight: bold;
+        font-size: 14px;
       }
 
       /* Estil pels inputs, TEXt dins el camp*/

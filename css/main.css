@@ -661,18 +661,22 @@ button .fa {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  /* Només el primer `.form-group` té un marge superior */
   /* Grup de formulari */
   /* Camps de text amb botó de firma a dins */
+}
+.dotacio-modal-content #dotacio-form .form-group:first-child {
+  margin-top: 20px;
 }
 .dotacio-modal-content #dotacio-form .form-group {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0px;
   margin-bottom: 10px;
   /* Estil pels inputs, TEXt dins el camp*/
 }
 .dotacio-modal-content #dotacio-form .form-group label {
-  font-weight: bold;
+  font-size: 14px;
 }
 .dotacio-modal-content #dotacio-form .form-group input {
   padding: 10px;
