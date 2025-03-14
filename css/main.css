@@ -461,9 +461,13 @@ button .fa {
   line-height: 1.4;
 }
 
-/* Amaga el text del select de frnaja horaria però manté l'espai reservat */
 #diet-type {
-  visibility: hidden;
+  color: transparent; /* Amaga el text del select */
+  text-indent: -9999px; /* Desplaça el text fora de la vista */
+}
+
+#diet-type option {
+  color: black; /* Manté el color de les opcions quan es desplega */
 }
 
 .input-error {
