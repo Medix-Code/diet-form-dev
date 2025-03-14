@@ -467,33 +467,33 @@ button .fa {
 }
 
 .group-header {
-  /* Disposem el contingut en columna (títol a dalt, botons a sota) */
   display: flex;
-  flex-direction: column;
+  align-items: center; /* Mantenim la disposició horitzontal actual */
+  justify-content: space-between;
   width: 100%;
-  margin-bottom: 0px;
 }
 
-/* Títol */
 .group-title {
   font-size: 1rem;
   font-weight: 600;
   margin: 0;
+  flex-grow: 1;
   color: var(--primary-color);
-  /* Separa el títol dels botons */
-  margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 20px;
 }
 
-/* Contenidor dels botons */
 .group-btns {
   display: flex;
-  justify-content: flex-start;
-  gap: 15px;
-  /* Pots afegir margin-bottom per separar-los del formulari */
-  margin-bottom: 15px;
+  gap: 10px;
+  position: relative;
+  top: 10px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
 }
 
-/* Botons individuals */
+.group-btn span {
+  line-height: clamp(40px, 5vw, 50px);
+}
+
 .group-btn {
   width: clamp(35px, 5vw, 45px);
   height: clamp(35px, 5vw, 45px);
@@ -514,6 +514,9 @@ button .fa {
 .group-btn img {
   width: 22px;
   height: 22px;
+}
+.group-btn span {
+  line-height: clamp(40px, 5vw, 50px);
 }
 
 .dotacio-modal-content {
