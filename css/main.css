@@ -480,18 +480,14 @@ button .fa {
   flex-grow: 1;
   color: var(--primary-color);
   margin-top: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .group-btns {
   display: flex;
   gap: 10px;
   position: relative;
-  top: 10px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
-}
-
-.group-btn span {
-  line-height: clamp(40px, 5vw, 50px);
+  top: 15px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
 }
 
 .group-btn {
