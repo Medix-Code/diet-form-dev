@@ -37,6 +37,7 @@ export function setDefaultDietSelect() {
   const dietSelect = document.getElementById("diet-type");
   if (dietSelect) {
     dietSelect.value = getCurrentDietType();
+    dietSelect.style.visibility = "visible"; // Mostrar-lo després d'assignar el valor
   }
 }
 

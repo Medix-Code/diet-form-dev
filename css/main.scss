@@ -538,6 +538,11 @@ button .fa {
   }
 }
 
+/* Amaga el text del select de frnaja horaria però manté l'espai reservat */
+#diet-type {
+  visibility: hidden;
+}
+
 .input-error {
   border: 2px solid var(--textfield-error) !important;
   background-color: var(--textfield-error-bg) !important;
