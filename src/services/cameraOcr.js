@@ -33,12 +33,16 @@ export function initCameraOcr() {
     cameraGalleryModal.classList.remove("hidden");
   });
 
-  // Tancar el modal quan es fa clic fora del contingut
-  cameraGalleryModal.addEventListener("click", (event) => {
+  // Funció per tancar el modal quan s'ha de clicar fora
+  function closeModalOnClickOutside(event) {
+    // Si el clic és sobre el modal principal (no sobre els botons)
     if (event.target === cameraGalleryModal) {
       cameraGalleryModal.classList.add("hidden");
     }
-  });
+  }
+
+  // Afegir l'event listener per tancar el modal
+  cameraGalleryModal.addEventListener("click", closeModalOnClickOutside);
 
   // Al clicar "Cámara"
   optionCameraBtn.addEventListener("click", () => {
