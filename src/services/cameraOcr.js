@@ -25,9 +25,12 @@ export function initCameraOcr() {
     cameraGalleryModal.classList.remove("hidden");
   });
 
-  // Tancar si cliquem fora (capa fosca)
-  cameraGalleryModal.addEventListener("click", (event) => {
-    if (!modalContent.contains(event.target)) {
+  // Detectar clics a qualsevol lloc i tancar el modal si el clic NO és dins
+  document.addEventListener("click", (event) => {
+    if (
+      !modalContent.contains(event.target) && // Si el clic no és dins del modal
+      !cameraBtn.contains(event.target) // I tampoc al botó d'obrir-lo
+    ) {
       cameraGalleryModal.classList.add("hidden");
     }
   });
