@@ -780,24 +780,35 @@
     <!-- MODAL que apareixerà des de sota amb 2 botons: "Cámara" i "Galería" -->
     <div id="camera-gallery-modal" class="modal-bottom hidden">
       <div class="modal-bottom-content">
-        <!-- Títol i text explicatiu -->
-        <h3 class="modal-bottom-title">Camera OCR</h3>
+        <!-- Títol centrat -->
+        <h3 class="modal-bottom-title">Cámara OCR</h3>
+        <!-- Descripció breu a sota del títol -->
         <p class="modal-bottom-description">
-          Toma una foto o elige una imagen para extraer texto automáticamente.
+          Extrae texto de una foto o imagen.
         </p>
 
-        <!-- Botons d'opcions -->
-        <button id="option-camera" class="modal-bottom-btn">
-          <img src="assets/icons/camera.svg" alt="Cámara" />
-          Cámara
-        </button>
+        <!-- Contenidor horitzontal per als 2 botons -->
+        <div class="modal-bottom-row">
+          <button id="option-camera" class="modal-bottom-btn">
+            <img src="assets/icons/camera.svg" alt="Cámara" />
+            <span class="modal-bottom-text">Cámara</span>
+          </button>
 
-        <button id="option-gallery" class="modal-bottom-btn">
-          <img src="assets/icons/gallery.svg" alt="Galería" />
-          Galería
-        </button>
+          <button id="option-gallery" class="modal-bottom-btn">
+            <img src="assets/icons/gallery.svg" alt="Galería" />
+            <span class="modal-bottom-text">Galería</span>
+          </button>
+        </div>
       </div>
     </div>
+
+    <!-- Input ocult per fer la foto o seleccionar imatge -->
+    <input
+      type="file"
+      accept="image/*"
+      id="camera-input"
+      style="display: none"
+    />
 
     <!-- PDF-lib (CDN) -->
     <script
