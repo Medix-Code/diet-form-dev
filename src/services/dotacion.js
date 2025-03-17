@@ -1,103 +1,232 @@
-/**
- * Mòdul de gestió de dotacions.
- */
+/*******************************************************
+ * dotacionn.js
+ *
+ * Ahora, si la dotación ya existe (mismo Vehículo + Conductor + Ayudante
+ * ignorando mayúsculas), se SOBRESCRIBE en lugar de lanzar un error.
+ * Además, los campos Conductor/Ayudante muestran
+ * el borde rojo si faltan (clase .input-error) sobre
+ * la .input-with-icon en lugar del input directamente.
+ *******************************************************/
+
 import {
-  getSignatureDotacioConductor,
-  getSignatureDotacioAyudante,
-  clearDotacioSignatures, // <-- Funció opcional per netejar firmes del modal
+  getSignatureConductor,
+  getSignatureAjudant,
   setSignatureConductor,
   setSignatureAjudant,
   updateSignatureIcons,
-} from "../services/signatureService.js";
+} from "./signatureService.js";
 
-let dotacions = []; // array local (dades a localStorage)
+import { showToast } from "../ui/toast.js";
 
-let dotacioModal, dotacioOptionsContainer, closeDotacioBtn;
-let openAddDotacioBtn, addDotacioModal, closeAddDotacioBtn;
-let dotacioForm;
+const DOTACIONS_KEY = "dotacions"; // Clave para localStorage
+let dotacions = [];
 
-/* ──────────────────────────────────────────
-       Funcions per obrir/tancar modal principal
-     ──────────────────────────────────────────*/
-export function openDotacioModal() {
-  dotacioModal.style.display = "block";
-  document.body.classList.add("modal-open");
+/**
+ * Inicializa la lógica de las dotaciones.
+ */
+export function initDotacion() {
+  loadDotacionsFromStorage();
+
+  const addDotacioBtn = document.getElementById("add-dotacio");
+  addDotacioBtn?.addEventListener("click", addDotacioFromMainForm);
+
+  const openDotacioBtn = document.getElementById("open-dotacio-modal");
+  openDotacioBtn?.addEventListener("click", openDotacioModal);
+
+  const closeDotacioBtn = document.getElementById("close-dotacio-modal");
+  closeDotacioBtn?.addEventListener("click", closeDotacioModal);
+
+  // Cerrar el modal si se hace clic fuera
+  const dotacioModal = document.getElementById("dotacio-modal");
+  window.addEventListener("click", (evt) => {
+    if (evt.target === dotacioModal) {
+      closeDotacioModal();
+    }
+  });
+
   displayDotacioOptions();
+
+  // ─────────────────────────────────────────────
+  // AÑADIMOS LISTENERS PARA LIMPIAR .input-error
+  // cuando el usuario empieza a escribir en Vehículo, Conductor y Ayudante
+  // ─────────────────────────────────────────────
+
+  // Vehículo (es directamente un <input>)
+  const vehicleInput = document.getElementById("vehicle-number");
+  vehicleInput?.addEventListener("input", () => {
+    vehicleInput.classList.remove("input-error");
+  });
+
+  // Conductor (la clase .input-error se aplica al DIV .input-with-icon)
+  const conductorInput = document.getElementById("person1");
+  const conductorGroup = conductorInput?.closest(".input-with-icon");
+  conductorInput?.addEventListener("input", () => {
+    conductorGroup?.classList.remove("input-error");
+  });
+
+  // Ayudante (igual que Conductor)
+  const ajudantInput = document.getElementById("person2");
+  const ajudantGroup = ajudantInput?.closest(".input-with-icon");
+  ajudantInput?.addEventListener("input", () => {
+    ajudantGroup?.classList.remove("input-error");
+  });
 }
 
-function closeDotacioModal() {
-  dotacioModal.style.display = "none";
-  document.body.classList.remove("modal-open");
-}
-
-/* ────────────────────────────────────────────
-       Funcions per obrir/tancar modal "add dotació"
-     ────────────────────────────────────────────*/
-function openAddDotacioModal() {
-  // Obrim el modal d’afegir
-  addDotacioModal.style.display = "block";
-  document.body.classList.add("modal-open");
-
-  // (Opcional) Netejar camps i signatures si ho desitges
-  dotacioForm.reset();
-  // Pots també netejar firmes del modal:
-  clearDotacioSignatures();
-}
-
-function closeAddDotacioModal() {
-  addDotacioModal.style.display = "none";
-  document.body.classList.remove("modal-open");
-}
-
-/* ──────────────────────────────────────────
-       Carregar / Desar al localStorage
-     ──────────────────────────────────────────*/
+/**
+ * Carga el array de dotaciones desde el localStorage.
+ */
 function loadDotacionsFromStorage() {
-  const saved = localStorage.getItem("dotacions");
-  dotacions = saved ? JSON.parse(saved) : [];
+  const savedDotacions = localStorage.getItem(DOTACIONS_KEY);
+  dotacions = savedDotacions ? JSON.parse(savedDotacions) : [];
 }
 
+/**
+ * Guarda el array de dotaciones en el localStorage.
+ */
 function saveDotacions() {
-  localStorage.setItem("dotacions", JSON.stringify(dotacions));
+  localStorage.setItem(DOTACIONS_KEY, JSON.stringify(dotacions));
 }
 
-/* ──────────────────────────────────────────
-       Eliminar i "Carregar" dotació
-     ──────────────────────────────────────────*/
-function deleteDotacio(index) {
-  dotacions.splice(index, 1);
+/**
+ * Se llama cuando el usuario hace clic en "Guardar" (#add-dotacio).
+ * - Comprueba si hay Vehículo, Conductor y Ayudante.
+ * - Si la dotación ya existe, la sobrescribe.
+ * - Si no existe, crea una nueva.
+ * - Muestra .input-error en el borde si faltan campos.
+ */
+function addDotacioFromMainForm() {
+  // Inputs básicos
+  const vehicleInput = document.getElementById("vehicle-number");
+
+  // Conductor y Ayudante (inputs + contenedor .input-with-icon)
+  const conductorInput = document.getElementById("person1");
+  const ajudantInput = document.getElementById("person2");
+
+  // Contenedores (para marcar el borde rojo si faltan)
+  const conductorGroup = conductorInput?.closest(".input-with-icon");
+  const ajudantGroup = ajudantInput?.closest(".input-with-icon");
+
+  // Limpiar clases de error previas
+  [vehicleInput, conductorGroup, ajudantGroup].forEach((el) => {
+    el?.classList.remove("input-error");
+  });
+
+  // Valores
+  const vehiculo = (vehicleInput?.value || "").trim();
+  const conductor = (conductorInput?.value || "").trim();
+  const ayudante = (ajudantInput?.value || "").trim();
+
+  // Firmas (opcional)
+  const firmaConductor = getSignatureConductor();
+  const firmaAjudant = getSignatureAjudant();
+
+  let valid = true;
+
+  // ─────────────────────────────────────────────
+  // Validamos campos obligatorios
+  // ─────────────────────────────────────────────
+  if (!vehiculo) {
+    vehicleInput?.classList.add("input-error");
+    valid = false;
+  }
+  if (!conductor) {
+    conductorGroup?.classList.add("input-error");
+    valid = false;
+  }
+  if (!ayudante) {
+    ajudantGroup?.classList.add("input-error");
+    valid = false;
+  }
+
+  if (!valid) {
+    showToast(
+      "Faltan campos obligatorios (Vehículo, Conductor, Ayudante).",
+      "error"
+    );
+    return;
+  }
+
+  // ─────────────────────────────────────────────
+  // Comprobamos si ya existe la misma dotación
+  // (ignorando mayúsculas/minúsculas)
+  // ─────────────────────────────────────────────
+  const vLower = vehiculo.toLowerCase();
+  const cLower = conductor.toLowerCase();
+  const aLower = ayudante.toLowerCase();
+
+  // Buscamos el índice si coincide Vehículo/Conductor/Ayudante
+  const existingIndex = dotacions.findIndex(
+    (d) =>
+      d.numero.toLowerCase() === vLower &&
+      d.conductor.toLowerCase() === cLower &&
+      d.ajudant.toLowerCase() === aLower
+  );
+
+  if (existingIndex !== -1) {
+    // Ya existía, por lo que SOBRESCRIBIMOS la dotación
+    dotacions[existingIndex].numero = vehiculo;
+    dotacions[existingIndex].conductor = conductor;
+    dotacions[existingIndex].ajudant = ayudante;
+    dotacions[existingIndex].firmaConductor = firmaConductor;
+    dotacions[existingIndex].firmaAjudant = firmaAjudant;
+
+    saveDotacions();
+    showToast("¡Dotación sobrescrita correctamente!", "success");
+    displayDotacioOptions();
+    return;
+  }
+
+  // ─────────────────────────────────────────────
+  // Si no existía, creamos una nueva dotación
+  // ─────────────────────────────────────────────
+  const nuevaDotacion = {
+    numero: vehiculo,
+    conductor: conductor,
+    ajudant: ayudante,
+    firmaConductor: firmaConductor,
+    firmaAjudant: firmaAjudant,
+  };
+
+  dotacions.push(nuevaDotacion);
   saveDotacions();
+
+  showToast("¡Nueva dotación guardada correctamente!", "success");
   displayDotacioOptions();
 }
 
-function loadDotacio(index) {
-  const selected = dotacions[index];
-  if (!selected) return;
+/**
+ * Abre el modal "Gestor de dotaciones" y actualiza la lista.
+ */
+function openDotacioModal() {
+  const modal = document.getElementById("dotacio-modal");
+  if (!modal) return;
+  modal.style.display = "block";
+  document.body.classList.add("modal-open");
 
-  // Assignem valors al formulari principal "Datos" (pestanya principal)
-  document.getElementById("vehicle-number").value = selected.numero || "";
-  document.getElementById("person1").value = selected.conductor || "";
-  document.getElementById("person2").value = selected.ayudante || "";
-
-  // 1) Carreguem les firmes guardades en el "selected"
-  //    i les assignem a "signatureConductor" / "signatureAjudant"
-  //    per la pestanya principal:
-  setSignatureConductor(selected.firmaConductor || "");
-  setSignatureAjudant(selected.firmaAyudante || "");
-
-  // 2) Actualitzem la UI dels botons sign-person1 i sign-person2
-  //    a la pestanya principal (icona: signature.svg vs signature_ok.svg)
-  updateSignatureIcons();
-
-  closeDotacioModal(); // Tanca el modal
+  displayDotacioOptions();
 }
 
-/* ──────────────────────────────────────────
-       Mostrar la llista dins #dotacio-options
-     ──────────────────────────────────────────*/
+/**
+ * Cierra el modal "Gestor de dotaciones".
+ */
+function closeDotacioModal() {
+  const modal = document.getElementById("dotacio-modal");
+  if (!modal) return;
+  modal.style.display = "none";
+  document.body.classList.remove("modal-open");
+}
+
+/**
+ * Muestra la lista de dotaciones en el contenedor #dotacio-options
+ * utilizando la plantilla <template id="dotacio-template">
+ */
 function displayDotacioOptions() {
-  dotacioOptionsContainer.innerHTML = "";
+  const container = document.getElementById("dotacio-options");
+  const template = document.getElementById("dotacio-template");
   const noDotacioText = document.getElementById("no-dotacio-text");
+  if (!container || !template) return;
+
+  container.innerHTML = "";
 
   if (dotacions.length === 0) {
     noDotacioText?.classList.remove("hidden");
@@ -106,123 +235,103 @@ function displayDotacioOptions() {
     noDotacioText?.classList.add("hidden");
   }
 
-  // Agafem el template
-  const template = document.getElementById("dotacio-template");
-  if (!template) {
-    console.warn("No s'ha trobat el template #dotacio-template!");
-    return;
-  }
-
   dotacions.forEach((dotacio, index) => {
-    // Clonem el <template>
     const clone = template.content.cloneNode(true);
 
-    // Busquem els elements interns
     const infoSpan = clone.querySelector(".dotacio-info");
     const loadBtn = clone.querySelector(".dotacio-load");
     const deleteBtn = clone.querySelector(".dotacio-delete");
 
-    // Omplim el text
-    infoSpan.textContent = `${dotacio.numero} - ${dotacio.conductor} y ${dotacio.ayudante}`;
+    infoSpan.textContent = formatDotacioListText(dotacio);
 
-    // Assignem index (per identificar la dotació)
     loadBtn.dataset.index = index;
     deleteBtn.dataset.index = index;
 
-    // Lliguem events
     loadBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       loadDotacio(parseInt(loadBtn.dataset.index, 10));
     });
+
     deleteBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       deleteDotacio(parseInt(deleteBtn.dataset.index, 10));
     });
 
-    // Afegim l'item clonat al DOM
-    dotacioOptionsContainer.appendChild(clone);
+    container.appendChild(clone);
   });
 }
 
-/* ──────────────────────────────────────────
-       Formulari "Afegir dotació"
-     ──────────────────────────────────────────*/
-function addDotacioFromForm(e) {
-  e.preventDefault();
+/**
+ * Devuelve la cadena a mostrar en la lista, por ejemplo:
+ * "G887 - Joselin Manhego y Manel Romero"
+ * (solo nombre + primer apellido para conductor y ayudante).
+ */
+function formatDotacioListText(dotacio) {
+  const unidad = dotacio.numero;
+  const cShort = shortNameAndSurname(dotacio.conductor);
+  const aShort = shortNameAndSurname(dotacio.ajudant);
+  return `${unidad} - ${cShort} y ${aShort}`;
+}
 
-  const vehiculo = document.getElementById("dotacio-vehiculo")?.value.trim();
-  const conductor = document.getElementById("dotacio-conductor")?.value.trim();
-  const ayudante = document.getElementById("dotacio-ayudante")?.value.trim();
+/**
+ * Dado un string "Pep Martí Sans", devuelve "Pep Martí"
+ * (nombre + primer apellido).
+ */
+function shortNameAndSurname(full) {
+  if (!full) return "";
+  const parts = full.split(" ").filter(Boolean);
+  if (parts.length <= 1) return parts[0];
+  return `${parts[0]} ${parts[1]}`;
+}
 
-  // Obtenim la signatura en base64 per al conductor i l'ajudant (modal dotacio)
-  const firmaConductor = getSignatureDotacioConductor();
-  const firmaAyudante = getSignatureDotacioAyudante();
+/**
+ * Cuando se hace clic en "Cargar": carga la dotación en el formulario principal
+ * (vehículo, conductor, ayudante y firmas).
+ */
+function loadDotacio(index) {
+  const selected = dotacions[index];
+  if (!selected) return;
 
-  if (!vehiculo || (!conductor && !ayudante)) {
-    alert(
-      "Si us plau, completa el camp de Vehículo i com a mínim un dels camps (Conductor o Ajudant)."
-    );
-    return;
+  // VEHÍCULO
+  const vehicleInput = document.getElementById("vehicle-number");
+  vehicleInput.value = selected.numero || "";
+  // Si Vehículo no está en blanco, quita el error
+  if (vehicleInput.value.trim()) {
+    vehicleInput.classList.remove("input-error");
   }
 
-  const novaDotacio = {
-    numero: vehiculo,
-    conductor: conductor,
-    ayudante: ayudante,
-    firmaConductor, // signatura base64
-    firmaAyudante, // signatura base64
-  };
+  // CONDUCTOR
+  const conductorInput = document.getElementById("person1");
+  const conductorGroup = conductorInput.closest(".input-with-icon");
+  conductorInput.value = selected.conductor || "";
+  // Si Conductor no está en blanco, quita el error del DIV
+  if (conductorInput.value.trim()) {
+    conductorGroup?.classList.remove("input-error");
+  }
 
-  // Afegir a l'array, guardar al localStorage
-  dotacions.push(novaDotacio);
-  saveDotacions();
+  // AYUDANTE
+  const ajudantInput = document.getElementById("person2");
+  const ajudantGroup = ajudantInput.closest(".input-with-icon");
+  ajudantInput.value = selected.ajudant || "";
+  // Si Ayudante no está en blanco, quita el error del DIV
+  if (ajudantInput.value.trim()) {
+    ajudantGroup?.classList.remove("input-error");
+  }
 
-  // Reset del formulari (opcionalment netejar firmes)
-  dotacioForm.reset();
-  clearDotacioSignatures(); // neteja el signatureDotacioConductor i signatureDotacioAyudante
+  // Firmas
+  setSignatureConductor(selected.firmaConductor || "");
+  setSignatureAjudant(selected.firmaAjudant || "");
+  updateSignatureIcons();
 
-  // Tanca modal "afegir" i reobre el modal principal
-  closeAddDotacioModal();
-  openDotacioModal();
+  closeDotacioModal();
 }
 
-/* ──────────────────────────────────────────
-       Inicialització general (initDotacion)
-     ──────────────────────────────────────────*/
-export function initDotacion() {
-  dotacioModal = document.getElementById("dotacio-modal");
-  dotacioOptionsContainer = document.getElementById("dotacio-options");
-  closeDotacioBtn = document.getElementById("close-dotacio-modal");
-  openAddDotacioBtn = document.getElementById("open-add-dotacio-modal");
-  addDotacioModal = document.getElementById("add-dotacio-modal");
-  closeAddDotacioBtn = document.getElementById("close-add-dotacio-modal");
-  dotacioForm = document.getElementById("dotacio-form");
-
-  // Botó principal per obrir modal principal (Gestor de dotacions)
-  const openDotacioBtn = document.getElementById("open-dotacio-modal");
-  openDotacioBtn?.addEventListener("click", openDotacioModal);
-
-  // Tancar modal principal
-  closeDotacioBtn?.addEventListener("click", closeDotacioModal);
-
-  // Obrir modal "Afegir"
-  openAddDotacioBtn?.addEventListener("click", openAddDotacioModal);
-
-  // Tancar modal "Afegir"
-  closeAddDotacioBtn?.addEventListener("click", closeAddDotacioModal);
-
-  // Submit formulari “Afegir Dotació”
-  dotacioForm?.addEventListener("submit", addDotacioFromForm);
-
-  // Tancar si fem clic fora
-  window.addEventListener("click", (evt) => {
-    if (evt.target === dotacioModal) closeDotacioModal();
-    if (evt.target === addDotacioModal) closeAddDotacioModal();
-  });
-
-  // Carreguem dotacions existents
-  loadDotacionsFromStorage();
-
-  // Pintem la llista
+/**
+ * Elimina la dotación del array y vuelve a pintar la lista.
+ */
+function deleteDotacio(index) {
+  dotacions.splice(index, 1);
+  saveDotacions();
+  showToast("¡Dotación eliminada!", "success");
   displayDotacioOptions();
 }

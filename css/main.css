@@ -466,6 +466,11 @@ button .fa {
   background-color: var(--textfield-error-bg) !important;
 }
 
+/* si vols que l'input intern també quedi en vermell clar: */
+.input-with-icon.input-error input {
+  background-color: var(--textfield-error-bg) !important;
+}
+
 .group-header {
   display: flex;
   align-items: center; /* Mantenim la disposició horitzontal actual */
@@ -621,37 +626,31 @@ button .fa {
   padding-top: 10px; /* Separació de la llista scrollable */
 }
 
-/* Evitem que aquest botó comparteixi estils amb modal-button */
-.add-dotacio-button {
-  width: clamp(40px, 5vw, 50px);
-  height: clamp(40px, 5vw, 50px);
-  background-color: var(--primary-color); /* Color destacat */
+/* Botó de tancar centrat al modal */
+.close-dotacio-button {
+  width: 120px;
+  height: 40px;
+  background-color: var(--primary-color);
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 16px;
   font-weight: bold;
-  box-shadow: 0 2px 4px var(--bg-transp-ajustes);
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 20px auto; /* Centrar el botó al modal */
 }
 
-/* Efectes hover */
-.add-dotacio-button:hover {
+/* Efectes hover i clic */
+.close-dotacio-button:hover {
   background-color: #c78e00;
 }
 
-.add-dotacio-button:active {
+.close-dotacio-button:active {
   transform: scale(0.95);
-}
-
-/* Ajust per la icona dins el botó */
-.add-dotacio-button .icon {
-  width: 20px;
-  height: 20px;
 }
 
 /* Animació per al modal (si cal) */
@@ -665,100 +664,6 @@ button .fa {
     transform: scale(1);
   }
 }
-.dotacio-modal-content {
-  /* Formulari */
-  /* Botons de la part inferior */
-  /* Estil dels botons */
-}
-.dotacio-modal-content #dotacio-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  /* Només el primer `.form-group` té un marge superior */
-  /* Grup de formulari */
-  /* Camps de text amb botó de firma a dins */
-}
-.dotacio-modal-content #dotacio-form .form-group:first-child {
-  margin-top: 20px;
-}
-.dotacio-modal-content #dotacio-form .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
-  margin-bottom: 10px;
-  /* Estil pels inputs, TEXt dins el camp*/
-}
-.dotacio-modal-content #dotacio-form .form-group label {
-  font-size: 14px;
-}
-.dotacio-modal-content #dotacio-form .form-group input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-.dotacio-modal-content #dotacio-form .input-with-icon {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-.dotacio-modal-content #dotacio-form .input-with-icon input {
-  flex: 1;
-  padding-right: 40px;
-}
-.dotacio-modal-content #dotacio-form .input-with-icon .signature-btn {
-  position: absolute;
-  right: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-}
-.dotacio-modal-content #dotacio-form .input-with-icon .signature-btn .icon {
-  width: 20px;
-  height: 20px;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
-}
-.dotacio-modal-content #dotacio-form .input-with-icon .signature-btn:hover .icon {
-  opacity: 1;
-}
-.dotacio-modal-content .modal-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  padding-top: 10px;
-  border-top: 1px solid #eee;
-}
-.dotacio-modal-content .modal-button {
-  min-width: 120px;
-  min-height: 44px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-.dotacio-modal-content .modal-button.accept {
-  background-color: var(--btt-confirm);
-  color: var(--txt-btn-confirm);
-}
-.dotacio-modal-content .modal-button.accept:hover {
-  background-color: var(--bg-confirm);
-}
-.dotacio-modal-content .modal-button.cancel {
-  background-color: var(--bg-confirm-no);
-  color: var(--txt-btn-cancel);
-}
-.dotacio-modal-content .modal-button.cancel:hover {
-  background-color: var(--bg-confirm-no-hover);
-}
-
 .service-controls {
   display: flex;
   align-items: center;

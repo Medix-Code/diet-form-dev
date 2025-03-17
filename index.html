@@ -288,7 +288,6 @@
                 class="option-btn camera-btn"
                 id="camera-in-dropdown"
                 aria-label="Escanear datos (OCR)"
-                disabled
               >
                 <img src="assets/icons/camera.svg" alt="Cámara" class="icon" />
               </button>
@@ -718,80 +717,12 @@
           <!-- Aquí es crearà dinàmicament cada ítem -->
         </div>
 
-        <!-- Footer on posem el botó Afegir -->
+        <!-- Footer on posem el botó de Tancar -->
         <div class="modal-footer">
-          <button id="open-add-dotacio-modal" class="add-dotacio-button">
-            <img src="assets/icons/add.svg" alt="Afegir" class="icon" />
-            <span class="btn-text"></span>
+          <button id="close-dotacio-modal" class="close-dotacio-button">
+            Cerrar
           </button>
         </div>
-      </div>
-    </div>
-
-    <!-- MODAL PER AFEGIR UNA NOVA DOTACIÓ -->
-    <div id="add-dotacio-modal" class="modal" role="dialog" aria-modal="true">
-      <div class="modal-content dotacio-modal-content">
-        <h3>Nueva dotación</h3>
-
-        <form id="dotacio-form">
-          <div class="form-group">
-            <label for="dotacio-vehiculo">Vehículo</label>
-            <input type="text" id="dotacio-vehiculo" required />
-          </div>
-
-          <!-- Conductor + firma -->
-          <div class="form-group">
-            <label for="dotacio-conductor">Conductor</label>
-            <div class="input-with-icon">
-              <input type="text" id="dotacio-conductor" required />
-              <button
-                type="button"
-                class="signature-btn"
-                id="sign-dotacio-conductor"
-                aria-label="Firma del conductor"
-              >
-                <img
-                  src="assets/icons/signature.svg"
-                  alt="Firma"
-                  class="icon"
-                />
-              </button>
-            </div>
-          </div>
-
-          <!-- Ayudante + firma -->
-          <div class="form-group">
-            <label for="dotacio-ayudante">Ayudante</label>
-            <div class="input-with-icon">
-              <input
-                type="text"
-                id="dotacio-ayudante"
-                enterkeyhint="done"
-                inputmode="text"
-                autocomplete="off"
-                required
-              />
-              <button
-                type="button"
-                class="signature-btn"
-                id="sign-dotacio-ayudante"
-                aria-label="Firma del ayudante"
-              >
-                <img
-                  src="assets/icons/signature.svg"
-                  alt="Firma"
-                  class="icon"
-                />
-              </button>
-            </div>
-          </div>
-
-          <button type="submit" class="modal-button accept">Añadir</button>
-        </form>
-
-        <button id="close-add-dotacio-modal" class="modal-button cancel">
-          Cancelar
-        </button>
       </div>
     </div>
 
@@ -864,7 +795,7 @@
       accept="image/*"
       capture="environment"
       id="camera-input"
-      style="display: none"
+      style="display: flex"
     />
   </body>
 </html>

@@ -543,6 +543,11 @@ button .fa {
   background-color: var(--textfield-error-bg) !important;
 }
 
+/* si vols que l'input intern també quedi en vermell clar: */
+.input-with-icon.input-error input {
+  background-color: var(--textfield-error-bg) !important;
+}
+
 // ===========================================================================
 // GROUP DATOS + TITLE DATOS
 // ===========================================================================
@@ -710,37 +715,31 @@ button .fa {
   padding-top: 10px; /* Separació de la llista scrollable */
 }
 
-/* Evitem que aquest botó comparteixi estils amb modal-button */
-.add-dotacio-button {
-  width: clamp(40px, 5vw, 50px);
-  height: clamp(40px, 5vw, 50px);
-  background-color: var(--primary-color); /* Color destacat */
+/* Botó de tancar centrat al modal */
+.close-dotacio-button {
+  width: 120px;
+  height: 40px;
+  background-color: var(--primary-color);
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 16px;
   font-weight: bold;
-  box-shadow: 0 2px 4px var(--bg-transp-ajustes);
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 20px auto; /* Centrar el botó al modal */
 }
 
-/* Efectes hover */
-.add-dotacio-button:hover {
+/* Efectes hover i clic */
+.close-dotacio-button:hover {
   background-color: #c78e00;
 }
 
-.add-dotacio-button:active {
+.close-dotacio-button:active {
   transform: scale(0.95);
-}
-
-/* Ajust per la icona dins el botó */
-.add-dotacio-button .icon {
-  width: 20px;
-  height: 20px;
 }
 
 /* Animació per al modal (si cal) */
@@ -752,119 +751,6 @@ button .fa {
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-// ===========================================================================
-// DOTACIÓN - AÑADIR DOTACIÓN
-// ===========================================================================
-.dotacio-modal-content {
-  /* Formulari */
-  #dotacio-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-
-    /* Només el primer `.form-group` té un marge superior */
-    .form-group:first-child {
-      margin-top: 20px; // Ajusta segons necessitis
-    }
-
-    /* Grup de formulari */
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0px;
-
-      margin-bottom: 10px;
-
-      label {
-        font-size: 14px;
-      }
-
-      /* Estil pels inputs, TEXt dins el camp*/
-      input {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-      }
-    }
-
-    /* Camps de text amb botó de firma a dins */
-    .input-with-icon {
-      display: flex;
-      align-items: center;
-      position: relative;
-
-      input {
-        flex: 1;
-        padding-right: 40px; // Deixa espai per al botó dins l’input
-      }
-
-      .signature-btn {
-        position: absolute;
-        right: 5px; // Posiciona el botó dins del camp de text
-        background: none;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-      }
-
-      .signature-btn .icon {
-        width: 20px;
-        height: 20px;
-        opacity: 0.7;
-        transition: opacity 0.3s ease;
-      }
-
-      .signature-btn:hover .icon {
-        opacity: 1;
-      }
-    }
-  }
-
-  /* Botons de la part inferior */
-  .modal-buttons {
-    display: flex;
-    justify-content: space-between; // Posa un a l’esquerra i l’altre a la dreta
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 1px solid #eee; // Separació visual amb el formulari
-  }
-
-  /* Estil dels botons */
-  .modal-button {
-    min-width: 120px;
-    min-height: 44px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-
-    &.accept {
-      background-color: var(--btt-confirm);
-      color: var(--txt-btn-confirm);
-
-      &:hover {
-        background-color: var(--bg-confirm);
-      }
-    }
-
-    &.cancel {
-      background-color: var(--bg-confirm-no);
-      color: var(--txt-btn-cancel);
-
-      &:hover {
-        background-color: var(--bg-confirm-no-hover);
-      }
-    }
   }
 }
 
