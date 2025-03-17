@@ -25,9 +25,9 @@ export function initCameraOcr() {
     cameraGalleryModal.classList.remove("hidden");
   });
 
-  // Tancar en fer clic fora (només si es fa clic a la capa fosca)
+  // Tancar si cliquem fora (capa fosca)
   cameraGalleryModal.addEventListener("click", (event) => {
-    if (event.target === cameraGalleryModal) {
+    if (!modalContent.contains(event.target)) {
       cameraGalleryModal.classList.add("hidden");
     }
   });

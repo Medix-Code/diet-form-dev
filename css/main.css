@@ -918,7 +918,8 @@ button .fa {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* Fons fosc semitransparent */
+  border-radius: 12px 12px 0 0;
+  background-color: #ccc3c3;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -929,7 +930,7 @@ button .fa {
   /* Eliminem ombra o borde gris: */
   box-shadow: none !important;
   border: none !important;
-  background-color: #fff;
+  background-color: #ccc3c3;
   width: 100%;
   border-radius: 12px 12px 0 0;
   padding: 20px;
