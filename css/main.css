@@ -541,6 +541,7 @@ button .fa {
   overflow: hidden; /* Evita scroll global si s’excedeix l’alçada */
   /* Títol */
   /* Quan no hi ha dotacions */
+  /* Estilos generales para el ícono */
   /* Llista de dotacions (fa scroll) */
 }
 .dotacio-modal-content h3 {
@@ -549,7 +550,18 @@ button .fa {
 }
 .dotacio-modal-content #no-dotacio-text {
   margin-top: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center; /* Centra verticalmente ícono y texto */
+  justify-content: center; /* Centra horizontalmente */
+  gap: 8px; /* Espacio entre texto e ícono (ajusta a tu gusto) */
+}
+.dotacio-modal-content .save-icon {
+  width: 20px;
+  height: 20px;
+  /* Elimina margenes innecesarios */
+  margin: 0;
+  /* Asegura que el ícono no se distorsione */
+  vertical-align: middle;
 }
 .dotacio-modal-content .dotacio-list {
   flex: 1; /* Ocupa tot l’espai disponible per fer scroll */
@@ -641,7 +653,7 @@ button .fa {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px auto; /* Centrar el botó al modal */
+  margin: 10px auto; /* Centrar el botó al modal */
 }
 
 /* Efectes hover i clic */
@@ -1298,7 +1310,7 @@ button:disabled {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 #install-prompt {

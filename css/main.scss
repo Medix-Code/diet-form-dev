@@ -635,7 +635,20 @@ button .fa {
   /* Quan no hi ha dotacions */
   #no-dotacio-text {
     margin-top: 20px;
-    text-align: center;
+    display: flex;
+    align-items: center; /* Centra verticalmente ícono y texto */
+    justify-content: center; /* Centra horizontalmente */
+    gap: 8px; /* Espacio entre texto e ícono (ajusta a tu gusto) */
+  }
+
+  /* Estilos generales para el ícono */
+  .save-icon {
+    width: 20px;
+    height: 20px;
+    /* Elimina margenes innecesarios */
+    margin: 0;
+    /* Asegura que el ícono no se distorsione */
+    vertical-align: middle;
   }
 
   /* Llista de dotacions (fa scroll) */
@@ -730,7 +743,7 @@ button .fa {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px auto; /* Centrar el botó al modal */
+  margin: 10px auto; /* Centrar el botó al modal */
 }
 
 /* Efectes hover i clic */
@@ -1460,7 +1473,7 @@ button:disabled {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 // ===========================================================================

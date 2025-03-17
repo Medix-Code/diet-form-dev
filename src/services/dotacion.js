@@ -116,9 +116,29 @@ function addDotacioFromMainForm() {
     valid = false;
   }
 
+  //Declaración de errorFields
+  const errorFields = []; //
+
+  // Validación de campos obligatorios
+  if (!vehiculo) {
+    vehicleInput?.classList.add("input-error");
+    errorFields.push("Vehículo");
+    valid = false;
+  }
+  if (!conductor) {
+    conductorGroup?.classList.add("input-error");
+    errorFields.push("Conductor");
+    valid = false;
+  }
+  if (!ajudant) {
+    ajudantGroup?.classList.add("input-error");
+    errorFields.push("Ayudante");
+    valid = false;
+  }
+
   if (!valid) {
     showToast(
-      "Faltan campos obligatorios (Vehículo, Conductor, Ayudante)",
+      `Faltan campos obligatorios: ${errorFields.join(", ")}.`,
       "error"
     );
     return;
