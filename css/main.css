@@ -910,9 +910,61 @@ button .fa {
   filter: brightness(0.9);
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.modal-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* Pots jugar amb la transició i etc. */
+  background-color: rgba(0, 0, 0, 0.4); /* Fons semi-transparent */
+  display: flex;
+  align-items: flex-end; /* Ens enganxem a baix */
+  justify-content: center;
+  z-index: 9999; /* Sobre tot */
+}
+
+.modal-bottom-content {
+  background-color: #fff;
+  width: 100%;
+  border-radius: 12px 12px 0 0; /* Cantonades arrodonides a dalt */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Botons del modal */
+.modal-bottom-btn {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  background-color: #eee;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.modal-bottom-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.modal-bottom-cancel {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  background-color: #fff;
+  border: none;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Quan volem amagar el modal */
+.hidden {
+  display: none !important;
 }
 
 .signature-group .input-with-icon {

@@ -7,32 +7,57 @@
 import { showToast } from "../ui/toast.js";
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
 
-/** Inicialitza la lògica d'OCR amb un sol botó i input. */
+/** Inicialitza la lògica d'OCR amb un botó i un modal personalitzat. */
 export function initCameraOcr() {
+  // Botó del menú (antigament obria directament la càmera)
   const cameraBtn = document.getElementById("camera-in-dropdown");
+  // Modal personalitzat on tenim 2 botons (Cámara / Galería) + 1 cancel
+  const cameraGalleryModal = document.getElementById("camera-gallery-modal");
+
+  // Botons del modal
+  const optionCameraBtn = document.getElementById("option-camera");
+  const optionGalleryBtn = document.getElementById("option-gallery");
+  const cancelOptionBtn = document.getElementById("option-cancel");
+
+  // Input type="file"
   const cameraInput = document.getElementById("camera-input");
 
-  if (!cameraBtn || !cameraInput) {
-    console.warn("[cameraOcr] Botó o input no trobat.");
+  if (!cameraBtn || !cameraInput || !cameraGalleryModal) {
+    console.warn("[cameraOcr] Botons o modal no trobats.");
     return;
   }
 
-  // Quan es clica el botó de càmera
-  cameraBtn.addEventListener("click", async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-      });
-
-      stream.getTracks().forEach((track) => track.stop());
-      cameraInput.click();
-    } catch (err) {
-      console.error("[cameraOcr] Error en accedir a la càmera:", err);
-      showToast("Error en accedir a la càmera: " + err.message, "error");
-    }
+  // Al clicar el botó principal "camera-in-dropdown"
+  cameraBtn.addEventListener("click", () => {
+    // Obrim el modal personalitzat
+    cameraGalleryModal.classList.remove("hidden");
   });
 
-  // Quan l'usuari selecciona la imatge
+  // Al clicar "Cámara"
+  optionCameraBtn.addEventListener("click", () => {
+    // Forcem la càmera posterior
+    cameraInput.setAttribute("capture", "environment");
+    cameraInput.value = ""; // Neteja l'input per si hi havia alguna selecció prèvia
+    cameraInput.click(); // Obrim el diàleg natiu
+    // Tanquem el modal
+    cameraGalleryModal.classList.add("hidden");
+  });
+
+  // Al clicar "Galería"
+  optionGalleryBtn.addEventListener("click", () => {
+    // Eliminem capture per deixar triar la galeria
+    cameraInput.removeAttribute("capture");
+    cameraInput.value = "";
+    cameraInput.click();
+    cameraGalleryModal.classList.add("hidden");
+  });
+
+  // Al clicar "Cancelar", simplement tanquem el modal
+  cancelOptionBtn.addEventListener("click", () => {
+    cameraGalleryModal.classList.add("hidden");
+  });
+
+  // Quan l'usuari selecciona la imatge (o fa la foto)
   cameraInput.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) {
