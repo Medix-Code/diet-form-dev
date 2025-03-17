@@ -33,6 +33,13 @@ export function initCameraOcr() {
     cameraGalleryModal.classList.remove("hidden");
   });
 
+  // Tancar el modal quan es fa clic fora del contingut
+  cameraGalleryModal.addEventListener("click", (event) => {
+    if (event.target === cameraGalleryModal) {
+      cameraGalleryModal.classList.add("hidden");
+    }
+  });
+
   // Al clicar "Cámara"
   optionCameraBtn.addEventListener("click", () => {
     // Forcem la càmera posterior
