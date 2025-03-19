@@ -61,11 +61,10 @@ export function initCameraOcr() {
     }
 
     try {
-      // 👇 Redimensiona i preprocessa la imatge abans de l'OCR:
       const resizedImageBlob = await resizeImage(file, 1000);
       const preprocessedBlob = await preprocessImage(resizedImageBlob);
 
-      const result = await window.Tesseract.recognize(preprocessedBlob, "spa", {
+      const worker = await Tesseract.createWorker({
         logger: (m) => {
           if (m.status === "recognizing text") {
             const percent = Math.floor(m.progress * 100);
@@ -75,7 +74,14 @@ export function initCameraOcr() {
         },
       });
 
-      const ocrText = result.data.text;
+      await worker.loadLanguage("spa");
+      await worker.initialize("spa");
+
+      const {
+        data: { text: ocrText },
+      } = await worker.recognize(preprocessedBlob);
+      await worker.terminate();
+
       if (!ocrText.trim()) {
         showToast("No s'ha detectat cap text.", "error");
         return;
