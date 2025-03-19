@@ -3,6 +3,8 @@
 import { showToast } from "../ui/toast.js";
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
 
+let cameraStream; // Para detener la cámara después
+
 export function initCameraOcr() {
   const cameraBtn = document.getElementById("camera-in-dropdown");
   const cameraGalleryModal = document.getElementById("camera-gallery-modal");
@@ -12,6 +14,12 @@ export function initCameraOcr() {
   const optionCameraBtn = document.getElementById("option-camera");
   const optionGalleryBtn = document.getElementById("option-gallery");
   const cameraInput = document.getElementById("camera-input");
+  const cameraUI = document.getElementById("camera-ui");
+  const video = document.getElementById("camera-preview");
+  const captureButton = document.getElementById("capture-button");
+
+  // Ocultar UI de la cámara al iniciar
+  cameraUI.style.display = "none";
 
   if (!cameraBtn || !cameraInput || !cameraGalleryModal || !modalContent) {
     console.warn("[cameraOcr] Elements no trobats.");
@@ -116,6 +124,90 @@ export function initCameraOcr() {
   function closeModal() {
     cameraGalleryModal.classList.remove("visible");
     setTimeout(() => cameraGalleryModal.classList.add("hidden"), 300);
+  }
+
+  // Evento para el botón de Cámara
+  optionCameraBtn.addEventListener("click", () => {
+    // Mostrar UI de la cámara y ocultar botones originales
+    cameraUI.style.display = "block";
+    optionCameraBtn.style.display = "none";
+    optionGalleryBtn.style.display = "none";
+
+    // Iniciar la cámara
+    navigator.mediaDevices
+      .getUserMedia({
+        video: { facingMode: "environment" },
+      })
+      .then((stream) => {
+        cameraStream = stream;
+        video.srcObject = stream;
+        video.play();
+      })
+      .catch((error) => console.error("Error de cámara:", error));
+  });
+
+  // Evento para tomar foto
+  captureButton.addEventListener("click", async () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Procesar cada marco
+    const results = await Promise.all([
+      processFrame("frame-service", "service-number"),
+      processFrame("frame-origin", "origin"),
+      processFrame("frame-destination", "destination"),
+    ]);
+
+    // Mostrar resultados en los campos
+    results.forEach((result) => {
+      const fieldId = `field-${result.field}`;
+      document.getElementById(fieldId).value = result.text;
+    });
+
+    // Detener la cámara y cerrar UI
+    cameraStream.getTracks().forEach((track) => track.stop());
+    cameraUI.style.display = "none";
+    optionCameraBtn.style.display = "block";
+    optionGalleryBtn.style.display = "block";
+  });
+
+  // Función para procesar un marco
+  async function processFrame(frameId, fieldType) {
+    const frame = document.getElementById(frameId);
+    const rect = frame.getBoundingClientRect();
+    const cropCanvas = document.createElement("canvas");
+    const cropCtx = cropCanvas.getContext("2d");
+    cropCanvas.width = rect.width;
+    cropCanvas.height = rect.height;
+
+    cropCtx.drawImage(
+      canvas,
+      rect.left,
+      rect.top,
+      rect.width,
+      rect.height,
+      0,
+      0,
+      rect.width,
+      rect.height
+    );
+
+    // Convertir a Blob y procesar con Tesseract
+    return new Promise((resolve) => {
+      cropCanvas.toBlob(async (blob) => {
+        const worker = await Tesseract.createWorker({
+          lang: "spa",
+          logger: (m) => console.log(m),
+        });
+        await worker.load();
+        const { data } = await worker.recognize(blob);
+        await worker.terminate();
+        resolve({ field: fieldType, text: data.text.trim().toUpperCase() });
+      }, "image/png");
+    });
   }
 }
 
