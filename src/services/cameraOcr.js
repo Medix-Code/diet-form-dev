@@ -99,42 +99,6 @@ export function initCameraOcr() {
   });
 }
 
-// Millora imatge
-async function improveImage(file, maxWidth = 1200, maxHeight = 1200) {
-  const img = new Image();
-  img.src = URL.createObjectURL(file);
-  await img.decode();
-
-  let { width, height } = img;
-  const aspectRatio = width / height;
-  if (width > maxWidth || height > maxHeight) {
-    width = aspectRatio > 1 ? maxWidth : maxHeight * aspectRatio;
-    height = aspectRatio > 1 ? maxWidth / aspectRatio : maxHeight;
-  }
-
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0, width, height);
-
-  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const pixels = imgData.data;
-
-  for (let i = 0; i < pixels.length; i += 4) {
-    const grayscale =
-      pixels[i] * 0.299 + pixels[i + 1] * 0.587 + pixels[i + 2] * 0.114;
-    const binary = grayscale > 128 ? 255 : 0;
-    pixels[i] = pixels[i + 1] = pixels[i + 2] = binary;
-  }
-
-  ctx.putImageData(imgData, 0, 0);
-
-  return new Promise((resolve) =>
-    canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.85)
-  );
-}
-
 /**
  * Analiza el texto OCR y rellena:
  *   - Campos de horas (origin-time, destination-time, end-time)
