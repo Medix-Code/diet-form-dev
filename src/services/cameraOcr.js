@@ -49,10 +49,7 @@ export function initCameraOcr() {
   // 1) Obrir modal en fer clic al botó principal
   cameraBtn.addEventListener("click", openModal);
 
-  // 2) Escoltar clics al document per tancar si fem clic fora
-  optionCameraBtn.addEventListener("click", closeModal);
-  optionGalleryBtn.addEventListener("click", closeModal);
-
+  // 2) Escoltar clics fora del modal per tancar-lo
   document.addEventListener("click", (e) => {
     if (
       cameraGalleryModal.classList.contains("visible") &&
