@@ -247,12 +247,12 @@ function fillServiceData(processedText, suffix) {
   const textLower = processedText.toLowerCase();
 
   // Número de servicio
-  const serviceNumberMatch = textLower.match(/afectats.*?(\d{9})/);
+  const serviceNumberMatch = textLower.match(/afectats[\s\S]{0,100}(\d{9})/i);
   const serviceNumber = serviceNumberMatch?.[1] || "000000000";
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
-  // Origen
-  const originMatch = textLower.match(/municipi\s*(?:\r?\n|\s)+([^\r\n]+)/);
+  // Origen (Municipi)
+  const originMatch = textLower.match(/municipi[\s\S]{0,100}([^\d\s\r\n]+)/i);
   if (originMatch?.[1]) {
     const originClean = originMatch[1].trim().toUpperCase();
     document.getElementById(`origin-${suffix}`).value = originClean;
@@ -260,14 +260,12 @@ function fillServiceData(processedText, suffix) {
     console.warn("[OCR] No se encontró origen después de 'Municipi'");
   }
 
-  // Destino
-  const destinationMatch = textLower.match(
-    /hospital\s*desti.*?\s+([^\r\n]+)/ // Simplificado para mayor claridad
-  );
+  // Destino (Hospital)
+  const destinationMatch = textLower.match(/hospital([\w\d\s]+)/i);
   if (destinationMatch?.[1]) {
     const destinationClean = destinationMatch[1].trim().toUpperCase();
     document.getElementById(`destination-${suffix}`).value = destinationClean;
   } else {
-    console.warn("[OCR] No se encontró destino después de 'Hospital Desti'");
+    console.warn("[OCR] No se encontró destino después de 'Hospital'");
   }
 }
