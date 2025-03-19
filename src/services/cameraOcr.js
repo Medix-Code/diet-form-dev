@@ -40,9 +40,9 @@ export function initCameraOcr() {
     }
   });
 
-  [optionCameraBtn, optionGalleryBtn].forEach((btn) =>
-    btn.addEventListener("click", closeModal)
-  );
+  [optionCameraBtn, optionGalleryBtn].forEach((btn) => {
+    btn.addEventListener("click", closeModal);
+  });
 
   optionCameraBtn.addEventListener("click", () => {
     cameraInput.setAttribute("capture", "environment");
@@ -57,7 +57,7 @@ export function initCameraOcr() {
   cameraInput.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) {
-      showToast("No se ha seleccionado ninguna imagen", "error");
+      showToast("No s'ha seleccionat cap imatge.", "error");
       return;
     }
 
@@ -71,37 +71,30 @@ export function initCameraOcr() {
       progressText.textContent = "Escanejant...";
     }
 
-    const optimizedBlob = await improveImage(file);
-
-    const worker = await Tesseract.createWorker({
-      logger: (m) => {
-        if (m.status === "recognizing text") {
-          const percent = Math.floor(m.progress * 100);
-          progressBar.value = percent;
-          progressText.textContent = `Escanejant ${percent}%`;
-        }
-      },
-    });
-
     try {
-      await worker.loadLanguage("spa");
-      await worker.initialize("spa");
-      const result = await worker.recognize(optimizedBlob);
+      const result = await window.Tesseract.recognize(file, "spa", {
+        logger: (m) => {
+          if (m.status === "recognizing text") {
+            const percent = Math.floor(m.progress * 100);
+            progressBar.value = percent;
+            progressText.textContent = `Escanejant ${percent}%`;
+          }
+        },
+      });
 
-      if (result.data.text) {
-        fillFormFieldsFromOcr(result.data.text);
-        showToast("OCR completado con éxito", "success");
-      } else {
-        showToast("No se ha detectado texto en la imagen", "error");
+      const ocrText = result.data.text;
+      if (!ocrText.trim()) {
+        showToast("No s'ha detectat cap text.", "error");
+        return;
       }
+
+      fillFormFieldsFromOcr(ocrText);
+      showToast("OCR completat amb èxit.", "success");
     } catch (error) {
-      showToast("Error al procesar la imagen: " + error.message, "error");
+      showToast(`Error en OCR: ${error.message}`, "error");
     } finally {
-      await worker.terminate();
       cameraInput.value = "";
-      if (progressContainer) {
-        setTimeout(() => progressContainer.classList.add("hidden"), 1000);
-      }
+      setTimeout(() => progressContainer.classList.add("hidden"), 1000);
     }
   });
 }
