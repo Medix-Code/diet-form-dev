@@ -21,61 +21,74 @@ export function initCameraOcr() {
   const optionGalleryBtn = document.getElementById("option-gallery");
   const cameraInput = document.getElementById("camera-input");
 
-  // Verificamos que existan los elementos necesarios
+  // Comprovem que tots els elements existeixin
   if (!cameraBtn || !cameraInput || !cameraGalleryModal || !modalContent) {
-    console.warn("[cameraOcr] Faltan botones o modal.");
+    console.warn("[cameraOcr] Falten elements per inicialitzar.");
     return;
   }
 
-  // Al hacer clic en el botón principal, abrimos el modal
-  cameraBtn.addEventListener("click", (e) => {
+  function openModal() {
+    // 1) Traiem .hidden per mostrar-lo de nou en el flux
     cameraGalleryModal.classList.remove("hidden");
-    cameraGalleryModal.classList.add("visible");
-    e.stopPropagation();
-  });
+    // 2) Forcem reflow i afegim .visible per iniciar la transició
+    requestAnimationFrame(() => {
+      cameraGalleryModal.classList.add("visible");
+    });
+  }
 
-  // Cerrar modal al hacer clic fuera
-  document.addEventListener("click", (event) => {
-    // Si el modal está visible y el clic no está dentro del contenido, cerramos
+  function closeModal() {
+    // 1) Traiem .visible per iniciar la transició de sortida
+    cameraGalleryModal.classList.remove("visible");
+
+    // 2) Esperem uns 300ms (mateix temps que transition: 0.3s) i afegim .hidden
+    setTimeout(() => {
+      cameraGalleryModal.classList.add("hidden");
+    }, 300);
+  }
+
+  // 1) Obrir modal en fer clic al botó principal
+  cameraBtn.addEventListener("click", openModal);
+
+  // 2) Escoltar clics al document per tancar si fem clic fora
+  optionCameraBtn.addEventListener("click", closeModal);
+  optionGalleryBtn.addEventListener("click", closeModal);
+
+  document.addEventListener("click", (e) => {
     if (
       cameraGalleryModal.classList.contains("visible") &&
-      !modalContent.contains(event.target)
+      !modalContent.contains(e.target) &&
+      !cameraBtn.contains(e.target)
     ) {
-      cameraGalleryModal.classList.remove("visible");
-      cameraGalleryModal.classList.add("hidden");
+      closeModal();
     }
   });
 
-  // Al hacer clic en los botones del modal (Cámara o Galería), también cerramos el modal
-  [optionCameraBtn, optionGalleryBtn].forEach((btn) =>
+  // 3) Quan fem clic als botons internes del modal, el tanquem
+  [optionCameraBtn, optionGalleryBtn].forEach((btn) => {
     btn.addEventListener("click", () => {
       cameraGalleryModal.classList.remove("visible");
       cameraGalleryModal.classList.add("hidden");
-    })
-  );
+    });
+  });
 
-  // Al hacer clic en "Cámara"
+  // 4) Lògica de càmera i galeria
   optionCameraBtn.addEventListener("click", () => {
     cameraInput.setAttribute("capture", "environment");
     cameraInput.value = "";
     cameraInput.click();
-    cameraGalleryModal.classList.add("hidden");
   });
 
-  // Al hacer clic en "Galería"
   optionGalleryBtn.addEventListener("click", () => {
     cameraInput.removeAttribute("capture");
     cameraInput.value = "";
     cameraInput.click();
-    cameraGalleryModal.classList.add("hidden");
   });
 
-  // Cuando el usuario selecciona la imagen o toma la foto
+  // 5) Quan l'usuari selecciona/toma la foto => OCR
   cameraInput.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) {
-      console.warn("[cameraOcr] No se ha seleccionado ningún archivo.");
-      showToast("No se ha seleccionado ninguna imagen", "error");
+      console.warn("[cameraOcr] No hi ha fitxer seleccionat.");
       return;
     }
 

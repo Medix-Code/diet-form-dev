@@ -924,28 +924,27 @@ button .fa {
   align-items: flex-end;
   justify-content: center;
   z-index: 9999;
-  transition: opacity 0.3s ease, visibility 0.3s ease; /* Transició suau */
+  opacity: 0;
   transform: translateY(100%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.modal-bottom.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.modal-bottom.hidden {
+  display: none;
 }
 
 .modal-bottom-content {
+  /* Eliminem ombra o borde gris: */
   box-shadow: none !important;
   border: none !important;
-  background-color: #c91f1f;
+  background-color: #ccc3c3;
   width: 100%;
   border-radius: 12px 12px 0 0;
   padding: 20px;
   box-sizing: border-box;
-}
-
-/* Estat visible (obert) del modal */
-.modal-bottom.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal-bottom.visible .modal-bottom-content {
-  transform: translateY(0); /* Mou cap amunt per mostrar-lo */
 }
 
 /* ---------------------------- */
