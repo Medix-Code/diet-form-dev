@@ -1,41 +1,60 @@
 /* cameraOcr.js
-   Exemple amb un sol botó de càmera i un sol input de fitxer.
-   En funció del text OCR, omple:
-     - Camps d'hores (origin-time, destination-time, end-time)
-     - Camps de servei (service-number, origin, destination)
+   Ejemplo con un solo botón de cámara y un solo input de archivo.
+   En función del texto OCR, rellena:
+     - Campos de horas (origin-time, destination-time, end-time)
+     - Campos de servicio (service-number, origin, destination)
 */
+
 import { showToast } from "../ui/toast.js";
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
 
+/**
+ * Inicializa la lógica de OCR con un botón y un modal personalizado.
+ */
 export function initCameraOcr() {
   const cameraBtn = document.getElementById("camera-in-dropdown");
   const cameraGalleryModal = document.getElementById("camera-gallery-modal");
+  const modalContent = cameraGalleryModal.querySelector(
+    ".modal-bottom-content"
+  );
   const optionCameraBtn = document.getElementById("option-camera");
   const optionGalleryBtn = document.getElementById("option-gallery");
   const cameraInput = document.getElementById("camera-input");
 
-  // Si falten elements, sortim
-  if (!cameraBtn || !cameraInput || !cameraGalleryModal) {
-    console.warn("[cameraOcr] Botons o modal no trobats.");
+  // Verificamos que existan los elementos necesarios
+  if (!cameraBtn || !cameraInput || !cameraGalleryModal || !modalContent) {
+    console.warn("[cameraOcr] Faltan botones o modal.");
     return;
   }
 
-  // Quan cliquem el botó principal, obrim el modal
-  cameraBtn.addEventListener("click", () => {
+  // Al hacer clic en el botón principal, abrimos el modal
+  cameraBtn.addEventListener("click", (e) => {
     cameraGalleryModal.classList.remove("hidden");
+    cameraGalleryModal.classList.add("visible");
+    e.stopPropagation();
   });
 
-  // Detectar clics a qualsevol lloc i tancar el modal si el clic NO és dins
+  // Cerrar modal al hacer clic fuera
   document.addEventListener("click", (event) => {
+    // Si el modal está visible y el clic no está dentro del contenido, cerramos
     if (
-      !modalContent.contains(event.target) && // Si el clic no és dins del modal
-      !cameraBtn.contains(event.target) // I tampoc al botó d'obrir-lo
+      cameraGalleryModal.classList.contains("visible") &&
+      !modalContent.contains(event.target)
     ) {
+      cameraGalleryModal.classList.remove("visible");
       cameraGalleryModal.classList.add("hidden");
     }
   });
 
-  // Al clicar "Cámara"
+  // Al hacer clic en los botones del modal (Cámara o Galería), también cerramos el modal
+  [optionCameraBtn, optionGalleryBtn].forEach((btn) =>
+    btn.addEventListener("click", () => {
+      cameraGalleryModal.classList.remove("visible");
+      cameraGalleryModal.classList.add("hidden");
+    })
+  );
+
+  // Al hacer clic en "Cámara"
   optionCameraBtn.addEventListener("click", () => {
     cameraInput.setAttribute("capture", "environment");
     cameraInput.value = "";
@@ -43,7 +62,7 @@ export function initCameraOcr() {
     cameraGalleryModal.classList.add("hidden");
   });
 
-  // Al clicar "Galería"
+  // Al hacer clic en "Galería"
   optionGalleryBtn.addEventListener("click", () => {
     cameraInput.removeAttribute("capture");
     cameraInput.value = "";
@@ -51,32 +70,63 @@ export function initCameraOcr() {
     cameraGalleryModal.classList.add("hidden");
   });
 
-  // Quan seleccionem (o fem la foto)
+  // Cuando el usuario selecciona la imagen o toma la foto
   cameraInput.addEventListener("change", async (event) => {
-    // ... [Resta de codi OCR, igual que abans] ...
+    const file = event.target.files[0];
+    if (!file) {
+      console.warn("[cameraOcr] No se ha seleccionado ningún archivo.");
+      showToast("No se ha seleccionado ninguna imagen", "error");
+      return;
+    }
+
+    // Ejemplo de procesamiento con Tesseract (ajústalo a tus necesidades):
+    try {
+      showToast("Procesando imagen...", "info");
+      console.log("[cameraOcr] Procesando OCR...");
+
+      const result = await window.Tesseract.recognize(file, "spa", {
+        logger: (m) => {
+          if (m.status === "recognizing text") {
+            const progressPercent = Math.floor(m.progress * 100);
+          }
+        },
+      });
+
+      const ocrText = result.data.text;
+      if (!ocrText) {
+        showToast("No se ha detectado texto en la imagen", "error");
+        return;
+      }
+
+      fillFormFieldsFromOcr(ocrText);
+
+      showToast("OCR completado con éxito", "success");
+    } catch (error) {
+      console.error("[cameraOcr] Error en OCR:", error);
+      showToast("Error al procesar la imagen: " + error.message, "error");
+    }
   });
 }
 
 /**
- * Analitza el text OCR i omple:
- *   - Camps d'hores (origin-time, destination-time, end-time)
- *   - Camps de servei (service-number, origin, destination)
+ * Analiza el texto OCR y rellena:
+ *   - Campos de horas (origin-time, destination-time, end-time)
+ *   - Campos de servicio (service-number, origin, destination)
  *
- * Cada foto ha de contenir només un tipus de dades.
+ * Cada foto debe contener solo un tipo de datos.
  */
 function fillFormFieldsFromOcr(ocrText) {
   const textLower = ocrText.toLowerCase();
   const currentServiceIndex = getCurrentServiceIndex();
   const suffix = currentServiceIndex + 1;
 
-  // Comprovem si hi ha dades d'hores
+  // Comprobamos si hay datos de horas
   const hasTimeData =
     /status:\s*mobilitzat/.test(textLower) ||
     /status:\s*arribada\s+hospital/.test(textLower) ||
     /altech\s+v\./.test(textLower);
 
-  // Comprovem si hi ha dades de servei (només si no es detecta informació d'hores)
-  // Ara el número de servei és un bloc de 9-10 dígits, i es busca també "municipi" o "hospital desti"
+  // Comprobamos si hay datos de servicio (solo si no se detectan datos de horas)
   const hasServiceData =
     !hasTimeData &&
     (/\b\d{9,10}\b/.test(textLower) ||
@@ -85,22 +135,23 @@ function fillFormFieldsFromOcr(ocrText) {
 
   if (hasTimeData) {
     fillTimes(textLower, suffix);
-    showToast("Dades d'hores omplertes!", "success");
+    showToast("¡Datos de horas completados!", "success");
   } else if (hasServiceData) {
     fillServiceData(textLower, suffix);
-    showToast("Dades de servei omplertes!", "success");
+    showToast("¡Datos de servicio completados!", "success");
   } else {
-    showToast("No s'ha detectat informació per omplir.", "error");
+    showToast("No se ha detectado información para completar.", "error");
   }
 }
 
-/* -----------------------------------------
-   Funció per omplir camps d'Hores
------------------------------------------ */
+/**
+ * Rellena los campos de horas:
+ *   - origin-time, destination-time, end-time
+ */
 function fillTimes(processedText, suffix) {
   const normalizeTime = (timeStr) => timeStr.replace(/-/g, ":");
 
-  // 1) Hora d'origen: utilitzem "status: mobilitzat"
+  // 1) Hora de origen: usamos "status: mobilitzat"
   const mobilitzatMatch = processedText.match(
     /s?t?a?t?u?s?:?\s*mobil\w*\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
@@ -110,7 +161,7 @@ function fillTimes(processedText, suffix) {
     );
   }
 
-  // 2) Hora de destinació: "status: arribada hospital"
+  // 2) Hora de destino: "status: arribada hospital"
   const arribadaMatch = processedText.match(
     /s?t?a?t?u?s?:?\s*a?r?r?i?b?a?d?a?\s+h?o?s?p?i?t?a?l?\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
   );
@@ -135,7 +186,7 @@ function fillTimes(processedText, suffix) {
       endMatch[1]
     );
   } else {
-    // Fallback: si no es troba l'hora final, usem l'hora actual
+    // Si no se encuentra la hora final, usamos la hora actual
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
@@ -143,31 +194,29 @@ function fillTimes(processedText, suffix) {
   }
 }
 
-/* -----------------------------------------
-   Funció per omplir camps de Servei (Nº, Origen, Destinació)
------------------------------------------ */
+/**
+ * Rellena los campos de servicio (Nº, Origen, Destino)
+ */
 function fillServiceData(processedText, suffix) {
-  // 1) Número de servei sota "Afectats"
+  // 1) Nº de servicio bajo "Afectats"
   const serviceNumberMatch = processedText.match(
     /afectats\s*(?:\r?\n)+\s*(\d{9})/i
   );
   const serviceNumber = serviceNumberMatch?.[1] || "000000000";
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
-  // 2) Origen: Captura TOT el text entre "Municipi" i "SubMunicipi 2"
-
+  // 2) Origen: Capturamos todo el texto tras "Municipi"
   const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
   if (originMatch?.[1]) {
-    // Substituïm salts de línia per espais, si vols que quedi més net
     const originClean = originMatch[1].replace(/\r?\n+/g, " ").trim();
     document.getElementById(`origin-${suffix}`).value = originClean;
   } else {
     console.warn(
-      `[OCR] No s'ha trobat l'origen entre "Municipi" i "SubMunicipi 2"`
+      `[OCR] No se ha encontrado el origen entre "Municipi" y "SubMunicipi 2"`
     );
   }
 
-  // 3) Destinació sota "Hospital Desti"
+  // 3) Destino bajo "Hospital Desti"
   const destinationMatch = processedText.match(
     /hospital\s*desti\s*(?:\r?\n)+\s*(.*)/i
   );
@@ -175,6 +224,6 @@ function fillServiceData(processedText, suffix) {
     document.getElementById(`destination-${suffix}`).value =
       destinationMatch[1].trim();
   } else {
-    console.warn(`[OCR] No s'ha trobat la destinació`);
+    console.warn(`[OCR] No se ha encontrado el destino`);
   }
 }
