@@ -64,7 +64,7 @@ export function initCameraOcr() {
       const resizedImageBlob = await resizeImage(file, 1000);
       const preprocessedBlob = await preprocessImage(resizedImageBlob);
 
-      const worker = await Tesseract.createWorker({
+      const worker = Tesseract.createWorker({
         logger: (m) => {
           if (m.status === "recognizing text") {
             const percent = Math.floor(m.progress * 100);
