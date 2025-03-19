@@ -64,19 +64,22 @@ export function initCameraOcr() {
       const resizedImageBlob = await resizeImage(file, 1000);
       const preprocessedBlob = await preprocessImage(resizedImageBlob);
 
-      const worker = Tesseract.createWorker({
-        logger: (m) => {
-          if (m.status === "recognizing text") {
-            const percent = Math.floor(m.progress * 100);
-            progressBar.value = percent;
-            progressText.textContent = `Escanejant ${percent}%`;
-          }
-        },
+      // Crear el worker con el idioma "spa" (español) como ARRAY
+      const worker = await Tesseract.createWorker({
+        lang: ["spa"], // ✅ CORREGIDO: Array con el idioma
+        langPath:
+          "https://cdn.jsdelivr.net/npm/tesseract.js@6.0.0/eng.traineddata.min.js", // Ruta predeterminada (solo para eng)
       });
 
-      await worker.loadLanguage("spa");
-      await worker.initialize("spa");
+      // Configurar el progreso
+      worker.setProgressBar((progress) => {
+        const percent = Math.floor(progress * 100);
+        console.log(`OCR Progress: ${percent}%`);
+        if (progressBar) progressBar.value = percent;
+        if (progressText) progressText.textContent = `Escanejant ${percent}%`;
+      });
 
+      // Reconocer texto
       const {
         data: { text: ocrText },
       } = await worker.recognize(preprocessedBlob);
@@ -93,7 +96,7 @@ export function initCameraOcr() {
       showToast(`Error en OCR: ${error.message}`, "error");
     } finally {
       cameraInput.value = "";
-      setTimeout(() => progressContainer.classList.add("hidden"), 1000);
+      setTimeout(() => progressContainer?.classList.add("hidden"), 1000);
     }
   });
 
