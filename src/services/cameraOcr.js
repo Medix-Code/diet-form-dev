@@ -237,30 +237,39 @@ function fillTimes(processedText, suffix) {
  * Rellena los campos de servicio (Nº, Origen, Destino)
  */
 function fillServiceData(processedText, suffix) {
-  // 1) Nº de servicio bajo "Afectats" (9 dígitos exactos)
-  const serviceNumberMatch = processedText.match(/afectats.*?(\d{9})/i);
+  // Normalitzem el text (tots minúscules)
+  const textLower = processedText.toLowerCase();
+
+  // 1) Nº de servei sota "Afectats" (exactament 9 dígits)
+  const serviceNumberMatch = textLower.match(/afectats.*?(\d{9})(?!\d)/);
   const serviceNumber = serviceNumberMatch?.[1] || "000000000";
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
-  // 2) Origen: Capturamos únicamente el texto debajo de "Municipi" (sin incluir submunicipi)
-  const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*([^\n]+)/i);
+  // 2) Origen: agafem només la línia següent a "Municipi"
+  const originMatch = textLower.match(/municipi\s*(?:\r?\n)+\s*([^\r\n]+)/);
   if (originMatch?.[1]) {
-    const originClean = originMatch[1].trim();
+    const originClean = originMatch[1]
+      .replace(/[^a-zà-ú\s]/gi, "") // Neteja possibles caràcters incorrectes
+      .trim()
+      .toUpperCase();
     document.getElementById(`origin-${suffix}`).value = originClean;
   } else {
-    console.warn(`[OCR] No se ha encontrado el origen después de "Municipi"`);
+    console.warn(`[OCR] No s'ha trobat l'origen després de "Municipi"`);
   }
 
-  // 3) Destino bajo "Hospital Desti" (arriba a la derecha)
-  const destinationMatch = processedText.match(
-    /hospital dest[ií]\s*(?:\r?\n)?\s*([^\n]+)/i
+  // 3) Destinació sota "Hospital Desti" (evitem agafar números)
+  const destinationMatch = textLower.match(
+    /hospital\s*dest[ií]\s*(?:\r?\n)?\s*([^\r\n\d]+[a-zà-ú])/i
   );
   if (destinationMatch?.[1]) {
-    document.getElementById(`destination-${suffix}`).value =
-      destinationMatch[1].trim();
+    const destinationClean = destinationMatch[1]
+      .replace(/[^a-zà-ú\s]/gi, "") // Elimina caràcters indesitjats
+      .trim()
+      .toUpperCase();
+    document.getElementById(`destination-${suffix}`).value = destinationClean;
   } else {
     console.warn(
-      `[OCR] No se ha encontrado el destino después de "Hospital Desti"`
+      `[OCR] No s'ha trobat la destinació després de "Hospital Desti"`
     );
   }
 }
