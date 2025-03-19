@@ -89,10 +89,21 @@ export function initCameraOcr() {
     const file = event.target.files[0];
     if (!file) {
       console.warn("[cameraOcr] No hi ha fitxer seleccionat.");
+      showToast("No se ha seleccionado ninguna imagen", "error");
       return;
     }
 
-    // Ejemplo de procesamiento con Tesseract (ajústalo a tus necesidades):
+    // Elements per a la barra de progrés
+    const progressContainer = document.getElementById("ocr-progress-container");
+    const progressBar = document.getElementById("ocr-progress");
+    const progressText = document.getElementById("ocr-progress-text");
+
+    if (progressContainer && progressBar && progressText) {
+      progressContainer.classList.remove("hidden");
+      progressBar.value = 0;
+      progressText.textContent = "Escanejant...";
+    }
+
     try {
       showToast("Procesando imagen...", "info");
       console.log("[cameraOcr] Procesando OCR...");
@@ -101,6 +112,9 @@ export function initCameraOcr() {
         logger: (m) => {
           if (m.status === "recognizing text") {
             const progressPercent = Math.floor(m.progress * 100);
+            if (progressBar) progressBar.value = progressPercent;
+            if (progressText)
+              progressText.textContent = `Escanejant ${progressPercent}%`;
           }
         },
       });
@@ -112,11 +126,18 @@ export function initCameraOcr() {
       }
 
       fillFormFieldsFromOcr(ocrText);
-
       showToast("OCR completado con éxito", "success");
     } catch (error) {
       console.error("[cameraOcr] Error en OCR:", error);
       showToast("Error al procesar la imagen: " + error.message, "error");
+    } finally {
+      cameraInput.value = "";
+      if (progressContainer && progressBar) {
+        progressBar.value = 100;
+        setTimeout(() => {
+          progressContainer.classList.add("hidden");
+        }, 1000);
+      }
     }
   });
 }
