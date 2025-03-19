@@ -111,6 +111,7 @@ export function initCameraOcr() {
 async function resizeImage(file, maxDimension = 1000) {
   return new Promise((resolve) => {
     const img = new Image();
+    const url = URL.createObjectURL(file);
     img.onload = () => {
       let { width, height } = img;
 
@@ -128,16 +129,23 @@ async function resizeImage(file, maxDimension = 1000) {
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, width, height);
 
-      canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.9);
+      canvas.toBlob(
+        (blob) => {
+          URL.revokeObjectURL(url);
+          resolve(blob);
+        },
+        "image/jpeg",
+        0.9
+      );
     };
-    img.src = URL.createObjectURL(file);
+    img.src = url;
   });
 }
 
-// Millora contrast i escala de grisos
-function preprocessImage(blob) {
+async function preprocessImage(blob) {
   return new Promise((resolve) => {
     const img = new Image();
+    const url = URL.createObjectURL(blob);
     img.onload = () => {
       const canvas = document.createElement("canvas");
       canvas.width = img.width;
@@ -145,9 +153,16 @@ function preprocessImage(blob) {
       const ctx = canvas.getContext("2d");
       ctx.filter = "brightness(120%) contrast(130%) grayscale(100%)";
       ctx.drawImage(img, 0, 0);
-      canvas.toBlob(resolve, "image/jpeg", 0.9);
+      canvas.toBlob(
+        (resultBlob) => {
+          URL.revokeObjectURL(url);
+          resolve(resultBlob);
+        },
+        "image/jpeg",
+        0.9
+      );
     };
-    img.src = URL.createObjectURL(blob);
+    img.src = url;
   });
 }
 
