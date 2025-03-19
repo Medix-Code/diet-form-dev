@@ -1,16 +1,8 @@
-/* cameraOcr.js
-   Ejemplo con un solo botón de cámara y un solo input de archivo.
-   En función del texto OCR, rellena:
-     - Campos de horas (origin-time, destination-time, end-time)
-     - Campos de servicio (service-number, origin, destination)
-*/
+/* cameraOcr.js - Codi complet amb optimitzacions per millorar OCR */
 
 import { showToast } from "../ui/toast.js";
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
 
-/**
- * Inicializa la lógica de OCR con un botón y un modal personalizado.
- */
 export function initCameraOcr() {
   const cameraBtn = document.getElementById("camera-in-dropdown");
   const cameraGalleryModal = document.getElementById("camera-gallery-modal");
@@ -21,35 +13,23 @@ export function initCameraOcr() {
   const optionGalleryBtn = document.getElementById("option-gallery");
   const cameraInput = document.getElementById("camera-input");
 
-  // Comprovem que tots els elements existeixin
   if (!cameraBtn || !cameraInput || !cameraGalleryModal || !modalContent) {
     console.warn("[cameraOcr] Falten elements per inicialitzar.");
     return;
   }
 
   function openModal() {
-    // 1) Traiem .hidden per mostrar-lo de nou en el flux
     cameraGalleryModal.classList.remove("hidden");
-    // 2) Forcem reflow i afegim .visible per iniciar la transició
-    requestAnimationFrame(() => {
-      cameraGalleryModal.classList.add("visible");
-    });
+    requestAnimationFrame(() => cameraGalleryModal.classList.add("visible"));
   }
 
   function closeModal() {
-    // 1) Traiem .visible per iniciar la transició de sortida
     cameraGalleryModal.classList.remove("visible");
-
-    // 2) Esperem uns 300ms (mateix temps que transition: 0.3s) i afegim .hidden
-    setTimeout(() => {
-      cameraGalleryModal.classList.add("hidden");
-    }, 300);
+    setTimeout(() => cameraGalleryModal.classList.add("hidden"), 300);
   }
 
-  // 1) Obrir modal en fer clic al botó principal
   cameraBtn.addEventListener("click", openModal);
 
-  // 2) Escoltar clics fora del modal per tancar-lo
   document.addEventListener("click", (e) => {
     if (
       cameraGalleryModal.classList.contains("visible") &&
@@ -60,37 +40,27 @@ export function initCameraOcr() {
     }
   });
 
-  // 3) Quan fem clic als botons internes del modal, el tanquem
-  [optionCameraBtn, optionGalleryBtn].forEach((btn) => {
-    btn.addEventListener("click", () => {
-      cameraGalleryModal.classList.remove("visible");
-      cameraGalleryModal.classList.add("hidden");
-    });
-  });
+  [optionCameraBtn, optionGalleryBtn].forEach((btn) =>
+    btn.addEventListener("click", closeModal)
+  );
 
-  // 4) Lògica de càmera i galeria
   optionCameraBtn.addEventListener("click", () => {
     cameraInput.setAttribute("capture", "environment");
-    cameraInput.value = "";
     cameraInput.click();
   });
 
   optionGalleryBtn.addEventListener("click", () => {
     cameraInput.removeAttribute("capture");
-    cameraInput.value = "";
     cameraInput.click();
   });
 
-  // 5) Quan l'usuari selecciona/toma la foto => OCR
   cameraInput.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) {
-      console.warn("[cameraOcr] No hi ha fitxer seleccionat.");
       showToast("No se ha seleccionado ninguna imagen", "error");
       return;
     }
 
-    // Elements per a la barra de progrés
     const progressContainer = document.getElementById("ocr-progress-container");
     const progressBar = document.getElementById("ocr-progress");
     const progressText = document.getElementById("ocr-progress-text");
@@ -101,42 +71,75 @@ export function initCameraOcr() {
       progressText.textContent = "Escanejant...";
     }
 
+    const optimizedBlob = await improveImage(file);
+
+    const worker = await Tesseract.createWorker({
+      logger: (m) => {
+        if (m.status === "recognizing text") {
+          const percent = Math.floor(m.progress * 100);
+          progressBar.value = percent;
+          progressText.textContent = `Escanejant ${percent}%`;
+        }
+      },
+    });
+
     try {
-      showToast("Procesando imagen...", "info");
-      console.log("[cameraOcr] Procesando OCR...");
+      await worker.loadLanguage("spa");
+      await worker.initialize("spa");
+      const result = await worker.recognize(optimizedBlob);
 
-      const result = await window.Tesseract.recognize(file, "spa", {
-        logger: (m) => {
-          if (m.status === "recognizing text") {
-            const progressPercent = Math.floor(m.progress * 100);
-            if (progressBar) progressBar.value = progressPercent;
-            if (progressText)
-              progressText.textContent = `Escanejant ${progressPercent}%`;
-          }
-        },
-      });
-
-      const ocrText = result.data.text;
-      if (!ocrText) {
+      if (result.data.text) {
+        fillFormFieldsFromOcr(result.data.text);
+        showToast("OCR completado con éxito", "success");
+      } else {
         showToast("No se ha detectado texto en la imagen", "error");
-        return;
       }
-
-      fillFormFieldsFromOcr(ocrText);
-      showToast("OCR completado con éxito", "success");
     } catch (error) {
-      console.error("[cameraOcr] Error en OCR:", error);
       showToast("Error al procesar la imagen: " + error.message, "error");
     } finally {
+      await worker.terminate();
       cameraInput.value = "";
-      if (progressContainer && progressBar) {
-        progressBar.value = 100;
-        setTimeout(() => {
-          progressContainer.classList.add("hidden");
-        }, 1000);
+      if (progressContainer) {
+        setTimeout(() => progressContainer.classList.add("hidden"), 1000);
       }
     }
   });
+}
+
+// Millora imatge
+async function improveImage(file, maxWidth = 1200, maxHeight = 1200) {
+  const img = new Image();
+  img.src = URL.createObjectURL(file);
+  await img.decode();
+
+  let { width, height } = img;
+  const aspectRatio = width / height;
+  if (width > maxWidth || height > maxHeight) {
+    width = aspectRatio > 1 ? maxWidth : maxHeight * aspectRatio;
+    height = aspectRatio > 1 ? maxWidth / aspectRatio : maxHeight;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, width, height);
+
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const pixels = imgData.data;
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    const grayscale =
+      pixels[i] * 0.299 + pixels[i + 1] * 0.587 + pixels[i + 2] * 0.114;
+    const binary = grayscale > 128 ? 255 : 0;
+    pixels[i] = pixels[i + 1] = pixels[i + 2] = binary;
+  }
+
+  ctx.putImageData(imgData, 0, 0);
+
+  return new Promise((resolve) =>
+    canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.85)
+  );
 }
 
 /**
