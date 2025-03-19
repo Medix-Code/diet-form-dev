@@ -1,8 +1,7 @@
-/* cameraOcr.js - Versión completa */
+/* cameraOcr.js - Correctament adaptat a Tesseract CDN (sense DataCloneError) */
+
 import { showToast } from "../ui/toast.js";
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
-
-let cameraStream; // Para detener la cámara después
 
 export function initCameraOcr() {
   const cameraBtn = document.getElementById("camera-in-dropdown");
@@ -13,23 +12,14 @@ export function initCameraOcr() {
   const optionCameraBtn = document.getElementById("option-camera");
   const optionGalleryBtn = document.getElementById("option-gallery");
   const cameraInput = document.getElementById("camera-input");
-  const cameraUI = document.getElementById("camera-ui");
-  const video = document.getElementById("camera-preview");
-  const captureButton = document.getElementById("capture-button");
 
-  // Ocultar UI de la cámara al iniciar
-  cameraUI.style.display = "none";
-
-  // Validación de elementos
   if (!cameraBtn || !cameraInput || !cameraGalleryModal || !modalContent) {
     console.warn("[cameraOcr] Elements no trobats.");
     return;
   }
 
-  // Evento para abrir el modal
   cameraBtn.addEventListener("click", openModal);
 
-  // Cerrar modal al hacer clic fuera
   document.addEventListener("click", (e) => {
     if (
       cameraGalleryModal.classList.contains("visible") &&
@@ -40,24 +30,20 @@ export function initCameraOcr() {
     }
   });
 
-  // Cerrar modal al hacer clic en los botones
   [optionCameraBtn, optionGalleryBtn].forEach((btn) =>
     btn.addEventListener("click", closeModal)
   );
 
-  // Botón de Cámara
   optionCameraBtn.addEventListener("click", () => {
     cameraInput.setAttribute("capture", "environment");
     cameraInput.click();
   });
 
-  // Botón de Galería
   optionGalleryBtn.addEventListener("click", () => {
     cameraInput.removeAttribute("capture");
     cameraInput.click();
   });
 
-  // Evento para seleccionar imagen desde galería
   cameraInput.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -65,7 +51,6 @@ export function initCameraOcr() {
       return;
     }
 
-    // Progreso del OCR
     const progressContainer = document.getElementById("ocr-progress-container");
     const progressBar = document.getElementById("ocr-progress");
     const progressText = document.getElementById("ocr-progress-text");
@@ -76,13 +61,12 @@ export function initCameraOcr() {
       progressText.textContent = "Escanejant...";
     }
 
-    // Configuración de Tesseract
     const worker = await Tesseract.createWorker("spa", 1, {
       logger: (e) => {
         if (e.status === "recognizing text") {
           const percent = Math.floor(e.progress * 100);
-          progressBar.value = percent;
-          progressText.textContent = `Escanejant ${percent}%`;
+          if (progressBar) progressBar.value = percent;
+          if (progressText) progressText.textContent = `Escanejant ${percent}%`;
         }
       },
     });
@@ -91,15 +75,18 @@ export function initCameraOcr() {
       tessedit_pageseg_mode: 3,
       tessedit_char_whitelist:
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:-",
-      tessedit_oem: 1,
-      tessedit_psm: 3,
-      load_system_dawg: false,
+      // Afegeix això:
+      tessedit_oem: 1, // Engine mode: LSTM
+      tessedit_psm: 3, // Auto-page segmentation
+      load_system_dawg: false, // Millora la velocitat
       load_freq_dawg: false,
     });
 
     try {
-      // Procesar imagen
+      //const resizedImageBlob = await resizeImage(file, 1000);
+      //const preprocessedBlob = await preprocessImage(resizedImageBlob);
       const preprocessedBlob = file;
+
       const {
         data: { text: ocrText },
       } = await worker.recognize(preprocessedBlob);
@@ -116,11 +103,11 @@ export function initCameraOcr() {
     } finally {
       await worker.terminate();
       cameraInput.value = "";
-      setTimeout(() => progressContainer?.classList.add("hidden"), 1000);
+      if (progressContainer)
+        setTimeout(() => progressContainer.classList.add("hidden"), 1000);
     }
   });
 
-  // Funciones del modal
   function openModal() {
     cameraGalleryModal.classList.remove("hidden");
     requestAnimationFrame(() => cameraGalleryModal.classList.add("visible"));
@@ -130,93 +117,8 @@ export function initCameraOcr() {
     cameraGalleryModal.classList.remove("visible");
     setTimeout(() => cameraGalleryModal.classList.add("hidden"), 300);
   }
-
-  // Evento para iniciar la cámara
-  optionCameraBtn.addEventListener("click", () => {
-    // Mostrar UI de la cámara y ocultar botones
-    cameraUI.style.display = "block";
-    optionCameraBtn.style.display = "none";
-    optionGalleryBtn.style.display = "none";
-
-    // Acceder a la cámara
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" } })
-      .then((stream) => {
-        cameraStream = stream;
-        video.srcObject = stream;
-        video.play();
-      })
-      .catch((error) => console.error("Error de cámara:", error));
-  });
-
-  // Tomar foto y procesar
-  captureButton.addEventListener("click", async () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    // Procesar cada marco
-    const results = await Promise.all([
-      processFrame("frame-service", "service-number"),
-      processFrame("frame-origin", "origin"),
-      processFrame("frame-destination", "destination"),
-    ]);
-
-    // Asignar resultados a campos
-    results.forEach((result) => {
-      const fieldId = `field-${result.field}`;
-      document.getElementById(fieldId).value = result.text;
-    });
-
-    // Detener cámara y cerrar UI
-    cameraStream.getTracks().forEach((track) => track.stop());
-    cameraUI.style.display = "none";
-    optionCameraBtn.style.display = "block";
-    optionGalleryBtn.style.display = "block";
-  });
-
-  // Procesar un marco con OCR
-  async function processFrame(frameId, fieldType) {
-    const frame = document.getElementById(frameId);
-    const rect = frame.getBoundingClientRect();
-    const cropCanvas = document.createElement("canvas");
-    const cropCtx = cropCanvas.getContext("2d");
-    cropCanvas.width = rect.width;
-    cropCanvas.height = rect.height;
-
-    cropCtx.drawImage(
-      canvas,
-      rect.left,
-      rect.top,
-      rect.width,
-      rect.height,
-      0,
-      0,
-      rect.width,
-      rect.height
-    );
-
-    return new Promise((resolve) => {
-      cropCanvas.toBlob(async (blob) => {
-        const worker = await Tesseract.createWorker({
-          lang: "spa",
-          logger: (m) => console.log(m),
-        });
-        await worker.load();
-        const { data } = await worker.recognize(blob);
-        await worker.terminate();
-        resolve({
-          field: fieldType,
-          text: data.text.trim().toUpperCase(),
-        });
-      }, "image/png");
-    });
-  }
 }
 
-// Funciones de preprocesamiento (opcional)
 async function resizeImage(file, maxDimension = 1000) {
   const img = await createImageBitmap(file);
   let { width, height } = img;
@@ -228,7 +130,8 @@ async function resizeImage(file, maxDimension = 1000) {
   canvas.width = width;
   canvas.height = height;
   canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-  return new Promise((resolve) => canvas.toBlob(resolve, "image/png", 1.0));
+
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/png", 1.0)); // 1.0 = qualitat màxima sense compressió
 }
 
 async function preprocessImage(blob) {
@@ -239,21 +142,29 @@ async function preprocessImage(blob) {
   const ctx = canvas.getContext("2d");
   ctx.filter = "brightness(110%) contrast(115%) grayscale(100%)";
   ctx.drawImage(img, 0, 0);
-  return new Promise((resolve) => canvas.toBlob(resolve, "image/png", 1.0));
+
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/png", 1.0)); // 1.0 = qualitat màxima sense compressió
 }
 
-// Lógica para llenar campos
+/**
+ * Analiza el texto OCR y rellena:
+ *   - Campos de horas (origin-time, destination-time, end-time)
+ *   - Campos de servicio (service-number, origin, destination)
+ *
+ * Cada foto debe contener solo un tipo de datos.
+ */
 function fillFormFieldsFromOcr(ocrText) {
   const textLower = ocrText.toLowerCase();
   const currentServiceIndex = getCurrentServiceIndex();
   const suffix = currentServiceIndex + 1;
 
-  // Detectar tipo de datos
+  // Comprobamos si hay datos de horas
   const hasTimeData =
     /status:\s*mobilitzat/.test(textLower) ||
     /status:\s*arribada\s+hospital/.test(textLower) ||
     /altech\s+v\./.test(textLower);
 
+  // Comprobamos si hay datos de servicio (solo si no se detectan datos de horas)
   const hasServiceData =
     !hasTimeData &&
     (/\b\d{9,10}\b/.test(textLower) ||
@@ -271,48 +182,67 @@ function fillFormFieldsFromOcr(ocrText) {
   }
 }
 
-// Llenado de campos de horas
+/**
+ * Rellena los campos de horas:
+ *   - origin-time, destination-time, end-time
+ */
 function fillTimes(processedText, suffix) {
   const normalizeTime = (timeStr) => {
+    // Normaliza formatos como "25-24" a "22:25" (ejemplo hipotético)
+    // Si el tiempo tiene más de 5 caracteres (ej: "23:25:08"), toma los primeros 5
     const clean = timeStr.replace(/-/g, ":").replace(/[^0-9:]/g, "");
     return clean.length > 5 ? clean.slice(0, 5) : clean;
   };
 
-  // Hora de origen
+  console.log("Texto procesado:", processedText); // Log para depuración
+
+  // 1) Hora de origen: "status:mobilitzat"
   const mobilitzatMatch = processedText.match(
     /status:\s*mobilitzat.*?(\d{1,2}[:\-]\d{2}(?:[:\-]\d{2})?)/i
   );
   if (mobilitzatMatch?.[1]) {
     const time = normalizeTime(mobilitzatMatch[1]);
     document.getElementById(`origin-time-${suffix}`).value = time;
+    console.log("Origem encontrado:", time);
+  } else {
+    console.warn("No se encontró hora de origen");
   }
 
-  // Hora de destino
+  // 2) Hora de destino: "status:arribada hospital"
   const arribadaMatch = processedText.match(
     /status:\s*arribada\s*hospital.*?(\d{1,2}[:\-]\d{2}(?:[:\-]\d{2})?)/i
   );
   if (arribadaMatch?.[1]) {
     const time = normalizeTime(arribadaMatch[1]);
     document.getElementById(`destination-time-${suffix}`).value = time;
+    console.log("Destino encontrado:", time);
+  } else {
+    console.warn("No se encontró hora de destino");
   }
 
-  // Hora final
+  // 3) Hora final: "altech" seguido de fecha y hora
   const endMatch = processedText.match(
     /altech[\s\S]*?\d{2}[-/]\d{2}[-/]\d{2}\s+(\d{1,2}[:\-]\d{2}).*?/i
   );
   if (endMatch?.[1]) {
     const time = normalizeTime(endMatch[1]);
     document.getElementById(`end-time-${suffix}`).value = time;
+    console.log("Hora final encontrada:", time);
   } else {
+    console.warn("No se encontró hora final. Usando hora actual");
     const now = new Date();
-    const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(
-      now.getMinutes()
-    ).padStart(2, "0")}`;
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const currentTime = `${hh}:${mm}`;
     document.getElementById(`end-time-${suffix}`).value = currentTime;
+    console.log("Hora final asignada automáticamente:", currentTime);
   }
 }
 
-// Llenado de campos de servicio
+/**
+ * Rellena los campos de servicio (Nº, Origen, Destino)
+ */
+
 function fillServiceData(processedText, suffix) {
   const textLower = processedText.toLowerCase();
 
@@ -322,18 +252,22 @@ function fillServiceData(processedText, suffix) {
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
   // Origen
-  const originMatch = textLower.match(/municipi[\s\S]{0,100}([^\d\s\r\n]+)/i);
+  const originMatch = textLower.match(/municipi\s*(?:\r?\n|\s)+([^\r\n]+)/);
   if (originMatch?.[1]) {
-    document.getElementById(`origin-${suffix}`).value = originMatch[1]
-      .trim()
-      .toUpperCase();
+    const originClean = originMatch[1].trim().toUpperCase();
+    document.getElementById(`origin-${suffix}`).value = originClean;
+  } else {
+    console.warn("[OCR] No se encontró origen después de 'Municipi'");
   }
 
   // Destino
-  const destinationMatch = textLower.match(/hospital([\w\d\s]+)/i);
+  const destinationMatch = textLower.match(
+    /hospital\s*desti.*?\s+([^\r\n]+)/ // Simplificado para mayor claridad
+  );
   if (destinationMatch?.[1]) {
-    document.getElementById(`destination-${suffix}`).value = destinationMatch[1]
-      .trim()
-      .toUpperCase();
+    const destinationClean = destinationMatch[1].trim().toUpperCase();
+    document.getElementById(`destination-${suffix}`).value = destinationClean;
+  } else {
+    console.warn("[OCR] No se encontró destino después de 'Hospital Desti'");
   }
 }
