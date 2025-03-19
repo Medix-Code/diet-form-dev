@@ -14,22 +14,11 @@ export function initCameraOcr() {
   const cameraInput = document.getElementById("camera-input");
 
   if (!cameraBtn || !cameraInput || !cameraGalleryModal || !modalContent) {
-    console.warn("[cameraOcr] Falten elements per inicialitzar.");
+    console.warn("[cameraOcr] Elements no trobats.");
     return;
   }
 
-  function openModal() {
-    cameraGalleryModal.classList.remove("hidden");
-    requestAnimationFrame(() => cameraGalleryModal.classList.add("visible"));
-  }
-
-  function closeModal() {
-    cameraGalleryModal.classList.remove("visible");
-    setTimeout(() => cameraGalleryModal.classList.add("hidden"), 300);
-  }
-
   cameraBtn.addEventListener("click", openModal);
-
   document.addEventListener("click", (e) => {
     if (
       cameraGalleryModal.classList.contains("visible") &&
@@ -40,9 +29,9 @@ export function initCameraOcr() {
     }
   });
 
-  [optionCameraBtn, optionGalleryBtn].forEach((btn) => {
-    btn.addEventListener("click", closeModal);
-  });
+  [optionCameraBtn, optionGalleryBtn].forEach((btn) =>
+    btn.addEventListener("click", closeModal)
+  );
 
   optionCameraBtn.addEventListener("click", () => {
     cameraInput.setAttribute("capture", "environment");
@@ -65,14 +54,18 @@ export function initCameraOcr() {
     const progressBar = document.getElementById("ocr-progress");
     const progressText = document.getElementById("ocr-progress-text");
 
-    if (progressContainer && progressBar && progressText) {
-      progressContainer.classList.remove("hidden");
-      progressBar.value = 0;
-      progressText.textContent = "Escanejant...";
-    }
+    progressContainer.classList.remove("hidden");
+    progressBar.value = 0;
+    progressText.textContent = "Escanejant...";
 
     try {
-      const result = await window.Tesseract.recognize(file, "spa", {
+      const resizedBlob = await resizeImage(file, 1000);
+      const enhancedBlob = await preprocessImage(resizedBlob);
+
+      const result = await Tesseract.recognize(enhancedBlob, "spa", {
+        tessedit_pageseg_mode: 3,
+        tessedit_char_whitelist:
+          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:-",
         logger: (m) => {
           if (m.status === "recognizing text") {
             const percent = Math.floor(m.progress * 100);
@@ -84,18 +77,68 @@ export function initCameraOcr() {
 
       const ocrText = result.data.text;
       if (!ocrText.trim()) {
-        showToast("No s'ha detectat cap text.", "error");
+        showToast("No s'ha detectat text.", "error");
         return;
       }
 
       fillFormFieldsFromOcr(ocrText);
       showToast("OCR completat amb èxit.", "success");
     } catch (error) {
-      showToast(`Error en OCR: ${error.message}`, "error");
+      showToast(`Error OCR: ${error.message}`, "error");
     } finally {
       cameraInput.value = "";
       setTimeout(() => progressContainer.classList.add("hidden"), 1000);
     }
+  });
+
+  function openModal() {
+    cameraGalleryModal.classList.remove("hidden");
+    requestAnimationFrame(() => cameraGalleryModal.classList.add("visible"));
+  }
+
+  function closeModal() {
+    cameraGalleryModal.classList.remove("visible");
+    setTimeout(() => cameraGalleryModal.classList.add("hidden"), 300);
+  }
+}
+
+// Funció per redimensionar imatge (accelerar OCR)
+function resizeImage(file, maxDimension) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      let { width, height } = img;
+      if (width > height && width > maxDimension) {
+        height *= maxDimension / width;
+        width = maxDimension;
+      } else if (height > maxDimension) {
+        width *= maxDimension / height;
+        height = maxDimension;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+      canvas.toBlob(resolve, "image/jpeg", 0.9);
+    };
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+// Millora contrast i escala de grisos
+function preprocessImage(blob) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.filter = "brightness(120%) contrast(130%) grayscale(100%)";
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob(resolve, "image/jpeg", 0.9);
+    };
+    img.src = URL.createObjectURL(blob);
   });
 }
 
