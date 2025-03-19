@@ -54,18 +54,17 @@ export function initCameraOcr() {
     const progressBar = document.getElementById("ocr-progress");
     const progressText = document.getElementById("ocr-progress-text");
 
-    progressContainer.classList.remove("hidden");
-    progressBar.value = 0;
-    progressText.textContent = "Escanejant...";
+    if (progressContainer && progressBar && progressText) {
+      progressContainer.classList.remove("hidden");
+      progressBar.value = 0;
+      progressText.textContent = "Escanejant...";
+    }
 
     try {
-      const resizedBlob = await resizeImage(file, 1000);
-      const enhancedBlob = await preprocessImage(resizedBlob);
+      // 👇 Redimensiona la imatge aquí abans del OCR:
+      const resizedImageBlob = await resizeImage(file, 1000);
 
-      const result = await Tesseract.recognize(enhancedBlob, "spa", {
-        tessedit_pageseg_mode: 3,
-        tessedit_char_whitelist:
-          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:-",
+      const result = await window.Tesseract.recognize(resizedImageBlob, "spa", {
         logger: (m) => {
           if (m.status === "recognizing text") {
             const percent = Math.floor(m.progress * 100);
@@ -77,14 +76,14 @@ export function initCameraOcr() {
 
       const ocrText = result.data.text;
       if (!ocrText.trim()) {
-        showToast("No s'ha detectat text.", "error");
+        showToast("No s'ha detectat cap text.", "error");
         return;
       }
 
       fillFormFieldsFromOcr(ocrText);
       showToast("OCR completat amb èxit.", "success");
     } catch (error) {
-      showToast(`Error OCR: ${error.message}`, "error");
+      showToast(`Error en OCR: ${error.message}`, "error");
     } finally {
       cameraInput.value = "";
       setTimeout(() => progressContainer.classList.add("hidden"), 1000);
@@ -102,24 +101,27 @@ export function initCameraOcr() {
   }
 }
 
-// Funció per redimensionar imatge (accelerar OCR)
-function resizeImage(file, maxDimension) {
+async function resizeImage(file, maxDimension = 1000) {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {
-      const canvas = document.createElement("canvas");
       let { width, height } = img;
+
       if (width > height && width > maxDimension) {
-        height *= maxDimension / width;
+        height = Math.round((height * maxDimension) / width);
         width = maxDimension;
-      } else if (height > maxDimension) {
-        width *= maxDimension / height;
+      } else if (height >= width && height > maxDimension) {
+        width = Math.round((width * maxDimension) / height);
         height = maxDimension;
       }
+
+      const canvas = document.createElement("canvas");
       canvas.width = width;
       canvas.height = height;
-      canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-      canvas.toBlob(resolve, "image/jpeg", 0.9);
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.9);
     };
     img.src = URL.createObjectURL(file);
   });
