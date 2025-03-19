@@ -75,11 +75,17 @@ export function initCameraOcr() {
       tessedit_pageseg_mode: 3,
       tessedit_char_whitelist:
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:-",
+      // Afegeix això:
+      tessedit_oem: 1, // Engine mode: LSTM
+      tessedit_psm: 3, // Auto-page segmentation
+      load_system_dawg: false, // Millora la velocitat
+      load_freq_dawg: false,
     });
 
     try {
-      const resizedImageBlob = await resizeImage(file, 1000);
-      const preprocessedBlob = await preprocessImage(resizedImageBlob);
+      //const resizedImageBlob = await resizeImage(file, 1000);
+      //const preprocessedBlob = await preprocessImage(resizedImageBlob);
+      const preprocessedBlob = file;
 
       const {
         data: { text: ocrText },
@@ -125,7 +131,7 @@ async function resizeImage(file, maxDimension = 1000) {
   canvas.height = height;
   canvas.getContext("2d").drawImage(img, 0, 0, width, height);
 
-  return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/png", 1.0)); // 1.0 = qualitat màxima sense compressió
 }
 
 async function preprocessImage(blob) {
@@ -134,10 +140,10 @@ async function preprocessImage(blob) {
   canvas.width = img.width;
   canvas.height = img.height;
   const ctx = canvas.getContext("2d");
-  ctx.filter = "brightness(120%) contrast(130%) grayscale(100%)";
+  ctx.filter = "brightness(110%) contrast(115%) grayscale(100%)";
   ctx.drawImage(img, 0, 0);
 
-  return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/png", 1.0)); // 1.0 = qualitat màxima sense compressió
 }
 
 /**
@@ -181,48 +187,55 @@ function fillFormFieldsFromOcr(ocrText) {
  *   - origin-time, destination-time, end-time
  */
 function fillTimes(processedText, suffix) {
-  const normalizeTime = (timeStr) => timeStr.replace(/-/g, ":");
+  const normalizeTime = (timeStr) => {
+    // Normaliza formatos como "25-24" a "22:25" (ejemplo hipotético)
+    // Si el tiempo tiene más de 5 caracteres (ej: "23:25:08"), toma los primeros 5
+    const clean = timeStr.replace(/-/g, ":").replace(/[^0-9:]/g, "");
+    return clean.length > 5 ? clean.slice(0, 5) : clean;
+  };
 
-  // 1) Hora de origen: usamos "status: mobilitzat"
+  console.log("Texto procesado:", processedText); // Log para depuración
+
+  // 1) Hora de origen: "status:mobilitzat"
   const mobilitzatMatch = processedText.match(
-    /s?t?a?t?u?s?:?\s*mobil\w*\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
+    /status:\s*mobilitzat.*?(\d{1,2}[:\-]\d{2}(?:[:\-]\d{2})?)/i
   );
   if (mobilitzatMatch?.[1]) {
-    document.getElementById(`origin-time-${suffix}`).value = normalizeTime(
-      mobilitzatMatch[1]
-    );
+    const time = normalizeTime(mobilitzatMatch[1]);
+    document.getElementById(`origin-time-${suffix}`).value = time;
+    console.log("Origem encontrado:", time);
+  } else {
+    console.warn("No se encontró hora de origen");
   }
 
-  // 2) Hora de destino: "status: arribada hospital"
+  // 2) Hora de destino: "status:arribada hospital"
   const arribadaMatch = processedText.match(
-    /s?t?a?t?u?s?:?\s*a?r?r?i?b?a?d?a?\s+h?o?s?p?i?t?a?l?\s+\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
+    /status:\s*arribada\s*hospital.*?(\d{1,2}[:\-]\d{2}(?:[:\-]\d{2})?)/i
   );
   if (arribadaMatch?.[1]) {
-    document.getElementById(`destination-time-${suffix}`).value = normalizeTime(
-      arribadaMatch[1]
-    );
-  }
-
-  // 3) Hora final: "altech"
-  let endMatch = processedText.match(
-    /altech\s*[^\n]*\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
-  );
-  if (!endMatch) {
-    endMatch = processedText.match(
-      /altech\s*[^\n]*\n\s*\d{2}[\/\-]\d{2}[\/\-]\d{2}\s+(\d{2}[-:]\d{2})/i
-    );
-  }
-
-  if (endMatch?.[1]) {
-    document.getElementById(`end-time-${suffix}`).value = normalizeTime(
-      endMatch[1]
-    );
+    const time = normalizeTime(arribadaMatch[1]);
+    document.getElementById(`destination-time-${suffix}`).value = time;
+    console.log("Destino encontrado:", time);
   } else {
-    // Si no se encuentra la hora final, usamos la hora actual
+    console.warn("No se encontró hora de destino");
+  }
+
+  // 3) Hora final: "altech" seguido de fecha y hora
+  const endMatch = processedText.match(
+    /altech[\s\S]*?\d{2}[-/]\d{2}[-/]\d{2}\s+(\d{1,2}[:\-]\d{2}).*?/i
+  );
+  if (endMatch?.[1]) {
+    const time = normalizeTime(endMatch[1]);
+    document.getElementById(`end-time-${suffix}`).value = time;
+    console.log("Hora final encontrada:", time);
+  } else {
+    console.warn("No se encontró hora final. Usando hora actual");
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
-    document.getElementById(`end-time-${suffix}`).value = `${hh}:${mm}`;
+    const currentTime = `${hh}:${mm}`;
+    document.getElementById(`end-time-${suffix}`).value = currentTime;
+    console.log("Hora final asignada automáticamente:", currentTime);
   }
 }
 
