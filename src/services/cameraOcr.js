@@ -63,8 +63,9 @@ export function initCameraOcr() {
     try {
       // 👇 Redimensiona la imatge aquí abans del OCR:
       const resizedImageBlob = await resizeImage(file, 1000);
+      const preprocessedBlob = await preprocessImage(resizedImageBlob);
 
-      const result = await window.Tesseract.recognize(resizedImageBlob, "spa", {
+      const result = await window.Tesseract.recognize(preprocessedBlob, "spa", {
         logger: (m) => {
           if (m.status === "recognizing text") {
             const percent = Math.floor(m.progress * 100);
