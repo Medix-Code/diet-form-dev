@@ -1,4 +1,4 @@
-/* cameraOcr.js - Codi complet amb optimitzacions per millorar OCR */
+/* cameraOcr.js - Correctament adaptat a Tesseract CDN (sense DataCloneError) */
 
 import { showToast } from "../ui/toast.js";
 import { getCurrentServiceIndex } from "../services/servicesPanelManager.js";
@@ -19,6 +19,7 @@ export function initCameraOcr() {
   }
 
   cameraBtn.addEventListener("click", openModal);
+
   document.addEventListener("click", (e) => {
     if (
       cameraGalleryModal.classList.contains("visible") &&
@@ -60,30 +61,29 @@ export function initCameraOcr() {
       progressText.textContent = "Escanejant...";
     }
 
+    const worker = await Tesseract.createWorker("spa", 1, {
+      logger: (e) => {
+        if (e.status === "recognizing text") {
+          const percent = Math.floor(e.progress * 100);
+          if (progressBar) progressBar.value = percent;
+          if (progressText) progressText.textContent = `Escanejant ${percent}%`;
+        }
+      },
+    });
+
+    await worker.setParameters({
+      tessedit_pageseg_mode: 3,
+      tessedit_char_whitelist:
+        "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:-",
+    });
+
     try {
       const resizedImageBlob = await resizeImage(file, 1000);
       const preprocessedBlob = await preprocessImage(resizedImageBlob);
 
-      // Crear el worker con el idioma "spa" (español) como ARRAY
-      const worker = await Tesseract.createWorker({
-        lang: ["spa"], // ✅ CORREGIDO: Array con el idioma
-        langPath:
-          "https://cdn.jsdelivr.net/npm/tesseract.js@6.0.0/eng.traineddata.min.js", // Ruta predeterminada (solo para eng)
-      });
-
-      // Configurar el progreso
-      worker.setProgressBar((progress) => {
-        const percent = Math.floor(progress * 100);
-        console.log(`OCR Progress: ${percent}%`);
-        if (progressBar) progressBar.value = percent;
-        if (progressText) progressText.textContent = `Escanejant ${percent}%`;
-      });
-
-      // Reconocer texto
       const {
         data: { text: ocrText },
       } = await worker.recognize(preprocessedBlob);
-      await worker.terminate();
 
       if (!ocrText.trim()) {
         showToast("No s'ha detectat cap text.", "error");
@@ -95,8 +95,10 @@ export function initCameraOcr() {
     } catch (error) {
       showToast(`Error en OCR: ${error.message}`, "error");
     } finally {
+      await worker.terminate();
       cameraInput.value = "";
-      setTimeout(() => progressContainer?.classList.add("hidden"), 1000);
+      if (progressContainer)
+        setTimeout(() => progressContainer.classList.add("hidden"), 1000);
     }
   });
 
@@ -112,61 +114,30 @@ export function initCameraOcr() {
 }
 
 async function resizeImage(file, maxDimension = 1000) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      let { width, height } = img;
+  const img = await createImageBitmap(file);
+  let { width, height } = img;
+  const ratio = Math.min(maxDimension / width, maxDimension / height, 1);
+  width *= ratio;
+  height *= ratio;
 
-      if (width > height && width > maxDimension) {
-        height = Math.round((height * maxDimension) / width);
-        width = maxDimension;
-      } else if (height >= width && height > maxDimension) {
-        width = Math.round((width * maxDimension) / height);
-        height = maxDimension;
-      }
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  canvas.getContext("2d").drawImage(img, 0, 0, width, height);
 
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
-
-      canvas.toBlob(
-        (blob) => {
-          URL.revokeObjectURL(url);
-          resolve(blob);
-        },
-        "image/jpeg",
-        0.9
-      );
-    };
-    img.src = url;
-  });
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
 }
 
 async function preprocessImage(blob) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const url = URL.createObjectURL(blob);
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-      ctx.filter = "brightness(120%) contrast(130%) grayscale(100%)";
-      ctx.drawImage(img, 0, 0);
-      canvas.toBlob(
-        (resultBlob) => {
-          URL.revokeObjectURL(url);
-          resolve(resultBlob);
-        },
-        "image/jpeg",
-        0.9
-      );
-    };
-    img.src = url;
-  });
+  const img = await createImageBitmap(blob);
+  const canvas = document.createElement("canvas");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  const ctx = canvas.getContext("2d");
+  ctx.filter = "brightness(120%) contrast(130%) grayscale(100%)";
+  ctx.drawImage(img, 0, 0);
+
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
 }
 
 /**
@@ -258,33 +229,32 @@ function fillTimes(processedText, suffix) {
 /**
  * Rellena los campos de servicio (Nº, Origen, Destino)
  */
+
 function fillServiceData(processedText, suffix) {
   const textLower = processedText.toLowerCase();
 
-  // 1) Número de servei sota "Afectats"
+  // Número de servicio
   const serviceNumberMatch = textLower.match(/afectats.*?(\d{9})/);
   const serviceNumber = serviceNumberMatch?.[1] || "000000000";
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
-  // 2) Origen després de "Municipi" (només la primera línia)
+  // Origen
   const originMatch = textLower.match(/municipi\s*(?:\r?\n|\s)+([^\r\n]+)/);
   if (originMatch?.[1]) {
     const originClean = originMatch[1].trim().toUpperCase();
     document.getElementById(`origin-${suffix}`).value = originClean;
   } else {
-    console.warn(`[OCR] No s'ha trobat l'origen després de "Municipi"`);
+    console.warn("[OCR] No se encontró origen después de 'Municipi'");
   }
 
-  // 3) Destinació després de "Hospital Desti" (a dalt dreta)
+  // Destino
   const destinationMatch = textLower.match(
-    /hospital\s*dest[ií].*?\s+([^\r\n]+)/
+    /hospital\s*desti.*?\s+([^\r\n]+)/ // Simplificado para mayor claridad
   );
   if (destinationMatch?.[1]) {
     const destinationClean = destinationMatch[1].trim().toUpperCase();
     document.getElementById(`destination-${suffix}`).value = destinationClean;
   } else {
-    console.warn(
-      `[OCR] No s'ha trobat la destinació després de "Hospital Desti"`
-    );
+    console.warn("[OCR] No se encontró destino después de 'Hospital Desti'");
   }
 }
