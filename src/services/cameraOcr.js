@@ -61,7 +61,7 @@ export function initCameraOcr() {
     }
 
     try {
-      // 👇 Redimensiona la imatge aquí abans del OCR:
+      // 👇 Redimensiona i preprocessa la imatge abans de l'OCR:
       const resizedImageBlob = await resizeImage(file, 1000);
       const preprocessedBlob = await preprocessImage(resizedImageBlob);
 
