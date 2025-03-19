@@ -231,33 +231,34 @@ function fillTimes(processedText, suffix) {
 /**
  * Rellena los campos de servicio (Nº, Origen, Destino)
  */
+/**
+ * Rellena los campos de servicio (Nº, Origen, Destino)
+ */
 function fillServiceData(processedText, suffix) {
-  // 1) Nº de servicio bajo "Afectats"
-  const serviceNumberMatch = processedText.match(
-    /afectats\s*(?:\r?\n)+\s*(\d{9})/i
-  );
+  // 1) Nº de servicio bajo "Afectats" (9 dígitos exactos)
+  const serviceNumberMatch = processedText.match(/afectats.*?(\d{9})/i);
   const serviceNumber = serviceNumberMatch?.[1] || "000000000";
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
-  // 2) Origen: Capturamos todo el texto tras "Municipi"
-  const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*(.*)/i);
+  // 2) Origen: Capturamos únicamente el texto debajo de "Municipi" (sin incluir submunicipi)
+  const originMatch = processedText.match(/municipi\s*(?:\r?\n)+\s*([^\n]+)/i);
   if (originMatch?.[1]) {
-    const originClean = originMatch[1].replace(/\r?\n+/g, " ").trim();
+    const originClean = originMatch[1].trim();
     document.getElementById(`origin-${suffix}`).value = originClean;
   } else {
-    console.warn(
-      `[OCR] No se ha encontrado el origen entre "Municipi" y "SubMunicipi 2"`
-    );
+    console.warn(`[OCR] No se ha encontrado el origen después de "Municipi"`);
   }
 
-  // 3) Destino bajo "Hospital Desti"
+  // 3) Destino bajo "Hospital Desti" (arriba a la derecha)
   const destinationMatch = processedText.match(
-    /hospital\s*desti\s*(?:\r?\n)+\s*(.*)/i
+    /hospital dest[ií]\s*(?:\r?\n)?\s*([^\n]+)/i
   );
   if (destinationMatch?.[1]) {
     document.getElementById(`destination-${suffix}`).value =
       destinationMatch[1].trim();
   } else {
-    console.warn(`[OCR] No se ha encontrado el destino`);
+    console.warn(
+      `[OCR] No se ha encontrado el destino después de "Hospital Desti"`
+    );
   }
 }
