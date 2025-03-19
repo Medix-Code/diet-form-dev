@@ -233,39 +233,29 @@ function fillTimes(processedText, suffix) {
 /**
  * Rellena los campos de servicio (Nº, Origen, Destino)
  */
-/**
- * Rellena los campos de servicio (Nº, Origen, Destino)
- */
 function fillServiceData(processedText, suffix) {
-  // Normalitzem el text (tots minúscules)
   const textLower = processedText.toLowerCase();
 
-  // 1) Nº de servei sota "Afectats" (exactament 9 dígits)
-  const serviceNumberMatch = textLower.match(/afectats.*?(\d{9})(?!\d)/);
+  // 1) Número de servei sota "Afectats"
+  const serviceNumberMatch = textLower.match(/afectats.*?(\d{9})/);
   const serviceNumber = serviceNumberMatch?.[1] || "000000000";
   document.getElementById(`service-number-${suffix}`).value = serviceNumber;
 
-  // 2) Origen: agafem només la línia següent a "Municipi"
-  const originMatch = textLower.match(/municipi\s*(?:\r?\n)+\s*([^\r\n]+)/);
+  // 2) Origen després de "Municipi" (només la primera línia)
+  const originMatch = textLower.match(/municipi\s*(?:\r?\n|\s)+([^\r\n]+)/);
   if (originMatch?.[1]) {
-    const originClean = originMatch[1]
-      .replace(/[^a-zà-ú\s]/gi, "") // Neteja possibles caràcters incorrectes
-      .trim()
-      .toUpperCase();
+    const originClean = originMatch[1].trim().toUpperCase();
     document.getElementById(`origin-${suffix}`).value = originClean;
   } else {
     console.warn(`[OCR] No s'ha trobat l'origen després de "Municipi"`);
   }
 
-  // 3) Destinació sota "Hospital Desti" (evitem agafar números)
+  // 3) Destinació després de "Hospital Desti" (a dalt dreta)
   const destinationMatch = textLower.match(
-    /hospital\s*dest[ií]\s*(?:\r?\n)?\s*([^\r\n\d]+[a-zà-ú])/i
+    /hospital\s*dest[ií].*?\s+([^\r\n]+)/
   );
   if (destinationMatch?.[1]) {
-    const destinationClean = destinationMatch[1]
-      .replace(/[^a-zà-ú\s]/gi, "") // Elimina caràcters indesitjats
-      .trim()
-      .toUpperCase();
+    const destinationClean = destinationMatch[1].trim().toUpperCase();
     document.getElementById(`destination-${suffix}`).value = destinationClean;
   } else {
     console.warn(
