@@ -919,7 +919,6 @@ button .fa {
   left: 0;
   right: 0;
   border-radius: 12px 12px 0 0;
-  background-color: rgba(0, 0, 0, 0.4); /* Fosc semi-transparent */
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -927,6 +926,18 @@ button .fa {
   opacity: 0;
   transform: translateY(100%);
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.modal-bottom.service-1 {
+  background-color: var(--service-1-bg);
+}
+.modal-bottom.service-2 {
+  background-color: var(--service-2-bg);
+}
+.modal-bottom.service-3 {
+  background-color: var(--service-3-bg);
+}
+.modal-bottom.service-4 {
+  background-color: var(--service-4-bg);
 }
 .modal-bottom.visible {
   opacity: 1;

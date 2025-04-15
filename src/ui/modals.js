@@ -209,8 +209,8 @@ function _createDietListItem(diet) {
 
   const loadBtn = document.createElement("button");
   loadBtn.className = `${CSS_CLASSES.LIST_ITEM_BTN} ${CSS_CLASSES.LIST_ITEM_BTN_LOAD} ${CSS_CLASSES.DIET_LOAD_BTN}`;
-  loadBtn.setAttribute("aria-label", `Carregar dieta ${ddmmaa}`);
-  loadBtn.innerHTML = `<img src="assets/icons/upload.svg" alt="" class="icon"><span class="btn-text visually-hidden">Carregar</span>`;
+  loadBtn.setAttribute("aria-label", `Cargar dieta ${ddmmaa}`);
+  loadBtn.innerHTML = `<img src="assets/icons/upload.svg" alt="" class="icon"><span class="btn-text visually-hidden">Cargar</span>`;
   loadBtn.setAttribute(DATA_ATTRIBUTES.DIET_ID, diet.id);
   loadBtn.setAttribute(DATA_ATTRIBUTES.DIET_DATE, diet.date);
   loadBtn.setAttribute(DATA_ATTRIBUTES.DIET_TYPE, diet.dietType);
