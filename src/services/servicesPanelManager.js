@@ -210,12 +210,11 @@ export function showService(index) {
   if (panelToShow) {
     panelToShow.classList.remove(CSS_CLASSES.SERVICE_HIDDEN);
     console.log(`   - Mostrat:`, panelToShow);
-    // Opcional: Moure focus
-    panelToShow.querySelector("input, textarea, select")?.focus();
+    panelToShow.focus({ preventScroll: true });
+    console.log(`   - Focus mogut al panell ${index + 1} (div)`); // Log addicional
   } else {
     console.warn(`   - Panell a mostrar (índex ${index}) no trobat.`);
-    // Si no es troba el nou, potser no hauríem de canviar l'índex?
-    // Però per ara continuem per mantenir la selecció de botó consistent.
+    // ...
   }
 
   // Actualitza estat dels botons de navegació (S1, S2...)
