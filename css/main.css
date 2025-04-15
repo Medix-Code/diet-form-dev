@@ -940,22 +940,11 @@ button .fa {
   /* Eliminem ombra o borde gris: */
   box-shadow: none !important;
   border: none !important;
+  background-color: #3f3c3c;
   width: 100%;
   border-radius: 12px 12px 0 0;
   padding: 20px;
   box-sizing: border-box;
-}
-.modal-bottom-content.service-1 {
-  background-color: var(--service-1-border);
-}
-.modal-bottom-content.service-2 {
-  background-color: var(--service-2-border);
-}
-.modal-bottom-content.service-3 {
-  background-color: var(--service-3-border);
-}
-.modal-bottom-content.service-4 {
-  background-color: var(--service-4-border);
 }
 
 /* ---------------------------- */
