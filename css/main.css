@@ -723,7 +723,7 @@ button .fa {
 
 .active-square {
   transform: scale(1.05);
-  border: 1px solid var(--border-btn-service);
+  border: 2px solid var(--border-btn-service);
 }
 
 .service {
@@ -919,6 +919,7 @@ button .fa {
   left: 0;
   right: 0;
   border-radius: 12px 12px 0 0;
+  background-color: rgba(0, 0, 0, 0.4); /* Fosc semi-transparent */
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -926,18 +927,6 @@ button .fa {
   opacity: 0;
   transform: translateY(100%);
   transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.modal-bottom.service-1 {
-  background-color: var(--service-1-bg);
-}
-.modal-bottom.service-2 {
-  background-color: var(--service-2-bg);
-}
-.modal-bottom.service-3 {
-  background-color: var(--service-3-bg);
-}
-.modal-bottom.service-4 {
-  background-color: var(--service-4-bg);
 }
 .modal-bottom.visible {
   opacity: 1;
@@ -951,11 +940,22 @@ button .fa {
   /* Eliminem ombra o borde gris: */
   box-shadow: none !important;
   border: none !important;
-  background-color: #ccc3c3;
   width: 100%;
   border-radius: 12px 12px 0 0;
   padding: 20px;
   box-sizing: border-box;
+}
+.modal-bottom-content.service-1 {
+  background-color: var(--service-1-border);
+}
+.modal-bottom-content.service-2 {
+  background-color: var(--service-2-border);
+}
+.modal-bottom-content.service-3 {
+  background-color: var(--service-3-border);
+}
+.modal-bottom-content.service-4 {
+  background-color: var(--service-4-border);
 }
 
 /* ---------------------------- */
