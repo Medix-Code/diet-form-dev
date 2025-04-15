@@ -1,14 +1,14 @@
-// init.js (dins src/init.js)
+// init.js
 import { openDatabase } from "./db/indexedDbDietRepository.js";
 import {
   setTodayDate,
   easterEgg,
   setDefaultDietSelect,
-} from "./utils/utils.js"; // Agrupat setDefaultDietSelect
+} from "./utils/utils.js";
 import { initServices } from "./services/servicesPanelManager.js";
 import { initSignature } from "./services/signatureService.js";
 import { setupTabs } from "./ui/tabs.js";
-import { initThemeSwitcher } from "./ui/theme.js"; //
+import { initThemeSwitcher } from "./ui/theme.js";
 import { setupMainButtons } from "./ui/mainButtons.js";
 import { setupClearSelectedService } from "./ui/clearService.js";
 import { setupModalGenerics } from "./ui/modals.js";
@@ -16,30 +16,40 @@ import { setupDatePickers, setupTimePickers } from "./ui/pickers.js";
 import { setupServiceNumberRestrictions } from "./utils/restrictions.js";
 import { initSettingsPanel } from "./ui/settingsPanel.js";
 import * as formService from "./services/formService.js";
-import { initPwaInstall } from "./services/pwaService.js"; // Importa la funció d'inicialització correcta
+import { initPwaInstall } from "./services/pwaService.js";
 import { initCameraOcr } from "./services/cameraOcr.js";
 import { initDotacion } from "./services/dotacion.js";
-// No cal importar isAppInstalled ni requestInstallPromptAfterAction aquí si no s'usen directament a init.js
 
-/**
- * Funció principal que orquestra la inicialització de tota l'aplicació.
- * S'executa quan el DOM està llest.
- */
+// SUPOSANT que has copiat funcions toggleAjustesPanel(), openExampleModal(), closeExampleModal()
+// en un altre mòdul o aquí mateix.
+import {
+  toggleAjustesPanel,
+  openExampleModal,
+  closeExampleModal,
+} from "./ui/demoExample.js";
+
+// Exemple: si les constants adjustmentsBtn, modalCloseBtn, etc., no estan definides enlloc, has de fer-ho aquí
+// o en un altre mòdul. Aquí ho fem localment per simplicitat:
+const ajustesBtn = document.querySelector(".c-ajustes-btn");
+const ajustesPanel = document.getElementById("ajustes-panel");
+const modalExample = document.getElementById("example-modal");
+const modalCloseBtn = modalExample?.querySelector(".c-modal__close-btn");
+
 export async function initializeApp() {
   console.log("initializeApp() iniciant...");
 
-  // --- Inicialitzacions bàsiques i dades ---
+  // 1) Inicialitzacions bàsiques
   setTodayDate();
   setDefaultDietSelect();
-  await openDatabase(); // Espera que la BD estigui llesta si altres mòduls la necessiten immediatament
+  await openDatabase();
 
-  // --- Inicialització de Serveis de Fons ---
+  // 2) Serveis de fons
   initServices();
   initSignature();
   initDotacion();
-  initCameraOcr(); // Pot inicialitzar la lògica, encara que el botó estigui amagat
+  initCameraOcr();
 
-  // --- Configuració de la Interfície d'Usuari (UI) ---
+  // 3) Configuració de la Interfície d'Usuari
   setupTabs();
   setupMainButtons();
   setupClearSelectedService();
@@ -49,22 +59,36 @@ export async function initializeApp() {
   initSettingsPanel();
   initThemeSwitcher();
 
-  // --- Configuració de Lògica de Formulari i Validacions ---
+  // ***Aquí és on portes el Codi del DOMContentLoaded del snippet***:
+  // (aquest codi s'executarà igualment, perquè initializeApp() s'executa un cop el DOM està a punt)
+  // ---------------------------------------------------------------------------
+  // Panell d'ajustaments
+  if (ajustesBtn) {
+    ajustesBtn.addEventListener("click", toggleAjustesPanel);
+  }
+
+  // Botó de tancar modal d'exemple
+  if (modalCloseBtn) {
+    modalCloseBtn.addEventListener("click", closeExampleModal);
+  }
+
+  // Si vols obrir el modal de demo en arrencar:
+  // openExampleModal();
+
+  // 4) Lògica Formulari
   setupServiceNumberRestrictions();
   formService.addInputListeners();
   formService.addDoneBehavior();
-  // Considera si realment necessites desar l'estat inicial aquí o si es pot gestionar d'una altra manera
   try {
     formService.setInitialFormDataStr(formService.getAllFormDataAsString());
   } catch (e) {
     console.warn("No s'ha pogut desar l'estat inicial del formulari:", e);
   }
 
-  // --- Inicialització del Servei PWA ---
-  // Aquesta única crida s'encarrega de tot: listeners, comprovacions d'estat, etc.
+  // 5) Servei PWA
   initPwaInstall();
 
-  // --- Altres ---
+  // 6) Altres
   easterEgg();
 
   console.log("initializeApp() completada.");

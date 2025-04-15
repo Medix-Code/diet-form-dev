@@ -36,6 +36,8 @@ const PRECACHE_FILES = [
   "./assets/icons/download_blue.svg",
   "./assets/icons/gear.svg",
   "./assets/icons/submenu.svg",
+  "./assets/icons/save_white.svg",
+  "./assets/icons/id_card.svg",
   // ... ( altres icones SVG/PNG essencials)
 ];
 
@@ -63,8 +65,6 @@ const RUNTIME_FILES = [
   "./src/utils/validation.js", // Funcions de validació
 
   // Altres assets que no siguin crítics inicialment (p.ex., altres icones menys usades)
-  "./assets/icons/save_white.svg",
-  "./assets/icons/id_card.svg",
   "./assets/icons/eraser.svg",
   "./assets/icons/ocr.svg",
   "./assets/icons/delete.svg",

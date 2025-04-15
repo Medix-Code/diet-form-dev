@@ -24,6 +24,7 @@ const CSS_CLASSES = {
   LIST_ITEM_BTN_DELETE: "list-item-btn--delete", // Modificador
 };
 const DOM_IDS = {
+  // Modals Específics
   DIET_MODAL: "diet-modal",
   DIET_OPTIONS_LIST: "diet-options",
   NO_DIETS_TEXT: "no-diets-text",
@@ -32,10 +33,18 @@ const DOM_IDS = {
   CONFIRM_TITLE: ".modal-title", // Selector dins del confirm modal
   CONFIRM_YES_BTN: "confirm-yes",
   CONFIRM_NO_BTN: "confirm-no",
+  // Altres modals (es gestionen per ID o selectors genèrics)
+  ABOUT_MODAL: "about-modal",
+  SIGNATURE_MODAL: "signature-modal",
+  DOTACIO_MODAL: "dotacio-modal",
+  CAMERA_GALLERY_MODAL: "camera-gallery-modal",
 };
 const SELECTORS = {
-  MODAL: ".modal",
-  MODAL_CLOSE_BTN: ".close-modal, .close-modal-btn",
+  MODAL: ".modal", // Selector genèric per identificar modals
+  MODAL_CLOSE_BTN: ".close-modal, .close-modal-btn", // Qualsevol botó de tancar
+  MODAL_TRIGGER: 'a[href^="#"]', // Enllaços que apunten a IDs (per setupModalGenerics)
+  FOCUSABLE_ELEMENTS:
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', // Elements enfocables
 };
 const DATA_ATTRIBUTES = {
   DIET_ID: "data-diet-id",
@@ -52,44 +61,101 @@ let confirmMsgElement = null;
 let confirmTitleElement = null;
 let confirmYesBtn = null;
 let confirmNoBtn = null;
-let currentConfirmResolve = null;
-let activeModal = null; // Referència al modal obert actualment per gestionar Escape
+let currentConfirmResolve = null; // Funció resolve de la promesa de confirmació actual
+let activeModalElement = null; // Referència al modal obert actualment
+let previousActiveElement = null; // Element que tenia el focus abans d'obrir el modal
+let currentOutsideClickListener = null; // Referència al listener de clic fora actiu
+let currentEscapeKeyListener = null; // Referència al listener d'Escape actiu
 
 // --- Funcions Privades ---
 
 /** Obre un modal genèric. */
 function _openGenericModal(modalElement) {
-  if (!modalElement || activeModal) return; // Evita obrir si ja n'hi ha un
-  activeModal = modalElement; // Guarda referència
+  if (!modalElement || activeModalElement) {
+    console.warn(
+      "Intent d'obrir modal invàlid o un altre ja actiu.",
+      modalElement?.id
+    );
+    return;
+  }
+
+  previousActiveElement = document.activeElement;
+  activeModalElement = modalElement;
+
   modalElement.style.display = "block"; // O 'flex'
   document.body.classList.add(CSS_CLASSES.MODAL_OPEN_BODY);
-  document.addEventListener("keydown", _handleGlobalEscape); // Afegeix listener Escape
+
+  // Defineix i afegeix listener per clic fora
+  currentOutsideClickListener = (event) => {
+    // Comprova si el clic és DIRECTAMENT sobre l'overlay del modal actiu
+    if (event.target === activeModalElement) {
+      console.log(`Clic fora detectat per al modal #${activeModalElement.id}`);
+      if (
+        activeModalElement.id === DOM_IDS.CONFIRM_MODAL &&
+        currentConfirmResolve
+      ) {
+        currentConfirmResolve(false); // Cancel·la confirmació
+        _closeConfirmModal();
+      } else if (activeModalElement.id !== DOM_IDS.CONFIRM_MODAL) {
+        _closeGenericModal(); // Tanca altres modals
+      }
+    }
+  };
+  // Afegim al document per capturar clics fora
+  document.addEventListener("click", currentOutsideClickListener, true); // Usem captura per assegurar-nos que s'executa abans que altres listeners interns
+
+  // Defineix i afegeix listener per Escape
+  currentEscapeKeyListener = (event) => {
+    if (event.key === "Escape" && activeModalElement) {
+      console.log(
+        `Tecla Escape detectada per al modal #${activeModalElement.id}`
+      );
+      if (
+        activeModalElement.id === DOM_IDS.CONFIRM_MODAL &&
+        currentConfirmResolve
+      ) {
+        currentConfirmResolve(false); // Cancel·la confirmació
+        _closeConfirmModal();
+      } else if (activeModalElement.id !== DOM_IDS.CONFIRM_MODAL) {
+        _closeGenericModal(); // Tanca altres modals
+      }
+    }
+  };
+  document.addEventListener("keydown", currentEscapeKeyListener, true);
 
   const firstFocusable = modalElement.querySelector(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    SELECTORS.FOCUSABLE_ELEMENTS
   );
   firstFocusable?.focus();
+
+  console.log(`Modal obert: #${modalElement.id}`);
 }
 
-/** Tanca un modal genèric. */
-function _closeGenericModal(modalElement) {
-  if (!modalElement || modalElement !== activeModal) return; // Només tanca l'actiu
-  modalElement.style.display = "none";
+/** Tanca el modal genèric actualment actiu. */
+function _closeGenericModal() {
+  if (!activeModalElement) return;
+
+  const modalToClose = activeModalElement;
+
+  modalToClose.style.display = "none";
   document.body.classList.remove(CSS_CLASSES.MODAL_OPEN_BODY);
-  document.removeEventListener("keydown", _handleGlobalEscape); // Treu listener Escape
-  activeModal = null; // Reseteja referència
-  // TODO: Retornar focus
-}
 
-/** Gestiona la tecla Escape globalment per tancar el modal actiu. */
-function _handleGlobalEscape(event) {
-  if (event.key === "Escape" && activeModal) {
-    // Excepció: No tanquem el modal de confirmació amb Escape directament aquí,
-    // ja que té la seva pròpia lògica de cancel·lació.
-    if (activeModal.id !== DOM_IDS.CONFIRM_MODAL) {
-      _closeGenericModal(activeModal);
-    }
+  // Elimina els listeners GLOBALS que vam afegir en obrir
+  if (currentOutsideClickListener) {
+    document.removeEventListener("click", currentOutsideClickListener, true);
+    currentOutsideClickListener = null;
   }
+  if (currentEscapeKeyListener) {
+    document.removeEventListener("keydown", currentEscapeKeyListener, true);
+    currentEscapeKeyListener = null;
+  }
+
+  console.log(`Modal tancat: #${modalToClose.id}`);
+  activeModalElement = null;
+
+  // Retorna focus només si hi havia un element previ i no estem tancant per obrir un altre modal immediatament
+  previousActiveElement?.focus();
+  previousActiveElement = null;
 }
 
 /** Crea un element de llista (DOM) per a una dieta. */
@@ -108,6 +174,7 @@ function _createDietListItem(diet) {
   const deleteBtn = document.createElement("button");
   deleteBtn.className = `${CSS_CLASSES.LIST_ITEM_BTN} ${CSS_CLASSES.LIST_ITEM_BTN_DELETE} ${CSS_CLASSES.DIET_DELETE_BTN}`;
   deleteBtn.setAttribute("aria-label", `Eliminar dieta ${ddmmaa}`);
+  // Afegim text ocult per accessibilitat, la icona va per CSS si s'usa :before/:after o directament com img
   deleteBtn.innerHTML = `<img src="assets/icons/delete.svg" alt="" class="icon"><span class="btn-text visually-hidden">Eliminar</span>`;
   deleteBtn.setAttribute(DATA_ATTRIBUTES.DIET_ID, diet.id);
   deleteBtn.setAttribute(DATA_ATTRIBUTES.DIET_DATE, diet.date);
@@ -146,50 +213,86 @@ async function _handleDietListClick(event) {
       `¿Quieres cargar la dieta de la ${franjaText} del ${ddmmaa}? Los datos no guardados se perderán.`,
       "Cargar dieta"
     );
-    if (confirmed) loadDietById(dietId);
+    if (confirmed) {
+      // loadDietById hauria de tancar el modal de dietes internament si té èxit
+      loadDietById(dietId);
+    }
   } else if (deleteButton) {
     event.stopPropagation();
     const dietId = deleteButton.getAttribute(DATA_ATTRIBUTES.DIET_ID);
     const dietDate = deleteButton.getAttribute(DATA_ATTRIBUTES.DIET_DATE);
     const dietType = deleteButton.getAttribute(DATA_ATTRIBUTES.DIET_TYPE);
-    if (dietId) deleteDietHandler(dietId, dietDate, dietType); // Ja demana confirmació interna
+    if (dietId) {
+      // deleteDietHandler ja gestiona la confirmació
+      deleteDietHandler(dietId, dietDate, dietType);
+    }
   }
 }
 
 /** Traps focus inside the confirm modal. */
 function _trapConfirmFocus(event) {
-  /* ... (codi igual que abans) ... */
+  if (
+    !confirmModalElement ||
+    confirmModalElement !== activeModalElement ||
+    event.key !== "Tab"
+  )
+    return;
+  const focusables = Array.from(
+    confirmModalElement.querySelectorAll(SELECTORS.FOCUSABLE_ELEMENTS)
+  ).filter((el) => el.offsetParent !== null);
+  if (focusables.length === 0) return;
+  const firstFocusable = focusables[0];
+  const lastFocusable = focusables[focusables.length - 1];
+  if (event.shiftKey) {
+    if (document.activeElement === firstFocusable) {
+      event.preventDefault();
+      lastFocusable.focus();
+    }
+  } else {
+    if (document.activeElement === lastFocusable) {
+      event.preventDefault();
+      firstFocusable.focus();
+    }
+  }
 }
-/** Neteja listeners del modal de confirmació. */
+
+/** Neteja listeners específics del modal de confirmació (Sí/No i Trap Focus). */
 function _cleanupConfirmModalListeners() {
-  /* ... (codi igual que abans) ... */
+  if (confirmNoBtn) confirmNoBtn.removeEventListener("click", _handleConfirmNo);
+  if (confirmYesBtn)
+    confirmYesBtn.removeEventListener("click", _handleConfirmYes);
+  document.removeEventListener("keydown", _trapConfirmFocus); // Neteja el trap
+  currentConfirmResolve = null; // Molt important!
+  // console.log("Listeners interns del modal de confirmació netejats.");
 }
+
 /** Gestiona clic "Sí". */
 function _handleConfirmYes() {
-  /* ... (codi igual que abans) ... */
+  if (currentConfirmResolve) currentConfirmResolve(true);
+  _closeConfirmModal();
 }
+
 /** Gestiona clic "No". */
 function _handleConfirmNo() {
-  /* ... (codi igual que abans) ... */
+  if (currentConfirmResolve) currentConfirmResolve(false);
+  _closeConfirmModal();
 }
-/** Gestiona clic fora del confirm modal. */
-function _handleConfirmOutsideClick(event) {
-  /* ... (codi igual que abans) ... */
-}
-/** Gestiona Escape per al confirm modal. */
-function _handleConfirmEscape(event) {
-  /* ... (codi igual que abans) ... */
-}
-/** Tanca confirm modal i neteja listeners. */
+
+/** Tanca el modal de confirmació i neteja els seus listeners interns. */
 function _closeConfirmModal() {
-  /* ... (codi igual que abans, crida _closeGenericModal) ... */
+  _cleanupConfirmModalListeners(); // Neteja Sí/No/Trap
+  _closeGenericModal(); // Crida genèrica per ocultar i netejar listeners globals
 }
 
 // --- Funcions Públiques / Exportades ---
 
-/** Configura listeners per a modals genèrics. */
+/**
+ * Configura els listeners per a modals genèrics que s'obren amb enllaços `href="#modal-id"`.
+ * També inicialitza el cache d'elements per al modal de confirmació.
+ * @export
+ */
 export function setupModalGenerics() {
-  // Cacheig inicial d'elements del modal de confirmació
+  // Cacheig inicial elements modal de confirmació
   confirmModalElement = document.getElementById(DOM_IDS.CONFIRM_MODAL);
   if (confirmModalElement) {
     confirmMsgElement = document.getElementById(DOM_IDS.CONFIRM_MESSAGE);
@@ -204,35 +307,62 @@ export function setupModalGenerics() {
       !confirmYesBtn ||
       !confirmNoBtn
     ) {
-      console.error("Falten elements dins del modal de confirmació.");
+      console.error(
+        "Falten elements dins del modal de confirmació. Funcionalitat desactivada."
+      );
       confirmModalElement = null;
     }
+    // No afegim listener de clic fora aquí, es gestiona globalment quan s'obre
   } else {
-    console.warn("Modal de confirmació no trobat.");
+    console.warn("Modal de confirmació no trobat durant la inicialització.");
   }
 
-  // Listeners per triggers genèrics (ex: About)
-  const modalTriggers = document.querySelectorAll('a[href^="#"]');
+  // Configura triggers genèrics (com el botó "About")
+  const modalTriggers = document.querySelectorAll(SELECTORS.MODAL_TRIGGER);
   modalTriggers.forEach((trigger) => {
-    const modalId = trigger.getAttribute("href").substring(1);
-    const targetModal = document.getElementById(modalId);
-    if (
-      targetModal &&
-      targetModal.classList.contains(SELECTORS.MODAL.substring(1))
-    ) {
-      trigger.addEventListener("click", (event) => {
-        event.preventDefault();
-        _openGenericModal(targetModal);
-      });
-      const closeButtons = targetModal.querySelectorAll(
-        SELECTORS.MODAL_CLOSE_BTN
+    try {
+      const modalId = trigger.getAttribute("href")?.substring(1);
+      if (!modalId) return;
+      const targetModal = document.getElementById(modalId);
+
+      // Assegura't que és un modal que volem gestionar aquí
+      if (targetModal && targetModal.matches(SELECTORS.MODAL)) {
+        // Evita afegir listeners múltiples
+        if (trigger.dataset.modalSetup === "true") return;
+        trigger.dataset.modalSetup = "true";
+
+        trigger.addEventListener("click", (event) => {
+          event.preventDefault();
+          // Comprova si ja hi ha un modal obert abans d'obrir-ne un altre
+          if (activeModalElement && activeModalElement !== targetModal) {
+            console.warn(
+              `S'ha intentat obrir el modal #${modalId} mentre #${activeModalElement.id} estava actiu.`
+            );
+            // Opcional: podries tancar l'antic primer?
+            // _closeGenericModal();
+            // setTimeout(() => _openGenericModal(targetModal), 10); // Petita espera
+            return; // Per ara, simplement no obrim el nou
+          }
+          _openGenericModal(targetModal);
+        });
+
+        // Configura botons de tancar interns
+        const closeButtons = targetModal.querySelectorAll(
+          SELECTORS.MODAL_CLOSE_BTN
+        );
+        closeButtons.forEach((btn) => {
+          if (btn.dataset.modalCloseSetup === "true") return;
+          btn.dataset.modalCloseSetup = "true";
+          btn.addEventListener("click", () => _closeGenericModal()); // Tanca l'actiu
+        });
+      }
+    } catch (error) {
+      console.error(
+        `Error configurant trigger per a modal: ${trigger.getAttribute(
+          "href"
+        )}`,
+        error
       );
-      closeButtons.forEach((btn) => {
-        btn.addEventListener("click", () => _closeGenericModal(targetModal));
-      });
-      targetModal.addEventListener("click", (event) => {
-        if (event.target === targetModal) _closeGenericModal(targetModal);
-      });
     }
   });
   console.log("Listeners per a modals genèrics configurats.");
@@ -241,34 +371,41 @@ export function setupModalGenerics() {
 /** Obre el modal de gestió de dietes. */
 export function openDietModal() {
   if (!dietModalElement) {
-    // Cacheig i listener de delegació només la primera vegada
+    // Cacheig i listener només la primera vegada
     dietModalElement = document.getElementById(DOM_IDS.DIET_MODAL);
     dietOptionsListElement = document.getElementById(DOM_IDS.DIET_OPTIONS_LIST);
     noDietsTextElement = document.getElementById(DOM_IDS.NO_DIETS_TEXT);
     if (dietOptionsListElement) {
       dietOptionsListElement.addEventListener("click", _handleDietListClick);
     } else {
-      console.error("No s'ha trobat el contenidor de la llista de dietes.");
-      dietModalElement = null; // Evita obrir si falta la llista
+      console.error(
+        "El contenidor de la llista de dietes (#diet-options) no s'ha trobat."
+      );
+      dietModalElement = null;
     }
   }
   if (dietModalElement) {
     _openGenericModal(dietModalElement);
-    displayDietOptions(); // Actualitza contingut en obrir
+    displayDietOptions();
   }
 }
 
 /** Tanca el modal de gestió de dietes. */
 export function closeDietModal() {
-  _closeGenericModal(dietModalElement);
+  // Només tanquem si el modal actiu ÉS el de dietes
+  if (activeModalElement && activeModalElement.id === DOM_IDS.DIET_MODAL) {
+    _closeGenericModal();
+  }
 }
 
-/** Mostra les opcions de dietes desades. */
+/** Mostra les opcions de dietes desades dins del seu contenidor al modal. */
 export async function displayDietOptions() {
+  if (!dietOptionsListElement)
+    dietOptionsListElement = document.getElementById(DOM_IDS.DIET_OPTIONS_LIST);
+  if (!noDietsTextElement)
+    noDietsTextElement = document.getElementById(DOM_IDS.NO_DIETS_TEXT);
   if (!dietOptionsListElement || !noDietsTextElement) {
-    console.error(
-      "No es poden mostrar opcions de dietes: elements DOM no trobats."
-    );
+    console.error("Elements DOM per a opcions de dietes no disponibles.");
     return;
   }
   dietOptionsListElement.innerHTML = "";
@@ -277,9 +414,12 @@ export async function displayDietOptions() {
     if (!savedDiets || savedDiets.length === 0) {
       dietOptionsListElement.classList.add(CSS_CLASSES.HIDDEN);
       noDietsTextElement.classList.remove(CSS_CLASSES.HIDDEN);
+      noDietsTextElement.textContent = "No hay dietas guardadas.";
     } else {
       dietOptionsListElement.classList.remove(CSS_CLASSES.HIDDEN);
       noDietsTextElement.classList.add(CSS_CLASSES.HIDDEN);
+      // Opcional: Ordenar
+      // savedDiets.sort((a, b) => new Date(b.date) - new Date(a.date));
       savedDiets.forEach((diet) => {
         const listItem = _createDietListItem(diet);
         dietOptionsListElement.appendChild(listItem);
@@ -287,33 +427,34 @@ export async function displayDietOptions() {
     }
   } catch (error) {
     console.error("Error obtenint o mostrant les dietes desades:", error);
-    // showToast("Error al carregar les dietes guardades.", "error"); // showToast potser no està disponible aquí
     dietOptionsListElement.classList.add(CSS_CLASSES.HIDDEN);
     noDietsTextElement.classList.remove(CSS_CLASSES.HIDDEN);
-    noDietsTextElement.textContent = "Error al carregar les dietes.";
+    noDietsTextElement.textContent = "Error al cargar las dietas.";
   }
 }
 
 /** Mostra un modal de confirmació reutilitzable. */
 export function showConfirmModal(message, title = "Confirmar acció") {
   if (!confirmModalElement) {
-    console.error("Modal de confirmació no inicialitzat.");
-    return Promise.resolve(false);
+    return Promise.reject(new Error("Modal de confirmació no inicialitzat."));
   }
   if (currentConfirmResolve) {
-    console.warn("Intent d'obrir confirmació mentre una altra està activa.");
-    return Promise.resolve(false);
+    // Ja hi ha una promesa pendent
+    console.warn("Modal de confirmació ja actiu. Petició ignorada.");
+    return Promise.resolve(false); // O potser rebutjar l'anterior? Per ara ignorem la nova.
   }
   return new Promise((resolve) => {
     currentConfirmResolve = resolve;
     confirmTitleElement.textContent = title;
     confirmMsgElement.textContent = message;
+
+    // Afegeix listeners interns Sí/No/TrapFocus
     confirmYesBtn.addEventListener("click", _handleConfirmYes);
     confirmNoBtn.addEventListener("click", _handleConfirmNo);
-    window.addEventListener("click", _handleConfirmOutsideClick); // Compte amb múltiples listeners si no es netegen bé
     document.addEventListener("keydown", _trapConfirmFocus);
-    document.addEventListener("keydown", _handleConfirmEscape);
+
+    // Obre el modal (això afegeix Escape global i Clic Fora global)
     _openGenericModal(confirmModalElement);
-    confirmYesBtn.focus();
+    confirmYesBtn.focus(); // Focus inicial
   });
 }
