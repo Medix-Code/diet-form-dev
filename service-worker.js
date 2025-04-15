@@ -36,7 +36,7 @@ const PRECACHE_FILES = [
   "./assets/icons/download_blue.svg",
   "./assets/icons/gear.svg",
   "./assets/icons/submenu.svg",
-  // ... (afegeix altres icones SVG/PNG essencials)
+  // ... ( altres icones SVG/PNG essencials)
 ];
 
 // Fitxers no essencials per a la primera càrrega o que es volen actualitzar sovint
