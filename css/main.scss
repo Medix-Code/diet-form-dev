@@ -86,7 +86,7 @@
   --service-3-border: #f0cdaa;
   --service-4-bg: #f9e6ff;
   --service-4-border: #e1b6f4;
-  --border-btn-service: #747474;
+  --border-btn-service: #363333;
 
   /* Mides i transicions */
   --top-bar-height: 60px;
@@ -820,7 +820,7 @@ button .fa {
 
 .active-square {
   transform: scale(1.05);
-  border: 2px solid var(--border-btn-service);
+  border: 1px solid var(--border-btn-service);
 }
 
 .service {
