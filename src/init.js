@@ -8,6 +8,7 @@ import {
 import { initServices } from "./services/servicesPanelManager.js";
 import { initSignature } from "./services/signatureService.js";
 import { setupTabs } from "./ui/tabs.js";
+import { initThemeSwitcher } from "./ui/theme.js"; //
 import { setupMainButtons } from "./ui/mainButtons.js";
 import { setupClearSelectedService } from "./ui/clearService.js";
 import { setupModalGenerics } from "./ui/modals.js";
@@ -46,6 +47,7 @@ export async function initializeApp() {
   setupDatePickers();
   setupTimePickers();
   initSettingsPanel();
+  initThemeSwitcher();
 
   // --- Configuració de Lògica de Formulari i Validacions ---
   setupServiceNumberRestrictions();
