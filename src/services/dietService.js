@@ -305,29 +305,37 @@ export async function handleSaveDietWithPossibleOverwrite() {
  * Carrega les dades d'una dieta específica al formulari.
  * @param {string} dietId - L'ID de la dieta a carregar.
  * @export
+ * @throws {Error} Si no es troba la dieta o hi ha un error durant la càrrega/populació.
  */
 export async function loadDietById(dietId) {
   if (!dietId) {
     console.warn("S'ha intentat carregar una dieta sense ID.");
-    return;
+    throw new Error("ID de dieta no proporcionat."); // Llança error per indicar problema
   }
   try {
-    const diet = await getDiet(dietId);
+    const diet = await getDiet(dietId); // Obté la dieta
     if (!diet) {
       showToast(`No se encontró la dieta con ID ${dietId}.`, "error");
-      return;
+      throw new Error(`Dieta amb ID ${dietId} no trobada.`); // Llança error
     }
 
-    populateFormWithDietData(diet);
+    populateFormWithDietData(diet); // Omple el formulari
 
-    // Captura l'estat carregat com el nou estat inicial
-    captureInitialFormState();
+    captureInitialFormState(); // Captura com a estat inicial
 
     showToast("Dieta cargada correctamente.", "success");
-    closeDietModal(); // Tanca el modal de selecció de dietes
+    console.log("Intentant tancar el modal de dietes...");
+    // *** PUNT CLAU: Tanca el modal DESPRÉS que tot hagi anat bé ***
+    closeDietModal(); // Crida a la funció importada de modals.jsç
+    console.log("Crida a closeDietModal realitzada.");
   } catch (error) {
     console.error(`Error carregant la dieta ${dietId}:`, error);
-    showToast(`Error al cargar la dieta: ${error.message}`, "error");
+    showToast(
+      `Error al cargar la dieta: ${error.message || "Error desconegut"}`,
+      "error"
+    );
+    // Llança l'error perquè qui l'ha cridat (modals.js) sàpiga que ha fallat
+    throw error;
   }
 }
 

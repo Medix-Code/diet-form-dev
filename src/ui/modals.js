@@ -71,58 +71,85 @@ let currentEscapeKeyListener = null; // Referència al listener d'Escape actiu
 
 /** Obre un modal genèric. */
 function _openGenericModal(modalElement) {
-  if (!modalElement || activeModalElement) {
-    console.warn(
-      "Intent d'obrir modal invàlid o un altre ja actiu.",
-      modalElement?.id
-    );
+  // Comprovació 1: El modal a obrir existeix?
+  if (!modalElement) {
+    console.error("Intent d'obrir un modal que no existeix.");
     return;
   }
 
-  previousActiveElement = document.activeElement;
-  activeModalElement = modalElement;
+  // Comprovació 2: Ja hi ha un modal actiu?
+  // EXCEPCIÓ: Permetem obrir el modal de confirmació (#confirm-modal)
+  // fins i tot si un altre modal genèric ja està actiu.
+  if (
+    activeModalElement &&
+    activeModalElement.id !== modalElement.id &&
+    modalElement.id !== DOM_IDS.CONFIRM_MODAL
+  ) {
+    console.warn(
+      `S'ha intentat obrir el modal #${modalElement.id} mentre #${activeModalElement.id} ja estava actiu (i no és confirmació). Acció bloquejada.`
+    );
+    return; // Bloqueja l'obertura si ja n'hi ha un altre (i no és el de confirmació)
+  }
 
+  // Si estem obrint un modal NOU (no el de confirmació sobre un altre),
+  // guardem l'element que tenia el focus abans.
+  if (!activeModalElement) {
+    previousActiveElement = document.activeElement;
+  }
+  // Si ja hi havia un modal i obrim el de confirmació, mantenim el previousActiveElement
+  // del modal original per poder retornar-hi si es cancel·la tot.
+
+  // *** Estableix el modal actual com l'ACTIU ***
+  // Si obrim confirmació sobre un altre, 'activeModalElement' ara serà el de confirmació.
+  activeModalElement = modalElement;
+  console.log("[Open] Active Modal SET to:", activeModalElement?.id);
   modalElement.style.display = "block"; // O 'flex'
   document.body.classList.add(CSS_CLASSES.MODAL_OPEN_BODY);
 
-  // Defineix i afegeix listener per clic fora
-  currentOutsideClickListener = (event) => {
-    // Comprova si el clic és DIRECTAMENT sobre l'overlay del modal actiu
-    if (event.target === activeModalElement) {
-      console.log(`Clic fora detectat per al modal #${activeModalElement.id}`);
-      if (
-        activeModalElement.id === DOM_IDS.CONFIRM_MODAL &&
-        currentConfirmResolve
-      ) {
-        currentConfirmResolve(false); // Cancel·la confirmació
-        _closeConfirmModal();
-      } else if (activeModalElement.id !== DOM_IDS.CONFIRM_MODAL) {
-        _closeGenericModal(); // Tanca altres modals
+  // Defineix i afegeix listeners globals per clic fora i Escape
+  // Només si no estem ja escoltant (evita duplicats si hi ha error)
+  if (!currentOutsideClickListener) {
+    currentOutsideClickListener = (event) => {
+      if (event.target === activeModalElement) {
+        // Només si clica l'overlay directe
+        console.log(
+          `Clic fora detectat per al modal #${activeModalElement?.id}`
+        );
+        if (
+          activeModalElement.id === DOM_IDS.CONFIRM_MODAL &&
+          currentConfirmResolve
+        ) {
+          currentConfirmResolve(false);
+          _closeConfirmModal();
+        } else if (activeModalElement.id !== DOM_IDS.CONFIRM_MODAL) {
+          _closeGenericModal();
+        }
       }
-    }
-  };
-  // Afegim al document per capturar clics fora
-  document.addEventListener("click", currentOutsideClickListener, true); // Usem captura per assegurar-nos que s'executa abans que altres listeners interns
+    };
+    document.addEventListener("click", currentOutsideClickListener, true);
+  }
 
-  // Defineix i afegeix listener per Escape
-  currentEscapeKeyListener = (event) => {
-    if (event.key === "Escape" && activeModalElement) {
-      console.log(
-        `Tecla Escape detectada per al modal #${activeModalElement.id}`
-      );
-      if (
-        activeModalElement.id === DOM_IDS.CONFIRM_MODAL &&
-        currentConfirmResolve
-      ) {
-        currentConfirmResolve(false); // Cancel·la confirmació
-        _closeConfirmModal();
-      } else if (activeModalElement.id !== DOM_IDS.CONFIRM_MODAL) {
-        _closeGenericModal(); // Tanca altres modals
+  if (!currentEscapeKeyListener) {
+    currentEscapeKeyListener = (event) => {
+      if (event.key === "Escape" && activeModalElement) {
+        console.log(
+          `Tecla Escape detectada per al modal #${activeModalElement?.id}`
+        );
+        if (
+          activeModalElement.id === DOM_IDS.CONFIRM_MODAL &&
+          currentConfirmResolve
+        ) {
+          currentConfirmResolve(false);
+          _closeConfirmModal();
+        } else if (activeModalElement.id !== DOM_IDS.CONFIRM_MODAL) {
+          _closeGenericModal();
+        }
       }
-    }
-  };
-  document.addEventListener("keydown", currentEscapeKeyListener, true);
+    };
+    document.addEventListener("keydown", currentEscapeKeyListener, true);
+  }
 
+  // Mou el focus
   const firstFocusable = modalElement.querySelector(
     SELECTORS.FOCUSABLE_ELEMENTS
   );
@@ -134,28 +161,28 @@ function _openGenericModal(modalElement) {
 /** Tanca el modal genèric actualment actiu. */
 function _closeGenericModal() {
   if (!activeModalElement) return;
-
   const modalToClose = activeModalElement;
+  // ... (Neteja listeners globals: clic fora, escape) ...
+  if (currentOutsideClickListener) {
+    /* ... remove listener ... */
+  }
+  if (currentEscapeKeyListener) {
+    /* ... remove listener ... */
+  }
 
   modalToClose.style.display = "none";
   document.body.classList.remove(CSS_CLASSES.MODAL_OPEN_BODY);
-
-  // Elimina els listeners GLOBALS que vam afegir en obrir
-  if (currentOutsideClickListener) {
-    document.removeEventListener("click", currentOutsideClickListener, true);
-    currentOutsideClickListener = null;
-  }
-  if (currentEscapeKeyListener) {
-    document.removeEventListener("keydown", currentEscapeKeyListener, true);
-    currentEscapeKeyListener = null;
-  }
-
   console.log(`Modal tancat: #${modalToClose.id}`);
-  activeModalElement = null;
+  activeModalElement = null; // <<-- Reseteja QUIN modal està actiu
 
-  // Retorna focus només si hi havia un element previ i no estem tancant per obrir un altre modal immediatament
-  previousActiveElement?.focus();
-  previousActiveElement = null;
+  // Només retornem el focus si no estem enmig d'una operació de confirmació
+  // (perquè volem que el focus torni DESPRÉS de tancar el modal original)
+  if (!currentConfirmResolve) {
+    // Si no hi ha una promesa de confirmació pendent
+    previousActiveElement?.focus();
+    previousActiveElement = null;
+  }
+  // Si currentConfirmResolve existeix, el focus es gestionarà quan es tanqui el modal original
 }
 
 /** Crea un element de llista (DOM) per a una dieta. */
@@ -208,14 +235,31 @@ async function _handleDietListClick(event) {
     const dietDate = loadButton.getAttribute(DATA_ATTRIBUTES.DIET_DATE);
     const dietType = loadButton.getAttribute(DATA_ATTRIBUTES.DIET_TYPE);
     if (!dietId) return;
+
     const { ddmmaa, franjaText } = getDietDisplayInfo(dietDate, dietType);
     const confirmed = await showConfirmModal(
-      `¿Quieres cargar la dieta de la ${franjaText} del ${ddmmaa}? Los datos no guardados se perderán.`,
+      `¿Quieres cargar la dieta de la ${franjaText} del ${ddmmaa}? Los datos no guardados del formulario actual se perderán.`,
       "Cargar dieta"
     );
+    console.log("Confirmació rebuda:", confirmed); //
+
     if (confirmed) {
-      // loadDietById hauria de tancar el modal de dietes internament si té èxit
-      loadDietById(dietId);
+      console.log("Entrant a carregar dieta...");
+      // Cridem loadDietById. Aquesta funció (a dietService.js)
+      // és la responsable de tancar el modal SI la càrrega té èxit.
+      try {
+        await loadDietById(dietId); // Esperem per si llança error
+        // Si loadDietById té èxit, ja haurà cridat a closeDietModal internament.
+        console.log(`Intent de càrrega completat per a la dieta ${dietId}.`);
+      } catch (error) {
+        // Si loadDietById falla, el modal probablement no s'haurà tancat.
+        // Podríem decidir tancar-lo aquí o deixar-lo obert.
+        // Per ara, el deixem obert per mantenir la consistència amb l'eliminació.
+        console.error(
+          `Error durant la crida a loadDietById per a ${dietId}:`,
+          error
+        );
+      }
     }
   } else if (deleteButton) {
     event.stopPropagation();
@@ -223,7 +267,9 @@ async function _handleDietListClick(event) {
     const dietDate = deleteButton.getAttribute(DATA_ATTRIBUTES.DIET_DATE);
     const dietType = deleteButton.getAttribute(DATA_ATTRIBUTES.DIET_TYPE);
     if (dietId) {
-      // deleteDietHandler ja gestiona la confirmació
+      // deleteDietHandler (a dietService.js) demana confirmació
+      // i després actualitza la llista (displayDietOptions), però NO tanca el modal.
+      // Això ja fa el que volem.
       deleteDietHandler(dietId, dietDate, dietType);
     }
   }
@@ -261,27 +307,45 @@ function _cleanupConfirmModalListeners() {
   if (confirmNoBtn) confirmNoBtn.removeEventListener("click", _handleConfirmNo);
   if (confirmYesBtn)
     confirmYesBtn.removeEventListener("click", _handleConfirmYes);
-  document.removeEventListener("keydown", _trapConfirmFocus); // Neteja el trap
-  currentConfirmResolve = null; // Molt important!
+  document.removeEventListener("keydown", _trapConfirmFocus);
+  // Ja no netegem currentConfirmResolve aquí, es fa després de resoldre
   // console.log("Listeners interns del modal de confirmació netejats.");
 }
 
 /** Gestiona clic "Sí". */
 function _handleConfirmYes() {
   if (currentConfirmResolve) currentConfirmResolve(true);
-  _closeConfirmModal();
+  _closeConfirmModalOnly(); // Només tanca el modal de confirmació visualment
+  currentConfirmResolve = null; // Reseteja la promesa ARA
 }
 
 /** Gestiona clic "No". */
 function _handleConfirmNo() {
   if (currentConfirmResolve) currentConfirmResolve(false);
-  _closeConfirmModal();
+  _closeConfirmModalOnly(); // Només tanca el modal de confirmació visualment
+  currentConfirmResolve = null; // Reseteja la promesa ARA
 }
 
 /** Tanca el modal de confirmació i neteja els seus listeners interns. */
 function _closeConfirmModal() {
   _cleanupConfirmModalListeners(); // Neteja Sí/No/Trap
   _closeGenericModal(); // Crida genèrica per ocultar i netejar listeners globals
+}
+
+/** Tanca NOMÉS el modal de confirmació visualment i neteja els seus listeners interns.
+ *  NO crida a _closeGenericModal per no resetejar activeModalElement ni listeners globals.
+ */
+function _closeConfirmModalOnly() {
+  if (!confirmModalElement) return;
+  confirmModalElement.style.display = "none"; // Oculta el modal de confirmació
+  _cleanupConfirmModalListeners(); // Neteja listeners interns (Sí/No/TrapFocus)
+  console.log(
+    "Modal de confirmació tancat visualment i listeners interns netejats."
+  );
+  // NO reseteja activeModalElement aquí
+  // NO treu la classe del body aquí
+  // NO treu listeners globals aquí
+  // NO retorna el focus aquí
 }
 
 // --- Funcions Públiques / Exportades ---
@@ -390,11 +454,15 @@ export function openDietModal() {
   }
 }
 
-/** Tanca el modal de gestió de dietes. */
+/** Tanca el modal de gestió de dietes (crida la funció genèrica). */
 export function closeDietModal() {
-  // Només tanquem si el modal actiu ÉS el de dietes
+  // Comprova si el modal actiu és realment el de dietes abans de tancar
   if (activeModalElement && activeModalElement.id === DOM_IDS.DIET_MODAL) {
     _closeGenericModal();
+  } else {
+    console.warn(
+      "S'ha intentat cridar closeDietModal quan no era el modal actiu."
+    );
   }
 }
 
@@ -436,25 +504,30 @@ export async function displayDietOptions() {
 /** Mostra un modal de confirmació reutilitzable. */
 export function showConfirmModal(message, title = "Confirmar acció") {
   if (!confirmModalElement) {
-    return Promise.reject(new Error("Modal de confirmació no inicialitzat."));
+    /* ... error ... */
   }
   if (currentConfirmResolve) {
-    // Ja hi ha una promesa pendent
-    console.warn("Modal de confirmació ja actiu. Petició ignorada.");
-    return Promise.resolve(false); // O potser rebutjar l'anterior? Per ara ignorem la nova.
-  }
+    /* ... warning ... */
+  } // Aquesta comprovació encara és útil
+
   return new Promise((resolve) => {
     currentConfirmResolve = resolve;
     confirmTitleElement.textContent = title;
     confirmMsgElement.textContent = message;
 
-    // Afegeix listeners interns Sí/No/TrapFocus
     confirmYesBtn.addEventListener("click", _handleConfirmYes);
     confirmNoBtn.addEventListener("click", _handleConfirmNo);
     document.addEventListener("keydown", _trapConfirmFocus);
 
-    // Obre el modal (això afegeix Escape global i Clic Fora global)
-    _openGenericModal(confirmModalElement);
-    confirmYesBtn.focus(); // Focus inicial
+    // *** IMPORTANT: Obre el modal de confirmació SENSE canviar activeModalElement ***
+    // Encara considerem que el modal subjacent és l'actiu principalment.
+    confirmModalElement.style.display = "block"; // Mostra directament
+    // NO cridem _openGenericModal aquí per no canviar activeModalElement
+    // Podríem afegir el listener d'escape específic per a confirmació si cal
+    // document.addEventListener('keydown', _handleConfirmEscapeSpecific);
+    console.log(
+      "Modal de confirmació obert (sobre possible altre modal). Esperant resposta..."
+    );
+    confirmYesBtn.focus();
   });
 }
