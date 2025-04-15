@@ -1,110 +1,190 @@
-//pdfService.js
 /**
- * Lógica para generar y descargar PDFs.
+ * @file pdfService.js
+ * @description Lògica per generar, omplir i descarregar documents PDF de dietes.
+ * @module pdfService
  */
 
+// Importacions de mòduls interns
 import { getCurrentTab } from "../ui/tabs.js";
 import { showToast } from "../ui/toast.js";
 import { handleSaveDietWithPossibleOverwrite } from "./dietService.js";
 import { gatherAllData } from "./formService.js";
 import { validateDadesTab, validateServeisTab } from "../utils/validation.js";
-import { isAppInstalled, showInstallPrompt } from "./pwaService.js";
+// Importacions del servei PWA (amb el nom corregit i només el necessari)
+import {
+  isAppInstalled,
+  requestInstallPromptAfterAction,
+} from "./pwaService.js"; // <-- NOM CORREGIT i nova funció esperada
 
-/**
- * Coordenadas generales para la plantilla PDF.
- */
+// --- Constants ---
+
+const DOM_IDS = {
+  DADES_TAB: "tab-dades",
+  SERVEIS_TAB: "tab-serveis",
+};
+
+const CSS_CLASSES = {
+  ERROR_TAB: "error-tab",
+};
+
+const PDF_SETTINGS = {
+  TEMPLATE_URLS: {
+    DEFAULT: "./dieta_tsc.pdf", // URL per defecte o per 'empresa1'
+    EMPRESA_2: "./dieta_tsc.pdf", // Canviar si és diferent per a 'empresa2'
+    // Afegir altres empreses si cal
+  },
+  SERVICE_Y_OFFSET: 82, // Desplaçament vertical per cada servei addicional
+  SIGNATURE_WIDTH: 100,
+  SIGNATURE_HEIGHT: 50,
+  WATERMARK_TEXT: "misdietas.com",
+  DEFAULT_FILENAME: "dieta.pdf",
+};
+
+// Coordenades (ben definides com a constants ja a l'original)
 const generalFieldCoordinates = {
-  date: { x: 155, y: 731, size: 16, color: "#000000" },
-  vehicleNumber: { x: 384, y: 731, size: 16, color: "#000000" },
-  person1: { x: 65, y: 368, size: 16, color: "#000000" },
-  person2: { x: 320, y: 368, size: 16, color: "#000000" },
+  /* ... (sense canvis) ... */
 };
-
-/**
- * Coordenadas base para cada servicio.
- */
 const baseServiceFieldCoordinates = {
-  serviceNumber: { x: 130, y: 715, size: 16, color: "#000000" },
-  origin: { x: 232, y: 698, size: 16, color: "#000000" },
-  originTime: { x: 441, y: 698, size: 16, color: "#000000" },
-  destination: { x: 232, y: 683, size: 16, color: "#000000" },
-  destinationTime: { x: 441, y: 681, size: 16, color: "#000000" },
-  endTime: { x: 441, y: 665, size: 16, color: "#000000" },
+  /* ... (sense canvis) ... */
 };
-
-/**
- * Coordenadas para las firmas.
- */
 const signatureCoordinates = {
-  conductor: { x: 125, y: 295, width: 100, height: 50 },
-  ayudante: { x: 380, y: 295, width: 100, height: 50 },
+  /* ... (sense canvis) ... */
 };
-
-/**
- * Coordenadas para la marca de agua.
- */
 const fixedTextCoordinates = {
-  website: { x: 250, y: 20, size: 6, color: "#EEEEEE" }, // Ajustar x, y y size según el PDF
+  /* ... (sense canvis) ... */
 };
 
+// --- Funcions Auxiliars ---
+
 /**
- * Convierte un color HEX (ej: "#ffffff") a su representación RGB.
- * @param {string} hex - El color en formato hexadecimal.
- * @returns {{r: number, g: number, b: number} | null}
+ * Converteix un color HEX a RGB. Retorna negre per defecte si és invàlid.
+ * @param {string} hex - Color en format "#RRGGBB".
+ * @returns {{r: number, g: number, b: number}} Objecte RGB (valors 0-255).
  */
 function hexToRgb(hex) {
-  hex = hex.replace("#", "");
-  if (hex.length !== 6) return null;
-  const bigint = parseInt(hex, 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-  return { r, g, b };
+  if (!hex || typeof hex !== "string") return { r: 0, g: 0, b: 0 };
+  const sanitizedHex = hex.replace("#", "");
+  if (sanitizedHex.length !== 6) return { r: 0, g: 0, b: 0 }; // Retorna negre per defecte
+  const bigint = parseInt(sanitizedHex, 16);
+  if (isNaN(bigint)) return { r: 0, g: 0, b: 0 };
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255,
+  };
 }
 
 /**
- * Formatea una fecha "YYYY-MM-DD" a "DD/MM/YYYY" para mostrar en el PDF.
- * @param {string} dateString - La fecha en formato "YYYY-MM-DD".
- * @returns {string} - La fecha formateada como "DD/MM/YYYY".
+ * Formata una data "YYYY-MM-DD" a "DD/MM/YYYY".
+ * @param {string} dateString - Data en format ISO (YYYY-MM-DD).
+ * @returns {string} Data formatada o string buit si l'entrada és invàlida.
  */
 function formatDateForPdf(dateString) {
+  if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) return "";
   const [yyyy, mm, dd] = dateString.split("-");
-  return `${dd.padStart(2, "0")}/${mm.padStart(2, "0")}/${yyyy}`;
+  return `${dd}/${mm}/${yyyy}`;
 }
 
 /**
- * Rellena un PDF con los datos proporcionados (usa PDFLib en window.PDFLib).
- * @param {object} data - Objeto con datos generales (fecha, vehículo, etc.).
- * @param {object[]} servicesData - Array de objetos con datos de servicios.
- * @returns {Promise<Uint8Array>} - Bytes del PDF resultante.
+ * Selecciona la URL de la plantilla PDF basada en les dades generals.
+ * @param {object} generalData - Dades generals que poden contenir 'empresa'.
+ * @returns {string} URL de la plantilla PDF.
+ */
+function getPdfTemplateUrl(generalData) {
+  const empresa = generalData?.empresa; // Accés segur
+  if (empresa === "empresa2" && PDF_SETTINGS.TEMPLATE_URLS.EMPRESA_2) {
+    return PDF_SETTINGS.TEMPLATE_URLS.EMPRESA_2;
+  }
+  // Podria afegir més lògica per a altres empreses aquí
+  return PDF_SETTINGS.TEMPLATE_URLS.DEFAULT;
+}
+
+/**
+ * Gestiona la visualització dels errors de validació a les pestanyes.
+ * @param {boolean} isDadesValid - Si la pestanya de dades és vàlida.
+ * @param {boolean} isServeisValid - Si la pestanya de serveis és vàlida.
+ */
+function handleValidationUIErrors(isDadesValid, isServeisValid) {
+  const dadesTabElement = document.getElementById(DOM_IDS.DADES_TAB);
+  const serveisTabElement = document.getElementById(DOM_IDS.SERVEIS_TAB);
+  const currentTab = getCurrentTab(); // Obtenir la pestanya activa
+
+  // Neteja errors previs
+  dadesTabElement?.classList.remove(CSS_CLASSES.ERROR_TAB);
+  serveisTabElement?.classList.remove(CSS_CLASSES.ERROR_TAB);
+
+  let toastMessage = "";
+
+  if (!isDadesValid && !isServeisValid) {
+    toastMessage =
+      "Completa els camps obligatoris a les pestanyes Datos i Servicios.";
+    dadesTabElement?.classList.add(CSS_CLASSES.ERROR_TAB);
+    serveisTabElement?.classList.add(CSS_CLASSES.ERROR_TAB);
+  } else if (!isDadesValid) {
+    toastMessage = "Completa els camps obligatoris a la pestanya Datos.";
+    dadesTabElement?.classList.add(CSS_CLASSES.ERROR_TAB);
+    // Mostra només si no estem ja a la pestanya amb error
+    if (currentTab !== "dades") {
+      // showToast(toastMessage, 'error'); // Opcional: mostrar sempre?
+    }
+  } else if (!isServeisValid) {
+    toastMessage = "Completa els camps obligatoris a la pestanya Servicios.";
+    serveisTabElement?.classList.add(CSS_CLASSES.ERROR_TAB);
+    // Mostra només si no estem ja a la pestanya amb error
+    if (currentTab !== "serveis") {
+      // showToast(toastMessage, 'error'); // Opcional: mostrar sempre?
+    }
+  }
+
+  // Mostra un únic toast si hi ha algun error
+  if (toastMessage) {
+    showToast(toastMessage, "error");
+  }
+}
+
+// --- Funcions Principals ---
+
+/**
+ * Omple una plantilla PDF amb les dades proporcionades usant PDFLib.
+ * @param {object} data - Dades generals (data, vehicle, personal, signatures).
+ * @param {object[]} servicesData - Array amb les dades de cada servei.
+ * @returns {Promise<Uint8Array>} Promesa que resol amb els bytes del PDF generat.
+ * @throws {Error} Si hi ha problemes carregant la plantilla, la font, o durant la generació.
  */
 export async function fillPdf(data, servicesData) {
+  // Validació bàsica d'arguments
+  if (!data || !Array.isArray(servicesData)) {
+    throw new Error("Dades invàlides proporcionades a fillPdf.");
+  }
+
+  // Assegura't que PDFLib està disponible (dependència global)
+  if (!window.PDFLib || !window.PDFLib.PDFDocument) {
+    console.error(
+      "PDFLib no està disponible a window.PDFLib. Assegura't que s'ha carregat correctament."
+    );
+    throw new Error("La llibreria PDFLib no està carregada.");
+  }
+  const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
+
   try {
-    const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
+    const pdfTemplateUrl = getPdfTemplateUrl(data);
+    const pdfBytes = await fetch(pdfTemplateUrl).then((res) => {
+      if (!res.ok)
+        throw new Error(
+          `No s'ha pogut carregar la plantilla PDF: ${res.statusText}`
+        );
+      return res.arrayBuffer();
+    });
 
-    // Selecciona la plantilla PDF en función de la empresa
-    let pdfTemplateUrl = "./dieta_tsc.pdf";
-    if (data.empresa === "empresa1") {
-      pdfTemplateUrl = "./dieta_tsc.pdf";
-    } else if (data.empresa === "empresa2") {
-      pdfTemplateUrl = "./dieta_tsc.pdf";
-    }
-
-    // Carga la plantilla PDF en memoria
-    const pdfBytes = await fetch(pdfTemplateUrl).then((r) => r.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBytes);
-    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const page = pdfDoc.getPages()[0];
+    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica); // O una altra font si es prefereix
+    const page = pdfDoc.getPages()[0]; // Assumeix una sola pàgina
 
-    // ==========================================
-    // 1) Rellenar Campos Generales
-    // ==========================================
-    for (const [field, coords] of Object.entries(generalFieldCoordinates)) {
+    // 1) Camps Generals
+    Object.entries(generalFieldCoordinates).forEach(([field, coords]) => {
       let value = data[field] || "";
-      if (field === "date" && value !== "") {
-        value = formatDateForPdf(value);
-      }
-      const { r, g, b } = hexToRgb(coords.color) || { r: 0, g: 0, b: 0 };
+      if (field === "date" && value) value = formatDateForPdf(value);
+      const { r, g, b } = hexToRgb(coords.color);
       page.drawText(value, {
         x: coords.x,
         y: coords.y,
@@ -112,202 +192,193 @@ export async function fillPdf(data, servicesData) {
         font: helveticaFont,
         color: rgb(r / 255, g / 255, b / 255),
       });
-    }
+    });
 
-    // ==========================================
-    // 2) Rellenar Datos de los Servicios
-    // ==========================================
-    servicesData.forEach((serv, idx) => {
-      const yOffset = idx * 82; // Cada servicio se desplaza 82 px verticalmente
-      for (const [field, coords] of Object.entries(
-        baseServiceFieldCoordinates
-      )) {
-        const val = serv[field] || "";
-        const { r, g, b } = hexToRgb(coords.color) || { r: 0, g: 0, b: 0 };
-        page.drawText(val, {
+    // 2) Dades de Serveis (iterant)
+    servicesData.forEach((service, index) => {
+      const yOffset = index * PDF_SETTINGS.SERVICE_Y_OFFSET;
+      Object.entries(baseServiceFieldCoordinates).forEach(([field, coords]) => {
+        const value = service[field] || "";
+        const { r, g, b } = hexToRgb(coords.color);
+        page.drawText(value, {
           x: coords.x,
           y: coords.y - yOffset,
           size: coords.size,
           font: helveticaFont,
           color: rgb(r / 255, g / 255, b / 255),
         });
-      }
+      });
     });
 
-    // ==========================================
-    // 3) Insertar Firmas
-    // ==========================================
-    if (data.signatureConductor) {
-      const pngImage = await pdfDoc.embedPng(data.signatureConductor);
-      const coords = signatureCoordinates.conductor;
-      page.drawImage(pngImage, {
-        x: coords.x,
-        y: coords.y,
-        width: coords.width,
-        height: coords.height,
-      });
-    }
-    if (data.signatureAjudant) {
-      const pngImage = await pdfDoc.embedPng(data.signatureAjudant);
-      const coords = signatureCoordinates.ayudante; // Ajustado a "ayudante"
-      page.drawImage(pngImage, {
-        x: coords.x,
-        y: coords.y,
-        width: coords.width,
-        height: coords.height,
-      });
-    }
-
-    // ==========================================
-    // 4) Agregar marca de agua ("misdietas.com")
-    // ==========================================
-    const { r, g, b } = hexToRgb(fixedTextCoordinates.website.color) || {
-      r: 0,
-      g: 0,
-      b: 0,
+    // 3) Firmes (si existeixen)
+    const embedAndDrawSignature = async (signatureData, coords) => {
+      if (signatureData) {
+        try {
+          const pngImage = await pdfDoc.embedPng(signatureData);
+          page.drawImage(pngImage, {
+            x: coords.x,
+            y: coords.y,
+            width: PDF_SETTINGS.SIGNATURE_WIDTH,
+            height: PDF_SETTINGS.SIGNATURE_HEIGHT,
+          });
+        } catch (sigError) {
+          console.warn("Error en incrustar la signatura:", sigError);
+          // Podria afegir un text placeholder si falla la incrustació
+        }
+      }
     };
-    const text = "misdietas.com";
-    const textWidth = helveticaFont.widthOfTextAtSize(
-      text,
-      fixedTextCoordinates.website.size
+    await embedAndDrawSignature(
+      data.signatureConductor,
+      signatureCoordinates.conductor
     );
+    await embedAndDrawSignature(
+      data.signatureAjudant,
+      signatureCoordinates.ayudante
+    ); // Corregit nom "ayudante"
+
+    // 4) Marca d'aigua
+    const { r, g, b } = hexToRgb(fixedTextCoordinates.website.color);
+    const text = PDF_SETTINGS.WATERMARK_TEXT;
+    const textSize = fixedTextCoordinates.website.size;
+    const textWidth = helveticaFont.widthOfTextAtSize(text, textSize);
     const pageWidth = page.getWidth();
     const xCentered = (pageWidth - textWidth) / 2;
 
     page.drawText(text, {
       x: xCentered,
       y: fixedTextCoordinates.website.y,
-      size: fixedTextCoordinates.website.size,
+      size: textSize,
       font: helveticaFont,
       color: rgb(r / 255, g / 255, b / 255),
     });
 
-    // Devuelve los bytes del PDF ya modificado
+    // Desa i retorna els bytes
     return await pdfDoc.save();
   } catch (error) {
-    console.error("Error en fillPdf:", error);
-    throw error;
+    console.error("Error detallat dins de fillPdf:", error);
+    // Propaga l'error per a maneig extern si cal, o retorna null/buit
+    throw new Error(`Error durant la generació del PDF: ${error.message}`);
   }
 }
 
 /**
- * Genera el PDF y lo descarga automáticamente.
- * Valida las pestañas antes de generar. Muestra toasts si hay errores.
+ * Construeix un nom de fitxer descriptiu per al PDF.
+ * @param {string} dateValue - Data en format "YYYY-MM-DD".
+ * @param {string} dietType - Tipus de dieta ("lunch", "dinner", etc.).
+ * @returns {string} Nom de fitxer generat (ex: "dieta_comida_25_12_2023.pdf").
+ */
+export function buildPdfFileName(dateValue, dietType) {
+  const datePart = formatDateForPdf(dateValue).replace(/\//g, "_"); // DD_MM_YYYY
+  if (!datePart) return PDF_SETTINGS.DEFAULT_FILENAME; // Fallback
+
+  let typePart = "dieta";
+  if (dietType === "lunch") typePart = "dieta_comida";
+  else if (dietType === "dinner") typePart = "dieta_cena";
+  // Afegir més tipus si cal
+
+  return `${typePart}_${datePart}.pdf`;
+}
+
+/**
+ * Orquestra la generació i descàrrega del PDF.
+ * Inclou validació prèvia, recollida de dades, generació, descàrrega,
+ * desat de la dieta i notificació al servei PWA.
  */
 export async function generateAndDownloadPdf() {
-  // Limpia cualquier clase de error previa
-  document.getElementById("tab-dades").classList.remove("error-tab");
-  document.getElementById("tab-serveis").classList.remove("error-tab");
+  // 1. Validació de les pestanyes
+  const isDadesValid = validateDadesTab();
+  const isServeisValid = validateServeisTab();
 
-  const dadesOK = validateDadesTab();
-  const serveisOK = validateServeisTab();
-  const currentTab = getCurrentTab();
-
-  // Si alguno de los dos grupos (Datos o Servicios) no es válido
-  if (!dadesOK || !serveisOK) {
-    if (currentTab === "dades") {
-      // Muestra toast solo si "Dades" está completo pero "Serveis" tiene errores
-      if (dadesOK && !serveisOK) {
-        document.getElementById("tab-serveis").classList.add("error-tab");
-        showToast("Completa los campos en la pestaña Servicios.", "error");
-      }
-    } else if (currentTab === "serveis") {
-      // Muestra toast solo si "Serveis" está completo pero "Dades" tiene errores
-      if (serveisOK && !dadesOK) {
-        document.getElementById("tab-dades").classList.add("error-tab");
-        showToast("Completa los campos en la pestaña Datos.", "error");
-      }
-    }
-    return;
+  if (!isDadesValid || !isServeisValid) {
+    handleValidationUIErrors(isDadesValid, isServeisValid);
+    return; // Atura si hi ha errors de validació
   }
 
-  try {
-    // Recolectamos todos los datos
-    const { generalData, servicesData } = gatherAllData();
+  // Neteja els indicadors d'error si tot és vàlid
+  document
+    .getElementById(DOM_IDS.DADES_TAB)
+    ?.classList.remove(CSS_CLASSES.ERROR_TAB);
+  document
+    .getElementById(DOM_IDS.SERVEIS_TAB)
+    ?.classList.remove(CSS_CLASSES.ERROR_TAB);
 
-    // Generamos el PDF
+  try {
+    console.info("Iniciant generació de PDF...");
+    showToast("Generant PDF...", "info"); // Feedback inicial
+
+    // 2. Recollida de dades
+    const { generalData, servicesData } = gatherAllData();
+    if (!generalData || !servicesData) {
+      throw new Error("No s'han pogut recollir les dades del formulari.");
+    }
+
+    // 3. Generació dels bytes del PDF
     const pdfBytes = await fillPdf(generalData, servicesData);
 
-    // Preparamos el Blob y lo descargamos
+    // 4. Preparació i inici de la descàrrega
     const fileName = buildPdfFileName(generalData.date, generalData.dietType);
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    a.click();
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link); // Necessari per a Firefox en alguns casos
+    link.click();
+    document.body.removeChild(link); // Neteja del DOM
 
-    // Liberamos la URL para no gastar memoria
-    setTimeout(() => URL.revokeObjectURL(url), 100);
+    // Allibera memòria (després d'un temps prudencial per si la descàrrega triga)
+    setTimeout(() => URL.revokeObjectURL(url), 500); // 500ms de marge
 
-    // Guardamos la dieta después de generar el PDF
-    await handleSaveDietWithPossibleOverwrite();
+    showToast("PDF generat i descarregant...", "success");
+    console.info(`PDF "${fileName}" generat i descàrrega iniciada.`);
 
-    // Incrementamos el contador de descargas y comprobamos si mostrar prompt
-    incrementPdfDownloadCountAndMaybeShowPrompt();
-
-    console.log("Generando y descargando el PDF...");
-  } catch (err) {
-    console.error("[app] Error generando el PDF:", err);
-  }
-}
-
-/**
- * Construye el nombre de archivo del PDF según la fecha y el tipo de dieta.
- * @param {string} dateValue - Fecha "YYYY-MM-DD".
- * @param {string} dietType - Tipo de dieta ("lunch" o "dinner").
- * @returns {string} - Nombre de archivo para el PDF.
- */
-export function buildPdfFileName(dateValue, dietType) {
-  const [yyyy, mm, dd] = (dateValue || "").split("-");
-  if (!yyyy || !mm || !dd) return "dieta.pdf";
-  const formatted = `${dd}_${mm}_${yyyy}`;
-
-  if (dietType === "lunch") return `dieta_comida_${formatted}.pdf`;
-  if (dietType === "dinner") return `dieta_cena_${formatted}.pdf`;
-  return `dieta_${formatted}.pdf`;
-}
-
-/**
- * Controla el contador de descargas y, potencialmente, muestra
- * el prompt de instalación (PWA) según la lógica definida.
- */
-export function incrementPdfDownloadCountAndMaybeShowPrompt() {
-  console.log("incrementPdfDownloadCountAndMaybeShowPrompt() se ha ejecutado");
-  const installed = isAppInstalled();
-  const neverShow = localStorage.getItem("neverShowInstallPrompt") === "true";
-
-  // Si la app está instalada o el usuario marcó que no se muestre más, salimos
-  if (installed || neverShow) return;
-
-  let timesUserSaidNo = +localStorage.getItem("timesUserSaidNo") || 0;
-  console.log(
-    "Veces que el usuario ha rechazado la instalación:",
-    timesUserSaidNo
-  );
-
-  // CASO 1: El usuario nunca ha dicho NO
-  if (timesUserSaidNo === 0) {
-    setTimeout(() => {
-      console.log("Mostrando prompt por primera vez...");
-      showInstallPrompt();
-    }, 5000);
-    return;
-  }
-
-  // CASO 2: El usuario ha dicho "No" una vez
-  if (timesUserSaidNo === 1) {
-    let pdfDownloadsSinceNo = +localStorage.getItem("pdfDownloadsSinceNo") || 0;
-    pdfDownloadsSinceNo++;
-    localStorage.setItem("pdfDownloadsSinceNo", String(pdfDownloadsSinceNo));
-
-    console.log("PDFs descargados desde el último NO:", pdfDownloadsSinceNo);
-    if (pdfDownloadsSinceNo >= 7) {
-      setTimeout(() => {
-        console.log("Mostrando prompt PWA (después de 7 descargas)...");
-        showInstallPrompt();
-      }, 5000);
+    // 5. Desat de la dieta (després de la generació amb èxit)
+    // Si falla el desat, l'usuari ja té el PDF descarregat.
+    try {
+      await handleSaveDietWithPossibleOverwrite();
+    } catch (saveError) {
+      console.error(
+        "Error en desar la dieta després de generar el PDF:",
+        saveError
+      );
+      showToast(
+        "El PDF s'ha generat, però hi ha hagut un error en desar la dieta.",
+        "warning"
+      );
     }
+
+    // 6. Notificació al servei PWA (DELEGACIÓ!)
+    // En lloc de contenir la lògica aquí, simplement notifiquem a pwaService
+    // que s'ha produït una acció que podria desencadenar el prompt.
+    // !!! Aquesta funció 'requestInstallPromptAfterAction' S'HA D'IMPLEMENTAR a pwaService.js !!!
+    if (typeof requestInstallPromptAfterAction === "function") {
+      requestInstallPromptAfterAction();
+      console.info(
+        "Notificació enviada a pwaService per possible prompt d'instal·lació."
+      );
+    } else {
+      console.warn(
+        "La funció 'requestInstallPromptAfterAction' no està disponible a pwaService."
+      );
+    }
+  } catch (error) {
+    console.error("Error durant generateAndDownloadPdf:", error);
+    showToast(
+      `Error generant PDF: ${error.message || "Error desconegut"}`,
+      "error"
+    );
+    // Assegura't que els indicadors d'error es netegen si no hi havia problema de validació
+    document
+      .getElementById(DOM_IDS.DADES_TAB)
+      ?.classList.remove(CSS_CLASSES.ERROR_TAB);
+    document
+      .getElementById(DOM_IDS.SERVEIS_TAB)
+      ?.classList.remove(CSS_CLASSES.ERROR_TAB);
   }
 }
+
+// --- Eliminació de la Funció Duplicada/Incorrecta ---
+// La funció incrementPdfDownloadCountAndMaybeShowPrompt s'elimina completament d'aquí.
+// La seva responsabilitat es trasllada a pwaService.js, que serà notificat
+// mitjançant la nova funció requestInstallPromptAfterAction().

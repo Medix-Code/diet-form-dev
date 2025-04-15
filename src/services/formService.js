@@ -1,196 +1,277 @@
 /**
- * Lògica de formulari: recollir dades, comparar, gestionar estat inicial, etc.
+ * @file formService.js
+ * @description Gestiona l'estat del formulari principal, la recollida de dades,
+ *              la detecció de canvis i la interacció bàsica dels inputs.
+ * @module formService
  */
 
 import {
   getSignatureConductor,
   getSignatureAjudant,
 } from "./signatureService.js";
-
 import { getCurrentDietType } from "../utils/utils.js";
+// Importa debounce des d'utils si existeix, sinó defineix-lo aquí o importa des de signatureService si està allà
+// import { debounce } from '../utils/utils.js';
 
-// ESTAT LOCAL del mòdul
-let initialFormDataStr = "";
+// --- Constants ---
+// IDs i Selectors principals
+const FORM_CONTAINER_ID = "main-content"; // Assumeix que hi ha un contenidor principal
+const DATE_INPUT_ID = "date";
+const DIET_TYPE_SELECT_ID = "diet-type";
+const VEHICLE_INPUT_ID = "vehicle-number";
+const PERSON1_INPUT_ID = "person1";
+const PERSON2_INPUT_ID = "person2";
+const EMPRESA_SELECT_ID = "empresa";
+const SAVE_BUTTON_ID = "save-diet";
+const SERVICE_CONTAINER_SELECTOR = ".service"; // Classe per a cada contenidor de servei
 
-/**
- * Actualitza l'estat inicial (string JSON del formulari)
- */
-export function setInitialFormDataStr(str) {
-  initialFormDataStr = str;
+// Selectors dins de cada servei
+const SERVICE_FIELD_SELECTORS = {
+  serviceNumber: ".service-number",
+  origin: ".origin",
+  originTime: ".origin-time",
+  destination: ".destination",
+  destinationTime: ".destination-time",
+  endTime: ".end-time",
+};
+
+// Selector general per als camps que s'han de vigilar per canvis
+const WATCHED_FIELDS_SELECTOR = `
+    #${DATE_INPUT_ID},
+    #${DIET_TYPE_SELECT_ID},
+    #${VEHICLE_INPUT_ID},
+    #${PERSON1_INPUT_ID},
+    #${PERSON2_INPUT_ID},
+    #${EMPRESA_SELECT_ID},
+    ${SERVICE_CONTAINER_SELECTOR} ${Object.values(SERVICE_FIELD_SELECTORS).join(
+  ", "
+)}
+`;
+
+const CSS_CLASSES = {
+  INPUT_ERROR: "input-error", // Classe per marcar errors (gestionada externament)
+  DISABLED_BUTTON: "disabled-button",
+};
+
+const DEBOUNCE_DELAY = 300; // ms
+
+// --- Variables d'Estat del Mòdul ---
+let initialFormDataStr = ""; // Emmagatzema l'estat inicial com a string JSON
+let saveButtonElement = null;
+
+// --- Funcions Privades ---
+
+/** Funció Debounce (reutilitzada o importada) */
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func.apply(this, args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
 /**
- * Retorna l'estat inicial (string JSON)
+ * Recull les dades actuals del formulari i les retorna com un objecte estructurat.
+ * @returns {{generalData: object, servicesData: object[]}|null} Objecte amb les dades o null si hi ha error.
+ */
+function getFormDataObject() {
+  try {
+    const generalData = {
+      date: document.getElementById(DATE_INPUT_ID)?.value.trim() || "",
+      dietType:
+        document.getElementById(DIET_TYPE_SELECT_ID)?.value.trim() ||
+        getCurrentDietType(),
+      vehicleNumber:
+        document.getElementById(VEHICLE_INPUT_ID)?.value.trim() || "",
+      person1: document.getElementById(PERSON1_INPUT_ID)?.value.trim() || "",
+      person2: document.getElementById(PERSON2_INPUT_ID)?.value.trim() || "",
+      empresa: document.getElementById(EMPRESA_SELECT_ID)?.value.trim() || "",
+      signatureConductor: getSignatureConductor(),
+      signatureAjudant: getSignatureAjudant(),
+    };
+
+    const serviceElements = document.querySelectorAll(
+      SERVICE_CONTAINER_SELECTOR
+    );
+    const servicesData = Array.from(serviceElements).map((serviceElement) => {
+      const service = {};
+      for (const [fieldName, selector] of Object.entries(
+        SERVICE_FIELD_SELECTORS
+      )) {
+        service[fieldName] =
+          serviceElement.querySelector(selector)?.value.trim() || "";
+      }
+      return service;
+    });
+
+    return { generalData, servicesData };
+  } catch (error) {
+    console.error("Error recollint les dades del formulari:", error);
+    return null; // Indica que hi ha hagut un problema
+  }
+}
+
+// --- Funcions Públiques / Exportades ---
+
+/**
+ * Emmagatzema l'estat actual del formulari com a estat inicial per a comparacions futures.
+ * @export
+ */
+export function captureInitialFormState() {
+  const data = getFormDataObject();
+  initialFormDataStr = data ? JSON.stringify(data) : "";
+  // Assegura que el botó de desar comença desactivat
+  checkIfFormChanged();
+  console.log("Estat inicial del formulari capturat.");
+}
+
+/**
+ * Retorna l'estat inicial capturat (string JSON).
+ * @export
  */
 export function getInitialFormDataStr() {
   return initialFormDataStr;
 }
 
 /**
- * Afegeix listeners als inputs per:
- *  - Treure la classe "input-error" si l'usuari corregeix l'error
- *  - Debounce checkIfFormChanged
- */
-export function addInputListeners() {
-  // Seleccionem tots els inputs d’interès (camps obligatoris i altres)
-  const watchSelector = [
-    "#date",
-    "#diet-type",
-    "#vehicle-number",
-    "#person1",
-    "#person2",
-    ".service-number",
-    ".origin",
-    ".origin-time",
-    ".destination",
-    ".destination-time",
-    ".end-time",
-  ].join(", ");
-
-  const allInputs = document.querySelectorAll(watchSelector);
-
-  // Definim una versió "debounced" de checkIfFormChanged
-  const debouncedCheck = debounce(checkIfFormChanged, 300);
-
-  allInputs.forEach((inp) => {
-    // Al fer 'input', provem de treure error si es corregeix
-    inp.addEventListener("input", () => {
-      if (isFieldNowValid(inp)) {
-        inp.classList.remove("input-error");
-      }
-      // També comprovem canvis amb debounce
-      debouncedCheck();
-    });
-  });
-  // 🔹 Afegim la solució pel problema de Firefox amb el selector de data
-  const dateInput = document.getElementById("date");
-  if (dateInput) {
-    dateInput.addEventListener("change", function () {
-      this.blur(); // Treu el focus perquè Firefox accepti el valor immediatament
-    });
-  }
-}
-
-/**
- * Tanca teclat en prémer Enter si hi ha 'enterkeyhint="done"'
- */
-export function addDoneBehavior() {
-  const doneInputs = document.querySelectorAll('input[enterkeyhint="done"]');
-  doneInputs.forEach((inp) => {
-    inp.addEventListener("keydown", (evt) => {
-      if (evt.key === "Enter") {
-        evt.preventDefault();
-        inp.blur();
-      }
-    });
-  });
-}
-
-/**
- * Comprova si hi ha canvis al formulari respecte a l'estat inicial
- * i habilita o deshabilita el botó "Guardar" en conseqüència
+ * Comprova si el formulari ha canviat respecte a l'estat inicial capturat.
+ * Actualitza l'estat (activat/desactivat) del botó de desar.
+ * @export
  */
 export function checkIfFormChanged() {
-  const saveBtn = document.getElementById("save-diet");
-  if (!saveBtn) return;
-
-  const currentStr = getAllFormDataAsString();
-  if (currentStr === initialFormDataStr) {
-    // sense canvis
-    saveBtn.disabled = true;
-    saveBtn.classList.add("disabled-button");
-  } else {
-    // hi ha canvis
-    saveBtn.disabled = false;
-    saveBtn.classList.remove("disabled-button");
+  if (!saveButtonElement) {
+    saveButtonElement = document.getElementById(SAVE_BUTTON_ID);
+    if (!saveButtonElement) return; // Si no troba el botó, no fa res
   }
+
+  const currentData = getFormDataObject();
+  const currentStr = currentData ? JSON.stringify(currentData) : "";
+
+  const hasChanged = currentStr !== initialFormDataStr;
+
+  saveButtonElement.disabled = !hasChanged;
+  saveButtonElement.classList.toggle(CSS_CLASSES.DISABLED_BUTTON, !hasChanged);
 }
 
 /**
- * Retorna tot el formulari en forma de string JSON
+ * Afegeix listeners als camps del formulari per detectar canvis.
+ * @export
  */
-export function getAllFormDataAsString() {
-  const { generalData, servicesData } = gatherAllData();
-  return JSON.stringify({ generalData, servicesData });
+export function addInputListeners() {
+  const container = document.getElementById(FORM_CONTAINER_ID);
+  if (!container) {
+    console.error(
+      `Form Service: Contenidor principal amb ID '${FORM_CONTAINER_ID}' no trobat.`
+    );
+    return;
+  }
+
+  // Usem delegació d'esdeveniments en el contenidor principal per eficiència
+  const debouncedCheck = debounce(checkIfFormChanged, DEBOUNCE_DELAY);
+
+  container.addEventListener("input", (event) => {
+    // Comprova si l'element que ha disparat l'event és un dels que volem vigilar
+    if (event.target.matches(WATCHED_FIELDS_SELECTOR)) {
+      // Quan un camp canvia, activa la comprovació de canvis (amb debounce)
+      debouncedCheck();
+
+      // NOTA: La lògica per treure la classe 'input-error' s'ha eliminat d'aquí.
+      // Aquesta classe l'hauria de gestionar el sistema de validació principal
+      // (p.ex., les funcions validateDadesTab, validateServeisTab) quan es revalidi
+      // el formulari, no només basant-se en si el camp ja no està buit.
+      // Si es volgués mantenir aquí, la lògica de `isFieldNowValid` hauria de ser
+      // molt més completa o coordinada amb les validacions externes.
+    }
+  });
+
+  // Solució específica per Firefox amb date picker (mantinguda si cal)
+  const dateInput = document.getElementById(DATE_INPUT_ID);
+  if (dateInput) {
+    dateInput.addEventListener("change", function () {
+      this.blur(); // Força l'acceptació del valor
+      debouncedCheck(); // Comprova canvis també al 'change' per si 'input' no s'activa
+    });
+  }
+
+  // Listener per als selects, ja que 'input' pot no funcionar en tots els navegadors
+  container.addEventListener("change", (event) => {
+    if (
+      event.target.matches("select") &&
+      event.target.matches(WATCHED_FIELDS_SELECTOR)
+    ) {
+      debouncedCheck();
+    }
+  });
+
+  console.log("Listeners d'inputs del formulari configurats amb delegació.");
 }
 
 /**
- * Recull totes les dades del formulari en objectes "quan es guarda"
+ * Afegeix el comportament de tancar teclat en prémer 'Enter' a inputs amb 'enterkeyhint="done"'.
+ * @export
+ */
+export function addDoneBehavior() {
+  const container = document.getElementById(FORM_CONTAINER_ID);
+  if (!container) return;
+
+  container.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Enter" &&
+      event.target.matches('input[enterkeyhint="done"]')
+    ) {
+      event.preventDefault(); // Evita l'enviament del formulari si n'hi hagués
+      event.target.blur(); // Amaga el teclat virtual
+    }
+  });
+}
+
+/**
+ * Retorna les dades actuals del formulari en format d'objecte.
+ * Aquesta és la funció principal per obtenir les dades abans de desar o generar PDF.
+ * @export
+ * @returns {{generalData: object, servicesData: object[]}|null} Objecte amb les dades o null si hi ha error.
  */
 export function gatherAllData() {
-  const dateVal = document.getElementById("date").value.trim();
-
-  let dietTypeVal =
-    document.getElementById("diet-type").value.trim() || getCurrentDietType();
-
-  const vehicleVal = document.getElementById("vehicle-number").value.trim();
-  const p1 = document.getElementById("person1").value.trim();
-  const p2 = document.getElementById("person2").value.trim();
-
-  // Recollim el valor del camp "Empresa" (selecció única)
-  const empresaEl = document.getElementById("empresa");
-  const empresaVal = empresaEl ? empresaEl.value.trim() : "";
-
-  // Recollim dades de cada servei
-  const servicesEls = document.querySelectorAll(".service");
-  const servicesData = Array.from(servicesEls).map((s) => ({
-    serviceNumber: s.querySelector(".service-number")?.value.trim() || "",
-    origin: s.querySelector(".origin")?.value.trim() || "",
-    originTime: s.querySelector(".origin-time")?.value.trim() || "",
-    destination: s.querySelector(".destination")?.value.trim() || "",
-    destinationTime: s.querySelector(".destination-time")?.value.trim() || "",
-    endTime: s.querySelector(".end-time")?.value.trim() || "",
-  }));
-
-  return {
-    generalData: {
-      date: dateVal,
-      dietType: dietTypeVal,
-      vehicleNumber: vehicleVal,
-      person1: p1,
-      person2: p2,
-      empresa: empresaVal, // Afegim el nou camp aquí
-      signatureConductor: getSignatureConductor(),
-      signatureAjudant: getSignatureAjudant(),
-    },
-    servicesData,
-  };
+  // Simplement crida a la funció interna que fa la feina
+  return getFormDataObject();
 }
 
 /**
- * Elimina classes d'error dels camps d'un servei
+ * Funció per eliminar les classes d'error d'un element de servei específic.
+ * Pot ser cridada externament pel sistema de validació.
+ * @param {Element} serviceElement - L'element DOM del contenidor del servei.
+ * @export
  */
-export function removeErrorClasses(serviceElement) {
-  const fields = serviceElement.querySelectorAll(
-    ".service-number, .origin, .origin-time, .destination, .destination-time, .end-time"
-  );
-  fields.forEach((f) => f.classList.remove("input-error"));
+export function removeErrorClassesFromService(serviceElement) {
+  if (!serviceElement) return;
+  Object.values(SERVICE_FIELD_SELECTORS).forEach((selector) => {
+    serviceElement
+      .querySelector(selector)
+      ?.classList.remove(CSS_CLASSES.INPUT_ERROR);
+  });
 }
 
-/* -------------------------------------------------------
-   AUXILIARS
---------------------------------------------------------*/
+// NOTA: setInitialFormDataStr i getAllFormDataAsString es podrien eliminar si
+// només s'usa captureInitialFormState i gatherAllData/getFormDataObject.
+// Ho mantenim per compatibilitat amb el codi anterior si cal.
 
 /**
- * Funció de "debounce" genèrica
+ * Actualitza l'estat inicial (string JSON del formulari) - Mantenim per possible compatibilitat.
+ * @param {string} str - El nou estat inicial com a string JSON.
  */
-function debounce(func, wait) {
-  let timeout;
-  return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
+export function setInitialFormDataStr(str) {
+  initialFormDataStr = str || "";
 }
 
 /**
- * Comprovem si un input "ara" és vàlid (només comprovació simple).
- * - Per ex. si té text i no està buit
- * - Si és select, que tingui un valor...
+ * Retorna tot el formulari en forma de string JSON - Mantenim per possible compatibilitat.
+ * @returns {string} String JSON de les dades actuals del formulari.
  */
-function isFieldNowValid(inp) {
-  const val = inp.value?.trim() || "";
-  // Ex. si l'input és "service-number-1" necessitem >= 9 digits?
-  // Per ara, fem un check genèric: no estigui buit.
-  // Pots refinar-ho segons la lògica que vulguis.
-  return val.length > 0;
+export function getAllFormDataAsString() {
+  const data = getFormDataObject();
+  return data ? JSON.stringify(data) : "";
 }

@@ -1,171 +1,260 @@
 /**
- * Lògica relacionada amb els panells de Serveis.
+ * @file servicesPanelManager.js
+ * @description Gestiona la visualització i navegació entre els diferents panells de servei
+ *              i actualitza l'estil dels controls associats.
+ * @module servicesPanelManager
  */
 
-// Array amb les classes de servei
-export const serviceColors = [
-  "service-1",
-  "service-2",
-  "service-3",
-  "service-4",
-];
-
-// Índex de servei actual
-let currentServiceIndex = 0;
-
-/**
- * Retorna l'índex del servei actual
- */
-export const getCurrentServiceIndex = () => currentServiceIndex;
-
-/**
- * Estableix l'índex del servei actual
- * @param {number} index - Nou índex de servei
- */
-const setCurrentServiceIndex = (index) => {
-  currentServiceIndex = index;
+// --- Constants ---
+const DOM_IDS = {
+  CONTAINER: "services-container",
+  BUTTONS_CONTAINER: "service-buttons-container",
+  OPTIONS_MENU: "options-menu",
+  OPTIONS_TOGGLE_BTN: "options-toggle",
+  CLEAR_BTN: "clear-selected-service", // Afegit per claredat
+  CAMERA_BTN: "camera-in-dropdown", // Afegit per claredat
+};
+const SELECTORS = {
+  SERVICE_PANEL: ".service",
+  SERVICE_BUTTON: ".service-button",
+};
+const CSS_CLASSES = {
+  // IMPORTANT: Assegura't que aquesta classe CSS realment fa 'display: none !important;'
+  SERVICE_HIDDEN: "hidden",
+  BUTTON_ACTIVE: "active-square",
+  SERVICE_COLORS: ["service-1", "service-2", "service-3", "service-4"],
+  OPTIONS_MENU_HIDDEN: "hidden",
 };
 
-// Obtenim referències als elements del DOM
-const servicesContainer = document.getElementById("services-container");
+// --- Variables d'Estat del Mòdul ---
+let currentServiceIndex = 0;
+let servicePanels = [];
+let serviceButtons = [];
+let servicesContainerElement = null;
+let serviceButtonsContainerElement = null;
+let optionsMenuElement = null;
+let optionsToggleButtonElement = null;
+let isInitialized = false;
 
-/**
- * Inicialitza la lògica dels serveis:
- *  - Crea els botons per canviar de servei
- *  - Mostra el servei amb índex 0
- *  - Assigna els event listeners als botons del menú d'opcions
- */
-export function initServices() {
-  createServiceButtons();
-  showService(currentServiceIndex);
-  attachOptionsMenuListeners();
+// --- Funcions Privades ---
+
+/** Crea els botons de navegació (S1, S2...) dinàmicament. */
+function _createServiceButtons() {
+  if (!serviceButtonsContainerElement || !servicePanels.length) return;
+  serviceButtonsContainerElement.innerHTML = "";
+  serviceButtons = [];
+  servicePanels.forEach((_, index) => {
+    const btn = document.createElement("button");
+    const colorClass = CSS_CLASSES.SERVICE_COLORS[index] || "";
+    // Afegim la classe base explícitament per si el selector canvia
+    btn.className = `service-button ${colorClass}`; // Classe base + color
+    btn.textContent = `S${index + 1}`;
+    btn.type = "button";
+    btn.setAttribute("aria-label", `Mostrar Servei ${index + 1}`);
+    btn.addEventListener("click", () => {
+      showService(index);
+    });
+    serviceButtonsContainerElement.appendChild(btn);
+    serviceButtons.push(btn);
+  });
 }
 
-/**
- * Crea els botons de selecció de serveis dinàmicament
- */
-const createServiceButtons = () => {
-  const container = document.getElementById("service-buttons-container");
-  const allServices = servicesContainer.querySelectorAll(".service");
-
-  // Neteja qualsevol contingut anterior
-  container.innerHTML = "";
-
-  // Crea un botó per a cada servei
-  allServices.forEach((_, i) => {
-    const btn = document.createElement("button");
-    btn.className = `service-button ${serviceColors[i]}`;
-    btn.textContent = `S${i + 1}`;
-
-    // En fer clic, mostrem el servei corresponent
-    btn.addEventListener("click", () => {
-      showService(i);
-    });
-
-    container.appendChild(btn);
+/** Assigna listeners al menú d'opcions. */
+function _attachOptionsMenuListeners() {
+  if (!optionsMenuElement || !optionsToggleButtonElement) return;
+  optionsToggleButtonElement.addEventListener("click", (e) => {
+    e.stopPropagation();
+    optionsMenuElement.classList.toggle(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
   });
-};
-
-/**
- * Mostra i activa visualment el servei amb l'índex proporcionat
- * @param {number} index - Índex del servei a mostrar
- */
-const showService = (index) => {
-  const allServices = servicesContainer.querySelectorAll(".service");
-  setCurrentServiceIndex(index);
-
-  // Mostra només el servei seleccionat, amaga els altres
-  allServices.forEach((serviceEl, i) => {
-    serviceEl.style.display = i === index ? "block" : "none";
-  });
-
-  // Actualitza l'estat de tots els botons de servei
-  const buttons = document.querySelectorAll(".service-button");
-  buttons.forEach((btn, i) => {
-    if (i === index) {
-      btn.classList.add("active-square");
-      btn.style.opacity = "1";
-    } else {
-      btn.classList.remove("active-square");
-      btn.style.opacity = "0.5";
+  document.addEventListener("click", (event) => {
+    if (
+      !optionsToggleButtonElement.contains(event.target) &&
+      !optionsMenuElement.contains(event.target) &&
+      !optionsMenuElement.classList.contains(CSS_CLASSES.OPTIONS_MENU_HIDDEN)
+    ) {
+      optionsMenuElement.classList.add(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
     }
   });
-
-  // Actualitza el botó d'"esborrar" si existeix
-  const clearButton = document.getElementById("clear-selected-service");
-  if (clearButton) {
-    clearButton.className = `clear-selected-btn ${serviceColors[index]}`;
-  }
-  // Actualitza el botó de la càmera si existeix
-  const cameraButton = document.getElementById("camera-in-dropdown");
-  if (cameraButton) {
-    cameraButton.className = `camera-btn ${serviceColors[index]}`;
-  }
-  // Actualitza el botó del menú d'opcions si existeix
-  const optionButton = document.getElementById("options-toggle");
-  if (optionButton) {
-    optionButton.className = `options-btn ${serviceColors[index]}`;
-  }
-};
-
-/**
- * Neteja tots els camps de text i select d'un servei donat
- * @param {HTMLElement} serviceEl - L'element del DOM que conté el servei
- */
-export function clearServiceFields(serviceEl) {
-  serviceEl
-    .querySelectorAll('input[type="text"], input[type="time"]')
-    .forEach((input) => {
-      input.value = "";
-      input.classList.remove("input-error");
-    });
-
-  serviceEl.querySelectorAll("select").forEach((select) => {
-    select.selectedIndex = 0;
-    select.classList.remove("input-error");
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      !optionsMenuElement.classList.contains(CSS_CLASSES.OPTIONS_MENU_HIDDEN)
+    ) {
+      optionsMenuElement.classList.add(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
+      optionsToggleButtonElement.focus();
+    }
+  });
+  optionsMenuElement.addEventListener("click", (event) => {
+    if (event.target.closest("button")) {
+      optionsMenuElement.classList.add(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
+    }
   });
 }
 
-/**
- * Assigna els event listeners als botons del menú d'opcions (esborrar i càmera)
- * per tancar el menú quan es cliqui en algun d'ells o fora.
- */
-function attachOptionsMenuListeners() {
-  const optionsMenu = document.getElementById("options-menu");
-  const optionsToggleBtn = document.getElementById("options-toggle");
-  const clearButton = document.getElementById("clear-selected-service");
-  const cameraButton = document.getElementById("camera-in-dropdown");
+/** Actualitza l'estil dels botons externs. */
+function _updateExternalButtonStyles(index) {
+  const colorClass = CSS_CLASSES.SERVICE_COLORS[index] || "";
+  const clearButton = document.getElementById(DOM_IDS.CLEAR_BTN);
+  const cameraButton = document.getElementById(DOM_IDS.CAMERA_BTN);
+  const baseClearClass = "clear-selected-btn";
+  const baseCameraClass = "camera-btn";
+  const baseOptionsClass = "options-btn";
 
-  // 1) Obrir/tancar el menú en fer clic al botó d'opcions
-  if (optionsToggleBtn && optionsMenu) {
-    optionsToggleBtn.addEventListener("click", () => {
-      optionsMenu.classList.toggle("hidden");
-    });
-
-    // 2) Tancar el menú si es fa clic fora
-    document.addEventListener("click", (event) => {
-      if (
-        !optionsToggleBtn.contains(event.target) &&
-        !optionsMenu.contains(event.target)
-      ) {
-        optionsMenu.classList.add("hidden");
+  const updateButton = (button, baseClass) => {
+    if (button) {
+      button.classList.remove(...CSS_CLASSES.SERVICE_COLORS);
+      if (colorClass) button.classList.add(colorClass);
+      // Assegura la classe base (per si classList.remove l'hagués tret per error, poc probable)
+      if (!button.classList.contains(baseClass)) {
+        button.classList.add(baseClass);
       }
-    });
+    }
+  };
+
+  updateButton(clearButton, baseClearClass);
+  updateButton(cameraButton, baseCameraClass);
+  updateButton(optionsToggleButtonElement, baseOptionsClass); // optionsToggleButtonElement ja està cachejat
+}
+
+// --- Funcions Públiques ---
+
+/** Retorna l'índex del servei actualment seleccionat. */
+export const getCurrentServiceIndex = () => currentServiceIndex;
+
+/** Inicialitza el gestor de panells de serveis. */
+export function initServices() {
+  if (isInitialized) return;
+
+  servicesContainerElement = document.getElementById(DOM_IDS.CONTAINER);
+  serviceButtonsContainerElement = document.getElementById(
+    DOM_IDS.BUTTONS_CONTAINER
+  );
+  optionsMenuElement = document.getElementById(DOM_IDS.OPTIONS_MENU);
+  optionsToggleButtonElement = document.getElementById(
+    DOM_IDS.OPTIONS_TOGGLE_BTN
+  );
+
+  if (!servicesContainerElement || !serviceButtonsContainerElement) {
+    console.error("Services Panel Manager: Falten contenidors essencials.");
+    return;
   }
 
-  // 3) Quan es fa clic en el botó "esborrar" (clear), tancar el menú
-  if (clearButton) {
-    clearButton.addEventListener("click", () => {
-      // Aquí pots executar la lògica d'esborrar si cal
-      optionsMenu.classList.add("hidden");
-    });
+  servicePanels = Array.from(
+    servicesContainerElement.querySelectorAll(SELECTORS.SERVICE_PANEL)
+  );
+  console.log(
+    `Panells de servei trobats: ${servicePanels.length}`,
+    servicePanels
+  ); // Log per depurar
+
+  if (!servicePanels.length) {
+    console.warn("Services Panel Manager: No s'han trobat panells de servei.");
+    return;
   }
 
-  // 4) Quan es fa clic en el botó "càmera", tancar el menú
-  if (cameraButton) {
-    cameraButton.addEventListener("click", () => {
-      // Aquí s'executarà la lògica d'OCR (initCameraOcr, etc.)
-      optionsMenu.classList.add("hidden");
-    });
+  _createServiceButtons();
+  _attachOptionsMenuListeners();
+
+  // **VISIBILITAT INICIAL CORREGIDA I SIMPLIFICADA:**
+  // Mostrem només el primer, la resta s'amaguen per CSS o per la lògica de showService
+  currentServiceIndex = 0; // Estat inicial correcte
+  // Assegurem que només el primer panell NO té la classe 'hidden' inicialment
+  servicePanels.forEach((panel, idx) => {
+    // Afegeix 'hidden' a tots EXCEPTE al primer (index 0)
+    panel.classList.toggle(
+      CSS_CLASSES.SERVICE_HIDDEN,
+      idx !== currentServiceIndex
+    );
+  });
+
+  // Activem el botó inicial i els estils externs
+  serviceButtons[currentServiceIndex]?.classList.add(CSS_CLASSES.BUTTON_ACTIVE);
+  _updateExternalButtonStyles(currentServiceIndex); // Estableix colors inicials correctes
+
+  isInitialized = true;
+  console.log(
+    "Services Panel Manager inicialitzat. Servei actiu inicial:",
+    currentServiceIndex + 1
+  );
+}
+
+/**
+ * Mostra el panell de servei a l'índex donat i actualitza els estats visuals.
+ * @param {number} index - L'índex del servei a mostrar (base 0).
+ */
+export function showService(index) {
+  if (
+    index < 0 ||
+    index >= servicePanels.length ||
+    index === currentServiceIndex
+  ) {
+    return; // Índex invàlid o ja actiu
   }
+
+  const previousIndex = currentServiceIndex;
+  console.log(
+    `[Services] Canviant de servei ${previousIndex + 1} a ${index + 1}`
+  );
+
+  // **LÒGICA DE VISIBILITAT REVISADA:**
+  const panelToHide = servicePanels[previousIndex];
+  const panelToShow = servicePanels[index];
+
+  if (panelToHide) {
+    panelToHide.classList.add(CSS_CLASSES.SERVICE_HIDDEN);
+    console.log(`   - Amagat:`, panelToHide);
+  } else {
+    console.warn(`   - Panell a amagar (índex ${previousIndex}) no trobat.`);
+  }
+
+  if (panelToShow) {
+    panelToShow.classList.remove(CSS_CLASSES.SERVICE_HIDDEN);
+    console.log(`   - Mostrat:`, panelToShow);
+    // Opcional: Moure focus
+    panelToShow.querySelector("input, textarea, select")?.focus();
+  } else {
+    console.warn(`   - Panell a mostrar (índex ${index}) no trobat.`);
+    // Si no es troba el nou, potser no hauríem de canviar l'índex?
+    // Però per ara continuem per mantenir la selecció de botó consistent.
+  }
+
+  // Actualitza estat dels botons de navegació (S1, S2...)
+  serviceButtons[previousIndex]?.classList.remove(CSS_CLASSES.BUTTON_ACTIVE);
+  serviceButtons[index]?.classList.add(CSS_CLASSES.BUTTON_ACTIVE);
+
+  // Actualitza l'índex *després* de les accions visuals
+  currentServiceIndex = index;
+
+  // Actualitza estils dels botons externs (clear, camera, options)
+  _updateExternalButtonStyles(currentServiceIndex);
+}
+
+/** Neteja els camps d'un element de servei específic. */
+export function clearServiceFields(serviceElement) {
+  // ... (Codi igual, no canvia) ...
+  if (!serviceElement) return;
+  serviceElement
+    .querySelectorAll(
+      'input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="hidden"])'
+    )
+    .forEach((input) => {
+      input.value = "";
+    });
+  serviceElement.querySelectorAll("select").forEach((select) => {
+    select.selectedIndex = 0;
+  });
+  serviceElement.querySelectorAll("textarea").forEach((textarea) => {
+    textarea.value = "";
+  });
+  console.log("Camps del servei netejats (valors).");
+}
+
+/** Funció exportada per actualitzar estils externs (per a tabs.js). */
+export function updateExternalStylesForCurrentService() {
+  _updateExternalButtonStyles(currentServiceIndex);
+  console.log(
+    `[Services] Estils externs actualitzats per al servei ${
+      currentServiceIndex + 1
+    }`
+  );
 }

@@ -22,7 +22,6 @@ const MODAL_TRANSITION_DURATION = 300;
 const PROGRESS_HIDE_DELAY = 1000;
 
 // --- Selectors del DOM (Cachejats) ---
-// Nota: Aquests es buscaran DINS de initCameraOcr per assegurar que el DOM està llest
 let cameraBtn,
   cameraGalleryModal,
   modalContent,
@@ -77,10 +76,7 @@ function cacheDomElements() {
   return true;
 }
 
-// --- Funcions Auxiliars (openModal, closeModal, handleOutsideClick, etc.) ---
-// (Aquestes funcions romanen igual que a la refactorització anterior,
-//  simplement ja no estan dins d'una IIFE)
-
+// --- Funcions Auxiliars ---
 function openModal() {
   if (!cameraGalleryModal) return;
   cameraGalleryModal.classList.remove(HIDDEN_CLASS);
@@ -154,8 +150,7 @@ async function resizeImage(file) {
     const { width: originalWidth, height: originalHeight } = img;
 
     if (Math.max(originalWidth, originalHeight) <= IMAGE_MAX_DIMENSION) {
-      // console.log("Imatge ja dins dels límits, no es redimensiona.");
-      // Cal retornar un Blob, no el File directament si la resta del codi espera Blob
+      // L'imatge ja està dins dels límits, retorna-la directament com a Blob
       return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) =>
@@ -201,7 +196,6 @@ async function resizeImage(file) {
   }
 }
 
-// preprocessImage (igual que abans)
 async function preprocessImage(blob) {
   try {
     const img = await createImageBitmap(blob);
@@ -211,6 +205,7 @@ async function preprocessImage(blob) {
     const ctx = canvas.getContext("2d");
     if (!ctx)
       throw new Error("No s'ha pogut obtenir el context 2D del canvas.");
+    // Ajustos de contrast, brillantor, etc.
     ctx.filter = "grayscale(100%) contrast(150%) brightness(110%)";
     ctx.drawImage(img, 0, 0);
     img.close();
@@ -238,7 +233,6 @@ async function preprocessImage(blob) {
   }
 }
 
-// normalizeTime (igual que abans)
 function normalizeTime(timeStr) {
   if (!timeStr) return "";
   let cleaned = timeStr.replace(/[^\d:-]/g, "");
@@ -257,15 +251,11 @@ function normalizeTime(timeStr) {
   return "";
 }
 
-// safeSetFieldValue (igual que abans)
 function safeSetFieldValue(fieldId, value, fieldName) {
   try {
     const element = document.getElementById(fieldId);
     if (element) {
       element.value = value;
-      // console.log(`[OCR Fill] Camp ${fieldName} (${fieldId}) omplert amb: "${value}"`);
-    } else {
-      // console.warn(`[OCR Fill] Element no trobat per al camp ${fieldName}: ${fieldId}`);
     }
   } catch (error) {
     console.error(
@@ -275,7 +265,6 @@ function safeSetFieldValue(fieldId, value, fieldName) {
   }
 }
 
-// fillTimes (igual que abans)
 function fillTimes(text, suffix) {
   let timeFound = false;
   const mobilitzatMatch = text.match(
@@ -286,6 +275,7 @@ function fillTimes(text, suffix) {
     safeSetFieldValue(`origin-time${suffix}`, originTime, "Hora Origen");
     timeFound = true;
   }
+
   const arribadaMatch = text.match(
     /status:\s*arribada\s*hospital.*?(\d{1,2}[:\-]\d{1,2}(?:[:\-]\d{2})?)/i
   );
@@ -298,6 +288,7 @@ function fillTimes(text, suffix) {
     );
     timeFound = true;
   }
+
   const endMatch = text.match(
     /altech.*?(\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4})?\s+(\d{1,2}[:\-]\d{1,2}(?:[:\-]\d{2})?)/i
   );
@@ -306,7 +297,7 @@ function fillTimes(text, suffix) {
     safeSetFieldValue(`end-time${suffix}`, endTime, "Hora Final");
     timeFound = true;
   } else if (!timeFound) {
-    // Fallback només si no s'ha trobat cap hora
+    // Si no hem trobat cap hora, posem l'hora actual com a última opció
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
@@ -319,7 +310,6 @@ function fillTimes(text, suffix) {
   return timeFound;
 }
 
-// fillServiceData (igual que abans)
 function fillServiceData(text, suffix) {
   let dataFound = false;
   const serviceNumberMatch = text.match(/\b(\d{9,10})\b/);
@@ -331,6 +321,7 @@ function fillServiceData(text, suffix) {
     );
     dataFound = true;
   }
+
   const originMatch = text.match(
     /municipi\s*[:\-]?\s*([^\d\n\r][a-z\s\-\'À-ÿ]+)/i
   );
@@ -339,6 +330,7 @@ function fillServiceData(text, suffix) {
     safeSetFieldValue(`origin${suffix}`, originClean, "Origen");
     dataFound = true;
   }
+
   const destinationMatch = text.match(
     /(?:hospital|desti)\s*[:\-]?\s*([a-z\s\-\'À-ÿ\d]+)/i
   );
@@ -347,6 +339,7 @@ function fillServiceData(text, suffix) {
       .replace(/desti/i, "")
       .trim()
       .toUpperCase();
+    // Eliminem possibles codis numèrics massa llargs
     destinationClean = destinationClean.replace(/\b\d{5,}\b/g, "").trim();
     safeSetFieldValue(`destination${suffix}`, destinationClean, "Destí");
     dataFound = true;
@@ -354,7 +347,6 @@ function fillServiceData(text, suffix) {
   return dataFound;
 }
 
-// processAndFillForm (igual que abans)
 function processAndFillForm(ocrText) {
   if (!ocrText || !ocrText.trim()) {
     showToast("No s'ha pogut detectar text a la imatge.", "warning");
@@ -364,6 +356,7 @@ function processAndFillForm(ocrText) {
   const currentServiceIndex = getCurrentServiceIndex();
   const suffix = `-${currentServiceIndex + 1}`;
   let filledSomething = false;
+
   const timeFilled = fillTimes(cleanedText, suffix);
   const serviceDataFilled = fillServiceData(cleanedText, suffix);
   filledSomething = timeFilled || serviceDataFilled;
@@ -372,11 +365,9 @@ function processAndFillForm(ocrText) {
     showToast("Camps del formulari actualitzats des de la imatge.", "success");
   } else {
     showToast("No s'ha trobat informació rellevant a la imatge.", "info");
-    // console.log("[OCR Proc] Text detectat però no mapejat:\n", ocrText);
   }
 }
 
-// handleFileChange (igual que abans)
 async function handleFileChange(event) {
   if (isProcessing) {
     showToast("Ja hi ha un procés d'OCR en marxa.", "warning");
@@ -395,8 +386,9 @@ async function handleFileChange(event) {
   let worker = null;
 
   try {
-    let imageBlob = await resizeImage(file); // resizeImage ara retorna Blob
-    // imageBlob = await preprocessImage(imageBlob); // Descomenta si cal
+    let imageBlob = await resizeImage(file);
+    // Si voleu fer servir preprocessImage, descomenteu la línia següent:
+    // imageBlob = await preprocessImage(imageBlob);
 
     updateOcrProgress(5, "Carregant motor OCR...");
     worker = await Tesseract.createWorker(OCR_LANGUAGE, TESSERACT_ENGINE_MODE, {
@@ -439,8 +431,6 @@ async function handleFileChange(event) {
   }
 }
 
-// --- Funció d'Inicialització Exportada ---
-
 /**
  * Inicialitza la funcionalitat d'OCR per càmera/galeria.
  * Aquesta funció S'HA DE CRIDAR quan el DOM estigui llest.
@@ -448,31 +438,17 @@ async function handleFileChange(event) {
  * @export
  */
 export function initCameraOcr() {
-  // Busca els elements del DOM aquí, assegurant que el DOM està carregat
-  if (!cacheDomElements()) {
-    showToast(
-      "Error inicialitzant la funció de càmera/OCR. Falten elements del DOM.",
-      "error"
-    );
-    // Atura l'execució si falten elements clau, ja que res funcionarà
-    // Podries llançar un error o simplement retornar per evitar més problemes.
-    console.error(
-      "[cameraOcr] Inicialització fallida per falta d'elements DOM."
-    );
-    return;
-  }
+  // Busquem els elements del DOM
+  cacheDomElements();
 
   // --- Assignació d'Events ---
-  // Només afegeix listeners si els botons existeixen (cacheDomElements ho comprova)
-  cameraBtn.addEventListener("click", openModal);
-  optionCameraBtn.addEventListener("click", triggerCameraCapture);
-  optionGalleryBtn.addEventListener("click", triggerGallerySelection);
-  cameraInput.addEventListener("change", handleFileChange);
+  cameraBtn?.addEventListener("click", openModal);
+  optionCameraBtn?.addEventListener("click", triggerCameraCapture);
+  optionGalleryBtn?.addEventListener("click", triggerGallerySelection);
+  cameraInput?.addEventListener("change", handleFileChange);
 
-  // Listener per tancar el modal fent clic fora
   document.addEventListener("click", handleOutsideClick);
 
-  // Listener per tancar el modal amb la tecla 'Escape' (Millora Accessibilitat)
   document.addEventListener("keydown", (event) => {
     if (
       event.key === "Escape" &&
@@ -484,7 +460,3 @@ export function initCameraOcr() {
 
   console.log("[cameraOcr] Funcionalitat OCR inicialitzada correctament.");
 }
-
-// Elimina la comprovació DOMContentLoaded d'aquí.
-// El mòdul que importa 'initCameraOcr' (probablement init.js)
-// és responsable de cridar initCameraOcr() quan el DOM estigui llest.
