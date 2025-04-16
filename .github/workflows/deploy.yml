@@ -2,10 +2,7 @@
 
 name: Desplegar en GitHub Pages
 
-on:
-  push:
-    branches:
-      - main # O la branca principal que utilitzis
+on: push
 
 jobs:
   build-and-deploy:
