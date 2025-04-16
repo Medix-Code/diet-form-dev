@@ -75,6 +75,7 @@ jobs:
           # Si no tens pas de build, './' és probablement correcte.
           # Si tens un build a 'dist', canvia a './dist'.
           publish_dir: ./
+          publish_branch: gh-pages
           # Opcional: Forçar push si hi ha canvis només al SW
           # force_orphan: true # Considera si vols un historial net a gh-pages
           # cname: dev.misdietas.com # Descomenta si uses un domini personalitzat
