@@ -1,13 +1,80 @@
-name: Test Simple Trigger
+# .github/workflows/deploy.yml
+
+name: Desplegar en GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main # O la branca principal que utilitzis
 
 jobs:
-  test_job:
+  build-and-deploy:
+    name: Build and Deploy # Nom més descriptiu per al Job
     runs-on: ubuntu-latest
+
     steps:
-      - name: Echo a message
-        run: echo ">>> TEST WORKFLOW TRIGGERED SUCCESSFULLY on branch ${GITHUB_REF##*/}"
+      # 1. Fer checkout del codi (versió actualitzada)
+      - name: Checkout del código
+        uses: actions/checkout@v4 # <-- Actualitzat a v4 (o la més recent)
+
+      # 2. Configurar Node.js (Opcional, però útil si necessites eines JS per al build/linting)
+      # - name: Configurar Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '18' # O la versió LTS que prefereixis
+      #     cache: 'npm' # O 'yarn', 'pnpm' si uses gestor de paquets
+
+      # 3. (Opcional) Instal·lar dependències i fer build si cal
+      # - name: Instal·lar dependències
+      #   run: npm ci # O yarn install --frozen-lockfile, pnpm install --frozen-lockfile
+      # - name: Construir l'aplicació (si tens un pas de build)
+      #   run: npm run build # O el teu script de build
+
+      # 4. Actualitzar la versió del Service Worker amb Timestamp
+      - name: Actualizar versión del Service Worker
+        id: update_sw # Donem un ID al pas per si volem referenciar la versió després
+        run: |
+          # Genera versió única basada en timestamp UTC per consistència
+          SW_VERSION=$(date -u +'%Y%m%d%H%M%S')
+          echo "Nueva versión del Service Worker: $SW_VERSION"
+
+          # ====> MODIFICA AQUESTA RUTA SI EL TEU SERVICE WORKER NO ESTÀ A L'ARREL <====
+          SW_FILE="./service-worker.js"
+          # Exemple si estigués a src: SW_FILE="./src/service-worker.js"
+
+          if [ -f "$SW_FILE" ]; then
+            # Reemplaça la línia del CACHE_NAME usant la nova versió
+            # L'expressió regular busca la línia i reemplaça el valor entre cometes
+            sed -i -E "s/(const CACHE_NAME = \"dieta-cache-v)[^\"]*(\";)/\1${SW_VERSION}\2/g" "$SW_FILE"
+            echo "Service Worker ($SW_FILE) actualizado con CACHE_NAME = dieta-cache-v${SW_VERSION}"
+            # Guarda la versió com a output del pas (opcional)
+            echo "::set-output name=sw_version::$SW_VERSION"
+          else
+            echo "Error: No se encontró el archivo Service Worker en la ruta '$SW_FILE'"
+            exit 1 # Fa fallar el workflow si no troba el fitxer
+          fi
+
+      # 5. Mostrar els primers 5 renglons del Service Worker (per depuració)
+      - name: Mostrar cabecera del Service Worker actualizado
+        run: |
+          # ====> AJUSTA AQUESTA RUTA SI CAL <====
+          SW_FILE="./service-worker.js"
+          if [ -f "$SW_FILE" ]; then
+            echo "Contenido inicial de $SW_FILE:"
+            head -n 5 "$SW_FILE"
+          else
+            echo "No se puede mostrar el contenido, archivo $SW_FILE no encontrado."
+          fi
+
+      # 6. Desplegar a GitHub Pages (usant l'acció actualitzada)
+      - name: Desplegar en GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3 # v3 encara és àmpliament usada i estable
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # ====> AJUSTA publish_dir SI FAS UN BUILD A UNA CARPETA ESPECÍFICA <====
+          # Si no tens pas de build, './' és probablement correcte.
+          # Si tens un build a 'dist', canvia a './dist'.
+          publish_dir: ./
+          # Opcional: Forçar push si hi ha canvis només al SW
+          # force_orphan: true # Considera si vols un historial net a gh-pages
+          # cname: dev.misdietas.com # Descomenta si uses un domini personalitzat

@@ -1,13 +1,13 @@
 // ===========================================================================
-// VARIABLES CSS amb :root
-// (Seguim fent servir variables CSS per mantenir compatibilitat amb el teu codi)
+// VARIABLES CSS PER TEMES (LIGHT i DARK)
 // ===========================================================================
+
 :root {
   /* Colors principals */
   --primary-color: #004aad; // Color principal (ex. capçalera)
   --secondary-color: #004aad; // Color secundari
   --secondary-color-hover: #0056b3;
-  --text-color: #333333; // Text títol
+  --text-color: #333333; // Text Títol
   --subtext-color: #444444; // Text secundari
 
   /* TopBar */
@@ -16,7 +16,7 @@
 
   /* Pestanyes (Tabs) */
   --bg-tab-active: #fefeff; // Fons de la pestanya activa
-  --bg-tab-noactive: #f3f3f3; // Fons pestanyes inactives
+  --bg-tab-noactive: #f3f3f3; // Fons de les pestanyes inactives
   --txtcolor-tab-active: #333333; // Text pestanya activa
   --txtcolor-tab-noactive: #4a4a4a; // Text pestanya inactiva
   --bg-tab-hover: #dee2e6; // Fons en hover
@@ -96,8 +96,8 @@
   --icon-size: 24px;
 }
 
-// Tema fosc (reescriptura de variables)
 .theme-dark {
+  /* Sobre-escrivim les variables per al tema fosc */
   --primary-color: #343a40;
   --secondary-color: #1470c2;
   --secondary-color-hover: #0056b3;
@@ -171,6 +171,7 @@
 // ===========================================================================
 // ESTILS BASE & GLOBALS
 // ===========================================================================
+
 html {
   font-size: 16px;
   color-scheme: light dark;
@@ -187,10 +188,10 @@ body {
   flex-direction: column;
   margin: 0;
   padding: 0;
+}
 
-  &.modal-open {
-    overflow: hidden !important;
-  }
+body.modal-open {
+  overflow: hidden !important;
 }
 
 main {
@@ -201,6 +202,7 @@ main {
 // ===========================================================================
 // TOP BAR (CAPÇALERA)
 // ===========================================================================
+
 .top-bar {
   position: fixed;
   top: 0;
@@ -213,38 +215,34 @@ main {
   justify-content: space-between;
   align-items: center;
   z-index: 1100;
+}
 
-  &__center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  &__left {
-    display: flex;
-    align-items: center;
-  }
-
-  &__title {
-    font-weight: 600;
-    margin: 0;
-    font-size: 30px;
-    padding-left: 20px;
-    letter-spacing: 0;
-    color: var(--title-color);
-    text-align: center;
-  }
+.top-bar__center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .logo-title {
   text-decoration: none;
 }
 
+.top-bar__title {
+  font-weight: 600;
+  margin: 0;
+  font-size: 30px;
+  padding-left: 20px;
+  letter-spacing: 0;
+  color: var(--title-color);
+  text-align: center;
+}
+
 // ===========================================================================
 // BOTONS D'AJUSTOS I PANEL D'AJUSTOS
 // ===========================================================================
+
 .button-group {
   position: relative;
   display: flex;
@@ -262,7 +260,6 @@ main {
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  cursor: pointer;
 
   &.open {
     .hamburger {
@@ -299,17 +296,17 @@ main {
     left: 0;
     transition: 0.2s ease;
     pointer-events: none;
+  }
 
-    &:nth-child(1) {
-      top: 0;
-    }
-    &:nth-child(2) {
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    &:nth-child(3) {
-      bottom: 0;
-    }
+  span:nth-child(1) {
+    top: 0;
+  }
+  span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  span:nth-child(3) {
+    bottom: 0;
   }
 }
 
@@ -335,7 +332,6 @@ main {
     pointer-events: auto;
     max-height: 300px;
   }
-
   &:hover,
   &:active {
     background-color: var(--bg-btn-ajustes);
@@ -355,11 +351,14 @@ main {
     border: none;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-    color: var(--text-color-btn-ajustes, var(--text-color));
+    color: var(--text-color-btn-ajustes);
     box-sizing: border-box;
     text-align: left;
     border-radius: 0;
 
+    &:last-child {
+      margin-bottom: 0;
+    }
     &:hover {
       background-color: var(--bgcolor-hover);
       transform: scale(1.02);
@@ -381,6 +380,7 @@ main {
 // ===========================================================================
 // PESTANYES (TABS)
 // ===========================================================================
+
 .tabs-container {
   position: fixed;
   top: var(--tab-height);
@@ -392,6 +392,13 @@ main {
   border-bottom: 1px solid var(--grey-border);
   z-index: 900;
   box-shadow: 0 2px 5px var(--bg-transp-ajustes);
+}
+
+button .fas,
+button .far,
+button .fa {
+  pointer-events: none;
+  font-size: inherit;
 }
 
 .tab {
@@ -419,21 +426,6 @@ main {
     color: var(--txtcolor-tab-active);
     box-shadow: inset 0 -3px 0 var(--line-tab);
   }
-
-  &.error-tab {
-    animation: blinkErrorAnim 1s ease-in-out infinite alternate;
-    font-weight: 600;
-  }
-}
-
-@keyframes blinkErrorAnim {
-  0% {
-    color: var(--textfield-error);
-  }
-  100% {
-    background-color: var(--bg-tab-noactive);
-    color: var(--txtcolor-tab-noactive);
-  }
 }
 
 .tab-content-container {
@@ -448,9 +440,26 @@ main {
   }
 }
 
+/* Pestanya amb error (parpelleig) */
+.tab.error-tab {
+  animation: blinkErrorAnim 1s ease-in-out infinite alternate;
+  font-weight: 600;
+}
+
+@keyframes blinkErrorAnim {
+  0% {
+    color: var(--textfield-error);
+  }
+  100% {
+    background-color: var(--bg-tab-noactive);
+    color: var(--txtcolor-tab-noactive);
+  }
+}
+
 // ===========================================================================
 // FORMULARIS
 // ===========================================================================
+
 .form-group {
   margin-bottom: 25px;
 
@@ -476,11 +485,6 @@ main {
     color: var(--subtext-color);
     box-sizing: border-box;
     text-align: left;
-
-    &:focus {
-      outline: none;
-      border: 2px solid var(--border-textfield-focus);
-    }
   }
 
   select option {
@@ -495,12 +499,26 @@ main {
     -webkit-appearance: none;
     -moz-appearance: none;
     min-height: 40px;
+    width: 100%;
     font-size: 16px;
     padding-left: 10px;
     padding-right: 10px;
+  }
 
-    @supports (-webkit-touch-callout: none) {
-      /* Estils específics per a iOS */
+  /* Focus per DATE, TIME, DATETIME i SELECT */
+  input[type="date"],
+  input[type="time"],
+  select {
+    &:focus {
+      outline: none;
+      border: 2px solid var(--border-textfield-focus);
+    }
+  }
+
+  /* Estils específics per a iOS */
+  @supports (-webkit-touch-callout: none) {
+    input[type="date"],
+    input[type="time"] {
       height: 40px !important;
       font-size: 16px !important;
     }
@@ -523,11 +541,11 @@ main {
 .input-error {
   border: 2px solid var(--textfield-error) !important;
   background-color: var(--textfield-error-bg) !important;
+}
 
-  /* si vols que l'input intern també quedi en vermell clar: */
-  &.input-with-icon input {
-    background-color: var(--textfield-error-bg) !important;
-  }
+/* si vols que l'input intern també quedi en vermell clar: */
+.input-with-icon.input-error input {
+  background-color: var(--textfield-error-bg) !important;
 }
 
 // ===========================================================================
@@ -535,7 +553,7 @@ main {
 // ===========================================================================
 .group-header {
   display: flex;
-  align-items: center;
+  align-items: center; /* Mantenim la disposició horitzontal actual */
   justify-content: space-between;
   width: 100%;
 }
@@ -554,7 +572,7 @@ main {
   display: flex;
   gap: 10px;
   position: relative;
-  top: 15px;
+  top: 15px; /* Ajusta aquest valor fins que la part superior dels botons s'alineï amb la part inferior del text */
 }
 
 .group-btn {
@@ -581,52 +599,61 @@ main {
   span {
     line-height: clamp(40px, 5vw, 50px);
   }
+}
 
-  &.btn-save {
-    background-color: #28a745; // Verd
-    &:hover {
-      background-color: #218838; // Verd fosc en hover
-    }
+/* 🔹 Color de fons per al botó "Guardar" */
+.btn-save {
+  background-color: #28a745; // Verd
+  &:hover {
+    background-color: #218838; // Verd fosc quan passes el cursor
   }
+}
 
-  &.btn-options {
-    background-color: #007bff; // Blau
-    &:hover {
-      background-color: #0056b3; // Blau fosc en hover
-    }
+/* 🔹 Color de fons per al botó "Opcions" */
+.btn-options {
+  background-color: #007bff; // Blau
+  &:hover {
+    background-color: #0056b3; // Blau fosc quan passes el cursor
   }
 }
 
 // ===========================================================================
 // DOTACIÓ
 // ===========================================================================
+
 .dotacio-modal-content {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden; /* Evita scroll global si s’excedeix l’alçada */
 
+  /* Títol */
   h3 {
     margin-bottom: 10px;
-    text-align: center;
+    text-align: center; /* O left, segons et convingui */
   }
 
+  /* Quan no hi ha dotacions */
   #no-dotacio-text {
     margin-top: 20px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    align-items: center; /* Centra verticalmente ícono y texto */
+    justify-content: center; /* Centra horizontalmente */
+    gap: 8px; /* Espacio entre texto e ícono (ajusta a tu gusto) */
   }
 
+  /* Estilos generales para el ícono */
   .save-icon {
     width: 20px;
     height: 20px;
+    /* Elimina margenes innecesarios */
     margin: 0;
+    /* Asegura que el ícono no se distorsione */
     vertical-align: middle;
   }
 
+  /* Llista de dotacions (fa scroll) */
   .dotacio-list {
-    flex: 1;
+    flex: 1; /* Ocupa tot l’espai disponible per fer scroll */
     overflow-y: auto;
     margin-top: 10px;
     padding-right: 5px;
@@ -637,13 +664,14 @@ main {
   }
 }
 
+/* Cada ítem de la llista */
 .dotacio-item {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 10px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Primera línia: text; segona: botons */
   gap: 12px;
   margin-bottom: 10px;
 
@@ -652,21 +680,23 @@ main {
     text-align: left;
   }
 
+  /* Contenidor dels botons dins de cada item (p.ex. Cargar i Eliminar) */
   .button-container {
     display: flex;
-    gap: 10px;
+    gap: 10px; /* Espai entre botons */
     button {
-      flex: 1;
+      flex: 1; /* Cada botó ocupa tot l'espai disponible */
     }
   }
 }
 
+/* Botnons dins la llista de*/
 .dotacio-load,
 .dotacio-delete {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 8px; /* Espai entre icona i text */
   padding: 6px 12px;
   border: none;
   border-radius: 8px;
@@ -678,25 +708,27 @@ main {
 .dotacio-load {
   background-color: #eceffc;
   color: #004aad;
-  &:hover {
-    background-color: #dce0fa;
-  }
+}
+.dotacio-load:hover {
+  background-color: #dce0fa;
 }
 
 .dotacio-delete {
   background-color: #fdeceb;
   color: #e03131;
-  &:hover {
-    background-color: #fccac9;
-  }
+}
+.dotacio-delete:hover {
+  background-color: #fccac9;
 }
 
+/* Footer del modal: botó "Afegir" a la dreta */
 .modal-footer {
   display: flex;
-  justify-content: flex-end;
-  padding-top: 10px;
+  justify-content: flex-end; /* Botó a la dreta */
+  padding-top: 10px; /* Separació de la llista scrollable */
 }
 
+/* Botó de tancar centrat al modal */
 .close-dotacio-button {
   width: 120px;
   height: 40px;
@@ -708,19 +740,37 @@ main {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin: 10px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto; /* Centrar el botó al modal */
+}
 
-  &:hover {
-    background-color: #c78e00;
-  }
-  &:active {
+/* Efectes hover i clic */
+.close-dotacio-button:hover {
+  background-color: #c78e00;
+}
+
+.close-dotacio-button:active {
+  transform: scale(0.95);
+}
+
+/* Animació per al modal (si cal) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
     transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
 // ===========================================================================
-// SERVICIOS i MENU
+// SERVICIOS y MENU
 // ===========================================================================
+
 .service-controls {
   display: flex;
   align-items: center;
@@ -795,13 +845,16 @@ main {
   }
 }
 
+/* Contenidor general d'opcions */
 .options-container {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  //gap: 10px; /* Espai entre els botons */
+  justify-content: flex-end; /* Alineació a la dreta */
 }
 
+/* Botó principal d'opcions (tres punts, etc.) */
 .options-btn {
   width: clamp(40px, 5vw, 50px);
   height: clamp(40px, 5vw, 50px);
@@ -831,21 +884,27 @@ main {
     background-color: var(--service-4-border);
   }
 
-  &:hover {
-    filter: brightness(0.95);
-  }
   &:active {
     filter: brightness(0.9);
   }
 }
 
+.options-btn:hover {
+  filter: brightness(0.95);
+}
+.options-btn:active {
+  filter: brightness(0.9);
+}
+
+/* Menú desplegable: disposició en columna per mostrar els botons un sota l'altre */
 .options-dropdown {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 10px; /* Espai entre els botons */
+  /* Eliminem el padding, fons, ombra i border-radius */
   padding: 0;
   background: transparent;
   box-shadow: none;
@@ -854,12 +913,14 @@ main {
   opacity: 0;
   transform: translateY(-10px);
   animation: dropdownAnimation 0.3s ease-out forwards;
-
-  &.hidden {
-    display: none;
-  }
 }
 
+/* Amagat per defecte (via classe hidden) */
+.options-dropdown.hidden {
+  display: none;
+}
+
+/* Animació per al desplegable */
 @keyframes dropdownAnimation {
   to {
     opacity: 1;
@@ -867,9 +928,11 @@ main {
   }
 }
 
+/* Estil comú per als botons del menú */
 .option-btn {
   width: clamp(40px, 5vw, 50px);
-  height: clamp(40px, 5vw, 50px);
+  width: clamp(40px, 5vw, 50px);
+
   border-radius: 8px;
   border: none;
   font-size: 20px;
@@ -885,8 +948,7 @@ main {
   animation: fadeIn 0.3s ease-out forwards;
 }
 
-.clear-selected-btn,
-.camera-btn {
+.clear-selected-btn {
   margin-left: auto;
   width: clamp(40px, 5vw, 50px);
   height: clamp(40px, 5vw, 50px);
@@ -901,7 +963,6 @@ main {
   cursor: pointer;
   background-color: var(--bg-tab-active);
   transition: background-color 0.3s ease, filter 0.3s ease;
-
   &.service-1 {
     background-color: var(--service-1-border);
   }
@@ -920,27 +981,49 @@ main {
   }
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
+.camera-btn {
+  margin-left: auto;
+  width: clamp(40px, 5vw, 50px);
+  height: clamp(40px, 5vw, 50px);
+  border-radius: 8px;
+  border: none;
+  font-size: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: var(--bg-tab-active);
+  transition: background-color 0.3s ease, filter 0.3s ease;
+  &.service-1 {
+    background-color: var(--service-1-border);
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
+  &.service-2 {
+    background-color: var(--service-2-border);
+  }
+  &.service-3 {
+    background-color: var(--service-3-border);
+  }
+  &.service-4 {
+    background-color: var(--service-4-border);
+  }
+
+  &:active {
+    filter: brightness(0.9);
   }
 }
 
-// ===========================================================================
-// MODAL “BOTTOM SHEET” BASE
-// ===========================================================================
+/* ------------------------- */
+/* MODAL “BOTTOM SHEET” BASE */
+/* ------------------------- */
 .modal-bottom {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   border-radius: 12px 12px 0 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.4); /* Fosc semi-transparent */
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -949,32 +1032,39 @@ main {
   transform: translateY(100%);
   transition: opacity 0.3s ease, transform 0.3s ease;
 
+  // Quan està visible, fem la transició a opacitat 1 i col·loquem a posició 0
   &.visible {
     opacity: 1;
     transform: translateY(0);
   }
 
+  // Quan està “hidden”, no es mostra (fora de DOM). Això evita que
+  // quedi un espai en blanc que pugui rebre clics, etc.
   &.hidden {
     display: none;
   }
-
-  &-content {
-    box-shadow: none !important;
-    border: none !important;
-    background-color: #3f3c3c;
-    width: 100%;
-    border-radius: 12px 12px 0 0;
-    padding: 20px;
-    box-sizing: border-box;
-  }
 }
 
+.modal-bottom-content {
+  /* Eliminem ombra o borde gris: */
+  box-shadow: none !important;
+  border: none !important;
+  background-color: #3f3c3c;
+  width: 100%;
+  border-radius: 12px 12px 0 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* ---------------------------- */
+/* Títol i descripció centrats  */
+/* ---------------------------- */
 .modal-bottom-title {
   margin: 0;
   text-align: center;
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: #333; /* Ajusta segons vulguis */
 }
 
 .modal-bottom-description {
@@ -984,46 +1074,64 @@ main {
   color: #666;
 }
 
+/* ------------------------------------- */
+/* Contenidor per als 2 botons (en fila) */
+/* ------------------------------------- */
 .modal-bottom-row {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-around; /* Espaiat uniforme */
   align-items: center;
   gap: 20px;
 }
 
+/* -------------------------------------- */
+/* Cada botó en forma de “quadrat”        */
+/* -------------------------------------- */
 .modal-bottom-btn {
+  /* Quadrat o rectangle */
   width: 100px;
   height: 100px;
   border-radius: 10px;
+
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Icona a dalt, text a sota */
   align-items: center;
   justify-content: center;
+
   background-color: #eee;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s;
+}
 
-  &:hover {
-    background-color: #ddd;
-  }
+/* Efecte hover */
+.modal-bottom-btn:hover {
+  background-color: #ddd;
+}
 
-  img {
-    width: 36px;
-    height: 36px;
-    margin-bottom: 4px;
-  }
+/* Icona una mica més gran, a dalt */
+.modal-bottom-btn img {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 4px;
+}
 
-  .modal-bottom-text {
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-  }
+/* Text a sota la icona */
+.modal-bottom-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Quan volem amagar el modal */
+.hidden {
+  display: none !important;
 }
 
 // ===========================================================================
 // SIGNATURE (CAMPO DE FIRMA)
 // ===========================================================================
+
 .signature-group {
   .input-with-icon {
     display: flex;
@@ -1083,6 +1191,7 @@ main {
 // ===========================================================================
 // MODALS (MODALS GENÈRICS)
 // ===========================================================================
+
 .modal {
   display: none;
   position: fixed;
@@ -1091,45 +1200,46 @@ main {
   width: 100%;
   height: 100%;
   z-index: 1200;
+
   background-color: var(--bg-transp-modal);
   overflow: auto;
+}
 
-  &-content {
-    max-height: 80vh;
-    text-align: left;
-    overflow-y: auto;
-    position: relative;
-    margin: 10% auto;
-    background-color: var(--bg-color);
-    border-radius: 12px;
-    padding: 20px 30px;
-    max-width: 500px;
-    box-shadow: 0 4px 8px var(--bg-transp-ajustes);
-    animation: fadeIn var(--transition-speed) ease-in-out;
+.modal-content {
+  max-height: 80vh; /* Limita l'altura al 80% de l'alçada de la finestra */
+  text-align: left;
+  overflow-y: auto; /* Mostra una barra de desplaçament vertical si és necessari */
+  position: relative;
+  margin: 10% auto;
+  background-color: var(--bg-color);
+  border-radius: 12px;
+  padding: 20px 30px;
+  max-width: 500px;
+  box-shadow: 0 4px 8px var(--bg-transp-ajustes);
+  animation: fadeIn var(--transition-speed) ease-in-out;
 
-    .modal-title {
-      font-weight: 600;
-      font-size: 1.1rem;
-      text-align: center;
-    }
+  .modal-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+  }
 
-    h2,
-    h3 {
-      text-align: center;
-      margin: 0;
-      font-size: 22px;
-      font-weight: bold;
-      color: var(--text-color);
-      border-bottom: 1px solid var(--grey-border);
-      padding-bottom: 10px;
-    }
+  h2,
+  h3 {
+    text-align: center;
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--grey-border);
+    padding-bottom: 10px;
+  }
 
-    p {
-      font-size: 16px;
-      line-height: 1.6;
-      color: var(--text-color);
-      margin: 15px 0;
-    }
+  p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin: 15px 0;
   }
 }
 
@@ -1184,6 +1294,7 @@ main {
 // ===========================================================================
 // MODAL DE GESTIÓ DE DIETES
 // ===========================================================================
+
 #diet-modal-title {
   text-align: center;
   font-size: 1.1rem;
@@ -1213,50 +1324,53 @@ main {
   padding: 20px 15px;
   background-color: var(--bg-dietas);
   cursor: default;
+}
 
-  .diet-date {
-    font-size: 16px;
-    color: var(--text-color);
-  }
+.diet-date {
+  font-size: 16px;
+  color: var(--text-color);
+}
 
-  .diet-icons {
-    display: flex;
-    gap: 40px;
-    align-items: stretch;
+.diet-icons {
+  display: flex;
+  gap: 40px;
+  align-items: stretch;
+}
 
-    button {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.2s ease, filter 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      border-radius: 8px;
+.diet-icons button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      &:hover {
-        transform: scale(1.1);
-        filter: brightness(0.95);
-      }
-      &:active {
-        transform: scale(0.95);
-        filter: brightness(0.9);
-      }
+  height: 100%; /* Respectem l'altura existent */
+  border-radius: 8px; /* Arrodonit per millor estètica */
+}
 
-      img {
-        width: 22px !important;
-        height: 22px !important;
-        pointer-events: none;
-        flex-shrink: 0;
-      }
-    }
-  }
+.diet-icons button:hover {
+  transform: scale(1.1);
+  filter: brightness(0.95);
+}
+
+.diet-icons button:active {
+  transform: scale(0.95);
+  filter: brightness(0.9);
+}
+
+.diet-icons img {
+  width: 22px !important;
+  height: 22px !important;
+  pointer-events: none;
+  flex-shrink: 0;
 }
 
 // ===========================================================================
 // MODAL DE FIRMA
 // ===========================================================================
+
 #signature-modal {
   z-index: 9999;
   display: none;
@@ -1301,6 +1415,7 @@ main {
 // ===========================================================================
 // MODAL DE CONFIRMACIÓ
 // ===========================================================================
+
 .modal-buttons {
   display: flex;
   justify-content: space-between;
@@ -1358,6 +1473,7 @@ main {
 // ===========================================================================
 // TOASTS
 // ===========================================================================
+
 #toast-container {
   position: fixed;
   bottom: 20px;
@@ -1414,6 +1530,7 @@ main {
 // ===========================================================================
 // FOOTER
 // ===========================================================================
+
 .footer {
   margin-top: 60px;
   background-color: var(--bg-footer);
@@ -1422,12 +1539,12 @@ main {
   text-align: center;
   font-family: sans-serif;
 
-  &__content {
+  .footer__content {
     display: flex;
     flex-direction: column;
   }
 
-  &__icons {
+  .footer__icons {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1435,12 +1552,10 @@ main {
     margin-bottom: 30px;
   }
 
-  &__text {
-    p {
-      margin: 0;
-      font-size: 1rem;
-      opacity: 0.8;
-    }
+  .footer__text p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.8;
   }
 
   .footer-btn {
@@ -1453,16 +1568,16 @@ main {
     &:focus {
       transform: scale(1.1);
     }
-    &:active {
-      transform: scale(1.2);
-    }
+  }
+  .footer-btn:active {
+    transform: scale(1.2);
+  }
 
-    .icon {
-      width: var(--icon-size);
-      height: var(--icon-size);
-      object-fit: contain;
-      transition: transform var(--transition-speed) ease;
-    }
+  .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    object-fit: contain;
+    transition: transform var(--transition-speed) ease;
   }
 }
 
@@ -1473,6 +1588,7 @@ main {
 // ===========================================================================
 // BANNER PWA (INSTAL·LACIÓ)
 // ===========================================================================
+
 #install-prompt {
   position: fixed;
   bottom: 0;
@@ -1490,57 +1606,55 @@ main {
   transition: transform 0.3s ease, opacity 0.3s ease;
   transform: translateY(100%);
   opacity: 0;
+}
 
-  &.visible {
-    transform: translateY(0);
-    opacity: 1;
-  }
+#install-prompt.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
 
-  p {
-    margin: 0 0 30px 0;
-    font-size: 16px;
-    font-weight: bold;
-  }
+#install-prompt p {
+  margin: 0 0 30px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
 
-  .install-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
+#install-prompt .install-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
 
-    button {
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+#install-prompt button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-      &:nth-child(2) {
-        // "Instalar" button
-        background-color: var(--secondary-color);
-        color: var(--text-color);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+#install-prompt #install-button {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
 
-        &:hover {
-          background-color: var(--secondary-color-hover);
-          transform: scale(1.05);
-        }
-      }
+#install-prompt #install-button:hover {
+  background-color: var(--secondary-color-hover);
+  transform: scale(1.05);
+}
 
-      &:nth-child(1) {
-        // "No, gracias" button
-        background-color: #5c6064;
-        color: var(--text-color);
+#install-prompt #dismiss-button {
+  background-color: #5c6064;
+  color: var(--text-color);
+}
 
-        &:hover {
-          background-color: #5a6268;
-          transform: scale(1.05);
-        }
-      }
-    }
-  }
+#install-prompt #dismiss-button:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
 }
 
 button .icon {
@@ -1552,6 +1666,7 @@ button .icon {
 // ===========================================================================
 // EASTER EGG
 // ===========================================================================
+
 .easter-egg-overlay {
   position: fixed;
   top: 0;
@@ -1570,10 +1685,6 @@ button .icon {
   z-index: 2000;
   opacity: 1;
   animation: fadeInStatic 0.5s forwards, pulse 1.5s ease-in-out infinite 0.5s;
-
-  &.clicked {
-    animation: spinFadeOut 1s forwards;
-  }
 }
 
 .easter-egg-text {
@@ -1606,6 +1717,15 @@ button .icon {
   }
 }
 
+.easter-egg-icon img {
+  width: 200px;
+  height: auto;
+}
+
+.easter-egg-icon.clicked {
+  animation: spinFadeOut 1s forwards;
+}
+
 @keyframes spinFadeOut {
   from {
     transform: translate(-50%, -50%) rotate(0deg) scale(1);
@@ -1617,37 +1737,29 @@ button .icon {
   }
 }
 
-.easter-egg-icon img {
-  width: 200px;
-  height: auto;
-}
-
 // ===========================================================================
 // MEDIA QUERIES RESPONSIVES
 // ===========================================================================
 
-// ---------------------
-// TAULETES (entre 769px i 1024px)
-// ---------------------
 @media (max-width: 1024px) and (min-width: 769px) {
   .top-bar {
     height: calc(var(--top-bar-height) - 4px);
     padding: 0;
+  }
 
-    &__title {
-      font-size: 24px;
-    }
+  .top-bar__title {
+    font-size: 24px;
   }
 
   .ajustes-btn {
     width: 40px;
     height: 40px;
-    .hamburger {
-      width: 28px;
-      height: 18px;
-      span {
-        height: 2.5px;
-      }
+  }
+  .hamburger {
+    width: 28px;
+    height: 18px;
+    span {
+      height: 2.5px;
     }
   }
 
@@ -1659,15 +1771,14 @@ button .icon {
       padding: 18px 20px;
       font-size: 15px;
       gap: 25px;
-
       i {
         font-size: 18px;
       }
     }
+  }
 
-    .big-btn:first-child {
-      padding-top: 20px;
-    }
+  .ajustes-panel .big-btn:first-child {
+    padding-top: 20px;
   }
 
   .tabs-container {
@@ -1696,18 +1807,15 @@ button .icon {
   }
 }
 
-// ---------------------
-// MÒBILS (fins a 768px)
-// ---------------------
 @media (max-width: 768px) {
   .top-bar {
     height: calc(var(--top-bar-height) + 10px);
     padding: 0;
+  }
 
-    &__title {
-      font-size: 22px;
-      padding-left: 20px;
-    }
+  .top-bar__title {
+    font-size: 22px;
+    padding-left: 20px;
   }
 
   .button-group {
@@ -1719,12 +1827,12 @@ button .icon {
   .ajustes-btn {
     width: 36px;
     height: 36px;
-    .hamburger {
-      width: 24px;
-      height: 16px;
-      span {
-        height: 2px;
-      }
+  }
+  .hamburger {
+    width: 24px;
+    height: 16px;
+    span {
+      height: 2px;
     }
   }
 
@@ -1735,7 +1843,6 @@ button .icon {
       padding: 18px 20px;
       font-size: 15px;
       gap: 25px;
-
       i {
         font-size: 18px;
       }
@@ -1746,7 +1853,6 @@ button .icon {
     min-height: 8px;
     padding: 14px 16px;
     font-size: 0.9rem;
-
     &.active {
       font-size: 1rem;
     }
@@ -1774,17 +1880,19 @@ button .icon {
 
   .diet-item {
     padding: 14px 12px;
-    .diet-icons {
-      gap: 20px;
+  }
 
-      img {
-        width: 20px !important;
-        height: 20px !important;
-      }
-    }
-    .diet-date {
-      font-size: 15px;
-    }
+  .diet-icons {
+    gap: 20px;
+  }
+
+  .diet-date {
+    font-size: 15px;
+  }
+
+  .diet-icons img {
+    width: 20px !important;
+    height: 20px !important;
   }
 
   input[type="text"],
@@ -1795,6 +1903,11 @@ button .icon {
     font-size: 11px;
     padding: 8px 12px;
     border-radius: 4px;
+  }
+
+  select {
+    text-align: center;
+    line-height: normal;
   }
 
   select option {
@@ -1826,7 +1939,7 @@ button .icon {
     max-height: 70vh;
     margin: 20% auto;
     overflow: auto;
-    padding: 20px 20px;
+    padding: 20px 20px 20px 20px;
 
     h2,
     h3 {
@@ -1876,7 +1989,6 @@ button .icon {
       background-color: var(--bg-color);
       transition: all 0.3s ease;
       margin-left: 10px;
-
       i {
         font-size: 14px;
       }
@@ -1903,6 +2015,7 @@ button .icon {
 // ===========================================================================
 // RESET DE BOX-SIZING
 // ===========================================================================
+
 *,
 *::before,
 *::after {
