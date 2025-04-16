@@ -230,10 +230,7 @@ self.addEventListener("activate", (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (!cacheWhitelist.includes(cacheName)) {
-              console.log(
-                "[ServiceWorker] Eliminant caché anticaa:",
-                cacheName
-              );
+              console.log("[ServiceWorker] Eliminant caché antic:", cacheName);
               return caches.delete(cacheName);
             }
           })
