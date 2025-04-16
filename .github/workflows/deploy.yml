@@ -77,4 +77,4 @@ jobs:
           publish_dir: ./
           # Opcional: Forçar push si hi ha canvis només al SW
           # force_orphan: true # Considera si vols un historial net a gh-pages
-          # cname: misdietas.com # Descomenta si uses un domini personalitzat
+          # cname: dev.misdietas.com # Descomenta si uses un domini personalitzat
