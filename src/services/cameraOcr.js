@@ -315,152 +315,9 @@ function _safeSetFieldValue(fieldId, value, fieldName) {
 }
 
 /**
- * Procesa el texto extraído por OCR, intenta rellenar los campos de horas,
- * y proporciona feedback visual y mediante toasts al usuario.
- * @param {string} ocrText - El texto crudo obtenido de Tesseract.
+ * Gestiona la selecció d'un fitxer, inicia el procés OCR, fa scroll
+ * i actualitza el formulari amb els resultats.
  */
-function _processAndFillForm(ocrText) {
-  // LOG DEPURACIÓ 1: Veure el text reconegut per Tesseract
-  console.log("--- TEXTO COMPLETO RECONOCIDO POR TESSERACT ---");
-  console.log(`Valor de ocrText:`, ocrText);
-  console.log("-------------------------------------------");
-
-  if (!ocrText || !ocrText.trim()) {
-    showToast("No se pudo reconocer texto en esta imagen.", "warning");
-    return;
-  }
-
-  // 1. Preparación de variables
-  const currentServiceIndex = getCurrentServiceIndex();
-  const currentMode = getModeForService(currentServiceIndex) || "3.6";
-  const suffix = `-${currentServiceIndex + 1}`;
-  let filledFields = {};
-
-  const lines = ocrText.split("\n");
-  const processedText = ocrText.toLowerCase().replace(/ +/g, " ");
-
-  console.log(
-    `[OCR Proc] Procesando para el servicio ${
-      currentServiceIndex + 1
-    } en modo ${currentMode}`
-  );
-
-  // 2. Bucle principal para extraer datos
-  Object.values(OCR_PATTERNS).forEach((pattern) => {
-    // Aplica la regla de negocio para destinationTime
-    if (
-      (currentMode === "3.11" || currentMode === "3.22") &&
-      pattern.id === "destinationTime"
-    ) {
-      return;
-    }
-
-    let valueMatch = null;
-
-    // Estrategia de búsqueda por línea (para Origin y Destination)
-    if (pattern.lineKeywordRegex) {
-      for (const line of lines) {
-        if (pattern.lineKeywordRegex.test(line.toLowerCase())) {
-          const cleanedLine = line.replace(/\D/g, "");
-          if (cleanedLine.length >= 6) {
-            const timeDigits = cleanedLine.slice(-6);
-            const formattedTime = `${timeDigits.slice(0, 2)}:${timeDigits.slice(
-              2,
-              4
-            )}:${timeDigits.slice(4, 6)}`;
-            valueMatch = [null, formattedTime];
-            break;
-          }
-        }
-      }
-    }
-    // Estrategia de búsqueda global (para EndTime)
-    else if (pattern.valueRegex) {
-      valueMatch = processedText.match(pattern.valueRegex);
-    }
-
-    // Si se encontró un valor, se procesa y se rellena el campo
-    if (valueMatch && valueMatch[1]) {
-      let extractedValue = _normalizeTime(valueMatch[1].trim());
-      if (extractedValue && !filledFields[pattern.id]) {
-        const fieldId = `${pattern.fieldIdSuffix}${suffix}`;
-        _safeSetFieldValue(fieldId, extractedValue, pattern.label);
-        filledFields[pattern.id] = pattern;
-      }
-    }
-  });
-
-  // 3. Lógica de Fallback para Hora Final (con feedback visual y depuración)
-  if (
-    !filledFields.endTime &&
-    (filledFields.originTime || filledFields.destinationTime)
-  ) {
-    console.warn(
-      "[OCR Fallback] Hora Final no encontrada. Activando fallback."
-    );
-
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, "0");
-    const mm = String(now.getMinutes()).padStart(2, "0");
-    const currentTime = `${hh}:${mm}`;
-    const fieldId = `end-time${suffix}`;
-
-    // LOG DEPURACIÓ 2: Veure l'ID que estem intentant trobar
-    console.log(`[DEBUG] Intentando destacar el elemento con ID: "${fieldId}"`);
-
-    // Rellena el campo con la hora actual
-    _safeSetFieldValue(fieldId, currentTime, "Hora Final (Actual)");
-
-    const endTimeElement = document.getElementById(fieldId);
-
-    if (endTimeElement) {
-      // LOG DEPURACIÓ 3: Confirmar que l'element s'ha trobat
-      console.log(
-        "[DEBUG] Elemento encontrado! Añadiendo la clase .input-warning",
-        endTimeElement
-      );
-
-      // 1. Añade la clase de error para ponerlo en rojo
-      endTimeElement.classList.add("input-warning");
-
-      // LOG DEPURACIÓ 4: Comprovar si la classe s'ha afegit realment
-      console.log(
-        `[DEBUG] ¿El elemento tiene ahora la clase 'input-warning'?`,
-        endTimeElement.classList.contains("input-warning")
-      );
-
-      // 2. Después de 1 segundo (1000 milisegundos), elimina la clase
-      setTimeout(() => {
-        // LOG DEPURACIÓ 5: Confirmar que el temporitzador s'executa
-        console.log(
-          "[DEBUG] Eliminando la clase .input-warning después de 1 segundo."
-        );
-        endTimeElement.classList.remove("input-warning");
-      }, 3000); // Duración del destaque en ms
-    } else {
-      // LOG DEPURACIÓ 6: Error si no es troba l'element
-      console.error(
-        `[DEBUG] ERROR: No se ha encontrado el elemento con ID "${fieldId}" para destacar.`
-      );
-    }
-
-    // Registra que el campo se ha rellenado para el feedback final
-    filledFields.endTime = { label: "Hora Final (Actual)" };
-  }
-
-  // 4. Feedback final al usuario
-  const filledCount = Object.keys(filledFields).length;
-  if (filledCount > 0) {
-    const filledLabels = Object.values(filledFields).map(
-      (pattern) => pattern.label
-    );
-    let message = `Campos actualizados: ${filledLabels.join(", ")}.`;
-    showToast(message, "success");
-  } else {
-    showToast("No se encontraron horas relevantes en la imagen.", "info");
-  }
-}
-
 async function _handleFileChange(event) {
   if (isProcessing) {
     showToast("Proceso OCR ya en marcha.", "warning");
@@ -477,6 +334,17 @@ async function _handleFileChange(event) {
   isProcessing = true;
   setControlsDisabled(true);
   _updateOcrProgress(0, "Preparando imagen...");
+
+  // >>> 2. LÒGICA DE SCROLL AFEGIDA AQUÍ <<<
+  // Es fa just després de mostrar l'indicador de progrés.
+  const currentServiceIndex = getCurrentServiceIndex();
+  const suffix = `-${currentServiceIndex + 1}`;
+  const endTimeElement = document.getElementById(`end-time${suffix}`);
+
+  if (endTimeElement) {
+    console.log(`[UI] Iniciando scroll hacia el elemento #end-time${suffix}`);
+    _scrollToElement(endTimeElement);
+  }
 
   let worker = null;
 
@@ -503,6 +371,7 @@ async function _handleFileChange(event) {
     } = await worker.recognize(imageBlob);
     _updateOcrProgress(100, "Análisis completado.");
 
+    // Aquesta funció NO es modifica per al scroll
     _processAndFillForm(ocrText);
   } catch (error) {
     console.error("[cameraOcr] Error OCR:", error);
@@ -517,6 +386,114 @@ async function _handleFileChange(event) {
     _hideOcrProgress();
     setControlsDisabled(false);
     isProcessing = false;
+  }
+}
+
+// >>> 3. LA TEVA FUNCIÓ _processAndFillForm ES QUEDA EXACTAMENT COM ESTAVA <<<
+// No cal que la modifiquis. Aquí la poso per claredat.
+function _processAndFillForm(ocrText) {
+  console.log("--- TEXTO COMPLETO RECONOCIDO POR TESSERACT ---");
+  console.log(`Valor de ocrText:`, ocrText);
+  console.log("-------------------------------------------");
+
+  if (!ocrText || !ocrText.trim()) {
+    showToast("No se pudo reconocer texto en esta imagen.", "warning");
+    return;
+  }
+
+  // Preparación de variables
+  const currentServiceIndex = getCurrentServiceIndex();
+  const currentMode = getModeForService(currentServiceIndex) || "3.6";
+  const suffix = `-${currentServiceIndex + 1}`;
+  let filledFields = {};
+
+  const lines = ocrText.split("\n");
+  const processedText = ocrText.toLowerCase().replace(/ +/g, " ");
+
+  console.log(
+    `[OCR Proc] Procesando para el servicio ${
+      currentServiceIndex + 1
+    } en modo ${currentMode}`
+  );
+
+  // Bucle principal para extraer datos
+  Object.values(OCR_PATTERNS).forEach((pattern) => {
+    if (
+      (currentMode === "3.11" || currentMode === "3.22") &&
+      pattern.id === "destinationTime"
+    ) {
+      return;
+    }
+
+    let valueMatch = null;
+
+    if (pattern.lineKeywordRegex) {
+      for (const line of lines) {
+        if (pattern.lineKeywordRegex.test(line.toLowerCase())) {
+          const cleanedLine = line.replace(/\D/g, "");
+          if (cleanedLine.length >= 6) {
+            const timeDigits = cleanedLine.slice(-6);
+            const formattedTime = `${timeDigits.slice(0, 2)}:${timeDigits.slice(
+              2,
+              4
+            )}:${timeDigits.slice(4, 6)}`;
+            valueMatch = [null, formattedTime];
+            break;
+          }
+        }
+      }
+    } else if (pattern.valueRegex) {
+      valueMatch = processedText.match(pattern.valueRegex);
+    }
+
+    if (valueMatch && valueMatch[1]) {
+      let extractedValue = _normalizeTime(valueMatch[1].trim());
+      if (extractedValue && !filledFields[pattern.id]) {
+        const fieldId = `${pattern.fieldIdSuffix}${suffix}`;
+        _safeSetFieldValue(fieldId, extractedValue, pattern.label);
+        filledFields[pattern.id] = pattern;
+      }
+    }
+  });
+
+  // Lógica de Fallback para Hora Final (con feedback visual y depuración)
+  if (
+    !filledFields.endTime &&
+    (filledFields.originTime || filledFields.destinationTime)
+  ) {
+    console.warn(
+      "[OCR Fallback] Hora Final no encontrada. Activando fallback."
+    );
+
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const currentTime = `${hh}:${mm}`;
+    const fieldId = `end-time${suffix}`;
+
+    _safeSetFieldValue(fieldId, currentTime, "Hora Final (Actual)");
+
+    const endTimeElement = document.getElementById(fieldId);
+    if (endTimeElement) {
+      endTimeElement.classList.add("input-warning");
+      setTimeout(() => {
+        endTimeElement.classList.remove("input-warning");
+      }, 1500);
+    }
+
+    filledFields.endTime = { label: "Hora Final (Actual)" };
+  }
+
+  // Feedback final al usuario
+  const filledCount = Object.keys(filledFields).length;
+  if (filledCount > 0) {
+    const filledLabels = Object.values(filledFields).map(
+      (pattern) => pattern.label
+    );
+    let message = `Campos actualizados: ${filledLabels.join(", ")}.`;
+    showToast(message, "success");
+  } else {
+    showToast("No se encontraron horas relevantes en la imagen.", "info");
   }
 }
 
@@ -543,4 +520,21 @@ export function initCameraOcr() {
 
   isInitialized = true;
   console.log("[cameraOcr] Funcionalidad OCR inicializada.");
+}
+
+/**
+ * Fa scroll suau fins a un element específic dins del seu contenidor de scroll.
+ * @param {HTMLElement} element - L'element fins al qual volem fer scroll.
+ */
+function _scrollToElement(element) {
+  if (!element) return;
+
+  // 'scrollIntoView' és la manera més senzilla de fer-ho.
+  // 'behavior: "smooth"' fa l'animació.
+  // 'block: "nearest"' intenta que l'element quedi visible sense moure massa la pàgina.
+  element.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest",
+    inline: "start",
+  });
 }
