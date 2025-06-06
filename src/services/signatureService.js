@@ -5,6 +5,8 @@
  * @module signatureService
  */
 
+import { setSwipeEnabled } from "../ui/tabs.js";
+
 // --- Constants ---
 const DOM_IDS = {
   MODAL: "signature-modal",
@@ -223,6 +225,8 @@ function initCanvasEvents() {
 /** Obre el modal de signatura per a un objectiu específic ('person1' o 'person2'). */
 function openSignatureModal(target) {
   if (!signatureModalElement || !canvasContext) return;
+  // >>> DESHABILITEM EL SWIPE DE PESTANYES <<<
+  setSwipeEnabled(false);
 
   currentSignatureTarget = target;
 
@@ -255,6 +259,9 @@ function openSignatureModal(target) {
 /** Tanca el modal de signatura. */
 function closeSignatureModal() {
   if (!signatureModalElement) return;
+  // >>> TORNEM A HABILITAR EL SWIPE DE PESTANYES <<<
+  setSwipeEnabled(true);
+
   signatureModalElement.style.display = "none";
   document.body.classList.remove(CSS_CLASSES.MODAL_OPEN);
   currentSignatureTarget = null; // Reseteja l'objectiu

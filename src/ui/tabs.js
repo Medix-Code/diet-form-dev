@@ -33,6 +33,7 @@ const SWIPE_CONFIG = {
 let currentTab = TABS.DADES; // Inicialitza amb la pestanya per defecte
 let touchStartX = 0;
 let touchStartY = 0;
+let isSwipeEnabled = true;
 
 // --- Funcions Públiques / Exportades ---
 
@@ -141,6 +142,9 @@ function _setupSwipeListeners() {
 
 /** Guarda la posició inicial quan l'usuari toca la pantalla. */
 function _handleTouchStart(event) {
+  // Si el swipe no està habilitat, no fem res.
+  if (!isSwipeEnabled) return;
+
   const firstTouch = event.touches[0];
   touchStartX = firstTouch.clientX;
   touchStartY = firstTouch.clientY;
@@ -148,6 +152,7 @@ function _handleTouchStart(event) {
 
 /** Calcula la direcció del gest quan l'usuari aixeca el dit i canvia de pestanya si cal. */
 function _handleTouchEnd(event) {
+  if (!isSwipeEnabled || touchStartX === 0) return;
   if (!event.changedTouches || event.changedTouches.length === 0) {
     return;
   }
@@ -182,4 +187,18 @@ function _handleTouchEnd(event) {
       }
     }
   }
+}
+
+// >>> NOVA FUNCIÓ EXPORTADA <<<
+/**
+ * Habilita o deshabilita la funcionalitat de swipe per canviar de pestanya.
+ * @param {boolean} enable - Posa a 'true' per habilitar, 'false' per deshabilitar.
+ */
+export function setSwipeEnabled(enable) {
+  isSwipeEnabled = !!enable; // Assegurem que sigui un booleà
+  console.log(
+    `La detecció de swipe està ara ${
+      isSwipeEnabled ? "HABILITADA" : "DESHABILITADA"
+    }.`
+  );
 }
