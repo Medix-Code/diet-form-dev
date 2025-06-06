@@ -211,7 +211,7 @@ function _loadDotacio(index) {
   const selected = savedDotacions[index];
 
   // Neteja errors previs del formulari abans de carregar
-  _validateDotacionInputs(); // Crida per netejar errors visuals
+  _clearDotacionInputErrors();
 
   // Carrega valors
   document.getElementById(DOM_IDS.VEHICLE_INPUT).value = selected.numero || "";
@@ -387,4 +387,17 @@ export function addDotacioFromMainForm() {
   _saveDotacionsToStorage();
   // No cal actualitzar la llista del modal aquí, es farà quan s'obri
   // _displayDotacioOptions();
+}
+
+function _clearDotacionInputErrors() {
+  const vehicleInput = document.getElementById(DOM_IDS.VEHICLE_INPUT);
+  const conductorInput = document.getElementById(DOM_IDS.PERSON1_INPUT);
+  const ajudantInput = document.getElementById(DOM_IDS.PERSON2_INPUT);
+
+  const conductorGroup = conductorInput?.closest(SELECTORS.PERSON_INPUT_GROUP);
+  const ajudantGroup = ajudantInput?.closest(SELECTORS.PERSON_INPUT_GROUP);
+
+  vehicleInput?.classList.remove(CSS_CLASSES.INPUT_ERROR);
+  conductorGroup?.classList.remove(CSS_CLASSES.INPUT_ERROR);
+  ajudantGroup?.classList.remove(CSS_CLASSES.INPUT_ERROR);
 }

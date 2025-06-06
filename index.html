@@ -52,7 +52,7 @@
     <header class="top-bar">
       <div class="top-bar__left">
         <a class="logo-title" href="https://misdietas.com" title="MisDietas">
-          <h1 class="top-bar__title">MisDietas2 Dev</h1>
+          <h1 class="top-bar__title">MisDietas Dev</h1>
         </a>
       </div>
 
@@ -138,6 +138,7 @@
     </nav>
 
     <main id="main-content" class="tab-content-container">
+      <!--<div class="tab-content-wrapper"> -->
       <!-- PESTANYA DADES -->
       <section
         id="dades-tab-content"
@@ -295,16 +296,27 @@
           </div>
         </div>
 
-        <!-- Afegeix aquest element a la teva pàgina, per exemple dins del main -->
-        <div id="ocr-progress-container" class="hidden">
-          <p id="ocr-progress-text">Procesando la imagen......</p>
-          <progress id="ocr-progress" value="0" max="100"></progress>
-        </div>
-
         <!-- Contenidor dels 4 serveis -->
         <div id="services-container">
           <!-- SERVEI 1 -->
-          <div class="service service-1" aria-labelledby="servei-1" tabindex="-1"></div>
+          <div
+            class="service service-1"
+            aria-labelledby="servei-1"
+            tabindex="-1"
+          >
+            <div class="ocr-progress-container hidden">
+              <div class="ocr-spinner"></div>
+              <p class="ocr-progress-text">Procesando...</p>
+            </div>
+
+            <label class="chip-group-title">Resultado del servicio</label>
+
+            <div class="chip-group">
+              <button class="chip chip-active" data-mode="3.6">3.6</button>
+              <button class="chip" data-mode="3.22">3.22</button>
+              <button class="chip" data-mode="3.11">3.11</button>
+            </div>
+
             <div class="form-group">
               <label for="service-number-1">N.º de servicio</label>
               <input
@@ -321,7 +333,7 @@
               <label for="origin-1">Origen (municipio)</label>
               <input type="text" id="origin-1" name="origin-1" class="origin" />
             </div>
-            <div class="form-group">
+            <div class="form-group destination-group">
               <label for="destination-1">Destino (hospital, centro...)</label>
               <input
                 type="text"
@@ -346,7 +358,9 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="destination-time-1">Hora de destino</label>
+              <label for="form-group destination-time-group"
+                >Hora de destino</label
+              >
               <div class="time-wrapper">
                 <input
                   type="time"
@@ -364,6 +378,9 @@
                   type="time"
                   id="end-time-1"
                   name="end-time-1"
+                  Mode
+                  de
+                  Servei
                   class="end-time"
                   placeholder="HH:mm"
                 />
@@ -373,6 +390,18 @@
 
           <!-- SERVEI 2 -->
           <div class="service service-2" tabindex="-1">
+            <div class="ocr-progress-container hidden">
+              <div class="ocr-spinner"></div>
+              <p class="ocr-progress-text">Procesando...</p>
+            </div>
+            <label class="chip-group-title">Resultado del servicio</label>
+
+            <div class="chip-group">
+              <button class="chip chip-active" data-mode="3.6">3.6</button>
+              <button class="chip" data-mode="3.22">3.22</button>
+              <button class="chip" data-mode="3.11">3.11</button>
+            </div>
+
             <div class="form-group">
               <label for="service-number-2">N.º de servicio</label>
               <input
@@ -389,7 +418,7 @@
               <label for="origin-2">Origen (municipio)</label>
               <input type="text" id="origin-2" name="origin-2" class="origin" />
             </div>
-            <div class="form-group">
+            <div class="form-group destination-group">
               <label for="destination-2">Destino (hospital, centro...)</label>
               <input
                 type="text"
@@ -413,7 +442,7 @@
                 />
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group destination-time-group">
               <label for="destination-time-2">Hora de destino</label>
               <div class="time-wrapper">
                 <input
@@ -441,6 +470,17 @@
 
           <!-- SERVEI 3 -->
           <div class="service service-3" tabindex="-1">
+            <div class="ocr-progress-container hidden">
+              <div class="ocr-spinner"></div>
+              <p class="ocr-progress-text">Procesando...</p>
+            </div>
+            <label class="chip-group-title">Resultado del servicio</label>
+
+            <div class="chip-group">
+              <button class="chip chip-active" data-mode="3.6">3.6</button>
+              <button class="chip" data-mode="3.22">3.22</button>
+              <button class="chip" data-mode="3.11">3.11</button>
+            </div>
             <div class="form-group">
               <label for="service-number-3">N.º de servicio</label>
               <input
@@ -457,7 +497,7 @@
               <label for="origin-3">Origen (municipio)</label>
               <input type="text" id="origin-3" name="origin-3" class="origin" />
             </div>
-            <div class="form-group">
+            <div class="form-group destination-group">
               <label for="destination-3">Destino (hospital, centro...)</label>
               <input
                 type="text"
@@ -481,7 +521,7 @@
                 />
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group destination-time-group">
               <label for="destination-time-3">Hora de destino</label>
               <div class="time-wrapper">
                 <input
@@ -509,6 +549,17 @@
 
           <!-- SERVEI 4 -->
           <div class="service service-4" tabindex="-1">
+            <div class="ocr-progress-container hidden">
+              <div class="ocr-spinner"></div>
+              <p class="ocr-progress-text">Procesando...</p>
+            </div>
+            <label class="chip-group-title">Resultado del servicio</label>
+
+            <div class="chip-group">
+              <button class="chip chip-active" data-mode="3.6">3.6</button>
+              <button class="chip" data-mode="3.22">3.22</button>
+              <button class="chip" data-mode="3.11">3.11</button>
+            </div>
             <div class="form-group">
               <label for="service-number-4">N.º de servicio</label>
               <input
@@ -525,7 +576,7 @@
               <label for="origin-4">Origen (municipio)</label>
               <input type="text" id="origin-4" name="origin-4" class="origin" />
             </div>
-            <div class="form-group">
+            <div class="form-group destination-group">
               <label for="destination-4">Destino (hospital, centro...)</label>
               <input
                 type="text"
@@ -549,7 +600,7 @@
                 />
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group destination-time-group">
               <label for="destination-time-4">Hora de destino</label>
               <div class="time-wrapper">
                 <input
@@ -592,12 +643,19 @@
           <p id="no-diets-text" class="no-diets-text hidden">
             No hay dietas guardadas.
           </p>
+
           <!-- Aquí es crearà dinàmicament la llista de dietes en una sola línia -->
           <div
             id="diet-options"
             class="diet-list"
             aria-label="Opciones de dietas"
           ></div>
+
+          <div class="modal-footer">
+            <button id="close-diet-modal" class="close-diet-button">
+              Cerrar
+            </button>
+          </div>
         </div>
       </div>
 
@@ -630,6 +688,8 @@
 
       <!-- Contenidor del Toast -->
       <div id="toast-container"></div>
+
+      <!--      </div>   Fi de .tab-content-wrapper -->
     </main>
 
     <!-- FOOTER -->
@@ -780,11 +840,16 @@
     <!-- MODAL que apareixerà des de sota amb 2 botons: "Cámara" i "Galería" -->
     <div id="camera-gallery-modal" class="modal-bottom hidden">
       <div class="modal-bottom-content">
-        <!-- Títol centrat -->
-        <h3 class="modal-bottom-title">Cámara OCR</h3>
-        <!-- Descripció breu a sota del títol -->
+        <!-- Títol amb l'etiqueta BETA -->
+        <div class="modal-title-container">
+          <h3 class="modal-bottom-title">Escanear horas</h3>
+          <span class="beta-tag">BETA</span>
+        </div>
+
+        <!-- Descripció més neta i centrada en la instrucció -->
         <p class="modal-bottom-description">
-          Extrae texto de una foto o imagen.
+          Para una mejor detección, haz zoom y
+          <b>encuadra solo las horas del servicio</b> en la pantalla del AL20.
         </p>
 
         <!-- Contenidor horitzontal per als 2 botons -->

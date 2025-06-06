@@ -1,14 +1,16 @@
 // init.js (dins src/init.js)
+
+// --- Importacions de Mòduls ---
 import { openDatabase } from "./db/indexedDbDietRepository.js";
 import {
   setTodayDate,
   easterEgg,
   setDefaultDietSelect,
-} from "./utils/utils.js"; // Agrupat setDefaultDietSelect
+} from "./utils/utils.js";
 import { initServices } from "./services/servicesPanelManager.js";
 import { initSignature } from "./services/signatureService.js";
 import { setupTabs } from "./ui/tabs.js";
-import { initThemeSwitcher } from "./ui/theme.js"; //
+import { initThemeSwitcher } from "./ui/theme.js";
 import { setupMainButtons } from "./ui/mainButtons.js";
 import { setupClearSelectedService } from "./ui/clearService.js";
 import { setupModalGenerics } from "./ui/modals.js";
@@ -16,10 +18,38 @@ import { setupDatePickers, setupTimePickers } from "./ui/pickers.js";
 import { setupServiceNumberRestrictions } from "./utils/restrictions.js";
 import { initSettingsPanel } from "./ui/settingsPanel.js";
 import * as formService from "./services/formService.js";
-import { initPwaInstall } from "./services/pwaService.js"; // Importa la funció d'inicialització correcta
+import { initPwaInstall } from "./services/pwaService.js";
 import { initCameraOcr } from "./services/cameraOcr.js";
 import { initDotacion } from "./services/dotacion.js";
-// No cal importar isAppInstalled ni requestInstallPromptAfterAction aquí si no s'usen directament a init.js
+// >>> NOU IMPORT: Per a l'ID anònim de donació <<<
+import { getAnonymousUserId } from "./services/userService.js";
+
+// --- Constants Específiques d'Inicialització ---
+const DONATION_LINK_ID = "openDonation";
+
+// --- Funcions Privades d'Inicialització ---
+
+/**
+ * Modifica l'enllaç de donació per incloure l'ID anònim de l'usuari.
+ */
+function setupDonationLink() {
+  const donationLink = document.getElementById(DONATION_LINK_ID);
+  if (!donationLink) {
+    console.warn("No s'ha trobat l'enllaç de donació per modificar.");
+    return;
+  }
+
+  const userId = getAnonymousUserId();
+
+  try {
+    const url = new URL(donationLink.href);
+    url.searchParams.set("custom", userId); // Usem el paràmetre 'custom' de PayPal
+    donationLink.href = url.toString();
+    console.log("Enllaç de donació actualitzat amb ID d'usuari anònim.");
+  } catch (error) {
+    console.error("L'URL de l'enllaç de donació no és vàlida:", error);
+  }
+}
 
 /**
  * Funció principal que orquestra la inicialització de tota l'aplicació.
@@ -31,13 +61,13 @@ export async function initializeApp() {
   // --- Inicialitzacions bàsiques i dades ---
   setTodayDate();
   setDefaultDietSelect();
-  await openDatabase(); // Espera que la BD estigui llesta si altres mòduls la necessiten immediatament
+  await openDatabase();
 
   // --- Inicialització de Serveis de Fons ---
   initServices();
   initSignature();
   initDotacion();
-  initCameraOcr(); // Pot inicialitzar la lògica, encara que el botó estigui amagat
+  initCameraOcr();
 
   // --- Configuració de la Interfície d'Usuari (UI) ---
   setupTabs();
@@ -48,12 +78,12 @@ export async function initializeApp() {
   setupTimePickers();
   initSettingsPanel();
   initThemeSwitcher();
+  setupDonationLink(); // >>> CRIDA A LA NOVA FUNCIÓ <<<
 
   // --- Configuració de Lògica de Formulari i Validacions ---
   setupServiceNumberRestrictions();
   formService.addInputListeners();
   formService.addDoneBehavior();
-  // Considera si realment necessites desar l'estat inicial aquí o si es pot gestionar d'una altra manera
   try {
     formService.setInitialFormDataStr(formService.getAllFormDataAsString());
   } catch (e) {
@@ -61,7 +91,6 @@ export async function initializeApp() {
   }
 
   // --- Inicialització del Servei PWA ---
-  // Aquesta única crida s'encarrega de tot: listeners, comprovacions d'estat, etc.
   initPwaInstall();
 
   // --- Altres ---

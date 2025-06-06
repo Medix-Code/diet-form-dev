@@ -22,6 +22,8 @@
   --textfield-error-bg: #f5e9e9;
   --input-border: #ced4da;
   --border-textfield-focus: rgb(80, 80, 80);
+  --textfield-warning: #ff9f0a; /* Un taronja/ambre cridaner */
+  --textfield-warning-bg: #fff8e1; /* Un groc/crema molt pàl·lid per al fons */
   /* Group Tab Datos */
   --btt-card-bg: #004aad;
   /* Signature */
@@ -98,6 +100,8 @@
   --textfield-error-bg: #f5e9e9;
   --input-border: #ced4da;
   --border-textfield-focus: rgb(80, 80, 80);
+  --textfield-warning: #ff9f0a; /* Un taronja/ambre cridaner */
+  --textfield-warning-bg: #fff8e1; /* Un groc/crema molt pàl·lid per al fons */
   --btt-signature: #f3f3f3;
   --bg-signature-hover: #c9c9c9;
   --border-top-footer: #f1f1f1;
@@ -466,6 +470,12 @@ button .fa {
   background-color: var(--textfield-error-bg) !important;
 }
 
+.input-warning {
+  border: 2px solid var(--textfield-warning) !important;
+  background-color: var(--textfield-warning-bg) !important;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
 /* si vols que l'input intern també quedi en vermell clar: */
 .input-with-icon.input-error input {
   background-color: var(--textfield-error-bg) !important;
@@ -676,6 +686,114 @@ button .fa {
     transform: scale(1);
   }
 }
+.chip-group-title {
+  display: block;
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  color: var(--subtext-color);
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+/* contenidor horitzontal */
+.chip-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.chip {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  line-height: 1;
+  /* La vora la definirem per estat per evitar salts */
+}
+
+/* 2. Estils per als CHIPS INACTIUS (quan NO tenen .chip-active) */
+/* Aquesta regla general estableix l'opacitat i el pes de font per als inactius */
+.chip:not(.chip-active) {
+  font-weight: 500;
+  opacity: 0.6; /* <<< CLAU: Els fem més transparents per semblar menys actius */
+}
+
+/* Ara, apliquem els colors de fons i vora als inactius segons el servei */
+.chip-group.service-1 .chip:not(.chip-active) {
+  background-color: var(--service-1-bg);
+  border: 1px solid var(--service-1-border);
+  color: var(--txtcolor-tab-active); /* Text fosc */
+}
+
+.chip-group.service-2 .chip:not(.chip-active) {
+  background-color: var(--service-2-bg);
+  border: 1px solid var(--service-2-border);
+  color: var(--txtcolor-tab-active);
+}
+
+.chip-group.service-3 .chip:not(.chip-active) {
+  background-color: var(--service-3-bg);
+  border: 1px solid var(--service-3-border);
+  color: var(--txtcolor-tab-active);
+}
+
+.chip-group.service-4 .chip:not(.chip-active) {
+  background-color: var(--service-4-bg);
+  border: 1px solid var(--service-4-border);
+  color: var(--txtcolor-tab-active);
+}
+
+/* 3. Estil per al HOVER sobre un chip INACTIU */
+.chip:not(.chip-active):hover {
+  opacity: 1; /* Opacitat completa en fer hover per indicar que és clicable */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Una petita ombra en hover */
+}
+
+/* 4. Estil per al CHIP ACTIU (quan TÉ .chip-active) */
+/* Regla general per a l'actiu */
+.chip.chip-active {
+  color: var(--text-color-footer); /* Text blanc */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Ombra una mica més marcada */
+  font-weight: 600; /* Més gruixut */
+  opacity: 1; /* Opacitat completa */
+  border: 1px solid transparent; /* Vora transparent o del mateix color que el fons */
+}
+
+/* Fons de color sòlid per a l'actiu (més destacat) */
+.chip-group.service-1 .chip.chip-active {
+  background-color: var(--service-1-border);
+  border-color: var(--service-1-border);
+}
+
+.chip-group.service-2 .chip.chip-active {
+  background-color: var(--service-2-border);
+  border-color: var(--service-2-border);
+}
+
+.chip-group.service-3 .chip.chip-active {
+  background-color: var(--service-3-border);
+  border-color: var(--service-3-border);
+}
+
+.chip-group.service-4 .chip.chip-active {
+  background-color: var(--service-4-border);
+  border-color: var(--service-4-border);
+}
+
+/* ========================================================================== */
+/* ESTILS PER A CONTROLS DESHABILITATS TEMPORALMENT per ocr                   */
+/* ========================================================================== */
+.disabled-control {
+  opacity: 0.4 !important; /* Opacitat molt baixa per indicar clarament que no es pot fer servir */
+  cursor: not-allowed !important; /* El cursor canvia per reforçar que no és clicable */
+  pointer-events: none !important; /* Aquesta és la propietat clau: ignora completament els esdeveniments de ratolí/tàctil */
+}
+
 .service-controls {
   display: flex;
   align-items: center;
@@ -689,45 +807,68 @@ button .fa {
   gap: 20px;
 }
 
+#services-container {
+  display: grid; /* actiu grid */
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1rem; /* separació entre recuadres */
+  align-items: start;
+}
+
 .service-button {
-  width: clamp(40px, 5vw, 50px);
-  height: clamp(40px, 5vw, 50px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  /* Mida responsive */
+  --size: clamp(40px, 5vw, 50px);
+  inline-size: var(--size);
+  block-size: var(--size);
+  /* Centrat perfecte */
+  display: grid; /* << únic display */
+  place-items: center;
+  /* Estil base */
   border-radius: 8px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 700;
+  line-height: 1; /* evita desplaçaments verticals */
+  padding: 0;
+  box-sizing: border-box;
   box-shadow: 0 2px 4px var(--bg-transp-ajustes);
   border: none;
   color: var(--text-color);
-  transition: all 0.2s ease;
   cursor: pointer;
+  transition: filter 0.2s ease, transform 0.2s ease;
+  /* Colors de cada servei */
 }
 .service-button.service-1 {
-  background-color: var(--service-1-border);
+  background: var(--service-1-border);
 }
 .service-button.service-2 {
-  background-color: var(--service-2-border);
+  background: var(--service-2-border);
 }
 .service-button.service-3 {
-  background-color: var(--service-3-border);
+  background: var(--service-3-border);
 }
 .service-button.service-4 {
-  background-color: var(--service-4-border);
+  background: var(--service-4-border);
 }
 .service-button:active {
-  filter: brightness(0.9);
+  transform: scale(0.96);
 }
 
-.active-square {
-  transform: scale(1.05);
+/* Estat ACTIU */
+.service-button.active-square {
+  filter: none;
   border: 1px solid var(--border-btn-service);
+  transform: scale(1.05);
+}
+
+/* Estat INACTIU */
+.service-button:not(.active-square) {
+  opacity: 0.5;
 }
 
 .service {
-  padding: clamp(15px, 3vw, 30px) clamp(10px, 2vw, 20px);
+  padding-top: clamp(10px, 2vw, 20px);
+  padding-bottom: clamp(15px, 3vw, 30px); /* Mantenim o ajustem el padding inferior */
+  padding-left: clamp(10px, 2vw, 20px);
+  padding-right: clamp(10px, 2vw, 20px);
   background-color: var(--bg-color);
   border-radius: 8px;
   box-shadow: 0 4px 8px var(--bg-transp-ajustes);
@@ -911,58 +1052,100 @@ button .fa {
 }
 
 /* ------------------------- */
-/* MODAL “BOTTOM SHEET” BASE */
+/* MODAL “BOTTOM SHEET” BASE OCR */
 /* ------------------------- */
+/* Contenidor de fons semi-transparent que puja des de baix */
 .modal-bottom {
   position: fixed;
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  border-radius: 12px 12px 0 0;
-  background-color: rgba(0, 0, 0, 0.4); /* Fosc semi-transparent */
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: flex-end;
+  align-items: flex-end; /* Alinea el contingut a la part inferior */
   justify-content: center;
   z-index: 9999;
+  /* Animació d'entrada/sortida */
   opacity: 0;
-  transform: translateY(100%);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease;
 }
+
+/* Quan el modal és visible */
 .modal-bottom.visible {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Quan el modal està amagat (per a JavaScript) */
 .modal-bottom.hidden {
   display: none;
 }
 
+/* El contingut del modal (la part que té el text i els botons) */
 .modal-bottom-content {
-  /* Eliminem ombra o borde gris: */
-  box-shadow: none !important;
-  border: none !important;
-  background-color: #3f3c3c;
+  background-color: var(--primary-color);
+  color: #ffffff;
   width: 100%;
-  border-radius: 12px 12px 0 0;
+  max-width: 100%;
+  border-radius: 16px 16px 0 0;
   padding: 20px;
   box-sizing: border-box;
+  box-shadow: none !important;
+  border: none !important;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.modal-bottom.visible .modal-bottom-content {
+  transform: translateY(0);
 }
 
 /* ---------------------------- */
 /* Títol i descripció centrats  */
 /* ---------------------------- */
-.modal-bottom-title {
-  margin: 0;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-  color: #333; /* Ajusta segons vulguis */
+.modal-title-container {
+  display: flex;
+  align-items: center; /* Alinea verticalment el text i l'etiqueta */
+  justify-content: center; /* Centra el conjunt */
+  gap: 8px; /* Espai entre el títol i l'etiqueta */
+  margin-bottom: 16px; /* Espai sota el títol/etiqueta */
 }
 
+/* Títol del modal (eliminem marges individuals) */
+.modal-bottom-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f5f5f7;
+}
+
+/* Etiqueta BETA */
+.beta-tag {
+  background-color: #ff9f0a; /* Un taronja que destaca bé */
+  color: #000000; /* Text negre per a bon contrast */
+  font-size: 0.6rem; /* Mida de font petita */
+  font-weight: 700; /* Negreta */
+  padding: 2px 5px; /* Padding petit */
+  border-radius: 4px; /* Cantonades arrodonides */
+  text-transform: uppercase; /* Text en majúscules */
+  line-height: 1;
+  align-self: center; /* Ajuda a l'alineació vertical */
+}
+
+/* Descripció/Subtítol (ajustem marges) */
 .modal-bottom-description {
-  margin: 8px 0 20px 0;
+  margin: 0 0 25px 0;
   text-align: center;
-  font-size: 14px;
-  color: #666;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+}
+
+.modal-bottom-description b {
+  color: #ffffff;
+  font-weight: 600;
 }
 
 /* ------------------------------------- */
@@ -970,53 +1153,109 @@ button .fa {
 /* ------------------------------------- */
 .modal-bottom-row {
   display: flex;
-  justify-content: space-around; /* Espaiat uniforme */
+  justify-content: center; /* Centra els botons horitzontalment */
   align-items: center;
-  gap: 20px;
+  gap: 60px; /* Espai entre els botons */
 }
 
 /* -------------------------------------- */
 /* Cada botó en forma de “quadrat”        */
 /* -------------------------------------- */
 .modal-bottom-btn {
-  /* Quadrat o rectangle */
-  width: 100px;
-  height: 100px;
-  border-radius: 10px;
+  /* Mida del botó */
+  width: 100px; /* Una mica més ample per a millor toc */
+  height: 90px;
+  border-radius: 12px; /* Cantonades arrodonides */
   display: flex;
   flex-direction: column; /* Icona a dalt, text a sota */
   align-items: center;
   justify-content: center;
-  background-color: #eee;
+  gap: 6px; /* Espai entre icona i text */
+  /* >>> NOU: ESTIL VISUAL DELS BOTONS <<< */
+  background-color: #f5f5f7; /* Un gris mitjà-fosc per al fons del botó */
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.1s ease-out;
 }
 
-/* Efecte hover */
+/* Efecte hover i active/clic */
 .modal-bottom-btn:hover {
-  background-color: #ddd;
+  background-color: #e5e5e7; /* Un gris una mica més clar en fer hover */
 }
 
-/* Icona una mica més gran, a dalt */
+.modal-bottom-btn:active {
+  transform: scale(0.97); /* Un petit efecte de "pressió" en fer clic */
+}
+
+/* Icona dins del botó */
 .modal-bottom-btn img {
-  width: 36px;
-  height: 36px;
-  margin-bottom: 4px;
+  width: 28px; /* Mida de la icona */
+  height: 28px;
 }
 
-/* Text a sota la icona */
+/* Text a sota de la icona */
 .modal-bottom-text {
-  font-size: 14px;
+  font-size: 0.85rem; /* 14px o similar */
+  font-weight: 500; /* Pes mitjà */
+  color: var(--text-color); /* Text blanc/gris clar */
+}
+
+/* Assegura't que el pare .service tingui position: relative; (ja ho tenies, està bé) */
+.service {
+  position: relative;
+  /* ... */
+}
+
+/* Estil de l'overlay de progrés (ara amb classe) */
+.ocr-progress-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.85); /* Fons blanc translúcid */
+  backdrop-filter: blur(4px);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Quan està amagat (la classe 'hidden' que afegeix/treu el JS) */
+.ocr-progress-container.hidden {
+  opacity: 0;
+  pointer-events: none; /* Evita que es pugui interactuar amb l'overlay amagat */
+}
+
+.ocr-progress-text {
+  font-size: 1rem;
   font-weight: 500;
-  color: #333;
+  color: var(--text-color);
+  margin-top: 15px;
 }
 
-/* Quan volem amagar el modal */
-.hidden {
-  display: none !important;
+/* Spinner animat */
+.ocr-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #f3f3f3; /* Gris clar */
+  border-top: 4px solid var(--primary-color); /* Color de la teva marca */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .signature-group .input-with-icon {
   display: flex;
   align-items: stretch;
@@ -1158,6 +1397,13 @@ button .fa {
   background-color: var(--secondary-color-hover);
 }
 
+.diet-modal-content {
+  display: flex;
+  flex-direction: column; /* header | scroll | footer */
+  max-height: 80vh; /* límit d’alçada total del modal */
+  overflow: hidden; /* que el scroll només afecti el fill .diet-list */
+}
+
 #diet-modal-title {
   text-align: center;
   font-size: 1.1rem;
@@ -1172,44 +1418,17 @@ button .fa {
 }
 
 .diet-list {
+  flex: 1; /* ocupa tot l’espai disponible */
+  overflow-y: auto; /* només aquesta secció es desplaça */
+  padding: 20px 0; /* el teu espai vertical actual */
   display: flex;
   flex-direction: column;
   gap: 15px;
-  padding: 20px 0;
 }
 
-.diet-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid var(--grey-border);
-  border-radius: 8px;
-  padding: 20px 15px;
-  background-color: var(--bg-dietas);
-  cursor: default;
-}
-
-.diet-date {
-  font-size: 16px;
-  color: var(--text-color);
-}
-
-.diet-icons {
-  display: flex;
-  gap: 40px;
-  align-items: stretch;
-}
-
-.diet-icons button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s ease, filter 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%; /* Respectem l'altura existent */
-  border-radius: 8px; /* Arrodonit per millor estètica */
+.no-diets-text {
+  margin: 20px 0; /* manté una mica d’aire */
+  text-align: center;
 }
 
 .diet-icons button:hover {
@@ -1222,11 +1441,102 @@ button .fa {
   filter: brightness(0.9);
 }
 
+/* ──────────────────────────────────────────────
+   GESTOR DE DIETAS – restyling d’un sol ítem
+   ────────────────────────────────────────────── */
+/* 1 ▸ Caixa principal de cada dieta */
+.diet-item {
+  display: flex;
+  flex-direction: column; /* text a dalt, botons a sota  */
+  gap: 0.75rem; /* espai vertical             */
+  padding: 12px 16px;
+  background: #f9f9f9;
+  border: 1px solid var(--grey-border);
+  border-radius: 8px;
+}
+
+/* 2 ▸ Primària (data – franja) */
+.diet-date {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 3 ▸ Contenidor dels dos botons */
+.diet-icons {
+  display: flex;
+  justify-content: space-between; /* un al costat de l’altre     */
+  align-items: center;
+  width: 100%;
+  gap: 10px; /* separació entre botons      */
+}
+
+/* 4 ▸ Botons: reaprofitem les mateixes classes que a dotacions  */
+.diet-icons button {
+  flex: 1; /* ocupen el mateix ample      */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* espai icona-text            */
+  padding: 10px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* 4.1 ▸ Eliminar */
+.diet-delete {
+  /* classe ja aplicada al botó */
+  background: #fdeceb;
+  color: #e03131;
+}
+.diet-delete:hover {
+  background: #fccac9;
+}
+
+/* 4.2 ▸ Carregar */
+.diet-load {
+  /* classe ja aplicada al botó */
+  background: #eceffc;
+  color: #004aad;
+}
+.diet-load:hover {
+  background: #dce0fa;
+}
+
+/* 5 ▸ Icones lleugerament més petites per encaixar */
 .diet-icons img {
-  width: 22px !important;
-  height: 22px !important;
-  pointer-events: none;
-  flex-shrink: 0;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Botó de tancar centrat al modal */
+.close-diet-button {
+  width: 120px;
+  height: 40px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto; /* Centrar el botó al modal */
+}
+
+/* Efectes hover i clic */
+.close-diet-button:hover {
+  background-color: #c78e00;
+}
+
+.close-diet-button:active {
+  transform: scale(0.95);
 }
 
 #signature-modal {
@@ -1397,9 +1707,13 @@ button .fa {
   border: none;
   cursor: pointer;
   transition: transform var(--transition-speed) ease;
+  padding: 8px; /* Afegim una mica de padding per a millor àrea de contacte */
+  border-radius: 50%; /* Els fem circulars per a un look més de "botó" */
 }
-.footer .footer-btn:hover, .footer .footer-btn:focus {
+.footer .footer-btn:hover,
+.footer .footer-btn .footer-btn:focus {
   transform: scale(1.1);
+  background-color: rgba(255, 255, 255, 0.1); /* Un fons subtil en hover */
 }
 .footer .footer-btn:active {
   transform: scale(1.2);
@@ -1667,7 +1981,7 @@ button .icon {
     font-size: 0.95rem;
   }
   .diet-list {
-    padding: 5px 0;
+    padding: 15px 0;
   }
   .diet-item {
     padding: 14px 12px;

@@ -1,6 +1,7 @@
 /**
  * @file tabs.js
- * @description Configuració i gestió de la navegació entre les pestanyes principals (Dades / Serveis).
+ * @description Configuració i gestió de la navegació entre les pestanyes principals (Dades / Serveis),
+ *              incloent la funcionalitat de swipe per a dispositius tàctils.
  * @module tabs
  */
 
@@ -17,14 +18,21 @@ const DOM_IDS = {
   TAB_SERVEIS: `tab-${TABS.SERVEIS}`,
   CONTENT_DADES: `${TABS.DADES}-tab-content`,
   CONTENT_SERVEIS: `${TABS.SERVEIS}-tab-content`,
+  MAIN_CONTENT_AREA: "main-content", // ID del contenidor principal on es farà swipe
 };
 const CSS_CLASSES = {
   ACTIVE_TAB: "active", // Classe per a la pestanya i contingut actiu
   ERROR_TAB: "error-tab", // Classe per indicar error en una pestanya
 };
+const SWIPE_CONFIG = {
+  MIN_DISTANCE: 60, // Distància horitzontal mínima en píxels per considerar-ho un swipe
+  MAX_VERTICAL_RATIO: 0.5, // Ratio màxim vertical/horitzontal per no confondre amb scroll
+};
 
 // --- Variables d'Estat del Mòdul ---
 let currentTab = TABS.DADES; // Inicialitza amb la pestanya per defecte
+let touchStartX = 0;
+let touchStartY = 0;
 
 // --- Funcions Públiques / Exportades ---
 
@@ -34,7 +42,7 @@ export function getCurrentTab() {
 }
 
 /**
- * Configura els listeners inicials per a les pestanyes.
+ * Configura els listeners inicials per a les pestanyes, incloent els de swipe.
  * @export
  */
 export function setupTabs() {
@@ -49,9 +57,12 @@ export function setupTabs() {
   tabDadesElement.addEventListener("click", () => switchToTab(TABS.DADES));
   tabServeisElement.addEventListener("click", () => switchToTab(TABS.SERVEIS));
 
+  // Configura els listeners per al gest de swipe
+  _setupSwipeListeners();
+
   // Mostra la pestanya inicial per defecte
-  switchToTab(currentTab); // Usa la variable d'estat inicial
-  console.log("Sistema de pestanyes configurat.");
+  switchToTab(currentTab);
+  console.log("Sistema de pestanyes (amb swipe) configurat.");
 }
 
 // --- Funcions Privades ---
@@ -61,16 +72,17 @@ export function setupTabs() {
  * @param {('dades'|'serveis')} tabName - L'ID de la pestanya a activar.
  */
 function switchToTab(tabName) {
+  // Evita canvis innecessaris si ja estem a la pestanya correcta
+  if (currentTab === tabName) return;
+
   if (tabName !== TABS.DADES && tabName !== TABS.SERVEIS) {
     console.warn(`Intent de canviar a una pestanya invàlida: ${tabName}`);
     return;
   }
 
-  // Actualitza l'estat intern
   currentTab = tabName;
   console.log(`Canviant a la pestanya: ${currentTab}`);
 
-  // Obté referències als elements (es podrien cachejar si no canvien)
   const tabDadesElement = document.getElementById(DOM_IDS.TAB_DADES);
   const tabServeisElement = document.getElementById(DOM_IDS.TAB_SERVEIS);
   const dadesContentElement = document.getElementById(DOM_IDS.CONTENT_DADES);
@@ -90,11 +102,9 @@ function switchToTab(tabName) {
     return;
   }
 
-  // (Opcional) Neteja indicadors d'error en canviar de pestanya
   tabDadesElement.classList.remove(CSS_CLASSES.ERROR_TAB);
   tabServeisElement.classList.remove(CSS_CLASSES.ERROR_TAB);
 
-  // Activa/Desactiva pestanyes i continguts
   const isDadesActive = tabName === TABS.DADES;
 
   tabDadesElement.classList.toggle(CSS_CLASSES.ACTIVE_TAB, isDadesActive);
@@ -105,16 +115,71 @@ function switchToTab(tabName) {
     !isDadesActive
   );
 
-  // **CORRECCIÓ CLAU:** Si la pestanya activada és la de 'serveis',
-  // cridem la funció per actualitzar els estils dels botons externs.
   if (tabName === TABS.SERVEIS) {
-    // Comprova si la funció existeix abans de cridar-la (bona pràctica)
     if (typeof updateExternalStylesForCurrentService === "function") {
       updateExternalStylesForCurrentService();
+    }
+  }
+}
+
+/** Configura els listeners d'esdeveniments tàctils a l'àrea de contingut. */
+function _setupSwipeListeners() {
+  const contentArea = document.getElementById(DOM_IDS.MAIN_CONTENT_AREA);
+  if (!contentArea) {
+    console.error(
+      `Swipe: No s'ha trobat l'àrea de contingut principal #${DOM_IDS.MAIN_CONTENT_AREA}.`
+    );
+    return;
+  }
+
+  // Usem { passive: true } per a una millor performance, ja que no prevenim el scroll
+  contentArea.addEventListener("touchstart", _handleTouchStart, {
+    passive: true,
+  });
+  contentArea.addEventListener("touchend", _handleTouchEnd, { passive: true });
+}
+
+/** Guarda la posició inicial quan l'usuari toca la pantalla. */
+function _handleTouchStart(event) {
+  const firstTouch = event.touches[0];
+  touchStartX = firstTouch.clientX;
+  touchStartY = firstTouch.clientY;
+}
+
+/** Calcula la direcció del gest quan l'usuari aixeca el dit i canvia de pestanya si cal. */
+function _handleTouchEnd(event) {
+  if (!event.changedTouches || event.changedTouches.length === 0) {
+    return;
+  }
+
+  const touchEndX = event.changedTouches[0].clientX;
+  const touchEndY = event.changedTouches[0].clientY;
+
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+
+  // Reseteja les coordenades per al proper gest, independentment del resultat
+  touchStartX = 0;
+  touchStartY = 0;
+
+  // Ignora el gest si el moviment vertical és dominant (scroll)
+  // Comprovem si el moviment vertical és més de la meitat de l'horitzontal
+  if (Math.abs(deltaY) > Math.abs(deltaX) * SWIPE_CONFIG.MAX_VERTICAL_RATIO) {
+    return;
+  }
+
+  // Comprova si el moviment horitzontal supera la distància mínima per a un swipe
+  if (Math.abs(deltaX) > SWIPE_CONFIG.MIN_DISTANCE) {
+    if (deltaX > 0) {
+      // Swipe cap a la DRETA -> Va a la pestanya de l'ESQUERRA
+      if (currentTab === TABS.SERVEIS) {
+        switchToTab(TABS.DADES);
+      }
     } else {
-      console.warn(
-        "La funció 'updateExternalStylesForCurrentService' no s'ha pogut importar o no existeix a servicesPanelManager."
-      );
+      // Swipe cap a l'ESQUERRA -> Va a la pestanya de la DRETA
+      if (currentTab === TABS.DADES) {
+        switchToTab(TABS.SERVEIS);
+      }
     }
   }
 }

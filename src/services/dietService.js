@@ -6,6 +6,9 @@
  */
 
 // Importacions del Repositori (Base de Dades)
+
+import { setModeForService } from "./servicesPanelManager.js";
+
 import {
   addDiet,
   getAllDiets,
@@ -27,7 +30,6 @@ import { getCurrentTab } from "../ui/tabs.js";
 import {
   gatherAllData,
   captureInitialFormState, // Canviat nom per claredat
-  getInitialFormDataStr,
   removeErrorClassesFromService, // <-- NOM CORREGIT DE L'IMPORT
 } from "./formService.js";
 import {
@@ -78,10 +80,7 @@ const CSS_CLASSES = {
 function buildDietObject(generalData, servicesData, dietId) {
   // Validació bàsica d'entrada
   if (!generalData || !Array.isArray(servicesData) || !dietId) {
-    console.error("Dades invàlides per construir l'objecte Dieta.");
-    throw new Error(
-      "No es pot construir l'objecte Dieta amb dades incompletes."
-    );
+    throw new Error("Dades incompletes per construir Dieta.");
   }
 
   return {
@@ -102,6 +101,7 @@ function buildDietObject(generalData, servicesData, dietId) {
       destination: s.destination || "",
       destinationTime: s.destinationTime || "",
       endTime: s.endTime || "",
+      mode: s.mode || "3.6",
     })),
     timeStampDiet: new Date().toISOString(), // Timestamp de l'operació
   };
@@ -188,8 +188,12 @@ function populateFormWithDietData(diet) {
           inputElement.value = serviceData[fieldName] || "";
         }
       }
+      console.log(`Servei ${index} carregat amb mode:`, serviceData.mode);
+      // aplica el mode guardat (o 3.6)
+      setModeForService(index, serviceData.mode || "3.6");
+
       // Neteja possibles errors visuals previs d'aquest servei
-      removeErrorClassesFromService(serviceElement); // <-- NOM CORREGIT DE LA CRIDA
+      removeErrorClassesFromService(serviceElement);
     }
   });
 
@@ -205,6 +209,10 @@ function populateFormWithDietData(diet) {
     removeErrorClassesFromService(serviceElement);
     // Aquí també podríem voler eliminar visualment el servei si la UI ho permet
   }
+  // Al final de populateFormWithDietData
+  console.log(
+    "Finalització de populateFormWithDietData, cap crida posterior hauria de canviar els modes."
+  );
 }
 
 // --- Funcions Públiques / Exportades ---
@@ -367,15 +375,17 @@ export async function deleteDietHandler(id, dietDate, dietType) {
       if (remainingDiets.length === 0) {
         closeDietModal(); // Tanca el modal si ja no hi ha dietes per mostrar
       }
-
-      // Opcional: Netejar el formulari si la dieta eliminada era la que estava carregada?
-      // const currentFormId = (gatherAllData()?.servicesData[0]?.serviceNumber || "").slice(0, 9);
-      // if (currentFormId === id) {
-      //    clearForm(); // Necessitaria una funció per netejar tot el formulari
-      // }
     } catch (error) {
       console.error(`Error eliminant la dieta ${id}:`, error);
       showToast(`Error al eliminar la dieta: ${error.message}`, "error");
     }
   }
+}
+
+// Helper: amaga/mostra camps `destination` i `destinationTime` d’un servei
+function applyModeToServiceElement(svcEl, mode) {
+  const hide = mode === "3.11" || mode === "3.22";
+  svcEl
+    .querySelectorAll(".destination-group, .destination-time-group")
+    .forEach((n) => n.classList.toggle("hidden", hide));
 }

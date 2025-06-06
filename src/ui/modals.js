@@ -439,6 +439,14 @@ export function openDietModal() {
     dietModalElement = document.getElementById(DOM_IDS.DIET_MODAL);
     dietOptionsListElement = document.getElementById(DOM_IDS.DIET_OPTIONS_LIST);
     noDietsTextElement = document.getElementById(DOM_IDS.NO_DIETS_TEXT);
+
+    // ▶︎ nou botó “Cerrar”
+    const closeDietBtn = document.getElementById("close-diet-modal");
+    if (closeDietBtn && !closeDietBtn.dataset.listenerAttached) {
+      closeDietBtn.dataset.listenerAttached = "true";
+      closeDietBtn.addEventListener("click", closeDietModal);
+    }
+
     if (dietOptionsListElement) {
       dietOptionsListElement.addEventListener("click", _handleDietListClick);
     } else {
@@ -486,8 +494,8 @@ export async function displayDietOptions() {
     } else {
       dietOptionsListElement.classList.remove(CSS_CLASSES.HIDDEN);
       noDietsTextElement.classList.add(CSS_CLASSES.HIDDEN);
-      // Opcional: Ordenar
-      // savedDiets.sort((a, b) => new Date(b.date) - new Date(a.date));
+      // Ordenar
+      savedDiets.sort((a, b) => new Date(b.date) - new Date(a.date));
       savedDiets.forEach((diet) => {
         const listItem = _createDietListItem(diet);
         dietOptionsListElement.appendChild(listItem);

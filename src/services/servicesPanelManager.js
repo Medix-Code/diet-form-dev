@@ -1,259 +1,382 @@
 /**
  * @file servicesPanelManager.js
- * @description Gestiona la visualització i navegació entre els diferents panells de servei
- *              i actualitza l'estil dels controls associats.
+ * @description Gestor dels panells de servei (S1-S4) i de la barra de “chips”
+ *              (3.6 / 3.22 / 3.11) — cada servei pot tenir el seu mode propi.
  * @module servicesPanelManager
  */
 
-// --- Constants ---
+/* ────────────────────────────────────────────────────────────────────────── */
+/* CONSTANTS                                                                */
+/* ────────────────────────────────────────────────────────────────────────── */
 const DOM_IDS = {
   CONTAINER: "services-container",
   BUTTONS_CONTAINER: "service-buttons-container",
   OPTIONS_MENU: "options-menu",
   OPTIONS_TOGGLE_BTN: "options-toggle",
-  CLEAR_BTN: "clear-selected-service", // Afegit per claredat
-  CAMERA_BTN: "camera-in-dropdown", // Afegit per claredat
+  CLEAR_BTN: "clear-selected-service",
+  CAMERA_BTN: "camera-in-dropdown",
+  CHIP_GROUP: "service-mode-chips", // barra de chips global
 };
+
 const SELECTORS = {
   SERVICE_PANEL: ".service",
   SERVICE_BUTTON: ".service-button",
+  CHIP: ".chip",
+  FORM_GROUP: ".form-group", // Helper selector for form groups
 };
+
 const CSS_CLASSES = {
-  // IMPORTANT: Assegura't que aquesta classe CSS realment fa 'display: none !important;'
   SERVICE_HIDDEN: "hidden",
   BUTTON_ACTIVE: "active-square",
   SERVICE_COLORS: ["service-1", "service-2", "service-3", "service-4"],
   OPTIONS_MENU_HIDDEN: "hidden",
+  CHIP_ACTIVE: "chip-active",
 };
 
-// --- Variables d'Estat del Mòdul ---
-let currentServiceIndex = 0;
+// Selectors for inputs within form-groups that s’oculten en modes “bàsics” (3.22 / 3.11)
+const DESTINATION_FIELD_SELECTORS = [
+  ".destination", // input destí
+  ".destination-time", // hora destí
+];
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* STATE                                                                    */
+/* ────────────────────────────────────────────────────────────────────────── */
+let isInitialized = false;
+let currentServiceIndex = 0; // 0..3  (S1 és 0)
 let servicePanels = [];
 let serviceButtons = [];
-let servicesContainerElement = null;
-let serviceButtonsContainerElement = null;
-let optionsMenuElement = null;
-let optionsToggleButtonElement = null;
-let isInitialized = false;
 
-// --- Funcions Privades ---
+let servicesContainerEl = null;
+let serviceButtonsContEl = null;
+let optionsMenuEl = null;
+let optionsToggleBtnEl = null;
+let globalChipBarEl = null; // Element for the global chip bar
+let globalChipButtons = []; // Buttons in the global chip bar
 
-/** Crea els botons de navegació (S1, S2...) dinàmicament. */
+/** Array amb el mode de cada servei – valors: "3.6", "3.22", "3.11"          */
+export let serviceModes = []; // es crea a init()
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* HELPERS – NAVEGACIÓ S1-S4                                                 */
+/* ────────────────────────────────────────────────────────────────────────── */
 function _createServiceButtons() {
-  if (!serviceButtonsContainerElement || !servicePanels.length) return;
-  serviceButtonsContainerElement.innerHTML = "";
-  serviceButtons = [];
-  servicePanels.forEach((_, index) => {
+  if (!serviceButtonsContEl) return;
+
+  serviceButtonsContEl.innerHTML = "";
+  serviceButtons = servicePanels.map((_, idx) => {
     const btn = document.createElement("button");
-    const colorClass = CSS_CLASSES.SERVICE_COLORS[index] || "";
-    // Afegim la classe base explícitament per si el selector canvia
-    btn.className = `service-button ${colorClass}`; // Classe base + color
-    btn.textContent = `S${index + 1}`;
+    btn.className = `service-button ${CSS_CLASSES.SERVICE_COLORS[idx]}`;
+    btn.textContent = `S${idx + 1}`;
     btn.type = "button";
-    btn.setAttribute("aria-label", `Mostrar Servei ${index + 1}`);
-    btn.addEventListener("click", () => {
-      showService(index);
-    });
-    serviceButtonsContainerElement.appendChild(btn);
-    serviceButtons.push(btn);
+    btn.setAttribute("aria-label", `Mostrar servei ${idx + 1}`);
+    btn.addEventListener("click", () => showService(idx));
+    serviceButtonsContEl.appendChild(btn);
+    return btn;
   });
 }
 
-/** Assigna listeners al menú d'opcions. */
+/* ────────────────────────────────────────────────────────────────────────── */
+/* HELPERS – MENÚ D'OPCIONS (tres punts)                                     */
+/* ────────────────────────────────────────────────────────────────────────── */
 function _attachOptionsMenuListeners() {
-  if (!optionsMenuElement || !optionsToggleButtonElement) return;
-  optionsToggleButtonElement.addEventListener("click", (e) => {
+  if (!optionsMenuEl || !optionsToggleBtnEl) return;
+
+  optionsToggleBtnEl.addEventListener("click", (e) => {
     e.stopPropagation();
-    optionsMenuElement.classList.toggle(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
+    optionsMenuEl.classList.toggle(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
   });
-  document.addEventListener("click", (event) => {
-    if (
-      !optionsToggleButtonElement.contains(event.target) &&
-      !optionsMenuElement.contains(event.target) &&
-      !optionsMenuElement.classList.contains(CSS_CLASSES.OPTIONS_MENU_HIDDEN)
-    ) {
-      optionsMenuElement.classList.add(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
-    }
-  });
-  document.addEventListener("keydown", (event) => {
-    if (
-      event.key === "Escape" &&
-      !optionsMenuElement.classList.contains(CSS_CLASSES.OPTIONS_MENU_HIDDEN)
-    ) {
-      optionsMenuElement.classList.add(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
-      optionsToggleButtonElement.focus();
-    }
-  });
-  optionsMenuElement.addEventListener("click", (event) => {
-    if (event.target.closest("button")) {
-      optionsMenuElement.classList.add(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
-    }
-  });
-}
 
-/** Actualitza l'estil dels botons externs. */
-function _updateExternalButtonStyles(index) {
-  const colorClass = CSS_CLASSES.SERVICE_COLORS[index] || "";
-  const clearButton = document.getElementById(DOM_IDS.CLEAR_BTN);
-  const cameraButton = document.getElementById(DOM_IDS.CAMERA_BTN);
-  const baseClearClass = "clear-selected-btn";
-  const baseCameraClass = "camera-btn";
-  const baseOptionsClass = "options-btn";
+  document.addEventListener("click", (e) => {
+    if (
+      optionsToggleBtnEl && // Check if optionsToggleBtnEl exists
+      !optionsToggleBtnEl.contains(e.target) &&
+      optionsMenuEl && // Check if optionsMenuEl exists
+      !optionsMenuEl.contains(e.target)
+    ) {
+      optionsMenuEl.classList.add(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
+    }
+  });
 
-  const updateButton = (button, baseClass) => {
-    if (button) {
-      button.classList.remove(...CSS_CLASSES.SERVICE_COLORS);
-      if (colorClass) button.classList.add(colorClass);
-      // Assegura la classe base (per si classList.remove l'hagués tret per error, poc probable)
-      if (!button.classList.contains(baseClass)) {
-        button.classList.add(baseClass);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && optionsMenuEl) {
+      optionsMenuEl.classList.add(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
+    }
+  });
+
+  if (optionsMenuEl) {
+    optionsMenuEl.addEventListener("click", (e) => {
+      if (e.target.closest("button")) {
+        optionsMenuEl.classList.add(CSS_CLASSES.OPTIONS_MENU_HIDDEN);
       }
-    }
-  };
-
-  updateButton(clearButton, baseClearClass);
-  updateButton(cameraButton, baseCameraClass);
-  updateButton(optionsToggleButtonElement, baseOptionsClass); // optionsToggleButtonElement ja està cachejat
+    });
+  }
 }
 
-// --- Funcions Públiques ---
+/* ────────────────────────────────────────────────────────────────────────── */
+/* HELPERS – CHIPS                                                           */
+/* ────────────────────────────────────────────────────────────────────────── */
+/** Troba el .form-group pare d’un input dins del panell */
+const _findFormGroup = (panel, inputSelector) => {
+  const input = panel.querySelector(inputSelector);
+  return input ? input.closest(SELECTORS.FORM_GROUP) : null;
+};
 
-/** Retorna l'índex del servei actualment seleccionat. */
-export const getCurrentServiceIndex = () => currentServiceIndex;
+/** Amaga/mostra els camps de destí segons el mode */
+function _applyModeToPanelUI(panel, mode) {
+  const hide = mode !== "3.6"; // 3.6 ➜ mostra tot; 3.22 / 3.11 ➜ amaga
+  DESTINATION_FIELD_SELECTORS.forEach((sel) => {
+    _findFormGroup(panel, sel)?.classList.toggle(
+      CSS_CLASSES.SERVICE_HIDDEN,
+      hide
+    );
+  });
+}
 
-/** Inicialitza el gestor de panells de serveis. */
+/** Marca el chip actiu visualment a la barra de chips global */
+function _updateGlobalChipBarUI(mode) {
+  // console.log(`[Services] Global chip bar UI updated to mode: ${mode}`);
+  if (!globalChipBarEl) return; // No global chip bar found or configured
+  globalChipButtons.forEach((btn) =>
+    btn.classList.toggle(CSS_CLASSES.CHIP_ACTIVE, btn.dataset.mode === mode)
+  );
+}
+
+/** Actualitza visualment els chips dins d'un panell específic */
+function _updatePanelChipsUI(panel, activeMode) {
+  const chipsInPanel = panel.querySelectorAll(SELECTORS.CHIP);
+  chipsInPanel.forEach((chip) => {
+    chip.classList.toggle(
+      CSS_CLASSES.CHIP_ACTIVE,
+      chip.dataset.mode === activeMode
+    );
+  });
+}
+
+/** Listeners pels chips dins de cada panell de servei */
+/** Listeners pels chips dins de cada panell de servei */
+function _attachPanelChipListeners() {
+  servicePanels.forEach((panel, idx) => {
+    // 'panel' aquí és el panell de servei actual (S1, S2, etc.)
+    const chipGroup = panel.querySelector(".chip-group"); // Troba el .chip-group DINS del panell actual
+    const chipsInPanel = panel.querySelectorAll(SELECTORS.CHIP); // Troba tots els .chip DINS del panell actual
+
+    chipsInPanel.forEach((chipButton) => {
+      // 'chipButton' és cada un dels botons .chip (3.6, 3.22, 3.11)
+      chipButton.addEventListener("click", () => {
+        const mode = chipButton.dataset.mode;
+        if (serviceModes[idx] === mode) return;
+
+        serviceModes[idx] = mode;
+
+        // Actualitzem la UI DINS d’aquest 'panel' (el del forEach exterior)
+        _updatePanelChipsUI(panel, mode);
+        _applyModeToPanelUI(panel, mode);
+
+        // Aplica la classe de color al 'chipGroup' que hem trobat abans
+        if (chipGroup) {
+          CSS_CLASSES.SERVICE_COLORS.forEach((colorClass) =>
+            chipGroup.classList.remove(colorClass)
+          );
+          // Afegeix la classe de color que correspon a l'índex (idx) del panell actual
+          chipGroup.classList.add(CSS_CLASSES.SERVICE_COLORS[idx]);
+        }
+
+        // Com que has eliminat la part de la barra global, no cal la comprovació de currentServiceIndex aquí per a això.
+        // Però si la necessitessis per a una altra cosa, 'idx' i 'currentServiceIndex' són correctes.
+      });
+    });
+  });
+}
+/* ────────────────────────────────────────────────────────────────────────── */
+/* HELPERS – BOTONS EXTERNS (clear / camera / options)                       */
+/* ────────────────────────────────────────────────────────────────────────── */
+function _updateExternalButtonStyles(idx) {
+  const colorClass = CSS_CLASSES.SERVICE_COLORS[idx];
+  const styleBtn = (el, baseClass) => {
+    if (!el) return;
+    el.classList.remove(...CSS_CLASSES.SERVICE_COLORS); // Remove all service color classes
+    el.classList.add(baseClass, colorClass); // Add base and current service color
+  };
+  styleBtn(document.getElementById(DOM_IDS.CLEAR_BTN), "clear-selected-btn");
+  styleBtn(document.getElementById(DOM_IDS.CAMERA_BTN), "camera-btn");
+  styleBtn(optionsToggleBtnEl, "options-btn");
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* INIT                                                                      */
+/* ────────────────────────────────────────────────────────────────────────── */
 export function initServices() {
   if (isInitialized) return;
 
-  servicesContainerElement = document.getElementById(DOM_IDS.CONTAINER);
-  serviceButtonsContainerElement = document.getElementById(
-    DOM_IDS.BUTTONS_CONTAINER
-  );
-  optionsMenuElement = document.getElementById(DOM_IDS.OPTIONS_MENU);
-  optionsToggleButtonElement = document.getElementById(
-    DOM_IDS.OPTIONS_TOGGLE_BTN
-  );
+  servicesContainerEl = document.getElementById(DOM_IDS.CONTAINER);
+  serviceButtonsContEl = document.getElementById(DOM_IDS.BUTTONS_CONTAINER);
+  optionsMenuEl = document.getElementById(DOM_IDS.OPTIONS_MENU);
+  optionsToggleBtnEl = document.getElementById(DOM_IDS.OPTIONS_TOGGLE_BTN);
+  //globalChipBarEl = document.getElementById(DOM_IDS.CHIP_GROUP);
 
-  if (!servicesContainerElement || !serviceButtonsContainerElement) {
-    console.error("Services Panel Manager: Falten contenidors essencials.");
+  if (!servicesContainerEl || !serviceButtonsContEl) {
+    console.error(
+      "[Services] Falten contenidors essencials (services-container o service-buttons-container)."
+    );
     return;
   }
 
   servicePanels = Array.from(
-    servicesContainerElement.querySelectorAll(SELECTORS.SERVICE_PANEL)
+    servicesContainerEl.querySelectorAll(SELECTORS.SERVICE_PANEL)
   );
-  console.log(
-    `Panells de servei trobats: ${servicePanels.length}`,
-    servicePanels
-  ); // Log per depurar
-
   if (!servicePanels.length) {
-    console.warn("Services Panel Manager: No s'han trobat panells de servei.");
+    console.warn("[Services] No s’han trobat panells .service");
     return;
   }
 
+  // Mode per defecte de cada servei: 3.6
+  serviceModes = servicePanels.map(() => "3.6");
+
   _createServiceButtons();
   _attachOptionsMenuListeners();
+  _attachPanelChipListeners(); // Changed from _attachChipListeners
 
-  // **VISIBILITAT INICIAL CORREGIDA I SIMPLIFICADA:**
-  // Mostrem només el primer, la resta s'amaguen per CSS o per la lògica de showService
-  currentServiceIndex = 0; // Estat inicial correcte
-  // Assegurem que només el primer panell NO té la classe 'hidden' inicialment
-  servicePanels.forEach((panel, idx) => {
-    // Afegeix 'hidden' a tots EXCEPTE al primer (index 0)
-    panel.classList.toggle(
-      CSS_CLASSES.SERVICE_HIDDEN,
-      idx !== currentServiceIndex
+  // Estat inicial (només S1 visible)
+  if (servicePanels.length > 0 && serviceButtons.length > 0) {
+    servicePanels.forEach((p, i) =>
+      p.classList.toggle(CSS_CLASSES.SERVICE_HIDDEN, i !== 0)
     );
-  });
+    serviceButtons[0].classList.add(CSS_CLASSES.BUTTON_ACTIVE);
 
-  // Activem el botó inicial i els estils externs
-  serviceButtons[currentServiceIndex]?.classList.add(CSS_CLASSES.BUTTON_ACTIVE);
-  _updateExternalButtonStyles(currentServiceIndex); // Estableix colors inicials correctes
+    // Apply UI for the initial service (S1)
+    const initialMode = serviceModes[0];
+    _applyModeToPanelUI(servicePanels[0], initialMode);
+    _updatePanelChipsUI(servicePanels[0], initialMode); // Ensure panel chips are correct
+    // Afegeix la classe de color al chip-group inicial
+    const initialChipGroup = servicePanels[0].querySelector(".chip-group");
+    if (initialChipGroup) {
+      initialChipGroup.classList.add(CSS_CLASSES.SERVICE_COLORS[0]);
+    }
+    _updateGlobalChipBarUI(initialMode); // Ensure global bar is correct
+    _updateExternalButtonStyles(0);
+  }
 
   isInitialized = true;
-  console.log(
-    "Services Panel Manager inicialitzat. Servei actiu inicial:",
-    currentServiceIndex + 1
-  );
+  console.log("[Services] Iniciat OK");
 }
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* CANVI DE SERVEI (S1-S4)                                                   */
+/* ────────────────────────────────────────────────────────────────────────── */
+export function showService(idx) {
+  if (idx < 0 || idx >= servicePanels.length || idx === currentServiceIndex)
+    return;
+
+  // Amaga / mostra panells
+  servicePanels[currentServiceIndex].classList.add(CSS_CLASSES.SERVICE_HIDDEN);
+  servicePanels[idx].classList.remove(CSS_CLASSES.SERVICE_HIDDEN);
+
+  // Botons S1-S4
+  serviceButtons[currentServiceIndex].classList.remove(
+    CSS_CLASSES.BUTTON_ACTIVE
+  );
+  serviceButtons[idx].classList.add(CSS_CLASSES.BUTTON_ACTIVE);
+
+  currentServiceIndex = idx;
+
+  // Sincronitza chips i camps del panell nou
+  const modeForNewService = serviceModes[idx];
+  _applyModeToPanelUI(servicePanels[idx], modeForNewService);
+
+  _updatePanelChipsUI(servicePanels[idx], modeForNewService);
+
+  // Actualitza la classe de color al chip-group del nou panell visible
+  const currentPanelChipGroup = servicePanels[idx].querySelector(".chip-group");
+  if (currentPanelChipGroup) {
+    CSS_CLASSES.SERVICE_COLORS.forEach((colorClass) =>
+      currentPanelChipGroup.classList.remove(colorClass)
+    ); // Neteja per si de cas
+    currentPanelChipGroup.classList.add(CSS_CLASSES.SERVICE_COLORS[idx]);
+  }
+  _updateExternalButtonStyles(idx);
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* API UTILITATS                                                             */
+/* ────────────────────────────────────────────────────────────────────────── */
+export const getCurrentServiceIndex = () => currentServiceIndex;
 
 /**
- * Mostra el panell de servei a l'índex donat i actualitza els estats visuals.
- * @param {number} index - L'índex del servei a mostrar (base 0).
+ * Retorna el mode del servei per a l'índex donat.
+ * @param {number} index - L'índex del servei (0, 1, 2, 3).
+ * @returns {string | undefined} El mode ("3.6", "3.22", "3.11") o undefined si l'índex és invàlid.
  */
-export function showService(index) {
-  if (
-    index < 0 ||
-    index >= servicePanels.length ||
-    index === currentServiceIndex
-  ) {
-    return; // Índex invàlid o ja actiu
+export const getModeForService = (index) => {
+  if (index >= 0 && index < serviceModes.length) {
+    return serviceModes[index];
   }
+  return undefined; // És millor retornar undefined que un valor per defecte, perquè qui crida sàpiga que no s'ha trobat.
+};
 
-  const previousIndex = currentServiceIndex;
-  console.log(
-    `[Services] Canviant de servei ${previousIndex + 1} a ${index + 1}`
-  );
-
-  // **LÒGICA DE VISIBILITAT REVISADA:**
-  const panelToHide = servicePanels[previousIndex];
-  const panelToShow = servicePanels[index];
-
-  if (panelToHide) {
-    panelToHide.classList.add(CSS_CLASSES.SERVICE_HIDDEN);
-    console.log(`   - Amagat:`, panelToHide);
-  } else {
-    console.warn(`   - Panell a amagar (índex ${previousIndex}) no trobat.`);
-  }
-
-  if (panelToShow) {
-    panelToShow.classList.remove(CSS_CLASSES.SERVICE_HIDDEN);
-    console.log(`   - Mostrat:`, panelToShow);
-    panelToShow.focus({ preventScroll: true });
-    console.log(`   - Focus mogut al panell ${index + 1} (div)`); // Log addicional
-  } else {
-    console.warn(`   - Panell a mostrar (índex ${index}) no trobat.`);
-    // ...
-  }
-
-  // Actualitza estat dels botons de navegació (S1, S2...)
-  serviceButtons[previousIndex]?.classList.remove(CSS_CLASSES.BUTTON_ACTIVE);
-  serviceButtons[index]?.classList.add(CSS_CLASSES.BUTTON_ACTIVE);
-
-  // Actualitza l'índex *després* de les accions visuals
-  currentServiceIndex = index;
-
-  // Actualitza estils dels botons externs (clear, camera, options)
-  _updateExternalButtonStyles(currentServiceIndex);
+/** Neteja tots els inputs d’un panell */
+export function clearServiceFields(panel) {
+  if (!panel) return;
+  panel.querySelectorAll("input, select, textarea").forEach((el) => {
+    if (el.type === "checkbox" || el.type === "radio") {
+      el.checked = false;
+    } else if (
+      el.type !== "button" &&
+      el.type !== "submit" &&
+      el.type !== "reset"
+    ) {
+      el.value = "";
+    }
+    // For select elements, you might want to reset to the first option
+    if (el.tagName === "SELECT") {
+      el.selectedIndex = 0; // Or -1 if you want no option selected by default if allowed
+    }
+  });
 }
 
-/** Neteja els camps d'un element de servei específic. */
-export function clearServiceFields(serviceElement) {
-  // ... (Codi igual, no canvia) ...
-  if (!serviceElement) return;
-  serviceElement
-    .querySelectorAll(
-      'input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="hidden"])'
-    )
-    .forEach((input) => {
-      input.value = "";
-    });
-  serviceElement.querySelectorAll("select").forEach((select) => {
-    select.selectedIndex = 0;
-  });
-  serviceElement.querySelectorAll("textarea").forEach((textarea) => {
-    textarea.value = "";
-  });
-  console.log("Camps del servei netejats (valors).");
-}
-
-/** Funció exportada per actualitzar estils externs (per a tabs.js). */
+/** Re-aplica colors dels botons externs (cridat des d’altres mòduls) */
 export function updateExternalStylesForCurrentService() {
   _updateExternalButtonStyles(currentServiceIndex);
-  console.log(
-    `[Services] Estils externs actualitzats per al servei ${
-      currentServiceIndex + 1
-    }`
-  );
+}
+
+/*  ═══════════════  PUBLIC: força un mode a un servei  ═══════════════  */
+
+/**
+ * Posa el mode (chip) corresponent al servei [index] i actualitza l’UI del panell.
+ * També actualitza la barra de chips global si el servei afectat és el que s'està mostrant.
+ * @param {number} index - Índex del servei (0, 1, 2, 3)
+ * @param {string} mode - "3.6", "3.22" o "3.11"
+ */
+export function setModeForService(index, mode) {
+  if (index < 0 || index >= servicePanels.length) {
+    console.warn(
+      `[Services] Intent d'establir mode per a un servei invàlid (índex: ${index})`
+    );
+    return;
+  }
+  // No actualitzar si el mode ja és el mateix, per evitar feina innecessària.
+  // if (serviceModes[index] === mode) return;
+
+  console.log(`[Services] Forçant mode '${mode}' per al servei ${index + 1}`);
+  serviceModes[index] = mode;
+
+  const panel = servicePanels[index];
+  if (!panel) {
+    console.error(
+      `[Services] No s'ha trobat el panell per al servei amb índex ${index}`
+    );
+    return;
+  }
+
+  // Actualitza els chips dins del panell del servei
+  _updatePanelChipsUI(panel, mode);
+
+  // Mostra/amaga camps dins del panell segons el nou mode
+  _applyModeToPanelUI(panel, mode);
+
+  // Si el servei modificat és el que s'està mostrant actualment,
+  // actualitza també la barra de chips global.
+  //if (index === currentServiceIndex) {
+  // _updateGlobalChipBarUI(mode);
+  // }
 }
