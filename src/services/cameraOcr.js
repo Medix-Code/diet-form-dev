@@ -137,6 +137,8 @@ function _cacheDomElements() {
 
 function _openCameraModal() {
   if (!cameraGalleryModal || !modalContentElement) return;
+  document.body.classList.add("modal-open");
+
   const currentServiceIdx = getCurrentServiceIndex();
   const currentColorClass = CSS_CLASSES.SERVICE_COLORS[currentServiceIdx] || "";
   modalContentElement.classList.remove(...CSS_CLASSES.SERVICE_COLORS);
@@ -151,6 +153,7 @@ function _openCameraModal() {
 
 function _closeCameraModal() {
   if (!cameraGalleryModal) return;
+  document.body.classList.remove("modal-open");
   cameraGalleryModal.classList.remove(CSS_CLASSES.VISIBLE);
   cameraBtn?.focus();
   setTimeout(
