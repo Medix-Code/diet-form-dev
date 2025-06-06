@@ -318,7 +318,7 @@ function _safeSetFieldValue(fieldId, value, fieldName) {
 }
 
 /**
- * Gestiona la selecció d'un fitxer, inicia el procés OCR, fa scroll
+ * Gestiona la selecció d'un fitxer, inicia el procés OCR, fa scroll fins al final
  * i actualitza el formulari amb els resultats.
  */
 async function _handleFileChange(event) {
@@ -338,16 +338,10 @@ async function _handleFileChange(event) {
   setControlsDisabled(true);
   _updateOcrProgress(0, "Preparando imagen...");
 
-  // >>> 2. LÒGICA DE SCROLL AFEGIDA AQUÍ <<<
-  // Es fa just després de mostrar l'indicador de progrés.
-  const currentServiceIndex = getCurrentServiceIndex();
-  const suffix = `-${currentServiceIndex + 1}`;
-  const endTimeElement = document.getElementById(`end-time${suffix}`);
-
-  if (endTimeElement) {
-    console.log(`[UI] Iniciando scroll hacia el elemento #end-time${suffix}`);
-    _scrollToElement(endTimeElement);
-  }
+  // >>> LÒGICA DE SCROLL MODIFICADA <<<
+  // Fa scroll fins al final de la pàgina mentre es processa la imatge.
+  console.log(`[UI] Iniciando scroll hacia el final de la página.`);
+  _scrollToBottom();
 
   let worker = null;
 
@@ -374,7 +368,7 @@ async function _handleFileChange(event) {
     } = await worker.recognize(imageBlob);
     _updateOcrProgress(100, "Análisis completado.");
 
-    // Aquesta funció NO es modifica per al scroll
+    // Aquesta funció s'encarrega d'omplir els camps amb les dades trobades
     _processAndFillForm(ocrText);
   } catch (error) {
     console.error("[cameraOcr] Error OCR:", error);
@@ -525,18 +519,10 @@ export function initCameraOcr() {
   console.log("[cameraOcr] Funcionalidad OCR inicializada.");
 }
 
-/**
- * Fa scroll suau fins a un element específic, intentant alinear-lo
- * a la part inferior de l'àrea visible.
- * @param {HTMLElement} element - L'element fins al qual volem fer scroll.
- */
-function _scrollToElement(element) {
-  if (!element) return;
-
-  // 'scrollIntoView' és la manera més senzilla de fer-ho.
-  element.scrollIntoView({
-    behavior: "smooth",
-    block: "end",
-    inline: "nearest",
+function _scrollToBottom() {
+  // window.scrollTo() és la funció nativa per fer scroll a la pàgina.
+  window.scrollTo({
+    top: document.body.scrollHeight, // La posició vertical on volem anar: l'alçada total del document.
+    behavior: "smooth", // Animació suau.
   });
 }
