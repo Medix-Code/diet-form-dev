@@ -520,24 +520,38 @@ export function initCameraOcr() {
       _closeCameraModal();
     }
   });
+  /**
+   * Fa scroll suau fins a un element específic, intentant alinear-lo
+   * a la part inferior de l'àrea visible.
+   * @param {HTMLElement} element - L'element fins al qual volem fer scroll.
+   */
+  function _scrollToElement(element) {
+    if (!element) return;
+
+    // 'scrollIntoView' és la manera més senzilla de fer-ho.
+    element.scrollIntoView({
+      behavior: "smooth", // Fa l'animació de desplaçament suau
+      block: "end", // <<< CANVI CLAU: Alinea la part INFERIOR de l'element amb la part INFERIOR de la finestra visible.
+      inline: "nearest", // 'nearest' és una bona opció per a l'eix horitzontal.
+    });
+  }
 
   isInitialized = true;
   console.log("[cameraOcr] Funcionalidad OCR inicializada.");
 }
 
 /**
- * Fa scroll suau fins a un element específic dins del seu contenidor de scroll.
+ * Fa scroll suau fins a un element específic, intentant alinear-lo
+ * a la part inferior de l'àrea visible.
  * @param {HTMLElement} element - L'element fins al qual volem fer scroll.
  */
 function _scrollToElement(element) {
   if (!element) return;
 
   // 'scrollIntoView' és la manera més senzilla de fer-ho.
-  // 'behavior: "smooth"' fa l'animació.
-  // 'block: "nearest"' intenta que l'element quedi visible sense moure massa la pàgina.
   element.scrollIntoView({
     behavior: "smooth",
-    block: "nearest",
-    inline: "start",
+    block: "end",
+    inline: "nearest",
   });
 }
