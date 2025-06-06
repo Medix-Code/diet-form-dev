@@ -1,7 +1,7 @@
 # .github/workflows/deploy.yml
 
 name: Desplegar en GitHub Pages
-# Aquest és un comentari de prova per forçar una actualització
+# Aquest és un comentari de prova per forçar una actualitzaci
 on:
   workflow_dispatch: # <--- Això afegeix un botó per activar-lo manualment.
   push:
