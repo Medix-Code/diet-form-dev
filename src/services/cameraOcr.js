@@ -472,14 +472,13 @@ function _processAndFillForm(ocrText) {
 
     const endTimeElement = document.getElementById(fieldId);
     if (endTimeElement) {
+      console.log(`[DEBUG] Aplicant estil d'avís a #${fieldId}`);
       endTimeElement.classList.add("input-warning");
       setTimeout(() => {
+        console.log(`[DEBUG] Eliminant estil d'avís de #${fieldId}`);
         endTimeElement.classList.remove("input-warning");
-      }, 1500);
+      }, 3000); 
     }
-
-    filledFields.endTime = { label: "Hora Final (Actual)" };
-  }
 
   // Feedback final al usuario
   const filledCount = Object.keys(filledFields).length;
