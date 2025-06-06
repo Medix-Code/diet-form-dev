@@ -73,6 +73,11 @@ export function setupTabs() {
  * @param {('dades'|'serveis')} tabName - L'ID de la pestanya a activar.
  */
 function switchToTab(tabName) {
+  if (currentTab === tabName && document.scrollingElement.scrollTop !== 0) {
+    // Si fem clic a la pestanya ja activa, fem scroll cap amunt
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
   // Evita canvis innecessaris si ja estem a la pestanya correcta
   if (currentTab === tabName) return;
 
@@ -80,7 +85,9 @@ function switchToTab(tabName) {
     console.warn(`Intent de canviar a una pestanya invàlida: ${tabName}`);
     return;
   }
-
+  //Fer scroll a dalt de la pàgina ABANS de canviar el contingut
+  window.scrollTo({ top: 0, behavior: "auto" });
+  // Actualitza l'estat intern
   currentTab = tabName;
   console.log(`Canviant a la pestanya: ${currentTab}`);
 
