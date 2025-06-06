@@ -3,7 +3,10 @@
 name: Desplegar en GitHub Pages
 
 on:
+  workflow_dispatch: # <--- Això afegeix un botó per activar-lo manualment.
   push:
+    branches:
+      - main # Assegura't que el nom és correcte
 
 jobs:
   build-and-deploy:
