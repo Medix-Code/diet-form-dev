@@ -473,12 +473,18 @@ function _processAndFillForm(ocrText) {
     const endTimeElement = document.getElementById(fieldId);
     if (endTimeElement) {
       console.log(`[DEBUG] Aplicant estil d'avís a #${fieldId}`);
+
+      // 1. Afegeix la classe .input-warning. El CSS s'encarregarà de l'estil taronja.
       endTimeElement.classList.add("input-warning");
+
+      // 2. Després d'un temps, elimina la classee.
+      // La transició definida al CSS farà que la desaparició del color sigui suau.
       setTimeout(() => {
         console.log(`[DEBUG] Eliminant estil d'avís de #${fieldId}`);
         endTimeElement.classList.remove("input-warning");
-      }, 3000); 
+      }, 2000); // Augmentat a 2 segons per donar temps a veure l'efecte
     }
+  }
 
   // Feedback final al usuario
   const filledCount = Object.keys(filledFields).length;
