@@ -319,6 +319,7 @@ main {
   top: calc(var(--top-bar-height));
   left: 0;
   right: 0;
+
   background-color: var(--bg-btn-ajustes);
   z-index: 1000;
   overflow: hidden;
@@ -881,6 +882,70 @@ button .fa {
   opacity: 0.4 !important; /* Opacitat molt baixa per indicar clarament que no es pot fer servir */
   cursor: not-allowed !important; /* El cursor canvia per reforçar que no és clicable */
   pointer-events: none !important; /* Aquesta és la propietat clau: ignora completament els esdeveniments de ratolí/tàctil */
+}
+
+// ===========================================================================
+// BOTÓ D'ACCIÓ OCR
+// ===========================================================================
+
+.ocr-action-container {
+  /* Contenidor per al botó, permet centrar-lo fàcilment */
+  display: flex;
+  justify-content: center; /* Centra el botó horitzontalment */
+  width: 100%;
+  margin-top: 15px; /* Una mica d'espai sobre el botó */
+  margin-bottom: 25px; /* Espai sota el botó, abans del següent camp */
+}
+
+.btn-ocr-scan {
+  /* Aparença del botó */
+  display: inline-flex; /* Per alinear icona i text */
+  align-items: center; /* Alineació vertical */
+  gap: 10px; /* Espai entre icona i text */
+
+  background-color: var(
+    --bg-tab-active
+  ); /* Un fons clar, com el de les pestanyes actives */
+  color: var(--primary-color); /* Text del color de la teva marca */
+  border: 1px solid var(--primary-color); /* Vora subtil del mateix color */
+
+  padding: 10px 20px; /* Espai intern per fer-lo més gran */
+  border-radius: 8px; /* Cantonades arrodonides consistents */
+
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  /* Petita ombra per donar-li profunditat */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  /* Estils per a la icona dins del botó */
+  .icon {
+    width: 20px;
+    height: 20px;
+    /* Si la teva icona SVG és negra, pots canviar el seu color amb filter.
+       Això genera el color blau de la teva marca. */
+    filter: invert(24%) sepia(85%) saturate(2375%) hue-rotate(200deg)
+      brightness(96%) contrast(101%);
+  }
+
+  /* Efectes d'interacció */
+  &:hover {
+    background-color: var(
+      --service-2-bg
+    ); /* Un blau molt pàl·lid en fer hover */
+    border-color: var(--secondary-color-hover);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px); /* Un petit efecte de "flotar" */
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98); /* Efecte de "pressió" */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
 }
 
 // ===========================================================================
@@ -1879,13 +1944,14 @@ button .fa {
     transition: transform var(--transition-speed) ease;
     padding: 8px; /* Afegim una mica de padding per a millor àrea de contacte */
     border-radius: 50%; /* Els fem circulars per a un look més de "botó" */
-
-    &:hover,
-    .footer-btn:focus {
-      transform: scale(1.1);
-      background-color: rgba(255, 255, 255, 0.1); /* Un fons subtil en hover */
-    }
   }
+
+  .footer-btn:hover,
+  .footer-btn:focus {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
   .footer-btn:active {
     transform: scale(1.2);
   }
@@ -2159,6 +2225,7 @@ button .icon {
     .big-btn {
       padding: 18px 20px;
       font-size: 15px;
+      font-weight: 400;
       gap: 25px;
       i {
         font-size: 18px;
