@@ -808,22 +808,21 @@ button .fa {
   margin-bottom: 0; /* Traiem el marge de la pròpia label, ara el controla el contenidor */
 }
 
-/* Nou estil per al botó d'escaneig "inline", ara amb més aspecte de botó */
 .btn-ocr-inline {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  /* >>> CANVIS PER DONAR-LI ASPECTE DE BOTÓ <<< */
-  background-color: transparent; /* Mantenim fons transparent per defecte */
-  border: 1px solid var(--input-border); /* Una vora subtil, com la dels camps de text */
-  padding: 6px 10px; /* Ajustem el padding */
+  /* >>> CANVIS PRINCIPALS PER AL FONS BLANC <<< */
+  background-color: #ffffff; /* O pots fer servir var(--textfield) per consistència */
+  border: 1px solid var(--input-border); /* Mantenim la vora grisa per definir-lo */
+  padding: 6px 12px; /* Un padding una mica més generós pot quedar millor amb fons */
   border-radius: 6px;
   color: var(--primary-color);
-  font-size: 13px; /* Mida de font una mica més gran */
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  /* Efecte hover més clar */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Una ombra molt subtil per donar-li volum */
 }
 .btn-ocr-inline .icon {
   width: 16px;
@@ -831,13 +830,15 @@ button .fa {
   filter: invert(24%) sepia(85%) saturate(2375%) hue-rotate(200deg) brightness(96%) contrast(101%);
 }
 .btn-ocr-inline:hover {
-  background-color: var(--bg-tab-hover);
-  border-color: var(--primary-color); /* La vora es torna del color principal */
-  transform: scale(1.05); /* Un lleuger efecte de zoom */
+  /* Mantenim el fons blanc però canviem la vora i l'ombra per a un feedback clar */
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px); /* Un lleuger efecte de "flotar" */
 }
 .btn-ocr-inline:active {
-  transform: scale(1); /* Torna a la mida normal en fer clic */
-  background-color: color-mix(in srgb, var(--bg-tab-hover) 80%, black 10%); /* Una mica més fosc */
+  transform: translateY(0) scale(0.98);
+  background-color: var(--bg-tab-hover); /* Un gris molt clar en fer clic */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Ombra interior per efecte de "pressió" */
 }
 
 /* ========================================================================== */
