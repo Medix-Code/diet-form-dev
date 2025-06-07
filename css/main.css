@@ -688,31 +688,30 @@ button .fa {
 }
 .chip-group-title {
   display: block;
-  font-size: var(--font-size-base);
-  font-weight: 400;
+  font-size: var(--font-size-base); /* 15px, igual que les altres labels */
+  font-weight: 500; /* Una mica més de pes per donar-li jerarquia de títol */
   color: var(--subtext-color);
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 10px; /* Mateix espai que les altres labels */
   text-align: left;
 }
 
-/* contenidor horitzontal */
 .chip-group {
   display: flex;
   gap: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 25px; /* Mateix espai que entre form-groups */
   width: 100%;
 }
 
-/* 1. Estil BASE per a tots els chips */
-.chip {
-  flex: 1;
-  display: inline-flex; /* Per alinear contingut si tingués icona */
-  justify-content: center;
+/* Estil base comú per a TOTS els botons dins del formulari (chips i ocr) */
+.chip,
+.btn-ocr-inline {
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  flex: 1; /* Fa que els chips tinguin la mateixa amplada */
   padding: 8px 10px;
-  border-radius: 8px; /* Consistent amb .btn-ocr-inline */
-  font-size: 13px;
+  border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -720,38 +719,36 @@ button .fa {
   line-height: 1;
 }
 
-/* 2. Estils per als CHIPS INACTIUS (quan NO tenen .chip-active) */
+/* Estil per als CHIPS INACTIUS */
 .chip:not(.chip-active) {
-  background-color: #ffffff; /* Fons blanc, com .btn-ocr-inline */
-  border: 1px solid var(--input-border); /* Vora grisa subtil */
-  color: var(--txtcolor-tab-noactive); /* Text grisós */
-  opacity: 0.7; /* Opacitat per indicar que estan inactius */
+  background-color: #ffffff;
+  border: 1px solid var(--input-border);
+  color: var(--txtcolor-tab-noactive);
+  opacity: 0.7;
+  font-size: 13px;
 }
 
-/* 3. Estil per al HOVER sobre un chip INACTIU */
 .chip:not(.chip-active):hover {
-  border-color: var(--primary-color); /* La vora es torna blava */
+  border-color: var(--primary-color);
   color: var(--primary-color);
   opacity: 1;
   transform: translateY(-1px);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
 }
 
-/* 4. Estil per al CHIP ACTIU (quan TÉ .chip-active) */
-/* Regla general per a l'actiu */
+/* Estil per al CHIP ACTIU */
 .chip.chip-active {
-  font-weight: 600; /* Text més gruixut */
+  font-size: 13px;
+  font-weight: 600;
   opacity: 1;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  /* L'estil ACTIU ara utilitza el color del SERVEI, però en la vora i el text */
-  /* El fons es manté clar per a consistència */
 }
 
-/* Apliquem els colors del servei a la VORA i al TEXT del chip actiu */
+/* Colors específics per al CHIP ACTIU */
 .chip-group.service-1 .chip.chip-active {
-  background-color: var(--service-1-bg); /* Fons pàl·lid del color del servei */
+  background-color: var(--service-1-bg);
   border: 1px solid var(--service-1-border);
-  color: color-mix(in srgb, var(--service-1-border) 80%, black 20%); /* Color del text basat en el de la vora */
+  color: color-mix(in srgb, var(--service-1-border) 80%, black 20%);
 }
 
 .chip-group.service-2 .chip.chip-active {
@@ -772,44 +769,35 @@ button .fa {
   color: color-mix(in srgb, var(--service-4-border) 80%, black 20%);
 }
 
-/* Línia de separació horitzontal */
+/* Línia de separació (si la vols utilitzar) */
 .section-divider {
-  border: none; /* Eliminem la vora per defecte de <hr> */
-  height: 1px; /* Gruix de la línia */
-  background-color: var(--input-border); /* Un color gris suau, consistent amb les teves vores */
-  margin: 25px 0; /* Espai vertical al voltant de la línia */
+  border: none;
+  height: 1px;
+  background-color: var(--input-border);
+  margin: 25px 0;
 }
 
-/* Contenidor per alinear l'etiqueta i el botó d'acció */
+/* Contenidor per alinear l'etiqueta i el botó d'escaneig */
 .label-action-container {
   display: flex;
-  justify-content: space-between; /* Un element a l'esquerra, l'altre a la dreta */
-  align-items: center; /* Alineació vertical perfecta */
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  margin-bottom: 10px; /* Mantenim l'espai que tenia la label */
+  margin-bottom: 10px;
 }
 
-/* El label dins d'aquest contenidor no necessita canvis, 
-   ja que 'justify-content: space-between' el mantindrà a l'esquerra */
 .label-action-container label {
-  margin-bottom: 0; /* Traiem el marge de la pròpia label, ara el controla el contenidor */
+  margin-bottom: 0;
 }
 
 .btn-ocr-inline {
-  display: inline-flex;
-  align-items: center;
+  flex: 0 1 auto; /* No creix, s'encongeix si cal, base automàtica */
   gap: 6px;
-  /* >>> CANVIS PRINCIPALS PER AL FONS BLANC <<< */
-  background-color: #ffffff; /* O pots fer servir var(--textfield) per consistència */
-  border: 1px solid var(--input-border); /* Mantenim la vora grisa per definir-lo */
-  padding: 6px 12px; /* Un padding una mica més generós pot quedar millor amb fons */
-  border-radius: 6px;
+  background-color: #ffffff;
+  border: 1px solid var(--input-border);
   color: var(--primary-color);
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Una ombra molt subtil per donar-li volum */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 .btn-ocr-inline .icon {
   width: 16px;
@@ -817,10 +805,9 @@ button .fa {
   filter: invert(24%) sepia(85%) saturate(2375%) hue-rotate(200deg) brightness(96%) contrast(101%);
 }
 .btn-ocr-inline:hover {
-  /* Mantenim el fons blanc però canviem la vora i l'ombra per a un feedback clar */
   border-color: var(--primary-color);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transform: translateY(-1px); /* Un lleuger efecte de "flotar" */
+  transform: translateY(-1px);
 }
 .btn-ocr-inline:active {
   transform: translateY(0) scale(0.98);
