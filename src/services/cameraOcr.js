@@ -43,6 +43,7 @@ const DOM_SELECTORS = {
   CAMERA_INPUT: "camera-input",
   OCR_PROGRESS_CONTAINER: ".ocr-progress-container",
   OCR_PROGRESS_TEXT: ".ocr-progress-text",
+  OCR_SCAN_BTN: ".btn-ocr-scan",
 };
 
 // --- Clases CSS ---
@@ -499,14 +500,47 @@ function _processAndFillForm(ocrText) {
   }
 }
 
+// >>> MODIFICA LA FUNCIÓ initCameraOcr <<<
 export function initCameraOcr() {
   if (isInitialized) {
-    console.warn("[cameraOcr] Ya inicializado.");
+    console.warn("[cameraOcr] Ja inicialitzat.");
     return;
   }
-  if (!_cacheDomElements()) return;
 
-  cameraBtn.addEventListener("click", _openCameraModal);
+  // Cachejem els elements que són únics
+  cameraGalleryModal = document.getElementById("camera-gallery-modal");
+  modalContentElement = cameraGalleryModal?.querySelector(
+    ".modal-bottom-content"
+  );
+  optionCameraBtn = document.getElementById("option-camera");
+  optionGalleryBtn = document.getElementById("option-gallery");
+  cameraInput = document.getElementById("camera-input");
+
+  if (
+    !cameraGalleryModal ||
+    !optionCameraBtn ||
+    !optionGalleryBtn ||
+    !cameraInput
+  ) {
+    console.warn("[cameraOcr] Falten elements DOM del modal OCR.");
+    return;
+  }
+
+  // >>> NOVA LÒGICA PER ALS BOTONS D'ESCANEIG <<<
+  // Trobem TOTS els botons per escanejar
+  const scanButtons = document.querySelectorAll(DOM_SELECTORS.OCR_SCAN_BTN);
+
+  if (scanButtons.length === 0) {
+    console.warn("[cameraOcr] No s'han trobat botons '.btn-ocr-scan'.");
+    return;
+  }
+
+  // Afegim un listener a cadascun d'ells
+  scanButtons.forEach((button) => {
+    button.addEventListener("click", _openCameraModal);
+  });
+
+  // La resta de listeners per al funcionament del modal i l'input de fitxer
   optionCameraBtn.addEventListener("click", _triggerCameraCapture);
   optionGalleryBtn.addEventListener("click", _triggerGallerySelection);
   cameraInput.addEventListener("change", _handleFileChange);
@@ -521,7 +555,9 @@ export function initCameraOcr() {
   });
 
   isInitialized = true;
-  console.log("[cameraOcr] Funcionalidad OCR inicializada.");
+  console.log(
+    "[cameraOcr] Funcionalitat OCR inicialitzada i lligada als botons de servei."
+  );
 }
 
 function _scrollToBottom() {
