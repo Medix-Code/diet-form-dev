@@ -785,6 +785,14 @@ button .fa {
   border-color: var(--service-4-border);
 }
 
+/* Línia de separació horitzontal */
+.section-divider {
+  border: none; /* Eliminem la vora per defecte de <hr> */
+  height: 1px; /* Gruix de la línia */
+  background-color: var(--input-border); /* Un color gris suau, consistent amb les teves vores */
+  margin: 25px 0; /* Espai vertical al voltant de la línia */
+}
+
 /* ========================================================================== */
 /* ESTILS PER A CONTROLS DESHABILITATS TEMPORALMENT per ocr                   */
 /* ========================================================================== */
