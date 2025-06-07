@@ -343,14 +343,19 @@ function drawSignatureFromDataUrl(dataUrl) {
 
 /** Actualitza l'aspecte del botó de signatura (icona, classe). */
 function updateSignatureUI(button, hasSignature) {
+  // 'hasSignature' és un booleà (true/false)
   if (!button) return;
-  const icon = button.querySelector(".icon"); // Assumeix que la icona té classe 'icon'
+  const icon = button.querySelector(".icon"); // Assumeix que la teva icona té la classe '.icon'
+  if (!icon) return;
+
   if (hasSignature) {
-    button.classList.add(CSS_CLASSES.SIGNED);
-    if (icon) icon.src = ICONS.SIGNATURE_OK;
+    // Si HI HA signatura
+    button.classList.add("signed"); // Afegeix una classe per a possibles estils addicionals
+    icon.src = "assets/icons/signature_ok.svg"; // <<< Posa l'icona VERDA
   } else {
-    button.classList.remove(CSS_CLASSES.SIGNED);
-    if (icon) icon.src = ICONS.SIGNATURE_PENDING;
+    // Si NO HI HA signatura
+    button.classList.remove("signed");
+    icon.src = "assets/icons/signature.svg"; // <<< Posa l'icona NORMAL (no verda)
   }
 }
 
