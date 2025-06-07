@@ -103,26 +103,23 @@ function _validateDotacionInputs() {
   };
 
   const errors = [];
+  // 1. Comprova si el vehicle està omplert (obligatori)
   if (!values.vehiculo) {
     vehicleInput?.classList.add(CSS_CLASSES.INPUT_ERROR);
     errors.push("Vehículo");
   }
-  if (!values.conductor) {
+
+  // 2. Comprova si ALMENYS un entre Conductor o Ajudant està omplert
+  if (!values.conductor && !values.ajudant) {
+    // Si TOTS DOS estan buits, marca els dos com a error
     conductorGroup?.classList.add(CSS_CLASSES.INPUT_ERROR);
-    errors.push("Conductor");
-  }
-  if (!values.ajudant) {
     ajudantGroup?.classList.add(CSS_CLASSES.INPUT_ERROR);
-    errors.push("Ayudante");
+    // Afegim un missatge d'error genèric per a aquesta condició
+    errors.push("Conductor o Ayudante");
   }
 
   if (errors.length > 0) {
-    showToast(
-      `Faltan campos obligatorios para guardar la dotación: ${errors.join(
-        ", "
-      )}.`,
-      "error"
-    );
+    showToast(`Faltan campos obligatorios: ${errors.join(", ")}.`, "error");
     return null; // Indica validació fallida
   }
 
