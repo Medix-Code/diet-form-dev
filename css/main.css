@@ -851,13 +851,13 @@ button .fa {
   display: inline-flex; /* Per alinear icona i text */
   align-items: center; /* Alineació vertical */
   gap: 10px; /* Espai entre icona i text */
-  background-color: var(--bg-tab-active); /* Un fons clar, com el de les pestanyes actives */
-  color: var(--primary-color); /* Text del color de la teva marca */
-  border: 1px solid var(--primary-color); /* Vora subtil del mateix color */
+  background-color: #ffffff;
+  border: 1px solid #ff9f0a;
+  color: #ff9f0a;
   padding: 10px 20px; /* Espai intern per fer-lo més gran */
   border-radius: 8px; /* Cantonades arrodonides consistents */
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -874,14 +874,16 @@ button .fa {
   filter: invert(79%) sepia(57%) saturate(1477%) hue-rotate(334deg) brightness(102%) contrast(101%);
 }
 .btn-ocr-scan:hover {
-  background-color: var(--service-2-bg); /* Un blau molt pàl·lid en fer hover */
-  border-color: var(--secondary-color-hover);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px); /* Un petit efecte de "flotar" */
+  /* En fer hover, podem fer el fons d'un color taronja pàl·lid */
+  background-color: var(--textfield-warning-bg); /* El groc/crema que ja tenies definit */
+  border-color: #ff9f0a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
 }
 .btn-ocr-scan:active {
-  transform: translateY(0) scale(0.98); /* Efecte de "pressió" */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transform: translateY(0) scale(0.98);
+  background-color: color-mix(in srgb, var(--textfield-warning-bg) 80%, black 10%); /* Una mica més fosc */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .service-controls {
