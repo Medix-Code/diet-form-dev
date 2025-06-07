@@ -347,18 +347,22 @@
             </div>
             <hr class="section-divider" />
 
-            <div class="ocr-action-container">
-              <button
-                type="button"
-                class="btn-ocr-scan"
-                id="camera-for-service-1"
-              >
-                <img src="assets/icons/ocr.svg" class="icon" />
-                <span>Escanear Horas</span>
-              </button>
-            </div>
             <div class="form-group">
-              <label for="origin-time-1">Hora de origen</label>
+              <!-- NOU: Contenidor per a l'etiqueta i el botó d'escaneig -->
+              <div class="label-action-container">
+                <label for="origin-time-1">Hora de origen</label>
+                <button
+                  type="button"
+                  class="btn-ocr-inline"
+                  id="camera-for-service-1"
+                  aria-label="Escanear Horas"
+                >
+                  <img src="assets/icons/ocr.svg" class="icon" />
+                  <span>Escanear</span>
+                  <!-- Text més curt per a un botó petit -->
+                </button>
+              </div>
+
               <div class="time-wrapper">
                 <input
                   type="time"
@@ -440,7 +444,19 @@
               />
             </div>
             <div class="form-group">
-              <label for="origin-time-2">Hora de origen</label>
+              <div class="label-action-container">
+                <label for="origin-time-2">Hora de origen</label>
+                <button
+                  type="button"
+                  class="btn-ocr-inline"
+                  id="camera-for-service-2"
+                  aria-label="Escanear Horas"
+                >
+                  <img src="assets/icons/ocr.svg" class="icon" />
+                  <span>Escanear</span>
+                  <!-- Text més curt per a un botó petit -->
+                </button>
+              </div>
               <div class="time-wrapper">
                 <input
                   type="time"
@@ -451,16 +467,7 @@
                 />
               </div>
             </div>
-            <div class="ocr-action-container">
-              <button
-                type="button"
-                class="btn-ocr-scan"
-                id="camera-for-service-2"
-              >
-                <img src="assets/icons/ocr.svg" class="icon" />
-                <span>Escanear Horas</span>
-              </button>
-            </div>
+
             <div class="form-group destination-time-group">
               <label for="destination-time-2">Hora de destino</label>
               <div class="time-wrapper">
@@ -528,18 +535,21 @@
                 autocomplete="off"
               />
             </div>
-            <div class="ocr-action-container">
-              <button
-                type="button"
-                class="btn-ocr-scan"
-                id="camera-for-service-3"
-              >
-                <img src="assets/icons/ocr.svg" class="icon" />
-                <span>Escanear Horas</span>
-              </button>
-            </div>
+
             <div class="form-group">
-              <label for="origin-time-3">Hora de origen</label>
+              <div class="label-action-container">
+                <label for="origin-time-3">Hora de origen</label>
+                <button
+                  type="button"
+                  class="btn-ocr-inline"
+                  id="camera-for-service-3"
+                  aria-label="Escanear Horas"
+                >
+                  <img src="assets/icons/ocr.svg" class="icon" />
+                  <span>Escanear</span>
+                  <!-- Text més curt per a un botó petit -->
+                </button>
+              </div>
               <div class="time-wrapper">
                 <input
                   type="time"
@@ -602,7 +612,19 @@
               />
             </div>
             <div class="form-group">
-              <label for="origin-4">Origen (municipio)</label>
+              <div class="label-action-container">
+                <label for="origin-time-4">Hora de origen</label>
+                <button
+                  type="button"
+                  class="btn-ocr-inline"
+                  id="camera-for-service-4"
+                  aria-label="Escanear Horas"
+                >
+                  <img src="assets/icons/ocr.svg" class="icon" />
+                  <span>Escanear</span>
+                  <!-- Text més curt per a un botó petit -->
+                </button>
+              </div>
               <input type="text" id="origin-4" name="origin-4" class="origin" />
             </div>
             <div class="form-group destination-group">
@@ -617,18 +639,8 @@
                 autocomplete="off"
               />
             </div>
-            <div class="ocr-action-container">
-              <button
-                type="button"
-                class="btn-ocr-scan"
-                id="camera-for-service-4"
-              >
-                <img src="assets/icons/ocr.svg" class="icon" />
-                <span>Escanear Horas</span>
-              </button>
-            </div>
+
             <div class="form-group">
-              <label for="origin-time-4">Hora de origen</label>
               <div class="time-wrapper">
                 <input
                   type="time"

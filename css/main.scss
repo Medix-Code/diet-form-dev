@@ -884,6 +884,54 @@ button .fa {
   margin: 25px 0; /* Espai vertical al voltant de la línia */
 }
 
+// A main.scss, pots afegir-ho a prop dels estils de .form-group o on gestionis els botons
+
+/* Contenidor per alinear l'etiqueta i el botó d'acció */
+.label-action-container {
+  display: flex;
+  justify-content: space-between; /* Un element a l'esquerra, l'altre a la dreta */
+  align-items: center; /* Alineació vertical perfecta */
+  width: 100%;
+  margin-bottom: 10px; /* Mantenim l'espai que tenia la label */
+}
+
+/* El label dins d'aquest contenidor no necessita canvis, 
+   ja que 'justify-content: space-between' el mantindrà a l'esquerra */
+.label-action-container label {
+  margin-bottom: 0; /* Traiem el marge de la pròpia label, ara el controla el contenidor */
+}
+
+/* Nou estil per al botó d'escaneig "inline" */
+.btn-ocr-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* Espai petit entre icona i text */
+
+  /* Aparença subtil, similar a un "link-button" */
+  background-color: transparent;
+  border: none;
+  padding: 4px 8px; /* Padding petit */
+  border-radius: 6px;
+
+  color: var(--primary-color);
+  font-size: 12px; /* Mida de font petita i discreta */
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  .icon {
+    width: 16px; /* Icona més petita */
+    height: 16px;
+    filter: invert(24%) sepia(85%) saturate(2375%) hue-rotate(200deg)
+      brightness(96%) contrast(101%);
+  }
+
+  &:hover {
+    background-color: var(--bg-tab-hover); /* Un fons subtil en fer hover */
+  }
+}
+
 /* ========================================================================== */
 /* ESTILS PER A CONTROLS DESHABILITATS TEMPORALMENT per ocr                   */
 /* ========================================================================== */
