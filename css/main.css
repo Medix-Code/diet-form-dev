@@ -871,7 +871,7 @@ button .fa {
   height: 20px;
   /* Si la teva icona SVG és negra, pots canviar el seu color amb filter.
      Això genera el color blau de la teva marca. */
-  filter: invert(24%) sepia(85%) saturate(2375%) hue-rotate(200deg) brightness(96%) contrast(101%);
+  filter: invert(79%) sepia(57%) saturate(1477%) hue-rotate(334deg) brightness(102%) contrast(101%);
 }
 .btn-ocr-scan:hover {
   background-color: var(--service-2-bg); /* Un blau molt pàl·lid en fer hover */
