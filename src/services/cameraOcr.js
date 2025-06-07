@@ -43,7 +43,7 @@ const DOM_SELECTORS = {
   CAMERA_INPUT: "camera-input",
   OCR_PROGRESS_CONTAINER: ".ocr-progress-container",
   OCR_PROGRESS_TEXT: ".ocr-progress-text",
-  OCR_SCAN_BTN: ".btn-ocr-scan",
+  OCR_SCAN_BTN: ".btn-ocr-inline",
 };
 
 // --- Clases CSS ---

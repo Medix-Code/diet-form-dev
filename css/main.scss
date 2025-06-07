@@ -901,34 +901,48 @@ button .fa {
   margin-bottom: 0; /* Traiem el marge de la pròpia label, ara el controla el contenidor */
 }
 
-/* Nou estil per al botó d'escaneig "inline" */
+/* Nou estil per al botó d'escaneig "inline", ara amb més aspecte de botó */
 .btn-ocr-inline {
   display: inline-flex;
   align-items: center;
-  gap: 6px; /* Espai petit entre icona i text */
+  gap: 6px;
 
-  /* Aparença subtil, similar a un "link-button" */
-  background-color: transparent;
-  border: none;
-  padding: 4px 8px; /* Padding petit */
+  /* >>> CANVIS PER DONAR-LI ASPECTE DE BOTÓ <<< */
+  background-color: transparent; /* Mantenim fons transparent per defecte */
+  border: 1px solid var(--input-border); /* Una vora subtil, com la dels camps de text */
+  padding: 6px 10px; /* Ajustem el padding */
   border-radius: 6px;
 
   color: var(--primary-color);
-  font-size: 12px; /* Mida de font petita i discreta */
+  font-size: 13px; /* Mida de font una mica més gran */
   font-weight: 500;
 
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 
   .icon {
-    width: 16px; /* Icona més petita */
+    width: 16px;
     height: 16px;
     filter: invert(24%) sepia(85%) saturate(2375%) hue-rotate(200deg)
       brightness(96%) contrast(101%);
   }
 
+  /* Efecte hover més clar */
   &:hover {
-    background-color: var(--bg-tab-hover); /* Un fons subtil en fer hover */
+    background-color: var(--bg-tab-hover);
+    border-color: var(
+      --primary-color
+    ); /* La vora es torna del color principal */
+    transform: scale(1.05); /* Un lleuger efecte de zoom */
+  }
+
+  &:active {
+    transform: scale(1); /* Torna a la mida normal en fer clic */
+    background-color: color-mix(
+      in srgb,
+      var(--bg-tab-hover) 80%,
+      black 10%
+    ); /* Una mica més fosc */
   }
 }
 
