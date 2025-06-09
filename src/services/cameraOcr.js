@@ -91,8 +91,12 @@ const OCR_PATTERNS = {
     id: "endTime",
     label: "Hora Final",
     fieldIdSuffix: "end-time",
-    valueRegex:
-      /\d{2}\s*\/?\s*\d{2}\s*\/?\s*\d{2}\s+(\d{1,2}:\d{2}(?::\d{2})?)/i,
+    // NOU: L'àncora que buscarem és la paraula "altech".
+    lineKeywordRegex: /altech/i,
+    // NOU: Un cop trobada l'àncora, apliquem aquest patró per extreure NOMÉS l'hora.
+    valueRegex: /(\d{1,2}:\d{2}(?::\d{2})?)/,
+    // NOU: Aquesta propietat clau li diu al codi que busqui a la línia següent (offset de +1).
+    searchLineOffset: 1,
   },
 };
 
@@ -399,14 +403,13 @@ function _processAndFillForm(ocrText) {
     return;
   }
 
-  // Preparación de variables
+  // Preparació de variables
   const currentServiceIndex = getCurrentServiceIndex();
   const currentMode = getModeForService(currentServiceIndex) || "3.6";
   const suffix = `-${currentServiceIndex + 1}`;
   let filledFields = {};
 
   const lines = ocrText.split("\n");
-  const processedText = ocrText.toLowerCase().replace(/ +/g, " ");
 
   console.log(
     `[OCR Proc] Procesando para el servicio ${
@@ -414,8 +417,12 @@ function _processAndFillForm(ocrText) {
     } en modo ${currentMode}`
   );
 
-  // Bucle principal para extraer datos
+  // >>> NOVA LÒGICA DE BUCLE MILLORADA <<<
   Object.values(OCR_PATTERNS).forEach((pattern) => {
+    // Si el camp ja ha estat omplert per un altre patró, saltem
+    if (filledFields[pattern.id]) return;
+
+    // Condició per saltar el camp de destinació en certs modes
     if (
       (currentMode === "3.11" || currentMode === "3.22") &&
       pattern.id === "destinationTime"
@@ -423,38 +430,55 @@ function _processAndFillForm(ocrText) {
       return;
     }
 
-    let valueMatch = null;
+    // Iterem per cada línia del text reconegut
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
 
-    if (pattern.lineKeywordRegex) {
-      for (const line of lines) {
-        if (pattern.lineKeywordRegex.test(line.toLowerCase())) {
-          const cleanedLine = line.replace(/\D/g, "");
-          if (cleanedLine.length >= 6) {
-            const timeDigits = cleanedLine.slice(-6);
-            const formattedTime = `${timeDigits.slice(0, 2)}:${timeDigits.slice(
-              2,
-              4
-            )}:${timeDigits.slice(4, 6)}`;
-            valueMatch = [null, formattedTime];
+      // Comprovem si la línia actual conté la paraula clau del patró
+      if (
+        pattern.lineKeywordRegex &&
+        pattern.lineKeywordRegex.test(line.toLowerCase())
+      ) {
+        // Determinem a quina línia buscar el valor real
+        const offset = pattern.searchLineOffset || 0; // Per defecte és 0 (mateixa línia)
+        const targetLineIndex = i + offset;
+
+        // Assegurem que la línia objectiu existeix
+        if (targetLineIndex < lines.length) {
+          const targetLine = lines[targetLineIndex];
+          let extractedValue = "";
+
+          // Mirem si el patró té un valueRegex per extreure l'hora
+          if (pattern.valueRegex) {
+            const valueMatch = targetLine.match(pattern.valueRegex);
+            if (valueMatch && valueMatch[1]) {
+              extractedValue = _normalizeTime(valueMatch[1].trim());
+            }
+          } else {
+            // Lògica antiga (per 'mobilitzat' i 'arribada') que busca dígits a la línia
+            const cleanedLine = line.replace(/\D/g, "");
+            if (cleanedLine.length >= 6) {
+              const timeDigits = cleanedLine.slice(-6);
+              extractedValue = `${timeDigits.slice(0, 2)}:${timeDigits.slice(
+                2,
+                4
+              )}`;
+            }
+          }
+
+          if (extractedValue) {
+            const fieldId = `${pattern.fieldIdSuffix}${suffix}`;
+            _safeSetFieldValue(fieldId, extractedValue, pattern.label);
+            filledFields[pattern.id] = pattern;
+            // Un cop trobat, sortim del bucle de línies per aquest patró
             break;
           }
         }
       }
-    } else if (pattern.valueRegex) {
-      valueMatch = processedText.match(pattern.valueRegex);
-    }
-
-    if (valueMatch && valueMatch[1]) {
-      let extractedValue = _normalizeTime(valueMatch[1].trim());
-      if (extractedValue && !filledFields[pattern.id]) {
-        const fieldId = `${pattern.fieldIdSuffix}${suffix}`;
-        _safeSetFieldValue(fieldId, extractedValue, pattern.label);
-        filledFields[pattern.id] = pattern;
-      }
     }
   });
 
-  // Lógica de Fallback para Hora Final (con feedback visual y depuración)
+  // Lógica de Fallback per Hora Final (ES MANTÉ EXACTAMENT IGUAL)
   if (
     !filledFields.endTime &&
     (filledFields.originTime || filledFields.destinationTime)
@@ -473,18 +497,13 @@ function _processAndFillForm(ocrText) {
 
     const endTimeElement = document.getElementById(fieldId);
     if (endTimeElement) {
-      console.log(`[DEBUG] Aplicant estil d'avís a #${fieldId}`);
-
-      // 1. Afegeix la classe .input-warning. El CSS s'encarregarà de l'estil taronja.
       endTimeElement.classList.add("input-warning");
-
-      // 2. Després d'un temps, elimina la classee.
-      // La transició definida al CSS farà que la desaparició del color sigui suau.
       setTimeout(() => {
-        console.log(`[DEBUG] Eliminant estil d'avís de #${fieldId}`);
         endTimeElement.classList.remove("input-warning");
-      }, 2000); // Augmentat a 2 segons per donar temps a veure l'efecte
+      }, 2000);
     }
+    // Afegim el camp als omplerts per al missatge final
+    filledFields.endTime = { label: "Hora Final (Actual)" };
   }
 
   // Feedback final al usuario
@@ -494,6 +513,9 @@ function _processAndFillForm(ocrText) {
       (pattern) => pattern.label
     );
     let message = `Campos actualizados: ${filledLabels.join(", ")}.`;
+    if (message.includes("(Actual)")) {
+      message += " (Hora actual usada como fallback)";
+    }
     showToast(message, "success");
   } else {
     showToast("No se encontraron horas relevantes en la imagen.", "info");
