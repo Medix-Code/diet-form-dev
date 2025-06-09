@@ -60,14 +60,12 @@ const OCR_PATTERNS = {
     label: "Hora Origen",
     fieldIdSuffix: "origin-time",
     lineKeywordRegex: /mobilitzat|ltat/i,
-    valueRegex: /(\d{1,2}:\d{2})/,
   },
   DESTINATION_TIME: {
     id: "destinationTime",
     label: "Hora Destino",
     fieldIdSuffix: "destination-time",
     lineKeywordRegex: /arribada|hospital|aaah/i,
-    valueRegex: /(\d{1,2}:\d{2})/,
   },
   END_TIME: {
     id: "endTime",
@@ -286,15 +284,13 @@ function _safeSetFieldValue(fieldId, value, fieldName) {
 }
 
 function _processAndFillForm(ocrText) {
+  console.log("--- TEXTO COMPLETO RECONOCIDO POR TESSERACT ---");
   const normalizedOcrText = ocrText.replace(/-/g, ":");
-  console.log(
-    "--- Texto Reconocido (Normalizado) --- \n",
-    normalizedOcrText,
-    "\n------------------------------------"
-  );
+  console.log(`Valor de ocrText (normalizado):`, normalizedOcrText);
+  console.log("-------------------------------------------");
 
   if (!normalizedOcrText.trim()) {
-    showToast("No se pudo reconocer texto en la imagen.", "warning");
+    showToast("No se pudo reconocer texto en esta imagen.", "warning");
     return;
   }
 
@@ -302,6 +298,7 @@ function _processAndFillForm(ocrText) {
   const currentMode = getModeForService(currentServiceIndex) || "3.6";
   const suffix = `-${currentServiceIndex + 1}`;
   let filledFieldsInThisScan = {};
+
   const lines = normalizedOcrText.split("\n");
 
   Object.values(OCR_PATTERNS).forEach((pattern) => {
@@ -323,15 +320,32 @@ function _processAndFillForm(ocrText) {
 
     for (const line of lines) {
       if (pattern.lineKeywordRegex.test(line.toLowerCase())) {
-        const valueMatch = line.match(pattern.valueRegex);
-        if (valueMatch && valueMatch[1]) {
-          const extractedValue = _normalizeTime(valueMatch[1].trim());
-          if (extractedValue) {
-            _safeSetFieldValue(fieldId, extractedValue, pattern.label);
-            fieldElement?.classList.remove(CSS_CLASSES.INPUT_WARNING);
-            filledFieldsInThisScan[pattern.id] = pattern;
-            break;
+        let extractedValue = "";
+
+        // Si el patró té un valueRegex (cas de END_TIME)
+        if (pattern.valueRegex) {
+          const valueMatch = line.match(pattern.valueRegex);
+          if (valueMatch && valueMatch[1]) {
+            extractedValue = _normalizeTime(valueMatch[1].trim());
           }
+        } else {
+          const digits = line.replace(/\D/g, "");
+          const datePatternIndex = digits.search(/\d{6}/);
+          if (datePatternIndex !== -1) {
+            const timeDigits = digits.substring(datePatternIndex + 6);
+            if (timeDigits.length >= 4) {
+              const hours = timeDigits.substring(0, 2);
+              const minutes = timeDigits.substring(2, 4);
+              extractedValue = _normalizeTime(`${hours}:${minutes}`);
+            }
+          }
+        }
+
+        if (extractedValue) {
+          _safeSetFieldValue(fieldId, extractedValue, pattern.label);
+          fieldElement?.classList.remove(CSS_CLASSES.INPUT_WARNING);
+          filledFieldsInThisScan[pattern.id] = pattern;
+          break;
         }
       }
     }
