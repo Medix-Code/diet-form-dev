@@ -110,32 +110,6 @@ let isInitialized = false;
 
 // --- Funciones Privadas ---
 
-function _cacheDomElements() {
-  cameraBtn = document.getElementById(DOM_SELECTORS.CAMERA_BTN);
-  cameraGalleryModal = document.getElementById(DOM_SELECTORS.CAMERA_MODAL);
-  modalContentElement = cameraGalleryModal?.querySelector(
-    DOM_SELECTORS.MODAL_CONTENT
-  );
-  optionCameraBtn = document.getElementById(DOM_SELECTORS.OPTION_CAMERA);
-  optionGalleryBtn = document.getElementById(DOM_SELECTORS.OPTION_GALLERY);
-  cameraInput = document.getElementById(DOM_SELECTORS.CAMERA_INPUT);
-
-  if (
-    !cameraBtn ||
-    !cameraGalleryModal ||
-    !modalContentElement ||
-    !optionCameraBtn ||
-    !optionGalleryBtn ||
-    !cameraInput
-  ) {
-    console.warn(
-      "[cameraOcr] Faltan elementos DOM esenciales para la funcionalidad OCR/Modal."
-    );
-    return false;
-  }
-  return true;
-}
-
 function _openCameraModal() {
   if (!cameraGalleryModal || !modalContentElement) return;
   document.body.classList.add("modal-open");
@@ -388,7 +362,9 @@ async function _handleFileChange(event) {
 }
 
 // >>> 3. LA TEVA FUNCIÓ _processAndFillForm ES QUEDA EXACTAMENT COM ESTAVA <<<
-// No cal que la modifiquis. Aquí la poso per claredat.
+// Aquesta funció va dins del teu fitxer cameraOcr.js
+// Només has de substituir la funció _processAndFillForm existent per aquesta.
+
 function _processAndFillForm(ocrText) {
   console.log("--- TEXTO COMPLETO RECONOCIDO POR TESSERACT ---");
   console.log(`Valor de ocrText:`, ocrText);
@@ -471,19 +447,26 @@ function _processAndFillForm(ocrText) {
 
     _safeSetFieldValue(fieldId, currentTime, "Hora Final (Actual)");
 
+    // Aquí implementem la lògica de l'avís persistent.
     const endTimeElement = document.getElementById(fieldId);
     if (endTimeElement) {
-      console.log(`[DEBUG] Aplicant estil d'avís a #${fieldId}`);
+      console.log(`[DEBUG] Aplicant estil d'avís persistent a  #${fieldId}`);
 
-      // 1. Afegeix la classe .input-warning. El CSS s'encarregarà de l'estil taronja.
+      // 1. Afegeix la classe d'avís. Aquesta es quedarà posada.
       endTimeElement.classList.add("input-warning");
 
-      // 2. Després d'un temps, elimina la classee.
-      // La transició definida al CSS farà que la desaparició del color sigui suau.
-      setTimeout(() => {
-        console.log(`[DEBUG] Eliminant estil d'avís de #${fieldId}`);
-        endTimeElement.classList.remove("input-warning");
-      }, 2000); // Augmentat a 2 segons per donar temps a veure l'efecte
+      // 2. Afegim un listener que s'executarà NOMÉS UNA VEGADA.
+      //    Quan l'usuari faci focus (clic o tab) en el camp, eliminarem l'avís.
+      endTimeElement.addEventListener(
+        "focus",
+        () => {
+          console.log(
+            `[DEBUG] L'usuari ha interactuat amb #${fieldId}. Eliminant l'avís.`
+          );
+          endTimeElement.classList.remove("input-warning");
+        },
+        { once: true }
+      ); // Aquesta opció fa que el listener s'elimini sol després d'executar-se.
     }
   }
 
