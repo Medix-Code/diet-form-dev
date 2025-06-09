@@ -71,8 +71,8 @@ const OCR_PATTERNS = {
     id: "endTime",
     label: "Hora Final",
     fieldIdSuffix: "end-time",
-    lineKeywordRegex: /^\d{2}\/\d{2}\/\d{2}/,
-    valueRegex: /(\d{1,2}:\d{2})/,
+    lineKeywordRegex: /^\d{2}\s*\/?\s*\d{2}\s*\/?\s*\d{2}/,
+    valueRegex: /(\d{1,2}:\d{2}(?::\d{2})?)/i,
   },
 };
 
@@ -167,12 +167,10 @@ function _getActiveServicePanelElement() {
 }
 
 function _updateOcrProgress(statusText) {
-  const currentServicePanel = _getActiveServicePanelElement();
-  const progressContainer = currentServicePanel?.querySelector(
+  const progressContainer = _getActiveServicePanelElement()?.querySelector(
     DOM_SELECTORS.OCR_PROGRESS_CONTAINER
   );
   if (!progressContainer) return;
-
   progressContainer.classList.remove(CSS_CLASSES.HIDDEN);
   const progressText = progressContainer.querySelector(
     DOM_SELECTORS.OCR_PROGRESS_TEXT
@@ -181,8 +179,7 @@ function _updateOcrProgress(statusText) {
 }
 
 function _hideOcrProgress() {
-  const currentServicePanel = _getActiveServicePanelElement();
-  const progressContainer = currentServicePanel?.querySelector(
+  const progressContainer = _getActiveServicePanelElement()?.querySelector(
     DOM_SELECTORS.OCR_PROGRESS_CONTAINER
   );
   if (progressContainer) {
@@ -276,10 +273,6 @@ function _safeSetFieldValue(fieldId, value, fieldName) {
   if (element) {
     element.value = value;
     console.log(`[OCR Fill] ${fieldName} (${fieldId}) = "${value}"`);
-  } else {
-    console.warn(
-      `[OCR Fill] No se encontró el campo ${fieldName} con ID ${fieldId}`
-    );
   }
 }
 
@@ -290,7 +283,7 @@ function _processAndFillForm(ocrText) {
   console.log("-------------------------------------------");
 
   if (!normalizedOcrText.trim()) {
-    showToast("No se pudo reconocer texto en esta imagen.", "warning");
+    showToast("No se pudo reconocer texto en la imagen.", "warning");
     return;
   }
 
@@ -310,34 +303,29 @@ function _processAndFillForm(ocrText) {
 
     const fieldId = `${pattern.fieldIdSuffix}${suffix}`;
     const fieldElement = document.getElementById(fieldId);
-
     if (
       fieldElement?.value &&
       !fieldElement.classList.contains(CSS_CLASSES.INPUT_WARNING)
-    ) {
+    )
       return;
-    }
 
     for (const line of lines) {
       if (pattern.lineKeywordRegex.test(line.toLowerCase())) {
         let extractedValue = "";
 
-        // Si el patró té un valueRegex (cas de END_TIME)
+        // Cas per a END_TIME, que té valueRegex
         if (pattern.valueRegex) {
           const valueMatch = line.match(pattern.valueRegex);
           if (valueMatch && valueMatch[1]) {
             extractedValue = _normalizeTime(valueMatch[1].trim());
           }
-        } else {
-          const digits = line.replace(/\D/g, "");
-          const datePatternIndex = digits.search(/\d{6}/);
-          if (datePatternIndex !== -1) {
-            const timeDigits = digits.substring(datePatternIndex + 6);
-            if (timeDigits.length >= 4) {
-              const hours = timeDigits.substring(0, 2);
-              const minutes = timeDigits.substring(2, 4);
-              extractedValue = _normalizeTime(`${hours}:${minutes}`);
-            }
+        }
+        // Cas per a ORIGIN_TIME i DESTINATION_TIME
+        else {
+          // Aquesta és la lògica original, més "tonta" però robusta
+          const timeMatch = line.match(/(\d{2}:\d{2}:\d{2})/);
+          if (timeMatch && timeMatch[1]) {
+            extractedValue = _normalizeTime(timeMatch[1]);
           }
         }
 
@@ -435,9 +423,7 @@ export function initCameraOcr() {
   if (!_cacheDomElements()) return;
 
   const scanButtons = document.querySelectorAll(DOM_SELECTORS.OCR_SCAN_BTN);
-  const allEndTimeInputs = document.querySelectorAll(
-    DOM_SELECTORS.END_TIME_INPUT
-  );
+  const allEndTimeInputs = document.querySelectorAll(".end-time");
 
   scanButtons.forEach((button) =>
     button.addEventListener("click", _openCameraModal)
@@ -465,5 +451,5 @@ export function initCameraOcr() {
   });
 
   isInitialized = true;
-  console.log("[cameraOcr] Funcionalidad OCR inicializada.");
+  console.log("[cameraOcr] Funcionalitat OCR inicialitzada.");
 }
