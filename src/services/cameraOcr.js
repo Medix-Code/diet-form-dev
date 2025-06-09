@@ -91,12 +91,8 @@ const OCR_PATTERNS = {
     id: "endTime",
     label: "Hora Final",
     fieldIdSuffix: "end-time",
-    // NOU: L'àncora que buscarem és la paraula "altech".
-    lineKeywordRegex: /altech/i,
-    // NOU: Un cop trobada l'àncora, apliquem aquest patró per extreure NOMÉS l'hora.
-    valueRegex: /(\d{1,2}:\d{2}(?::\d{2})?)/,
-    // NOU: Aquesta propietat clau li diu al codi que busqui a la línia següent (offset de +1).
-    searchLineOffset: 1,
+    valueRegex:
+      /\d{2}\s*\/?\s*\d{2}\s*\/?\s*\d{2}\s+(\d{1,2}:\d{2}(?::\d{2})?)/i,
   },
 };
 
@@ -392,23 +388,25 @@ async function _handleFileChange(event) {
 }
 
 // >>> 3. LA TEVA FUNCIÓ _processAndFillForm ES QUEDA EXACTAMENT COM ESTAVA <<<
+// No cal que la modifiquis. Aquí la poso per claredat.
 function _processAndFillForm(ocrText) {
   console.log("--- TEXTO COMPLETO RECONOCIDO POR TESSERACT ---");
   console.log(`Valor de ocrText:`, ocrText);
   console.log("-------------------------------------------");
 
   if (!ocrText || !ocrText.trim()) {
-    showToast("No se pudo reconocer texto en la imagen.", "warning");
+    showToast("No se pudo reconocer texto en esta imagen.", "warning");
     return;
   }
 
-  // Preparació de variables
+  // Preparación de variables
   const currentServiceIndex = getCurrentServiceIndex();
   const currentMode = getModeForService(currentServiceIndex) || "3.6";
   const suffix = `-${currentServiceIndex + 1}`;
-  let filledFieldsInThisScan = {}; // Camps omplerts en AQUEST escaneig
+  let filledFields = {};
 
   const lines = ocrText.split("\n");
+  const processedText = ocrText.toLowerCase().replace(/ +/g, " ");
 
   console.log(
     `[OCR Proc] Procesando para el servicio ${
@@ -416,10 +414,8 @@ function _processAndFillForm(ocrText) {
     } en modo ${currentMode}`
   );
 
+  // Bucle principal para extraer datos
   Object.values(OCR_PATTERNS).forEach((pattern) => {
-    // Si ja hem trobat aquest valor en aquest mateix escaneig, saltem.
-    if (filledFieldsInThisScan[pattern.id]) return;
-
     if (
       (currentMode === "3.11" || currentMode === "3.22") &&
       pattern.id === "destinationTime"
@@ -427,80 +423,42 @@ function _processAndFillForm(ocrText) {
       return;
     }
 
-    const fieldId = `${pattern.fieldIdSuffix}${suffix}`;
-    const fieldElement = document.getElementById(fieldId);
+    let valueMatch = null;
 
-    // >>> LÒGICA MILLORADA DE SOBREESCRIPTURA <<<
-    // Només saltem si el camp ja té un valor I NO és un valor de fallback (no té la classe .input-warning).
-    if (
-      fieldElement &&
-      fieldElement.value &&
-      !fieldElement.classList.contains("input-warning")
-    ) {
-      console.log(
-        `[OCR Skip] El camp ${pattern.label} (${fieldId}) ja té un valor definitiu: "${fieldElement.value}". No es modifica.`
-      );
-      return;
-    }
-    // >>> FI DE LA MILLORA <<<
-
-    // Iterem per cada línia del text reconegut
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-
-      if (
-        pattern.lineKeywordRegex &&
-        pattern.lineKeywordRegex.test(line.toLowerCase())
-      ) {
-        const offset = pattern.searchLineOffset || 0;
-        const targetLineIndex = i + offset;
-
-        if (targetLineIndex < lines.length) {
-          const targetLine = lines[targetLineIndex];
-          let extractedValue = "";
-
-          if (pattern.valueRegex) {
-            const valueMatch = targetLine.match(pattern.valueRegex);
-            if (valueMatch && valueMatch[1]) {
-              extractedValue = _normalizeTime(valueMatch[1].trim());
-            }
-          } else {
-            const cleanedLine = line.replace(/\D/g, "");
-            if (cleanedLine.length >= 6) {
-              const timeDigits = cleanedLine.slice(-6);
-              extractedValue = `${timeDigits.slice(0, 2)}:${timeDigits.slice(
-                2,
-                4
-              )}`;
-            }
-          }
-
-          if (extractedValue) {
-            _safeSetFieldValue(fieldId, extractedValue, pattern.label);
-            // Si hem omplert un camp, ens assegurem que no tingui l'estil d'avís
-            if (fieldElement) fieldElement.classList.remove("input-warning");
-
-            filledFieldsInThisScan[pattern.id] = pattern;
+    if (pattern.lineKeywordRegex) {
+      for (const line of lines) {
+        if (pattern.lineKeywordRegex.test(line.toLowerCase())) {
+          const cleanedLine = line.replace(/\D/g, "");
+          if (cleanedLine.length >= 6) {
+            const timeDigits = cleanedLine.slice(-6);
+            const formattedTime = `${timeDigits.slice(0, 2)}:${timeDigits.slice(
+              2,
+              4
+            )}:${timeDigits.slice(4, 6)}`;
+            valueMatch = [null, formattedTime];
             break;
           }
         }
       }
+    } else if (pattern.valueRegex) {
+      valueMatch = processedText.match(pattern.valueRegex);
+    }
+
+    if (valueMatch && valueMatch[1]) {
+      let extractedValue = _normalizeTime(valueMatch[1].trim());
+      if (extractedValue && !filledFields[pattern.id]) {
+        const fieldId = `${pattern.fieldIdSuffix}${suffix}`;
+        _safeSetFieldValue(fieldId, extractedValue, pattern.label);
+        filledFields[pattern.id] = pattern;
+      }
     }
   });
 
-  // Lógica de Fallback per a Hora Final
-  const endTimeFieldId = `end-time${suffix}`;
-  const endTimeField = document.getElementById(endTimeFieldId);
-  const wasAnyOtherTimeFound =
-    filledFieldsInThisScan.originTime ||
-    filledFieldsInThisScan.destinationTime ||
-    document.getElementById(`origin-time${suffix}`).value ||
-    document.getElementById(`destination-time${suffix}`).value;
-
-  // El fallback només s'activa si:
-  // 1. El camp d'hora final està buit.
-  // 2. S'ha trobat alguna de les altres hores (en aquest escaneig o en anteriors).
-  if (!endTimeField.value && wasAnyOtherTimeFound) {
+  // Lógica de Fallback para Hora Final (con feedback visual y depuración)
+  if (
+    !filledFields.endTime &&
+    (filledFields.originTime || filledFields.destinationTime)
+  ) {
     console.warn(
       "[OCR Fallback] Hora Final no encontrada. Activando fallback."
     );
@@ -509,82 +467,75 @@ function _processAndFillForm(ocrText) {
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
     const currentTime = `${hh}:${mm}`;
+    const fieldId = `end-time${suffix}`;
 
-    _safeSetFieldValue(endTimeFieldId, currentTime, "Hora Final (Actual)");
+    _safeSetFieldValue(fieldId, currentTime, "Hora Final (Actual)");
 
-    // Marquem el camp com a "avís" per indicar que és un valor de fallback
-    endTimeField.classList.add("input-warning");
+    const endTimeElement = document.getElementById(fieldId);
+    if (endTimeElement) {
+      console.log(`[DEBUG] Aplicant estil d'avís a #${fieldId}`);
 
-    // Important: NO fem el setTimeout per treure la classe. Es quedarà fins que es sobreescrigui.
-    // L'usuari pot esborrar manualment el camp, i en aquest cas també traurem l'avís.
-    // (Això es gestionaria en un altre lloc, si cal)
-
-    filledFieldsInThisScan.endTime = {
-      id: "endTime",
-      label: "Hora Final (Fallback)",
-    };
+      // 1. Afegeix la classe .input-warning. El CSS s'encarregarà de l'estil taronja.
+      endTimeElement.classList.add("input-warning");
+    }
+    // Afegim el camp als omplerts per al missatge final
+    filledFields.endTime = { label: "Hora Final (Actual)" };
   }
 
-  // Feedback final a l'usuari (més intel·ligent)
-  const newlyFilledLabels = Object.values(filledFieldsInThisScan).map(
-    (p) => p.label
-  );
-
-  if (newlyFilledLabels.length > 0) {
-    let message = `Datos añadidos: ${newlyFilledLabels.join(", ")}.`;
-    if (message.includes("Fallback")) {
-      message = message.replace(" (Fallback)", " (hora actual)");
-    }
+  // Feedback final al usuario
+  const filledCount = Object.keys(filledFields).length;
+  if (filledCount > 0) {
+    const filledLabels = Object.values(filledFields).map(
+      (pattern) => pattern.label
+    );
+    let message = `Campos actualizados: ${filledLabels.join(", ")}.`;
     showToast(message, "success");
   } else {
-    showToast("No se han añadido datos nuevos a los campos vacíos.", "info");
+    showToast("No se encontraron horas relevantes en la imagen.", "info");
   }
 }
 
-// >>> MODIFICA LA FUNCIÓ initCameraOcr <<<
+// Aquesta funció s'encarrega d'inicialitzar tota la funcionalitat OCR
 export function initCameraOcr() {
+  // 1. Evitem inicialitzar dues vegades
   if (isInitialized) {
     console.warn("[cameraOcr] Ja inicialitzat.");
     return;
   }
 
-  // Cachejem els elements que són únics
-  cameraGalleryModal = document.getElementById("camera-gallery-modal");
-  modalContentElement = cameraGalleryModal?.querySelector(
-    ".modal-bottom-content"
-  );
-  optionCameraBtn = document.getElementById("option-camera");
-  optionGalleryBtn = document.getElementById("option-gallery");
-  cameraInput = document.getElementById("camera-input");
-
-  if (
-    !cameraGalleryModal ||
-    !optionCameraBtn ||
-    !optionGalleryBtn ||
-    !cameraInput
-  ) {
-    console.warn("[cameraOcr] Falten elements DOM del modal OCR.");
+  // 2. Utilitzem la funció de "caching" per guardar els elements del modal.
+  // Si falta algun element essencial, la funció retorna 'false' i parem.
+  if (!_cacheDomElements()) {
     return;
   }
 
-  // >>> NOVA LÒGICA PER ALS BOTONS D'ESCANEIG <<<
-  // Trobem TOTS els botons per escanejar
+  // 3. Busquem els botons d'escaneig que hi ha a cada panell de servei.
   const scanButtons = document.querySelectorAll(DOM_SELECTORS.OCR_SCAN_BTN);
-
   if (scanButtons.length === 0) {
-    console.warn("[cameraOcr] No s'han trobat botons '.btn-ocr-scan'.");
-    return;
+    console.warn(
+      "[cameraOcr] No s'han trobat botons d'escaneig '.btn-ocr-inline'."
+    );
+    // Tot i que no hi ha botons, la resta pot seguir funcionant, no parem aquí.
   }
 
-  // Afegim un listener a cadascun d'ells
+  // 4. Busquem tots els camps de text per a l'hora final.
+  const allEndTimeInputs = document.querySelectorAll(".end-time");
+
+  // --- Assignació de Listeners (Vigilants d'esdeveniments) ---
+
+  // Afegim el listener per obrir el modal a cada botó d'escaneig
   scanButtons.forEach((button) => {
     button.addEventListener("click", _openCameraModal);
   });
 
-  // La resta de listeners per al funcionament del modal i l'input de fitxer
+  // Listeners per als botons dins del modal ("Cámara", "Galería")
   optionCameraBtn.addEventListener("click", _triggerCameraCapture);
   optionGalleryBtn.addEventListener("click", _triggerGallerySelection);
+
+  // Listener per quan es selecciona un fitxer (la imatge)
   cameraInput.addEventListener("change", _handleFileChange);
+
+  // Listeners per a la gestió del modal (tancar-lo amb 'Esc' o clicant fora)
   document.addEventListener("click", _handleOutsideClick);
   document.addEventListener("keydown", (event) => {
     if (
@@ -595,10 +546,24 @@ export function initCameraOcr() {
     }
   });
 
+  // Listener per treure l'avís taronja dels camps d'hora final
+  allEndTimeInputs.forEach((input) => {
+    const removeWarning = () => {
+      if (input.classList.contains("input-warning")) {
+        console.log(
+          `[UI] Eliminant avís de #${input.id} per interacció de l'usuari.`
+        );
+        input.classList.remove("input-warning");
+      }
+    };
+    // S'activa quan l'usuari escriu o fa clic al camp
+    input.addEventListener("input", removeWarning);
+    input.addEventListener("focus", removeWarning);
+  });
+
+  // 5. Marquem la funcionalitat com a inicialitzada
   isInitialized = true;
-  console.log(
-    "[cameraOcr] Funcionalitat OCR inicialitzada i lligada als botons de servei."
-  );
+  console.log("[cameraOcr] Funcionalitat OCR inicialitzada correctament.");
 }
 
 function _scrollToBottom() {
