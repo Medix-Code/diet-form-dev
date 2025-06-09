@@ -123,14 +123,37 @@ const _findFormGroup = (panel, inputSelector) => {
 };
 
 /** Amaga/mostra els camps de destí segons el mode */
+// A servicesPanelManager.js
+
+/** Amaga/mostra els camps de destí i ajusta el 'enterkeyhint' segons el mode. */
 function _applyModeToPanelUI(panel, mode) {
-  const hide = mode !== "3.6"; // 3.6 ➜ mostra tot; 3.22 / 3.11 ➜ amaga
+  if (!panel) return;
+
+  const isBasicMode = mode !== "3.6"; // true si és 3.22 o 3.11
+
+  // 1. Amaga/mostra els camps de destí
   DESTINATION_FIELD_SELECTORS.forEach((sel) => {
     _findFormGroup(panel, sel)?.classList.toggle(
       CSS_CLASSES.SERVICE_HIDDEN,
-      hide
+      isBasicMode
     );
   });
+
+  // 2. >>> NOVA LÒGICA: Canvia l'acció del teclat virtual <<<
+  const originInput = panel.querySelector(".origin");
+  if (originInput) {
+    if (isBasicMode) {
+      // En modes bàsics, "Origen" és l'últim camp de text, així que mostrem "Done"
+      originInput.setAttribute("enterkeyhint", "done");
+      console.log(
+        `[UI Mode] 'enterkeyhint' establert a "done" per a l'origen.`
+      );
+    } else {
+      // En mode complet (3.6), eliminem l'atribut perquè el teclat mostri "Next"
+      originInput.removeAttribute("enterkeyhint");
+      console.log(`[UI Mode] 'enterkeyhint' eliminat de l'origen.`);
+    }
+  }
 }
 
 /** Marca el chip actiu visualment a la barra de chips global */
