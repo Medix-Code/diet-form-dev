@@ -55,6 +55,8 @@ let signatureModalElement = null;
 let signPerson1Button = null;
 let signPerson2Button = null;
 
+let hasUserDrawn = false; // per controlar si s'ha dibuixat
+
 // Variables per a doble clic/tap
 let lastTouchTime = 0;
 let lastTouchX = 0;
@@ -97,6 +99,10 @@ function clearCanvas() {
     signatureCanvasElement.width,
     signatureCanvasElement.height
   );
+
+  // >>> NOU: Reseteja el flag quan es neteja el canvas <<<
+  hasUserDrawn = false;
+  console.log("[Signature] Canvas netejat, hasUserDrawn = false");
 }
 
 /** Obté les coordenades (x, y) relatives al canvas des d'un esdeveniment. */
@@ -123,6 +129,11 @@ function getEventCoordinates(event) {
 function startDrawing(event) {
   if (!canvasContext) return;
   isDrawing = true;
+
+  // Marca que l'usuari ha començat a dibuixar <<<
+  hasUserDrawn = true;
+  console.log("[Signature] Començant a dibuixar, hasUserDrawn = true");
+
   canvasContext.beginPath();
   const { x, y } = getEventCoordinates(event);
   canvasContext.moveTo(x, y);
@@ -225,7 +236,7 @@ function initCanvasEvents() {
 /** Obre el modal de signatura per a un objectiu específic ('person1' o 'person2'). */
 function openSignatureModal(target) {
   if (!signatureModalElement || !canvasContext) return;
-  // >>> DESHABILITEM EL SWIPE DE PESTANYES <<<
+  // DESHABILITEM EL SWIPE DE PESTANYES
   setSwipeEnabled(false);
 
   currentSignatureTarget = target;
