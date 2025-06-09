@@ -709,7 +709,7 @@ button .fa {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1; /* Fa que els chips tinguin la mateixa amplada */
+  flex: 1;
   padding: 8px 10px;
   border-radius: 8px;
   font-weight: 500;
@@ -790,28 +790,36 @@ button .fa {
   margin-bottom: 0;
 }
 
+/* Estil ESPECÍFIC per al botó d'escaneig */
 .btn-ocr-inline {
   flex: 0 1 auto; /* No creix, s'encongeix si cal, base automàtica */
   gap: 6px;
   background-color: #ffffff;
   border: 1px solid var(--input-border);
-  color: var(--primary-color);
   font-size: 13px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  /* >>> AQUÍ LA SOLUCIÓ AL COLOR <<< */
+  /* Forcem el color del text a ser el de la variable principal (negre/gris fosc) */
+  color: var(--text-color);
 }
+
 .btn-ocr-inline .icon {
   width: 16px;
   height: 16px;
+  /* Assegura't que l'SVG original sigui negre. Així no calen filtres. */
 }
+
+/* Efectes d'interacció per al botó d'escaneig */
 .btn-ocr-inline:hover {
-  border-color: var(--primary-color);
+  border-color: var(--primary-color); /* La vora es posa blava en fer hover */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
 }
+
 .btn-ocr-inline:active {
   transform: translateY(0) scale(0.98);
-  background-color: var(--bg-tab-hover); /* Un gris molt clar en fer clic */
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Ombra interior per efecte de "pressió" */
+  background-color: var(--bg-tab-hover);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* ========================================================================== */
@@ -834,7 +842,6 @@ button .fa {
 
 .btn-ocr-scan {
   /* Aparença del botó. */
-  display: inline-flex; /* Per alinear icona i text */
   align-items: center; /* Alineació vertical */
   gap: 10px; /* Espai entre icona i text */
   background-color: #ffffff;
