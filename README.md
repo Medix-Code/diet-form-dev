@@ -42,16 +42,7 @@ Una herramienta para registrar horarios y detalles de servicios, generar informe
 
 ### Pasos de Instalación
 
-1. **Clonar el Repositorio, Navegar al Directorio, Instalar Dependencias e Iniciar el Servidor Local**
-
-```bash
-git clone https://github.com/***/diet-log.git
-cd diet-log
-npm install # o yarn install
-npm start # o yarn start
-```
-
-2. **Acceder a la Aplicación**
+1. **Acceder a la Aplicación**
 
 Abre tu navegador y navega a http://localhost:3000 (o el puerto especificado).
 
