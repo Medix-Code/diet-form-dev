@@ -392,14 +392,13 @@ async function _handleFileChange(event) {
 }
 
 // >>> 3. LA TEVA FUNCIÓ _processAndFillForm ES QUEDA EXACTAMENT COM ESTAVA <<<
-// No cal que la modifiquis. Aquí la poso per claredat.
 function _processAndFillForm(ocrText) {
   console.log("--- TEXTO COMPLETO RECONOCIDO POR TESSERACT ---");
   console.log(`Valor de ocrText:`, ocrText);
   console.log("-------------------------------------------");
 
   if (!ocrText || !ocrText.trim()) {
-    showToast("No se pudo reconocer texto en esta imagen.", "warning");
+    showToast("No se pudo reconocer texto en la imagen.", "warning");
     return;
   }
 
@@ -407,7 +406,7 @@ function _processAndFillForm(ocrText) {
   const currentServiceIndex = getCurrentServiceIndex();
   const currentMode = getModeForService(currentServiceIndex) || "3.6";
   const suffix = `-${currentServiceIndex + 1}`;
-  let filledFields = {};
+  let filledFieldsInThisScan = {}; // Camps omplerts en AQUEST escaneig
 
   const lines = ocrText.split("\n");
 
@@ -417,12 +416,10 @@ function _processAndFillForm(ocrText) {
     } en modo ${currentMode}`
   );
 
-  // >>> NOVA LÒGICA DE BUCLE MILLORADA <<<
   Object.values(OCR_PATTERNS).forEach((pattern) => {
-    // Si el camp ja ha estat omplert per un altre patró, saltem
-    if (filledFields[pattern.id]) return;
+    // Si ja hem trobat aquest valor en aquest mateix escaneig, saltem.
+    if (filledFieldsInThisScan[pattern.id]) return;
 
-    // Condició per saltar el camp de destinació en certs modes
     if (
       (currentMode === "3.11" || currentMode === "3.22") &&
       pattern.id === "destinationTime"
@@ -430,32 +427,44 @@ function _processAndFillForm(ocrText) {
       return;
     }
 
+    const fieldId = `${pattern.fieldIdSuffix}${suffix}`;
+    const fieldElement = document.getElementById(fieldId);
+
+    // >>> LÒGICA MILLORADA DE SOBREESCRIPTURA <<<
+    // Només saltem si el camp ja té un valor I NO és un valor de fallback (no té la classe .input-warning).
+    if (
+      fieldElement &&
+      fieldElement.value &&
+      !fieldElement.classList.contains("input-warning")
+    ) {
+      console.log(
+        `[OCR Skip] El camp ${pattern.label} (${fieldId}) ja té un valor definitiu: "${fieldElement.value}". No es modifica.`
+      );
+      return;
+    }
+    // >>> FI DE LA MILLORA <<<
+
     // Iterem per cada línia del text reconegut
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Comprovem si la línia actual conté la paraula clau del patró
       if (
         pattern.lineKeywordRegex &&
         pattern.lineKeywordRegex.test(line.toLowerCase())
       ) {
-        // Determinem a quina línia buscar el valor real
-        const offset = pattern.searchLineOffset || 0; // Per defecte és 0 (mateixa línia)
+        const offset = pattern.searchLineOffset || 0;
         const targetLineIndex = i + offset;
 
-        // Assegurem que la línia objectiu existeix
         if (targetLineIndex < lines.length) {
           const targetLine = lines[targetLineIndex];
           let extractedValue = "";
 
-          // Mirem si el patró té un valueRegex per extreure l'hora
           if (pattern.valueRegex) {
             const valueMatch = targetLine.match(pattern.valueRegex);
             if (valueMatch && valueMatch[1]) {
               extractedValue = _normalizeTime(valueMatch[1].trim());
             }
           } else {
-            // Lògica antiga (per 'mobilitzat' i 'arribada') que busca dígits a la línia
             const cleanedLine = line.replace(/\D/g, "");
             if (cleanedLine.length >= 6) {
               const timeDigits = cleanedLine.slice(-6);
@@ -467,10 +476,11 @@ function _processAndFillForm(ocrText) {
           }
 
           if (extractedValue) {
-            const fieldId = `${pattern.fieldIdSuffix}${suffix}`;
             _safeSetFieldValue(fieldId, extractedValue, pattern.label);
-            filledFields[pattern.id] = pattern;
-            // Un cop trobat, sortim del bucle de línies per aquest patró
+            // Si hem omplert un camp, ens assegurem que no tingui l'estil d'avís
+            if (fieldElement) fieldElement.classList.remove("input-warning");
+
+            filledFieldsInThisScan[pattern.id] = pattern;
             break;
           }
         }
@@ -478,11 +488,19 @@ function _processAndFillForm(ocrText) {
     }
   });
 
-  // Lógica de Fallback per Hora Final (ES MANTÉ EXACTAMENT IGUAL)
-  if (
-    !filledFields.endTime &&
-    (filledFields.originTime || filledFields.destinationTime)
-  ) {
+  // Lógica de Fallback per a Hora Final
+  const endTimeFieldId = `end-time${suffix}`;
+  const endTimeField = document.getElementById(endTimeFieldId);
+  const wasAnyOtherTimeFound =
+    filledFieldsInThisScan.originTime ||
+    filledFieldsInThisScan.destinationTime ||
+    document.getElementById(`origin-time${suffix}`).value ||
+    document.getElementById(`destination-time${suffix}`).value;
+
+  // El fallback només s'activa si:
+  // 1. El camp d'hora final està buit.
+  // 2. S'ha trobat alguna de les altres hores (en aquest escaneig o en anteriors).
+  if (!endTimeField.value && wasAnyOtherTimeFound) {
     console.warn(
       "[OCR Fallback] Hora Final no encontrada. Activando fallback."
     );
@@ -491,34 +509,35 @@ function _processAndFillForm(ocrText) {
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
     const currentTime = `${hh}:${mm}`;
-    const fieldId = `end-time${suffix}`;
 
-    _safeSetFieldValue(fieldId, currentTime, "Hora Final (Actual)");
+    _safeSetFieldValue(endTimeFieldId, currentTime, "Hora Final (Actual)");
 
-    const endTimeElement = document.getElementById(fieldId);
-    if (endTimeElement) {
-      endTimeElement.classList.add("input-warning");
-      setTimeout(() => {
-        endTimeElement.classList.remove("input-warning");
-      }, 2000);
-    }
-    // Afegim el camp als omplerts per al missatge final
-    filledFields.endTime = { label: "Hora Final (Actual)" };
+    // Marquem el camp com a "avís" per indicar que és un valor de fallback
+    endTimeField.classList.add("input-warning");
+
+    // Important: NO fem el setTimeout per treure la classe. Es quedarà fins que es sobreescrigui.
+    // L'usuari pot esborrar manualment el camp, i en aquest cas també traurem l'avís.
+    // (Això es gestionaria en un altre lloc, si cal)
+
+    filledFieldsInThisScan.endTime = {
+      id: "endTime",
+      label: "Hora Final (Fallback)",
+    };
   }
 
-  // Feedback final al usuario
-  const filledCount = Object.keys(filledFields).length;
-  if (filledCount > 0) {
-    const filledLabels = Object.values(filledFields).map(
-      (pattern) => pattern.label
-    );
-    let message = `Campos actualizados: ${filledLabels.join(", ")}.`;
-    if (message.includes("(Actual)")) {
-      message += " (Hora actual usada como fallback)";
+  // Feedback final a l'usuari (més intel·ligent)
+  const newlyFilledLabels = Object.values(filledFieldsInThisScan).map(
+    (p) => p.label
+  );
+
+  if (newlyFilledLabels.length > 0) {
+    let message = `Datos añadidos: ${newlyFilledLabels.join(", ")}.`;
+    if (message.includes("Fallback")) {
+      message = message.replace(" (Fallback)", " (hora actual)");
     }
     showToast(message, "success");
   } else {
-    showToast("No se encontraron horas relevantes en la imagen.", "info");
+    showToast("No se han añadido datos nuevos a los campos vacíos.", "info");
   }
 }
 
