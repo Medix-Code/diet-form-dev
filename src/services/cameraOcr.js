@@ -450,7 +450,7 @@ function _processAndFillForm(ocrText) {
     // Aquí implementem la lògica de l'avís persistent.
     const endTimeElement = document.getElementById(fieldId);
     if (endTimeElement) {
-      console.log(`[DEBUG] Aplicant estil d'avís persistent a #${fieldId}`);
+      console.log(`[DEBUG] Aplicant estil d'avís persistent a  #${fieldId}`);
 
       // 1. Afegeix la classe d'avís. Aquesta es quedarà posada.
       endTimeElement.classList.add("input-warning");
